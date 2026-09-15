@@ -3,19 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="LQS es una agencia creativa modular de Medellin para LatAm. Siete modulos que se compran sueltos y se conectan entre si: video, foto, marca, redes, web, eventos y automatizacion.">
+<meta name="description" content="El mejor amigo de tus ideas. LQS es una agencia creativa modular de Medellin para LatAm. Siete modulos que se compran sueltos y se conectan entre si: video, foto, marca, redes, web, eventos y automatizacion.">
 <meta name="theme-color" content="#FDFBF7">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="canonical" href="https://motta-bit.github.io/lqs/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="LQS">
-<meta property="og:title" content="LQS — Una pared que se mueve">
-<meta property="og:description" content="LQS es una agencia creativa modular de Medellin para LatAm. Siete modulos que se compran sueltos y se conectan entre si: video, foto, marca, redes, web, eventos y automatizacion.">
+<meta property="og:title" content="LQS — El mejor amigo de tus ideas">
+<meta property="og:description" content="El mejor amigo de tus ideas. LQS es una agencia creativa modular de Medellin para LatAm. Siete modulos que se compran sueltos y se conectan entre si: video, foto, marca, redes, web, eventos y automatizacion.">
 <meta property="og:url" content="https://motta-bit.github.io/lqs/">
 <meta property="og:image" content="https://motta-bit.github.io/lqs/og.jpg">
 <meta property="og:locale" content="es_CO">
 <meta name="twitter:card" content="summary_large_image">
-<title>LQS</title>
+<title>LQS — El mejor amigo de tus ideas</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Rubik:wght@400;500;900&family=IBM+Plex+Mono:wght@400;600&family=Newsreader:ital,wght@1,300&display=swap">
 <style>
@@ -82,15 +82,15 @@ p{margin:0}
   background:linear-gradient(140deg,var(--p-violeta),var(--p-rojo));color:#1A1720;
   padding:clamp(28px,5vw,56px);min-height:min(78vh,620px);
   display:flex;flex-direction:column;justify-content:space-between;gap:30px}
+.hero h1{font-size:clamp(96px,19vw,230px);line-height:.8;letter-spacing:-.05em}
+.hero .lema{font-family:'Syne',system-ui,sans-serif;font-weight:800;
+  font-size:clamp(24px,4.2vw,50px);line-height:1;letter-spacing:-.03em;margin-top:clamp(10px,1.6vw,22px)}
 .hero .lede{max-width:44ch;font-size:clamp(15px,1.7vw,18px)}
 .hero .acc{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
 .h-forma{position:absolute;border-radius:50%;background:var(--p-ambar);opacity:.7;
   right:-70px;top:-70px;width:min(300px,46vw);aspect-ratio:1}
 .h-forma2{position:absolute;right:27%;bottom:-70px;width:150px;height:150px;
   background:var(--azul);opacity:.5;transform:rotate(18deg)}
-.h-cara{position:absolute;right:clamp(20px,5vw,60px);bottom:clamp(20px,4vw,48px);
-  width:clamp(84px,12vw,132px);aspect-ratio:1;color:var(--tinta);z-index:2}
-@media(max-width:700px){.h-cara{display:none}}
 
 /* entrada: los bloques se arman. Sin JS o con reduced-motion ya están armados. */
 .arma .apila{animation:apila .72s cubic-bezier(.2,.9,.25,1) both}
@@ -377,7 +377,8 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
     <div class="h-forma2"></div>
     <div>
       <div class="eyebrow" style="color:#1A1720;opacity:.7">Agencia creativa modular · Medellín · LatAm</div>
-      <h1>Una pared<br>que se mueve</h1>
+      <h1>LQS</h1>
+      <p class="lema">El mejor amigo de tus ideas</p>
     </div>
     <div>
       <p class="lede">No tenés que cambiar de proveedor. Empezás por lo que más te duele
@@ -387,7 +388,6 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
         <a class="btn ghost" href="#modulos">Ver los módulos</a>
       </div>
     </div>
-    <span class="h-cara" id="hero-cara"></span>
   </div>
 </section>
 
@@ -1161,7 +1161,6 @@ $("#logo-cara").innerHTML = LOGO;
 $("#pie-cara").innerHTML  = LOGO;
 
 /* ---------- caritas de interfaz ---------- */
-var caraHero = new Carita($("#hero-cara"), {gesto:"contenta", seguir:true});
 var caraCot  = new Carita($("#cot-cara"),  {gesto:"guino",    seguir:false});
 
 /* ---------- 00 cabecera ---------- */

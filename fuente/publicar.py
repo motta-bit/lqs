@@ -4,6 +4,7 @@ BASE = pathlib.Path(__file__).parent
 OUT  = BASE.parent
 OUT.mkdir(exist_ok=True)
 
+# siempre reconstruye: editar lqs.html a mano se pierde
 import subprocess, sys
 subprocess.run([sys.executable, str(BASE / "build.py")], check=True, cwd=BASE)
 
@@ -19,7 +20,7 @@ assert "NOTA DE ARMADO" not in html, "la nota no se quito"
 i = html.index("</style>") + len("</style>")
 cabeza, cuerpo = html[:i], html[i:]
 
-DESC = ("LQS es una agencia creativa modular de Medellin para LatAm. "
+DESC = ("El mejor amigo de tus ideas. LQS es una agencia creativa modular de Medellin para LatAm. "
         "Siete modulos que se compran sueltos y se conectan entre si: "
         "video, foto, marca, redes, web, eventos y automatizacion.")
 URL  = "https://motta-bit.github.io/lqs/"
@@ -35,7 +36,7 @@ doc = f"""<!doctype html>
 <link rel="canonical" href="{URL}">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="LQS">
-<meta property="og:title" content="LQS — Una pared que se mueve">
+<meta property="og:title" content="LQS — El mejor amigo de tus ideas">
 <meta property="og:description" content="{DESC}">
 <meta property="og:url" content="{URL}">
 <meta property="og:image" content="{URL}og.jpg">
