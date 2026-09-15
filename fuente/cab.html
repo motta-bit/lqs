@@ -96,6 +96,21 @@ p{margin:0}
 .sueltas .forma:nth-child(5){transform:rotate(-8deg)}
 .juntas{display:grid;grid-template-columns:repeat(3,44px);gap:2px}
 
+/* ---------- quiénes somos ---------- */
+.nos-grande{grid-column:span 4;background:var(--crema);border-radius:var(--r-cont);
+  padding:clamp(26px,3.6vw,40px);display:flex;flex-direction:column;justify-content:center;gap:16px}
+.nos-grande h2{font-size:clamp(26px,3.6vw,46px);line-height:.98}
+.nos-grande h2 em{font-style:normal;color:var(--violeta)}
+.nos-lugar{grid-column:span 2;background:var(--tinta);color:var(--papel);
+  border-radius:var(--r-cont);padding:clamp(24px,3vw,32px);position:relative;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:center;gap:12px}
+.nos-lugar h3{font-size:clamp(22px,2.6vw,32px)}
+.nos-forma{position:absolute;right:-40px;bottom:-40px;width:150px;height:150px;
+  border-radius:50%;background:var(--p-lima);opacity:.22}
+.nos-bloque{grid-column:span 3;background:var(--sf,var(--crema));border-radius:var(--r-bloque);
+  padding:26px;display:flex;flex-direction:column;gap:10px}
+.nos-bloque h4{font-size:20px}
+
 /* ---------- chips ---------- */
 .chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:var(--gap)}
 .chip{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.08em;
@@ -308,7 +323,7 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
 @media(max-width:900px){
   .pared{grid-template-columns:repeat(2,1fr)}
   .hero,.eco,.ad,.caso,.promesa,.cot,.tabla-caja,.aviso,.eco-vacio,.armado,.tarifa-nota,
-  .p-suelto,.p-junto,.form,.faqs{grid-column:span 2}
+  .p-suelto,.p-junto,.form,.faqs,.nos-grande,.nos-lugar,.nos-bloque{grid-column:span 2}
   .mod,.apertura{grid-column:span 1}
   .mod.ancho{grid-column:span 2;grid-template-columns:auto 1fr;row-gap:12px}
   .mod.ancho .mod-price{grid-column:1/-1;padding-right:0}
@@ -321,7 +336,8 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
 @media(max-width:560px){
   .pared{grid-template-columns:1fr}
   .hero,.eco,.ad,.caso,.promesa,.cot,.tabla-caja,.aviso,.eco-vacio,.armado,.tarifa-nota,
-  .p-suelto,.p-junto,.form,.faqs,.mod,.apertura,.mod.ancho,.trato,.caso-hueco,.eco-chip{grid-column:span 1}
+  .p-suelto,.p-junto,.form,.faqs,.mod,.apertura,.mod.ancho,.trato,.caso-hueco,.eco-chip,
+  .nos-grande,.nos-lugar,.nos-bloque{grid-column:span 1}
   .pared-eco{grid-template-columns:1fr}
   .seccion{padding:40px 0 8px}
   h1{line-height:.88}

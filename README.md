@@ -1,6 +1,6 @@
 # LQS — sitio oficial
 
-Sitio de **LQS**, agencia creativa modular con base en Medellín, para LatAm.
+Sitio de **LQS**, agencia creativa modular. Estamos donde nos necesiten.
 
 **En línea:** https://motta-bit.github.io/lqs/
 
@@ -90,4 +90,4 @@ hay módulo Marca.
 
 ---
 
-Medellín, Colombia.
+Estamos donde nos necesiten.

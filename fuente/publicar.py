@@ -20,9 +20,9 @@ assert "NOTA DE ARMADO" not in html, "la nota no se quito"
 i = html.index("</style>") + len("</style>")
 cabeza, cuerpo = html[:i], html[i:]
 
-DESC = ("El mejor amigo de tus ideas. LQS es una agencia creativa modular de Medellin para LatAm. "
-        "Siete modulos que se compran sueltos y se conectan entre si: "
-        "video, foto, marca, redes, web, eventos y automatizacion.")
+DESC = ("El mejor amigo de tus ideas. LQS no es solo una agencia creativa: es una agencia creativa "
+        "modular. Siete areas independientes que se contratan solas y se conectan entre si: "
+        "video, foto, marca, redes, web, eventos y automatizacion. Estamos donde nos necesiten.")
 URL  = "https://motta-bit.github.io/lqs/"
 
 doc = f"""<!doctype html>

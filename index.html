@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="El mejor amigo de tus ideas. LQS es una agencia creativa modular de Medellin para LatAm. Siete modulos que se compran sueltos y se conectan entre si: video, foto, marca, redes, web, eventos y automatizacion.">
+<meta name="description" content="El mejor amigo de tus ideas. LQS no es solo una agencia creativa: es una agencia creativa modular. Siete areas independientes que se contratan solas y se conectan entre si: video, foto, marca, redes, web, eventos y automatizacion. Estamos donde nos necesiten.">
 <meta name="theme-color" content="#FDFBF7">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="canonical" href="https://motta-bit.github.io/lqs/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="LQS">
 <meta property="og:title" content="LQS — El mejor amigo de tus ideas">
-<meta property="og:description" content="El mejor amigo de tus ideas. LQS es una agencia creativa modular de Medellin para LatAm. Siete modulos que se compran sueltos y se conectan entre si: video, foto, marca, redes, web, eventos y automatizacion.">
+<meta property="og:description" content="El mejor amigo de tus ideas. LQS no es solo una agencia creativa: es una agencia creativa modular. Siete areas independientes que se contratan solas y se conectan entre si: video, foto, marca, redes, web, eventos y automatizacion. Estamos donde nos necesiten.">
 <meta property="og:url" content="https://motta-bit.github.io/lqs/">
 <meta property="og:image" content="https://motta-bit.github.io/lqs/og.jpg">
 <meta property="og:locale" content="es_CO">
@@ -112,6 +112,21 @@ p{margin:0}
 .sueltas .forma:nth-child(3){transform:rotate(22deg)}
 .sueltas .forma:nth-child(5){transform:rotate(-8deg)}
 .juntas{display:grid;grid-template-columns:repeat(3,44px);gap:2px}
+
+/* ---------- quiénes somos ---------- */
+.nos-grande{grid-column:span 4;background:var(--crema);border-radius:var(--r-cont);
+  padding:clamp(26px,3.6vw,40px);display:flex;flex-direction:column;justify-content:center;gap:16px}
+.nos-grande h2{font-size:clamp(26px,3.6vw,46px);line-height:.98}
+.nos-grande h2 em{font-style:normal;color:var(--violeta)}
+.nos-lugar{grid-column:span 2;background:var(--tinta);color:var(--papel);
+  border-radius:var(--r-cont);padding:clamp(24px,3vw,32px);position:relative;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:center;gap:12px}
+.nos-lugar h3{font-size:clamp(22px,2.6vw,32px)}
+.nos-forma{position:absolute;right:-40px;bottom:-40px;width:150px;height:150px;
+  border-radius:50%;background:var(--p-lima);opacity:.22}
+.nos-bloque{grid-column:span 3;background:var(--sf,var(--crema));border-radius:var(--r-bloque);
+  padding:26px;display:flex;flex-direction:column;gap:10px}
+.nos-bloque h4{font-size:20px}
 
 /* ---------- chips ---------- */
 .chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:var(--gap)}
@@ -325,7 +340,7 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
 @media(max-width:900px){
   .pared{grid-template-columns:repeat(2,1fr)}
   .hero,.eco,.ad,.caso,.promesa,.cot,.tabla-caja,.aviso,.eco-vacio,.armado,.tarifa-nota,
-  .p-suelto,.p-junto,.form,.faqs{grid-column:span 2}
+  .p-suelto,.p-junto,.form,.faqs,.nos-grande,.nos-lugar,.nos-bloque{grid-column:span 2}
   .mod,.apertura{grid-column:span 1}
   .mod.ancho{grid-column:span 2;grid-template-columns:auto 1fr;row-gap:12px}
   .mod.ancho .mod-price{grid-column:1/-1;padding-right:0}
@@ -338,7 +353,8 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
 @media(max-width:560px){
   .pared{grid-template-columns:1fr}
   .hero,.eco,.ad,.caso,.promesa,.cot,.tabla-caja,.aviso,.eco-vacio,.armado,.tarifa-nota,
-  .p-suelto,.p-junto,.form,.faqs,.mod,.apertura,.mod.ancho,.trato,.caso-hueco,.eco-chip{grid-column:span 1}
+  .p-suelto,.p-junto,.form,.faqs,.mod,.apertura,.mod.ancho,.trato,.caso-hueco,.eco-chip,
+  .nos-grande,.nos-lugar,.nos-bloque{grid-column:span 1}
   .pared-eco{grid-template-columns:1fr}
   .seccion{padding:40px 0 8px}
   h1{line-height:.88}
@@ -376,7 +392,7 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
     <div class="h-forma"></div>
     <div class="h-forma2"></div>
     <div>
-      <div class="eyebrow" style="color:#1A1720;opacity:.7">Agencia creativa modular · Medellín · LatAm</div>
+      <div class="eyebrow" style="color:#1A1720;opacity:.7">Agencia creativa modular · Estamos donde nos necesiten</div>
       <h1>LQS</h1>
       <p class="lema">El mejor amigo de tus ideas</p>
     </div>
@@ -421,6 +437,44 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
       <h3>Una sola pared.<br>Un solo interlocutor.</h3>
       <p style="font-size:13.5px;opacity:.72;max-width:30ch">Vamos por partes, en el orden que te sirva,
         y cada pieza queda lista para la siguiente.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 02b QUIÉNES SOMOS ============ -->
+<section class="seccion" id="nosotros">
+  <div class="eyebrow">Quiénes somos</div>
+  <div class="pared">
+    <div class="nos-grande apila">
+      <h2>No somos solo una agencia creativa.<br>Somos una agencia creativa <em>modular</em>.</h2>
+      <p class="dim" style="max-width:56ch">Creativa porque trabajamos en varias áreas a la vez.
+        Modular porque cada una es independiente: se contrata sola, funciona sola, y se conecta con
+        las demás cuando tenga sentido. Esa palabra no es un adorno — es la forma en que cobramos,
+        entregamos y crecemos.</p>
+    </div>
+    <div class="nos-lugar apila grano">
+      <div class="nos-forma"></div>
+      <h3>Estamos donde nos necesiten.</h3>
+      <p style="font-size:13.5px;opacity:.8">El 80% del trabajo es remoto y hay clientes en LatAm,
+        España y Estados Unidos. Cuando hay que estar presencialmente, estamos.</p>
+    </div>
+
+    <div class="nos-bloque apila" style="--sf:var(--p-violeta)">
+      <h4>Por qué existe</h4>
+      <p style="font-size:13.5px;color:#3A3346">Una marca que necesita presencia suele tener dos
+        caminos, y los dos incomodan: una agencia que cobra el proyecto completo de entrada, o varios
+        proveedores sueltos que no se hablan entre ellos y cobran cada uno por su lado.</p>
+      <p style="font-size:13.5px;color:#3A3346"><b>LQS es el tercer camino.</b> Tomas la pieza que
+        necesitas hoy, pagas esa, y sumas la siguiente cuando puedas.</p>
+    </div>
+
+    <div class="nos-bloque apila" style="--sf:var(--p-azul)">
+      <h4>Y por dentro, igual</h4>
+      <p style="font-size:13.5px;color:#3A3346">No hay áreas fijas: el equipo rota y todos pasan por
+        todas. LQS nació del cansancio del trabajo que encierra a una persona en una sola tarea
+        repetida, y no tendría sentido repetir eso adentro.</p>
+      <p style="font-size:13.5px;color:#3A3346">Por eso también lo que produce un módulo le sirve al
+        siguiente: lo hace la misma gente.</p>
     </div>
   </div>
 </section>
@@ -699,8 +753,8 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
       <details><summary>¿Redes me amarra?</summary>
         <p>No hay permanencia mínima. El aviso de cancelación es de 15 días, solo para cerrar el calendario en curso
           sin dejar las cuentas a la deriva.</p></details>
-      <details><summary>¿Trabajan fuera de Medellín?</summary>
-        <p>Sí. La base es Medellín y el 80% del trabajo es remoto: hay clientes en LatAm, España y Estados Unidos.
+      <details><summary>¿Dónde trabajan?</summary>
+        <p>Donde nos necesiten. El 80% del trabajo es remoto y hay clientes en LatAm, España y Estados Unidos.
           Si hay rodaje o cobertura presencial, el transporte lo cubre el cliente.</p></details>
       <details><summary>¿Usan inteligencia artificial?</summary>
         <p>Cuando sirve, sí — y siempre se declara en la pieza. Nunca vas a recibir algo generado con IA sin saberlo.</p></details>
@@ -716,8 +770,8 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
     <div class="pie-grid">
       <div>
         <a class="marca" href="#inicio" style="color:var(--papel);margin-bottom:12px"><span class="cara" id="pie-cara" style="width:34px;height:34px"></span>LQS</a>
-        <p style="opacity:.7;max-width:34ch">Agencia creativa modular. Medellín, para LatAm.
-          Áreas independientes que se conectan según lo que cada cliente necesite.</p>
+        <p style="opacity:.7;max-width:34ch">Agencia creativa modular. Áreas independientes que se
+          contratan solas y se conectan según lo que cada cliente necesite. Estamos donde nos necesiten.</p>
       </div>
       <div>
         <h5>Módulos</h5>
@@ -738,7 +792,7 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
       </div>
     </div>
     <div class="pie-base">
-      <span>LQS · Lo Que Sea — Medellín, Colombia</span>
+      <span>LQS · Lo Que Sea</span>
       <span>Cuando usamos IA en una pieza, lo decimos.</span>
     </div>
   </div>
