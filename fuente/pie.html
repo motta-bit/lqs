@@ -147,7 +147,7 @@ function pintar(){
     r.textContent = "Un brief, un interlocutor, activos que se reutilizan. Por eso baja, no por rebaja." +
       (mensual ? " El descuento aplica al trabajo inicial, no a la mensualidad." : "");
   } else {
-    r.textContent = "Elegí dos o más para que los bloques compartan pared.";
+    r.textContent = "Elige dos o más para que los bloques compartan pared.";
   }
 
   estado = {inicial:inicial, mensual:mensual, desc:d, arr:arr};
@@ -175,7 +175,7 @@ function cotizar(){
 
   var res = $("#cot-resumen");
   if (!estado.arr.length){
-    res.innerHTML = 'Todavía no elegiste módulos. Subí a <a href="#ecosistema" style="color:var(--p-lima)">armá tu ecosistema</a> y tocá los que te sirven.';
+    res.innerHTML = 'Todavía no has elegido módulos. Sube a <a href="#ecosistema" style="color:var(--p-lima)">arma tu ecosistema</a> y toca los que te sirvan.';
   } else {
     res.innerHTML = '<b>' + estado.arr.join(" · ") + '</b>' +
       (estado.desc.p ? ' <span class="mono" style="opacity:.7">— ' + estado.desc.n + ', −' + estado.desc.p + '%</span>' : '');
@@ -243,7 +243,7 @@ $("#form").addEventListener("submit", function(e){
   var texto = "Hola LQS, soy " + f.nombre.value + " (" + f.correo.value + "). " + f.mensaje.value;
   $("#form-estado").innerHTML = 'Este formulario todavía no tiene servidor. ' +
     '<a href="https://wa.me/573247680413?text=' + encodeURIComponent(texto) +
-    '" target="_blank" rel="noopener" style="color:var(--violeta)"><b>Mandalo por WhatsApp</b></a> ' +
+    '" target="_blank" rel="noopener" style="color:var(--violeta)"><b>Envíalo por WhatsApp</b></a> ' +
     'y te contestamos hoy.';
 });
 
