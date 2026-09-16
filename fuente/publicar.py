@@ -8,13 +8,17 @@ OUT.mkdir(exist_ok=True)
 import subprocess, sys
 subprocess.run([sys.executable, str(BASE / "build.py")], check=True, cwd=BASE)
 
-html = (BASE / "lqs.html").read_text()
+html = (BASE / "lqs.html").read_text(encoding="utf-8")
 
 # 1. quitar la nota de armado (es interna, no va publicada)
 html = re.sub(
     r'<!-- ={6,} NOTA DE ARMADO.*?</section>\s*(?=</main>)',
     '', html, flags=re.S)
 assert "NOTA DE ARMADO" not in html, "la nota no se quito"
+
+# 1b. y su CSS, que tampoco tiene por que viajar
+html = re.sub(r'/\* -+ nota de armado.*?\.armado li\{[^}]*\}\s*', '', html, flags=re.S)
+assert '.armado{' not in html, "el CSS de la nota no se quito"
 
 # 2. separar el <title>/<link>/<style> del cuerpo
 i = html.index("</style>") + len("</style>")
@@ -49,14 +53,14 @@ doc = f"""<!doctype html>
 </body>
 </html>
 """
-(OUT / "index.html").write_text(doc)
+(OUT / "index.html").write_text(doc, encoding="utf-8")
 
 # 3. favicon a partir del gato vectorizado
-logo = (BASE / "carita-inline.svg").read_text()
+logo = (BASE / "carita-inline.svg").read_text(encoding="utf-8")
 logo = re.sub(r'\s(width|height)="[^"]*"', '', logo, count=2)
 logo = logo.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"', 1) if 'xmlns' not in logo.split('>')[0] else logo
 logo = logo.replace('fill="currentColor"', 'fill="#1A1720"')
-(OUT / "favicon.svg").write_text(logo)
+(OUT / "favicon.svg").write_text(logo, encoding="utf-8")
 
-(OUT / ".nojekyll").write_text("")
+(OUT / ".nojekyll").write_text("", encoding="utf-8")
 print("index.html", len(doc), "bytes")

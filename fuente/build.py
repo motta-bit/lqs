@@ -48,19 +48,19 @@ datos = json.dumps([{"nombre": m[0], "ico": m[1], "precio": m[5], "mensual": m[6
                     for m in MODULOS], ensure_ascii=False)
 
 # el logo real: el gato vectorizado, no la carita de interfaz
-logo = (BASE / "carita-inline.svg").read_text()
+logo = (BASE / "carita-inline.svg").read_text(encoding="utf-8")
 logo = re.sub(r'\s(width|height)="[^"]*"', '', logo, count=2)
 if 'style=' not in logo.split('>')[0]:
     logo = logo.replace('<svg', '<svg style="width:100%;height:100%;display:block"', 1)
 
-html = (BASE / "cab.html").read_text()
-html += (BASE / "cuerpo.html").read_text().replace("{{MODULOS}}", mods).replace("{{APERTURA}}", apert)
-html += ((BASE / "pie.html").read_text()
-         .replace("/*CARITA_JS*/", (BASE / "carita.js").read_text())
-         .replace("/*ICONOS_JS*/", (BASE / "iconos.js").read_text())
+html = (BASE / "cab.html").read_text(encoding="utf-8")
+html += (BASE / "cuerpo.html").read_text(encoding="utf-8").replace("{{MODULOS}}", mods).replace("{{APERTURA}}", apert)
+html += ((BASE / "pie.html").read_text(encoding="utf-8")
+         .replace("/*CARITA_JS*/", (BASE / "carita.js").read_text(encoding="utf-8"))
+         .replace("/*ICONOS_JS*/", (BASE / "iconos.js").read_text(encoding="utf-8"))
          .replace("{{DATOS}}", datos)
          .replace("{{LOGO}}", json.dumps(logo)))
 
 out = BASE / "lqs.html"
-out.write_text(html)
+out.write_text(html, encoding="utf-8")
 print("ok", len(html), "bytes")
