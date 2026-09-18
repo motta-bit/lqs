@@ -79,24 +79,6 @@ p{margin:0}
 .idioma b{font-weight:600}
 .top.pegada .idioma{color:var(--papel)}
 
-/* la pregunta flotante: solo aparece si el navegador no está en español.
-   No se guarda nada — la política de cookies promete que el sitio no guarda nada. */
-.pregunta{position:fixed;left:16px;right:16px;bottom:16px;z-index:70;max-width:420px;margin:0 auto;
-  background:var(--tinta);color:var(--papel);border-radius:var(--r-cont);padding:22px 22px 18px;
-  box-shadow:0 12px 40px rgba(26,23,32,.3);
-  padding-bottom:calc(18px + env(safe-area-inset-bottom,0px))}
-.pregunta[hidden]{display:none!important}
-.pregunta p{font-family:'Syne',system-ui,sans-serif;font-weight:800;font-size:20px;line-height:1.1;
-  letter-spacing:-.02em;margin-bottom:6px}
-.pregunta small{display:block;opacity:.6;font-size:12.5px;line-height:1.45;margin-bottom:16px}
-.pregunta-acc{display:flex;gap:8px}
-.pregunta-acc a,.pregunta-acc button{flex:1;display:inline-flex;align-items:center;justify-content:center;
-  height:46px;border-radius:999px;font-family:'Rubik',sans-serif;font-weight:900;font-size:13px;
-  letter-spacing:.02em;text-transform:uppercase;text-decoration:none;cursor:pointer;
-  border:2px solid var(--papel);background:transparent;color:var(--papel);transition:.14s}
-.pregunta-acc a{background:var(--papel);color:var(--tinta)}
-.pregunta-acc a:hover,.pregunta-acc button:hover{opacity:.85}
-.pregunta-acc :focus-visible{outline:3px solid var(--p-violeta);outline-offset:2px}
 @media(max-width:760px){ .idioma{padding:4px 8px;font-size:10px;letter-spacing:.06em} }
 
 /* ---------- 01 hero ---------- */
@@ -111,8 +93,8 @@ p{margin:0}
 .hero .acc{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
 .h-forma{position:absolute;border-radius:50%;background:var(--p-ambar);opacity:.7;
   right:-70px;top:-70px;width:min(300px,46vw);aspect-ratio:1}
-.h-forma2{position:absolute;right:27%;bottom:-70px;width:150px;height:150px;
-  background:var(--azul);opacity:.5;transform:rotate(18deg)}
+.h-forma2{position:absolute;right:7%;bottom:8%;width:clamp(72px,8vw,112px);aspect-ratio:1;
+  border-radius:8px;background:var(--azul);opacity:.38;transform:rotate(12deg)}
 
 /* entrada: los bloques se arman. Sin JS o con reduced-motion ya están armados. */
 .arma .apila{animation:apila .72s cubic-bezier(.2,.9,.25,1) both}
@@ -406,7 +388,7 @@ p{margin:0}
 .ases-cara{width:clamp(90px,11vw,132px);aspect-ratio:1;flex:none;display:block;color:var(--papel)}
 @media(max-width:760px){ .ases{flex-direction:column-reverse;align-items:flex-start;gap:20px} }
 .cot-cara{width:56px;aspect-ratio:1;flex:none;display:block;color:var(--papel);margin-bottom:4px}
-.form-ancho{grid-column:span 6}
+.form-ancho,.faqs-ancho{grid-column:span 6}
 
 /* ---------- 04 ecosistema ---------- */
 .eco{grid-column:span 6;background:var(--crema);border-radius:var(--r-cont);padding:22px}
@@ -567,6 +549,8 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
 .pie-grid a,.pie-grid p{color:var(--papel);text-decoration:none;opacity:.85;
   font-size:13.5px;display:block;margin-bottom:7px;overflow-wrap:anywhere}
 .pie-grid a:hover{opacity:1;text-decoration:underline;text-underline-offset:4px}
+/* el correo es largo y sin puntos de corte: que quepa en vez de partirse a mitad de palabra */
+.pie-grid a[href^="mailto"]{font-size:12.5px;letter-spacing:-.01em}
 .pie-base{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
   margin-top:40px;padding-top:20px;border-top:1px solid rgba(253,251,247,.16);
   font-family:'IBM Plex Mono',monospace;font-size:11px;opacity:.6}
@@ -579,7 +563,7 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
   .hero,.eco,.ad,.caso,.promesa,.cot,.tabla-caja,.aviso,.eco-vacio,.tarifa-nota,
   .p-suelto,.p-junto,.form,.faqs,.nos-grande,.nos-lugar,.nos-bloque,.ruta{grid-column:span 2}
   .mod,.apertura{grid-column:span 1}
-  .mod-mas,.ex,.doc-ind,.doc-cierre,.err,.gal-nada,.desc-caja,.ases,.form-ancho{grid-column:span 2}
+  .mod-mas,.ex,.doc-ind,.doc-cierre,.err,.gal-nada,.desc-caja,.ases,.form-ancho,.faqs-ancho{grid-column:span 2}
   .ficha{grid-column:span 1}
   .doc-ind{position:static}
   .trato{grid-column:span 1}
@@ -592,7 +576,7 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
   .pared{grid-template-columns:1fr}
   .hero,.eco,.ad,.caso,.promesa,.cot,.tabla-caja,.aviso,.eco-vacio,.tarifa-nota,
   .p-suelto,.p-junto,.form,.faqs,.mod,.apertura,.mod-mas,.ex,.doc-ind,.doc-cierre,.err,
-  .ficha,.gal-nada,.desc-caja,.ases,.form-ancho,
+  .ficha,.gal-nada,.desc-caja,.ases,.form-ancho,.faqs-ancho,
   .trato,.caso-hueco,.eco-chip,
   .nos-grande,.nos-lugar,.nos-bloque,.ruta{grid-column:span 1}
   .ex{padding:24px 20px}

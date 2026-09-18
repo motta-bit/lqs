@@ -60,31 +60,6 @@ if (top) addEventListener("scroll", function(){
 
 if (!quieto) document.body.classList.add("arma");
 
-/* ---------------- idioma: se pregunta, no se guarda ----------------
-   Solo aparece si el navegador NO está en español. Quien ya navega en español
-   nunca la ve, y no hay nada que recordar entre visitas. */
-(function(){
-  if (IDIOMA !== "es") return;
-  var idiomas = (navigator.languages && navigator.languages.length)
-      ? navigator.languages : [navigator.language || ""];
-  var habla = idiomas.some(function(l){ return String(l).toLowerCase().indexOf("es") === 0; });
-  if (habla) return;
-
-  var caja = document.createElement("div");
-  caja.className = "pregunta";
-  caja.setAttribute("role", "dialog");
-  caja.setAttribute("aria-label", "Language");
-  caja.innerHTML =
-    '<p>Prefer English?</p>' +
-    '<small>This site is in Spanish. There is an English version — nothing is saved either way.</small>' +
-    '<div class="pregunta-acc">' +
-      '<a href="{{OTRO}}" hreflang="en" lang="en">Yes, in English</a>' +
-      '<button type="button" id="pregunta-no">Seguir en español</button>' +
-    '</div>';
-  document.body.appendChild(caja);
-  $("#pregunta-no").addEventListener("click", function(){ caja.remove(); });
-})();
-
 /* ---------------- la carita del 404 ---------------- */
 var errCara = $("#err-cara");
 if (errCara) new Carita(errCara, {gesto:"error", seguir:!quieto});

@@ -32,7 +32,7 @@ MODULOS = [
  ]),
  ("Marca", "marca", "#F7D9A6", "Identidad, empaques, consultoría", [
    S("Solo el logo",                                 150000, grupo="identidad"),
-   S("Diseño de accesorios",                         250000),
+   S("Diseño de accesorios de marca",                250000),
    S("Consultoría de ADN y orientación de marca",    300000),
    S("Empaques",                                     350000),
    S("Rediseño de una marca que ya existe",          650000, grupo="identidad"),
@@ -50,7 +50,7 @@ MODULOS = [
    S("Menú digital con código QR",                   450000),
    S("Landing para una campaña",                     600000),
    S("Blog",                                         700000),
-   S("Portafolio",                                   900000),
+   S("Portafolio web",                               900000),
    S("Catálogo en línea",                           1000000),
    S("Página web",                                  1300000),
  ]),
@@ -132,7 +132,7 @@ EN_SERV = {
   "Foto para publicidad": "Advertising photography",
   "Sesión al equipo": "Team session",
   "Solo el logo": "Logo only",
-  "Diseño de accesorios": "Merchandise design",
+  "Diseño de accesorios de marca": "Brand merchandise design",
   "Consultoría de ADN y orientación de marca": "Brand DNA and positioning consulting",
   "Empaques": "Packaging",
   "Rediseño de una marca que ya existe": "Redesign of an existing brand",
@@ -146,7 +146,7 @@ EN_SERV = {
   "Menú digital con código QR": "Digital menu with QR code",
   "Landing para una campaña": "Campaign landing page",
   "Blog": "Blog",
-  "Portafolio": "Portfolio",
+  "Portafolio web": "Portfolio site",
   "Catálogo en línea": "Online catalogue",
   "Página web": "Website",
   "Diseño de accesorios del evento": "Event collateral design",
@@ -291,7 +291,7 @@ PAGINAS = {
         "desc": ("Elige servicio por servicio y el total se arma solo. Cada cosa con su precio, "
                  "el area completa con descuento. Llega directo a nuestro WhatsApp o correo."),
         "partes": ["encab-cotizador", "modulos", "descuentos", "ecosistema", "cotizador",
-                   "asesoria", "tarifas", "contacto"],
+                   "asesoria", "tarifas", "faqs", "contacto"],
     },
 }
 
