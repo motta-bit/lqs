@@ -40,6 +40,10 @@
     /* automatización · el ciclo corre solo */
     '@keyframes lqs-gira{to{transform:rotate(360deg)}}',
     '.i-auto .anillo{animation:lqs-gira 12s linear infinite;transform-origin:22px 22px}',
+    /* express · el reloj corre rápido, que es todo el argumento */
+    '@keyframes lqs-minutero{to{transform:rotate(360deg)}}',
+    '.i-reloj .minutero{animation:lqs-minutero 2.6s linear infinite;transform-origin:22px 22px}',
+    '.i-reloj .horario{animation:lqs-minutero 31.2s linear infinite;transform-origin:22px 22px}',
     '@media (prefers-reduced-motion:reduce){.lqs-ico *{animation:none!important}}'
   ].join("\n");
 
@@ -86,7 +90,15 @@
 
     "automatizacion":
       '<circle class="t anillo" cx="22" cy="22" r="15.4" stroke-dasharray="5 6.4"/>' +
-      '<path class="s" d="M25.6 10.4 L14.6 24.2 H20.6 L18.4 33.6 L29.4 19.8 H23.4 Z"/>'
+      '<path class="s" d="M25.6 10.4 L14.6 24.2 H20.6 L18.4 33.6 L29.4 19.8 H23.4 Z"/>',
+
+    reloj:
+      '<path class="t" d="M17 4.6 H27"/>' +
+      '<circle class="t" cx="22" cy="22" r="15.4"/>' +
+      '<path class="t" d="M22 6.6 V4.6"/>' +
+      '<path class="t horario" d="M22 22 V15.4"/>' +
+      '<path class="t minutero" d="M22 22 L29.4 22"/>' +
+      '<circle class="s" cx="22" cy="22" r="2.2"/>'
   };
 
   var ALIAS = { "automatización": "automatizacion", auto: "automatizacion" };
@@ -127,6 +139,6 @@
 
   global.Iconos = {
     html: html, montar: montar, auto: auto, CSS: CSS,
-    NOMBRES: ["video", "foto", "marca", "redes", "web", "eventos", "automatizacion"]
+    NOMBRES: ["video", "foto", "marca", "redes", "web", "eventos", "automatizacion", "reloj"]
   };
 })(window);

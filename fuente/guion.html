@@ -1,0 +1,571 @@
+<script>/*CARITA_JS*/</script>
+<script>/*ICONOS_JS*/</script>
+<script>
+(function(){
+"use strict";
+var $  = function(s,r){ return (r||document).querySelector(s); };
+var $$ = function(s,r){ return [].slice.call((r||document).querySelectorAll(s)); };
+var quieto = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---------------- datos ---------------- */
+var MODULOS  = {{DATOS}};
+var LOGO     = {{LOGO}};
+var CONTACTO = {{CONTACTO}};
+var ESCALERA = {{ESCALERA}};      // [[nº de áreas, % ], ...]
+var PLANES   = {{PLANES}};        // combinaciones armadas
+var RECOMENDADO = {{RECOMENDADO}};
+var AREA_COMPLETA = {{AREACOMPLETA}};
+var T = {{UI}};                   // las cadenas de interfaz, en el idioma de la página
+var IDIOMA = {{IDIOMA}};
+var SERV = {}, ICONO = {}, PORSLUG = {}, COLOR = {};
+MODULOS.forEach(function(m){
+  SERV[m.nombre] = m.serv || []; ICONO[m.nombre] = m.ico;
+  PORSLUG[m.ico] = m.nombre;    COLOR[m.nombre] = m.color;
+});
+function sv(a, i){ return (SERV[a] || [])[i]; }
+/* Índices del área que NO chocan con el servicio i (mismo grupo = alternativas) */
+function choca(a, i){
+  var g = sv(a,i).g;
+  if (!g) return [];
+  return SERV[a].map(function(s, j){ return (j !== i && s.g === g) ? j : -1; })
+                .filter(function(j){ return j >= 0; });
+}
+/* El área «completa»: todo lo que no tiene grupo, más el más amplio de cada grupo */
+function completaIdx(a){
+  var mejor = {};
+  SERV[a].forEach(function(s, j){
+    if (!s.g) return;
+    if (mejor[s.g] === undefined || s.p > SERV[a][mejor[s.g]].p) mejor[s.g] = j;
+  });
+  var top = Object.keys(mejor).map(function(k){ return mejor[k]; });
+  return SERV[a].map(function(s, j){ return (!s.g || top.indexOf(j) >= 0) ? j : -1; })
+                .filter(function(j){ return j >= 0; });
+}
+
+var fmt = function(n){ return "$" + Math.round(n).toLocaleString("es-CO"); };
+var wa  = function(txt){ return "https://wa.me/" + CONTACTO.whatsapp + "?text=" + encodeURIComponent(txt); };
+var mail = function(asunto, cuerpo){
+  return "mailto:" + CONTACTO.correo + "?subject=" + encodeURIComponent(asunto) +
+         "&body=" + encodeURIComponent(cuerpo);
+};
+
+/* ---------------- común a todas las páginas ---------------- */
+Iconos.auto();
+["#logo-cara", "#pie-cara"].forEach(function(s){ var n = $(s); if (n) n.innerHTML = LOGO; });
+
+var top = $("#top");
+if (top) addEventListener("scroll", function(){
+  top.classList.toggle("pegada", scrollY > 100);
+}, {passive:true});
+
+if (!quieto) document.body.classList.add("arma");
+
+/* ---------------- idioma: se pregunta, no se guarda ----------------
+   Solo aparece si el navegador NO está en español. Quien ya navega en español
+   nunca la ve, y no hay nada que recordar entre visitas. */
+(function(){
+  if (IDIOMA !== "es") return;
+  var idiomas = (navigator.languages && navigator.languages.length)
+      ? navigator.languages : [navigator.language || ""];
+  var habla = idiomas.some(function(l){ return String(l).toLowerCase().indexOf("es") === 0; });
+  if (habla) return;
+
+  var caja = document.createElement("div");
+  caja.className = "pregunta";
+  caja.setAttribute("role", "dialog");
+  caja.setAttribute("aria-label", "Language");
+  caja.innerHTML =
+    '<p>Prefer English?</p>' +
+    '<small>This site is in Spanish. There is an English version — nothing is saved either way.</small>' +
+    '<div class="pregunta-acc">' +
+      '<a href="{{OTRO}}" hreflang="en" lang="en">Yes, in English</a>' +
+      '<button type="button" id="pregunta-no">Seguir en español</button>' +
+    '</div>';
+  document.body.appendChild(caja);
+  $("#pregunta-no").addEventListener("click", function(){ caja.remove(); });
+})();
+
+/* ---------------- la carita del 404 ---------------- */
+var errCara = $("#err-cara");
+if (errCara) new Carita(errCara, {gesto:"error", seguir:!quieto});
+
+/* ---------------- selección de áreas, compartida entre páginas ----------------
+   Viaja por la URL: cotizador.html?areas=Marca,Web  — así se puede mandar por chat. */
+var det = {};   // área -> Set de índices de servicio elegidos
+function detSet(n){ return det[n] || (det[n] = new Set()); }
+function detN(n){ return det[n] ? det[n].size : 0; }
+function detIdx(n){ return detN(n) ? [...det[n]].sort(function(a,b){ return a-b; }) : []; }
+function detLista(n){ return detIdx(n).map(function(i){ return sv(n,i).n; }); }
+function completa(n){
+  var c = completaIdx(n);
+  return c.length > 0 && detN(n) === c.length && c.every(function(i){ return det[n].has(i); });
+}
+function areas(){ return MODULOS.map(function(m){ return m.nombre; }).filter(detN); }
+
+(function(){
+  /* s=video.0.3,marca.2 — el slug del área y los índices de lo que eligió adentro */
+  var d = new URLSearchParams(location.search).get("s");
+  if (d) d.split(",").forEach(function(tramo){
+    var pz = tramo.split("."), n = PORSLUG[pz[0]];
+    if (!n) return;
+    pz.slice(1).forEach(function(i){ i = +i; if (sv(n,i)) detSet(n).add(i); });
+  });
+})();
+
+function conUrl(){
+  var d = MODULOS.filter(function(m){ return detN(m.nombre); })
+                 .map(function(m){ return m.ico + "." + detIdx(m.nombre).join("."); })
+                 .join(",");
+  return "cotizador.html" + (d ? "?s=" + d : "");
+}
+
+/* ---------------- descuentos reales del tarifario ---------------- */
+function porEscalera(n){
+  var p = 0;
+  ESCALERA.forEach(function(e){ if (n >= e[0]) p = e[1]; });
+  return p;
+}
+function siguienteEscalon(n){
+  for (var i = 0; i < ESCALERA.length; i++) if (ESCALERA[i][0] > n) return ESCALERA[i];
+  return null;
+}
+function planesActivos(arr){
+  var s = new Set(arr);
+  return PLANES.filter(function(pl){ return pl.a.every(function(a){ return s.has(a); }); });
+}
+function descuento(arr, hayCompleta){
+  var op = [];
+  var esc = porEscalera(arr.length);
+  if (esc) op.push({p:esc, n:T.sumaAreas, tipo:"escalera"});
+  planesActivos(arr).forEach(function(pl){ op.push({p:pl.p, n:T.plan + " " + pl.n, tipo:"plan"}); });
+  if (hayCompleta) op.push({p:AREA_COMPLETA, n:T.areaCompleta, tipo:"area"});
+  if (!op.length) return {p:0, n:"", tipo:""};
+  /* Una sola, la mayor. Son mecánicas distintas y no se acumulan:
+     juntas llegarían al 55% sin que nadie lo hubiera decidido. */
+  return op.sort(function(a,b){ return b.p - a.p; })[0];
+}
+
+function cuentas(){
+  var arr = areas(), inicial = 0, mensual = 0, porAlcance = [], hayCompleta = false, detalle = [];
+  arr.forEach(function(n){
+    var items = [];
+    if (completa(n)) hayCompleta = true;
+    detIdx(n).forEach(function(i){
+      var s = sv(n,i);
+      items.push(s);
+      if (!s.p) porAlcance.push(n + ": " + s.n);
+      else if (s.m) mensual += s.p;
+      else inicial += s.p;
+    });
+    detalle.push({area:n, items:items, completa:completa(n)});
+  });
+  return { arr:arr, inicial:inicial, mensual:mensual, porAlcance:porAlcance,
+           detalle:detalle, desc:descuento(arr, hayCompleta) };
+}
+
+/* ---------------- tarjetas de área con sus servicios ---------------- */
+var barra = $("#barra-sel");
+
+function pintarTarjetas(){
+  $$(".serv").forEach(function(s){
+    s.setAttribute("aria-pressed", !!(det[s.dataset.area] && det[s.dataset.area].has(+s.dataset.i)));
+  });
+  $$(".mod[data-area]").forEach(function(c){
+    var n = c.dataset.area, k = detN(n);
+    c.classList.toggle("elegida", k > 0);
+    c.classList.toggle("llena", completa(n));
+    var chk = $(".check", c); if (chk) chk.textContent = completa(n) ? "★" : "✓";
+    var ab = $(".mod-abrir span", c);
+    if (ab) ab.textContent = k ? (k + " " + (k === 1 ? T.servElegido : T.servElegidos))
+                              : (T.verServ.replace("%d", SERV[n].length));
+    $$(".serv", c).forEach(function(s){
+      var i = +s.dataset.i;
+      s.classList.toggle("bloqueado", !det[n] || !det[n].has(i)
+        ? choca(n, i).some(function(j){ return det[n] && det[n].has(j); }) : false);
+    });
+    var td = $(".serv-todo", c);
+    if (td) td.textContent = completa(n) ? T.quitarArea
+                                         : T.tomarArea.replace("%d", AREA_COMPLETA).replace("%%","%");
+  });
+  if (barra){
+    var c = cuentas(), k = c.detalle.reduce(function(a,d){ return a + d.items.length; }, 0);
+    barra.hidden = k === 0;
+    if (k){
+      $("#barra-n").textContent = k + " " + (k === 1 ? T.servicio : T.servicios) +
+        " · " + c.arr.length + " " + (c.arr.length === 1 ? T.area : T.areas);
+      $("#barra-lista").textContent = c.detalle.map(function(d){
+        return d.area + (d.completa ? " (" + T.completa + ")" : " (" + d.items.length + ")");
+      }).join(" · ");
+      $("#barra-ir").href = conUrl();
+    }
+  }
+}
+
+function repintar(){
+  pintarTarjetas();
+  if (typeof pintarDescuentos === "function") pintarDescuentos();
+  if (typeof pintarEco === "function") pintarEco();
+  else if (typeof cotizar === "function") cotizar();
+}
+
+/* el desplegable de cada área */
+$$(".mod-abrir").forEach(function(b){
+  b.addEventListener("click", function(){
+    var lista = document.getElementById(b.getAttribute("aria-controls"));
+    var abierto = b.getAttribute("aria-expanded") === "true";
+    b.setAttribute("aria-expanded", String(!abierto));
+    lista.hidden = abierto;
+  });
+});
+
+$$(".serv").forEach(function(s){
+  s.addEventListener("click", function(){
+    var n = s.dataset.area, i = +s.dataset.i, S = detSet(n);
+    if (S.has(i)) S.delete(i);
+    else { S.add(i); choca(n, i).forEach(function(j){ S.delete(j); }); }
+    repintar();
+  });
+});
+
+/* tomar o soltar el área entera de un golpe */
+$$(".serv-todo").forEach(function(b){
+  b.addEventListener("click", function(){
+    var n = b.dataset.area, S = detSet(n);
+    if (completa(n)) S.clear();
+    else { S.clear(); completaIdx(n).forEach(function(i){ S.add(i); }); }
+    repintar();
+  });
+});
+
+var limpiarBarra = $("#barra-limpiar");
+if (limpiarBarra) limpiarBarra.addEventListener("click", function(){ det = {}; repintar(); });
+
+/* ---------------- la escalera y los planes ---------------- */
+var escaleraNodo = $("#escalera");
+if (escaleraNodo){
+  escaleraNodo.innerHTML = ESCALERA.map(function(e){
+    return '<li class="esc-fila" data-n="' + e[0] + '">' +
+      '<span class="esc-n mono">' + e[0] + ' ' + T.areasN + '</span>' +
+      '<span class="esc-barra"><i style="width:' + (e[1] / 35 * 100) + '%"></i></span>' +
+      '<b class="esc-p mono">−' + e[1] + '%</b></li>';
+  }).join("");
+}
+var planesNodo = $("#planes");
+if (planesNodo){
+  planesNodo.innerHTML = PLANES.map(function(pl){
+    return '<div class="plan' + (pl.n === RECOMENDADO ? " rec" : "") + '" data-plan="' + pl.n + '">' +
+      (pl.n === RECOMENDADO ? '<span class="plan-sello mono">' + (IDIOMA === "en" ? "Most requested" : "El más pedido") + '</span>' : '') +
+      '<div class="plan-cab"><h4>' + pl.n + '</h4><b class="mono">−' + pl.p + '%</b></div>' +
+      '<p class="dim plan-d">' + pl.d + '</p>' +
+      '<div class="plan-areas">' + pl.a.map(function(a){
+        return '<span class="plan-a">' + a + '</span>';
+      }).join("") + '</div>' +
+      '<button class="plan-ir" type="button" data-plan="' + pl.n + '">' + T.tomarPlan + '</button>' +
+      '</div>';
+  }).join("");
+  $$(".plan-ir", planesNodo).forEach(function(b){
+    b.addEventListener("click", function(){
+      var pl = PLANES.filter(function(x){ return x.n === b.dataset.plan; })[0];
+      if (!pl) return;
+      pl.a.forEach(function(a){
+        var S = detSet(a);
+        S.clear();
+        completaIdx(a).forEach(function(i){ S.add(i); });
+      });
+      repintar();
+      var cot = $("#cot"); if (cot) cot.scrollIntoView({behavior: quieto ? "auto" : "smooth", block:"start"});
+    });
+  });
+}
+function pintarDescuentos(){
+  if (!escaleraNodo && !planesNodo) return;
+  var c = cuentas(), n = c.arr.length, s = new Set(c.arr);
+  if (escaleraNodo){
+    $$(".esc-fila", escaleraNodo).forEach(function(f){
+      var k = +f.dataset.n;
+      f.classList.toggle("aqui", k === n);
+      f.classList.toggle("logrado", k <= n);
+    });
+  }
+  if (planesNodo){
+    $$(".plan", planesNodo).forEach(function(d){
+      var pl = PLANES.filter(function(x){ return x.n === d.dataset.plan; })[0];
+      var faltan = pl.a.filter(function(a){ return !s.has(a); });
+      d.classList.toggle("activo", faltan.length === 0);
+      $(".plan-ir", d).textContent = faltan.length === 0 ? T.yaLoTienes
+        : (faltan.length === pl.a.length ? T.tomarPlan
+           : T.falta + " " + faltan.join(IDIOMA === "en" ? " and " : " y "));
+    });
+  }
+}
+
+/* ---------------- galería con filtro y buscador ---------------- */
+var galRejilla = $("#gal-rejilla");
+if (galRejilla){
+  /* Cada servicio es una ficha. Cuando haya material, cada una lleva su imagen;
+     hoy muestran la superficie del área y el precio, que ya es información útil. */
+  var FICHAS = [];
+  MODULOS.forEach(function(m){
+    m.serv.forEach(function(s, i){
+      FICHAS.push({area:m.nombre, ico:m.ico, color:m.color, i:i, n:s.n, u:s.u, p:s.p, mens:s.m,
+                   busca: (m.nombre + " " + s.n + " " + (s.u||"") + " " + m.desc).toLowerCase()});
+    });
+  });
+
+  var filtro = "todos", texto = "";
+  var galChips = $("#gal-chips");
+  galChips.innerHTML = '<button class="chip" type="button" data-v="todos" aria-pressed="true">' + T.todas + '</button>' +
+    MODULOS.map(function(m){
+      return '<button class="chip" type="button" data-v="'+m.nombre+'" aria-pressed="false">'+m.nombre+'</button>';
+    }).join("");
+
+  function sinTildes(s){
+    return s.normalize ? s.normalize("NFD").replace(/[\u0300-\u036f]/g, "") : s;
+  }
+
+  function pintarGal(){
+    var q = sinTildes(texto.trim().toLowerCase());
+    var palabras = q ? q.split(/\s+/) : [];
+    var vistos = FICHAS.filter(function(f){
+      if (filtro !== "todos" && f.area !== filtro) return false;
+      if (!palabras.length) return true;
+      var b = sinTildes(f.busca);
+      return palabras.every(function(w){ return b.indexOf(w) !== -1; });
+    });
+
+    galRejilla.innerHTML = vistos.map(function(f){
+      var precio = f.p ? (fmt(f.p) + (f.mens ? " " + T.mes : "")) : T.porAlcance;
+      return '<article class="ficha" style="--sf:' + f.color + '">' +
+        '<div class="ficha-vis"><span class="ico" data-ico="' + f.ico + '"></span>' +
+        '<span class="ficha-falta mono">' + T.sinMuestra + '</span></div>' +
+        '<div class="ficha-txt">' +
+        '<span class="ficha-area mono">' + f.area + '</span>' +
+        '<h3>' + f.n + '</h3>' +
+        (f.u ? '<p class="dim ficha-u">' + f.u + '</p>' : '') +
+        '<span class="ficha-p mono">' + precio + '</span>' +
+        '<a class="ficha-ir" href="cotizador.html?s=' + f.ico + '.' + f.i + '">' + T.cotizarEsto + '</a>' +
+        '</div></article>';
+    }).join("");
+    Iconos.auto(galRejilla);
+
+    $("#gal-nada").hidden = vistos.length > 0;
+    $("#gal-cuenta").textContent = vistos.length
+      ? vistos.length + " " + (vistos.length === 1 ? T.servicio : T.servicios) +
+        (filtro !== "todos" ? " " + T.en + " " + filtro : "") + (q ? " " + T.para + ' «' + texto.trim() + '»' : "")
+      : "";
+    $("#busca-x").hidden = !texto;
+    if (!vistos.length){
+      $("#gal-preguntar").href = wa(T.nadaEncontrado.replace("%s", texto.trim()));
+    }
+  }
+
+  $$(".chip", galChips).forEach(function(c){
+    c.addEventListener("click", function(){
+      filtro = c.dataset.v;
+      $$(".chip", galChips).forEach(function(o){ o.setAttribute("aria-pressed", o === c); });
+      pintarGal();
+    });
+  });
+  var busca = $("#busca");
+  busca.addEventListener("input", function(){ texto = busca.value; pintarGal(); });
+  $("#busca-x").addEventListener("click", function(){ texto = ""; busca.value = ""; busca.focus(); pintarGal(); });
+  pintarGal();
+}
+
+/* ---------------- la pared del ecosistema ---------------- */
+var pared = $("#pared");
+var pintarEco = null;
+if (pared){
+  var limpiar = $("#limpiar");
+  if (limpiar) limpiar.addEventListener("click", function(){ det = {}; repintar(); });
+
+  pintarEco = function(){
+    $$(".eco-chip", pared).forEach(function(e){ e.remove(); });
+    var c = cuentas();
+    $("#vacio").hidden = c.arr.length > 0;
+    pared.classList.toggle("conectada", c.arr.length >= 2);
+
+    c.detalle.forEach(function(d){
+      var chip = document.createElement("div");
+      chip.className = "eco-chip";
+      chip.innerHTML = '<span style="font-family:Syne;font-weight:800;font-size:16px">' + d.area +
+        (d.completa ? ' <span class="mono" style="font-size:9.5px">' + T.completa + '</span>' : '') + '</span>' +
+        '<span class="mono" style="font-size:10px;color:#4A4453;line-height:1.4">' +
+        d.items.map(function(s){ return s.n; }).join(" · ") + '</span>';
+      pared.appendChild(chip);
+    });
+
+    $("#n-mod").textContent = c.arr.length;
+    $("#inicial").textContent = fmt(c.inicial * (1 - c.desc.p/100));
+    $("#mensual").textContent = fmt(c.mensual) + " " + T.mes;
+    $("#desc").textContent = c.desc.p + "%";
+    $("#desc-nombre").textContent = c.desc.n || T.ahorro;
+    $("#d-inicial").hidden = c.inicial === 0;
+    $("#d-mensual").hidden = c.mensual === 0;
+    $("#d-desc").hidden    = c.desc.p === 0;
+    $("#aviso").hidden     = c.mensual === 0;
+
+    var alc = $("#alcance");
+    alc.hidden = c.porAlcance.length === 0;
+    if (c.porAlcance.length){
+      alc.innerHTML = "<b>" + c.porAlcance.join(", ") + "</b> " +
+        (c.porAlcance.length > 1 ? T.seCotizanN : T.seCotiza);
+    }
+
+    var r = $("#razon");
+    if (c.desc.n === T.areaCompleta){
+      r.innerHTML = T.razonArea.replace("%d", AREA_COMPLETA);
+    } else if (c.desc.p){
+      r.textContent = T.razonConectar + (c.mensual ? T.razonMensual : "");
+    } else {
+      r.textContent = T.marcaDos;
+    }
+    if (typeof cotizar === "function") cotizar();
+  };
+}
+
+/* ---------------- el cotizador ---------------- */
+var seg = $("#seg-escala");
+var cotizar = null;
+if (seg){
+  var caraCot = new Carita($("#cot-cara"), {gesto:"contenta", seguir:false});
+  var escala = $$("#seg-escala button")[0].dataset.v;
+
+  $$("#seg-escala button").forEach(function(b){
+    b.addEventListener("click", function(){
+      escala = b.dataset.v;
+      $$("#seg-escala button").forEach(function(o){ o.setAttribute("aria-pressed", o === b); });
+      cotizar();
+    });
+  });
+
+  cotizar = function(){
+    var c = cuentas();
+    /* la carita reacciona a algo real: cuánto bajó */
+    caraCot.valor(Math.min(100, Math.round(c.desc.p / 35 * 100)));
+
+    var res = $("#cot-resumen");
+    res.innerHTML = c.arr.length
+      ? '<b>' + c.arr.join(" · ") + '</b>' +
+        (c.desc.p ? ' <span class="mono" style="opacity:.7">— ' + c.desc.n + ', −' + c.desc.p + '%</span>' : '') +
+        '<span class="cot-det">' + c.detalle.map(function(d){
+          return '<b>' + d.area + (d.completa ? " (" + T.completa + ")" : "") + '</b><br>' +
+            d.items.map(function(s){
+              return "&nbsp;&nbsp;" + s.n + " — " + (s.p ? fmt(s.p) + (s.m ? " " + T.mes : "") : T.porAlcance);
+            }).join("<br>");
+        }).join('<br>') + '</span>'
+      : T.nada;
+
+    var inicial = c.inicial * (1 - c.desc.p/100);
+    $("#c-inicial-v").textContent = fmt(inicial);
+    $("#c-mensual-v").textContent = fmt(c.mensual) + " " + T.mes;
+    $("#c-mensual").hidden = c.mensual === 0;
+    $("#c-inicial").hidden = c.inicial === 0;
+
+    var razon = T.razonBase;
+    var sig = siguienteEscalon(c.arr.length);
+    if (sig && c.arr.length >= 1)
+      razon = T.razonSube.replace("%d", sig[0]).replace("%d", sig[1]).replace("%%","%") + razon;
+    if (c.mensual) razon += T.razonMensual;
+    $("#c-razon").textContent = razon;
+
+    /* el mensaje que sale — el mismo por WhatsApp y por correo */
+    var t = [];
+    t.push(T.hola);
+    t.push("");
+    if (c.detalle.length){
+      t.push(T.loQueNecesito);
+      c.detalle.forEach(function(d){
+        t.push("");
+        t.push(d.area + (d.completa ? " " + T.areaCompletaMsg : "") + ":");
+        d.items.forEach(function(s){
+          t.push("  - " + s.n + (s.u ? " (" + s.u + ")" : "") +
+                 " — " + (s.p ? fmt(s.p) + (s.m ? " /mes" : "") : "por alcance"));
+        });
+      });
+      t.push("");
+    } else {
+      t.push(T.noLoTengo);
+    }
+    t.push(T.paraQuien + escala);
+    if (c.inicial) t.push(T.invInicial + fmt(inicial));
+    if (c.mensual) t.push(T.mensualEst + fmt(c.mensual));
+    if (c.desc.p)  t.push(T.descAplicado + c.desc.n + ", " + c.desc.p + "%");
+    if (c.porAlcance.length) t.push(T.sinCifra + c.porAlcance.join(", "));
+    var texto = t.join("\n");
+
+    $("#wa").href = wa(texto);
+    $("#correo").href = mail(T.asuntoCot + (c.arr.length ? " — " + c.arr.join(", ") : ""), texto);
+  };
+}
+
+/* la carita de la asesoría */
+var asesCara = $("#ases-cara");
+if (asesCara) new Carita(asesCara, {gesto:"contenta", seguir:!quieto});
+
+/* ---------------- antes / después ---------------- */
+var ad = $("#ad");
+if (ad){
+  var manija = $("#ad-manija"), panel = $("#ad-despues"), v = 50, arrastrando = false;
+  function poner(x){
+    v = Math.max(0, Math.min(100, x));
+    manija.style.left = v + "%";
+    panel.style.clipPath = "inset(0 0 0 " + v + "%)";
+    ad.setAttribute("aria-valuenow", Math.round(v));
+  }
+  function desde(e){ var r = ad.getBoundingClientRect(); poner(((e.clientX - r.left) / r.width) * 100); }
+  ad.addEventListener("pointerdown", function(e){ arrastrando = true; ad.setPointerCapture(e.pointerId); desde(e); });
+  ad.addEventListener("pointermove", function(e){ if (arrastrando) desde(e); });
+  ad.addEventListener("pointerup",     function(){ arrastrando = false; });
+  ad.addEventListener("pointercancel", function(){ arrastrando = false; });
+  ad.addEventListener("keydown", function(e){
+    if (e.key === "ArrowLeft")  { poner(v - 4); e.preventDefault(); }
+    if (e.key === "ArrowRight") { poner(v + 4); e.preventDefault(); }
+    if (e.key === "Home")       { poner(0);   e.preventDefault(); }
+    if (e.key === "End")        { poner(100); e.preventDefault(); }
+  });
+  poner(50);
+}
+
+/* ---------------- contacto: sale directo, sin bandeja intermedia ---------------- */
+var form = $("#form");
+if (form){
+  var faltan = function(){
+    var f = ["f-nombre","f-correo","f-msg"].map(function(id){ return $("#"+id); });
+    var vacio = f.some(function(n){ return !n.value.trim(); });
+    var ok = $("#f-legal").checked;
+    var aviso = $("#form-estado");
+    if (vacio) { aviso.textContent = T.faltanTres; return true; }
+    if (!ok)   { aviso.textContent = T.faltaLegal; return true; }
+    aviso.textContent = "";
+    return false;
+  };
+  var armarMensaje = function(){
+    /* No hay servidor que registre el consentimiento, así que la autorización y su fecha
+       viajan dentro del propio mensaje: eso es lo que queda como prueba, en las dos bandejas. */
+    var hoy = new Date().toLocaleDateString(IDIOMA === "en" ? "en-GB" : "es-CO", {year:"numeric", month:"long", day:"numeric"});
+    return [T.soy.replace("%s", $("#f-nombre").value.trim()),
+            T.contacto + $("#f-correo").value.trim(), "",
+            $("#f-msg").value.trim(), "",
+            "—",
+            T.autoriza.replace("%s", location.origin + location.pathname.replace(/[^/]*$/, "") + "legal.html#datos")
+                      .replace("%s", hoy)].join("\n");
+  };
+  $("#env-wa").addEventListener("click", function(e){
+    if (faltan()) { e.preventDefault(); return; }
+    e.currentTarget.href = wa(armarMensaje());
+  });
+  $("#env-correo").addEventListener("click", function(e){
+    if (faltan()) { e.preventDefault(); return; }
+    e.currentTarget.href = mail(T.asuntoContacto + $("#f-nombre").value.trim(), armarMensaje());
+  });
+  form.addEventListener("submit", function(e){ e.preventDefault(); $("#env-wa").click(); });
+}
+
+/* ---------------- arranque ---------------- */
+pintarTarjetas();
+if (typeof pintarDescuentos === "function") pintarDescuentos();
+if (pintarEco) pintarEco();
+else if (cotizar) cotizar();
+})();
+</script>

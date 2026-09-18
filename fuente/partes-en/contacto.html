@@ -1,0 +1,33 @@
+<section class="seccion" id="contacto">
+  <div class="eyebrow">Or write to us directly</div>
+  <h2 style="margin-bottom:8px">Let us talk</h2>
+  <p class="dim" style="max-width:56ch;margin-bottom:20px">What you write goes straight to our
+    WhatsApp or our email. There is no form sitting somewhere waiting for someone to check it.</p>
+  <div class="pared">
+    <form class="form form-ancho" id="form">
+      <div>
+        <label for="f-nombre">Name</label>
+        <input type="text" id="f-nombre" name="nombre" required>
+      </div>
+      <div>
+        <label for="f-correo">Email or WhatsApp</label>
+        <input type="text" id="f-correo" name="correo" required>
+      </div>
+      <div>
+        <label for="f-msg">What you need</label>
+        <textarea id="f-msg" name="mensaje" required></textarea>
+      </div>
+      <label class="legal" style="text-transform:none;letter-spacing:0;font-size:12px;font-family:inherit">
+        <input type="checkbox" id="f-legal" required>
+        <span>I authorise the processing of my data under the
+          <a href="legal.html#datos" target="_blank" rel="noopener">data policy</a>
+          and Colombian Law 1581 of 2012.</span>
+      </label>
+      <div class="form-acc">
+        <a class="btn v" id="env-wa" href="#" target="_blank" rel="noopener">Send on WhatsApp</a>
+        <a class="btn ghost" id="env-correo" href="#">Send by email</a>
+      </div>
+      <p class="dim" style="font-size:12px" id="form-estado" role="status"></p>
+    </form>
+  </div>
+</section>

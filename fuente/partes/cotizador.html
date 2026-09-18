@@ -1,0 +1,35 @@
+<!-- ============ 09 COTIZADOR ============ -->
+<section class="seccion" id="cotizador">
+  <div class="pared">
+    <div class="cot" id="cot">
+      <div class="paso">
+        <div class="paso-n">Lo que elegiste</div>
+        <p id="cot-resumen">Todavía no has elegido nada. Abre un área arriba y marca lo que necesitas.</p>
+      </div>
+      <div class="paso">
+        <div class="paso-n">Para quién es</div>
+        <div class="seg" id="seg-escala">
+          <button type="button" data-v="emprendedor" aria-pressed="true">Emprendedor</button>
+          <button type="button" data-v="empresa" aria-pressed="false">Empresa</button>
+          <button type="button" data-v="evento" aria-pressed="false">Evento</button>
+        </div>
+      </div>
+      <div class="paso">
+        <div class="paso-n">El estimado</div>
+        <div class="cot-total">
+          <span class="cara cot-cara" id="cot-cara" aria-hidden="true"></span>
+          <div class="dato" id="c-inicial"><span>Inversión inicial</span><b id="c-inicial-v">$0</b></div>
+          <div class="dato" id="c-mensual" hidden><span>Mensualidad</span><b id="c-mensual-v">$0</b></div>
+          <p class="razon" id="c-razon" style="color:rgba(253,251,247,.75)">Es un estimado sobre tarifas «desde».
+            El número final sale de una conversación corta.</p>
+        </div>
+        <div class="cot-cierre">
+          <a class="btn" id="wa" href="#" target="_blank" rel="noopener">Enviar por WhatsApp</a>
+          <a class="btn ghost claro" id="correo" href="#">Enviar por correo</a>
+          <span class="mono" style="font-size:12px;opacity:.6">Llega directo, con todo lo que elegiste.
+            Respondemos con propuesta formal en 24 horas.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

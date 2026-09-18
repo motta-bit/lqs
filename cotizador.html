@@ -3,22 +3,22 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="El mejor amigo de tus ideas. LQS no es solo una agencia creativa: es una agencia creativa modular. Siete areas independientes que se contratan solas y se conectan entre si. Estamos donde nos necesiten.">
+<meta name="description" content="Elige servicio por servicio y el total se arma solo. Cada cosa con su precio, el area completa con descuento. Llega directo a nuestro WhatsApp o correo.">
 <meta name="theme-color" content="#FDFBF7">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="canonical" href="https://motta-bit.github.io/lqs/">
+<link rel="canonical" href="https://motta-bit.github.io/lqs/cotizador.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="LQS">
-<meta property="og:title" content="LQS — El mejor amigo de tus ideas">
-<meta property="og:description" content="El mejor amigo de tus ideas. LQS no es solo una agencia creativa: es una agencia creativa modular. Siete areas independientes que se contratan solas y se conectan entre si. Estamos donde nos necesiten.">
-<meta property="og:url" content="https://motta-bit.github.io/lqs/">
+<meta property="og:title" content="Cotizador — LQS">
+<meta property="og:description" content="Elige servicio por servicio y el total se arma solo. Cada cosa con su precio, el area completa con descuento. Llega directo a nuestro WhatsApp o correo.">
+<meta property="og:url" content="https://motta-bit.github.io/lqs/cotizador.html">
 <meta property="og:image" content="https://motta-bit.github.io/lqs/og.jpg">
 <meta property="og:locale" content="es_CO">
-<link rel="alternate" hreflang="es" href="https://motta-bit.github.io/lqs/">
-<link rel="alternate" hreflang="en" href="https://motta-bit.github.io/lqs/en/">
+<link rel="alternate" hreflang="es" href="https://motta-bit.github.io/lqs/cotizador.html">
+<link rel="alternate" hreflang="en" href="https://motta-bit.github.io/lqs/en/cotizador.html">
 <link rel="alternate" hreflang="x-default" href="https://motta-bit.github.io/lqs/">
 <meta name="twitter:card" content="summary_large_image">
-<title>LQS — El mejor amigo de tus ideas</title>
+<title>Cotizador — LQS</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Rubik:wght@400;500;900&family=IBM+Plex+Mono:wght@400;600&family=Newsreader:ital,wght@1,300&display=swap">
 <style>
@@ -641,92 +641,250 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
   <nav class="nav">
     <a href="nosotros.html" data-pag="nosotros">Nosotros</a>
     <a href="muestras.html" data-pag="muestras">Muestras</a>
-    <a href="cotizador.html" data-pag="cotizador">Cotizador</a>
+    <a href="cotizador.html" data-pag="cotizador" aria-current="page">Cotizador</a>
   </nav>
-  <a class="idioma" href="en/index.html" hreflang="en" lang="en" aria-label="See in English"><b>ES</b> · EN</a>
+  <a class="idioma" href="en/cotizador.html" hreflang="en" lang="en" aria-label="See in English"><b>ES</b> · EN</a>
   <a class="btn v" href="cotizador.html">Cotizar</a>
 </header>
 
-<main class="wrap" id="inicio" data-pagina="index">
-<!-- ============ 01 HERO ============ -->
-<section class="pared" style="padding-top:76px">
-  <div class="hero grano apila">
-    <div class="h-forma"></div>
-    <div class="h-forma2"></div>
-    <div>
-      <div class="eyebrow" style="color:#1A1720;opacity:.7">Agencia creativa modular · Estamos donde nos necesiten</div>
-      <h1>LQS</h1>
-      <p class="lema">El mejor amigo de tus ideas</p>
+<main class="wrap" id="inicio" data-pagina="cotizador">
+<section class="seccion pagina-encab"><div class="eyebrow">Cotizador</div><h1 class="tit-pagina">Armemos el número</h1><p class="dim bajada">Abre el área, marca lo que necesitas y el total se arma solo. Cada servicio tiene su precio; si tomas un área completa, baja. Llega directo a nuestro WhatsApp, sin formularios que nadie revisa.</p></section>
+
+<!-- ============ ÁREAS ============ -->
+<section class="seccion" id="modulos">
+  <div class="eyebrow">Cada servicio con su precio · el área completa baja 10% · sumar áreas baja hasta 35%</div>
+  <h2 style="margin-bottom:20px">Marca lo que necesitas</h2>
+  <div class="chips" id="chips"></div>
+  <div class="pared" id="rejilla-modulos">
+    <article class="mod apila" data-area="Video" style="--sf:#C4A8F5"><div class="mod-cab"><span class="mod-top"><span class="ico" data-ico="video"></span></span><span class="mod-name">Video</span><span class="mod-desc">Reels, YouTube, comerciales</span><span class="mod-price">desde $150.000</span><span class="check" aria-hidden="true">✓</span></div><button class="mod-abrir" type="button" aria-expanded="false" aria-controls="serv-video"><span>Ver los 5 servicios</span><span class="mod-flecha" aria-hidden="true">+</span></button><div class="mod-lista" id="serv-video" hidden><button class="serv" type="button" data-area="Video" data-i="0" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Reels y contenido vertical</span><span class="serv-p mono">$150.000</span></button><button class="serv" type="button" data-area="Video" data-i="1" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Entrevistas</span><span class="serv-p mono">$350.000</span></button><button class="serv" type="button" data-area="Video" data-i="2" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Video para YouTube, acabado cinematográfico</span><span class="serv-p mono">$600.000</span></button><button class="serv" type="button" data-area="Video" data-i="3" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Podcast: grabación y cortes</span><span class="serv-p mono">$500.000</span></button><button class="serv" type="button" data-area="Video" data-i="4" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Comerciales y piezas de publicidad</span><span class="serv-p mono">$700.000</span></button><button class="serv-todo" type="button" data-area="Video">Tomar el área completa · −10%</button></div></article>
+<article class="mod apila" data-area="Foto" style="--sf:#A8CBF5"><div class="mod-cab"><span class="mod-top"><span class="ico" data-ico="foto"></span></span><span class="mod-name">Foto</span><span class="mod-desc">Producto, publicidad, sesiones</span><span class="mod-price">desde $200.000</span><span class="check" aria-hidden="true">✓</span></div><button class="mod-abrir" type="button" aria-expanded="false" aria-controls="serv-foto"><span>Ver los 6 servicios</span><span class="mod-flecha" aria-hidden="true">+</span></button><div class="mod-lista" id="serv-foto" hidden><button class="serv" type="button" data-area="Foto" data-i="0" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Retoque y edición<em class="serv-u">por foto</em></span><span class="serv-p mono">$40.000</span></button><button class="serv" type="button" data-area="Foto" data-i="1" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Sesión a una persona<em class="serv-u">45 min, 10 fotos</em></span><span class="serv-p mono">$200.000</span></button><button class="serv" type="button" data-area="Foto" data-i="2" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Foto de producto</span><span class="serv-p mono">$250.000</span></button><button class="serv" type="button" data-area="Foto" data-i="3" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Foto para portafolio</span><span class="serv-p mono">$300.000</span></button><button class="serv" type="button" data-area="Foto" data-i="4" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Foto para publicidad</span><span class="serv-p mono">$400.000</span></button><button class="serv" type="button" data-area="Foto" data-i="5" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Sesión al equipo</span><span class="serv-p mono">$400.000</span></button><button class="serv-todo" type="button" data-area="Foto">Tomar el área completa · −10%</button></div></article>
+<article class="mod apila" data-area="Marca" style="--sf:#F7D9A6"><div class="mod-cab"><span class="mod-top"><span class="ico" data-ico="marca"></span></span><span class="mod-name">Marca</span><span class="mod-desc">Identidad, empaques, consultoría</span><span class="mod-price">desde $150.000</span><span class="check" aria-hidden="true">✓</span></div><button class="mod-abrir" type="button" aria-expanded="false" aria-controls="serv-marca"><span>Ver los 6 servicios</span><span class="mod-flecha" aria-hidden="true">+</span></button><div class="mod-lista" id="serv-marca" hidden><button class="serv" type="button" data-area="Marca" data-i="0" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Solo el logo<em class="serv-u">una alternativa, no se suman</em></span><span class="serv-p mono">$150.000</span></button><button class="serv" type="button" data-area="Marca" data-i="1" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Diseño de accesorios</span><span class="serv-p mono">$250.000</span></button><button class="serv" type="button" data-area="Marca" data-i="2" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Consultoría de ADN y orientación de marca</span><span class="serv-p mono">$300.000</span></button><button class="serv" type="button" data-area="Marca" data-i="3" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Empaques</span><span class="serv-p mono">$350.000</span></button><button class="serv" type="button" data-area="Marca" data-i="4" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Rediseño de una marca que ya existe<em class="serv-u">una alternativa, no se suman</em></span><span class="serv-p mono">$650.000</span></button><button class="serv" type="button" data-area="Marca" data-i="5" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Diseño de marca desde cero<em class="serv-u">una alternativa, no se suman</em></span><span class="serv-p mono">$750.000</span></button><button class="serv-todo" type="button" data-area="Marca">Tomar el área completa · −10%</button></div></article>
+<article class="mod apila" data-area="Redes" style="--sf:#BFE0A8"><div class="mod-cab"><span class="mod-top"><span class="ico" data-ico="redes"></span></span><span class="mod-name">Redes</span><span class="mod-desc">Contenido, calendario, community</span><span class="mod-price">desde $210.000</span><span class="check" aria-hidden="true">✓</span></div><button class="mod-abrir" type="button" aria-expanded="false" aria-controls="serv-redes"><span>Ver los 6 servicios</span><span class="mod-flecha" aria-hidden="true">+</span></button><div class="mod-lista" id="serv-redes" hidden><button class="serv" type="button" data-area="Redes" data-i="0" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Publicaciones sueltas<em class="serv-u">por pieza</em></span><span class="serv-p mono">$40.000</span></button><button class="serv" type="button" data-area="Redes" data-i="1" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Comercial corto para pauta</span><span class="serv-p mono">$250.000</span></button><button class="serv" type="button" data-area="Redes" data-i="2" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Paquete de publicaciones<em class="serv-u">6 piezas</em></span><span class="serv-p mono">$210.000</span></button><button class="serv" type="button" data-area="Redes" data-i="3" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Respuesta de comentarios y mensajes</span><span class="serv-p mono">$290.000 /mes</span></button><button class="serv" type="button" data-area="Redes" data-i="4" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Social manager<em class="serv-u">plan Base</em></span><span class="serv-p mono">$650.000 /mes</span></button><button class="serv" type="button" data-area="Redes" data-i="5" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Plan mensual con calendario de publicación<em class="serv-u">plan Activo</em></span><span class="serv-p mono">$1.290.000 /mes</span></button><button class="serv-todo" type="button" data-area="Redes">Tomar el área completa · −10%</button></div></article>
+<article class="mod apila" data-area="Digital" style="--sf:#F7B2AB"><div class="mod-cab"><span class="mod-top"><span class="ico" data-ico="web"></span></span><span class="mod-name">Digital</span><span class="mod-desc">Sitios, catálogos, menús</span><span class="mod-price">desde $450.000</span><span class="check" aria-hidden="true">✓</span></div><button class="mod-abrir" type="button" aria-expanded="false" aria-controls="serv-web"><span>Ver los 6 servicios</span><span class="mod-flecha" aria-hidden="true">+</span></button><div class="mod-lista" id="serv-web" hidden><button class="serv" type="button" data-area="Digital" data-i="0" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Menú digital con código QR</span><span class="serv-p mono">$450.000</span></button><button class="serv" type="button" data-area="Digital" data-i="1" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Landing para una campaña</span><span class="serv-p mono">$600.000</span></button><button class="serv" type="button" data-area="Digital" data-i="2" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Blog</span><span class="serv-p mono">$700.000</span></button><button class="serv" type="button" data-area="Digital" data-i="3" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Portafolio</span><span class="serv-p mono">$900.000</span></button><button class="serv" type="button" data-area="Digital" data-i="4" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Catálogo en línea</span><span class="serv-p mono">$1.000.000</span></button><button class="serv" type="button" data-area="Digital" data-i="5" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Página web</span><span class="serv-p mono">$1.300.000</span></button><button class="serv-todo" type="button" data-area="Digital">Tomar el área completa · −10%</button></div></article>
+<article class="mod apila" data-area="Eventos" style="--sf:#C4A8F5"><div class="mod-cab"><span class="mod-top"><span class="ico" data-ico="eventos"></span></span><span class="mod-name">Eventos</span><span class="mod-desc">Logística, registro, cobertura</span><span class="mod-price">desde $250.000</span><span class="check" aria-hidden="true">✓</span></div><button class="mod-abrir" type="button" aria-expanded="false" aria-controls="serv-eventos"><span>Ver los 6 servicios</span><span class="mod-flecha" aria-hidden="true">+</span></button><div class="mod-lista" id="serv-eventos" hidden><button class="serv" type="button" data-area="Eventos" data-i="0" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Diseño de accesorios del evento</span><span class="serv-p mono">$350.000</span></button><button class="serv" type="button" data-area="Eventos" data-i="1" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Fondos y carruseles para conferencia</span><span class="serv-p mono">$250.000</span></button><button class="serv" type="button" data-area="Eventos" data-i="2" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Registro y control de invitados<em class="serv-u">con contacto post evento</em></span><span class="serv-p mono">$600.000</span></button><button class="serv" type="button" data-area="Eventos" data-i="3" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Cobertura en foto y video</span><span class="serv-p mono">$800.000</span></button><button class="serv" type="button" data-area="Eventos" data-i="4" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Insta foto: la foto llega el mismo día</span><span class="serv-p mono">$800.000</span></button><button class="serv" type="button" data-area="Eventos" data-i="5" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Logística completa del día</span><span class="serv-p mono">$1.800.000</span></button><button class="serv-todo" type="button" data-area="Eventos">Tomar el área completa · −10%</button></div></article>
+<article class="mod apila" data-area="Automatización" style="--sf:#A8CBF5"><div class="mod-cab"><span class="mod-top"><span class="ico" data-ico="automatizacion"></span></span><span class="mod-name">Automatización</span><span class="mod-desc">WhatsApp, Instagram, seguimiento</span><span class="mod-price">desde $300.000</span><span class="check" aria-hidden="true">✓</span></div><button class="mod-abrir" type="button" aria-expanded="false" aria-controls="serv-automatizacion"><span>Ver los 5 servicios</span><span class="mod-flecha" aria-hidden="true">+</span></button><div class="mod-lista" id="serv-automatizacion" hidden><button class="serv" type="button" data-area="Automatización" data-i="0" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Reporte automático de números cada semana</span><span class="serv-p mono">$300.000</span></button><button class="serv" type="button" data-area="Automatización" data-i="1" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">WhatsApp Business: catálogo y respuestas</span><span class="serv-p mono">$350.000</span></button><button class="serv" type="button" data-area="Automatización" data-i="2" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Solicitudes que llegan directo, sin bandeja</span><span class="serv-p mono">$400.000</span></button><button class="serv" type="button" data-area="Automatización" data-i="3" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Respuestas automáticas en Instagram<em class="serv-u">mensajes y comentarios</em></span><span class="serv-p mono">$400.000</span></button><button class="serv" type="button" data-area="Automatización" data-i="4" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Agente de WhatsApp que responde y cotiza<em class="serv-u">montaje</em></span><span class="serv-p mono">$1.550.000</span></button><button class="serv-todo" type="button" data-area="Automatización">Tomar el área completa · −10%</button></div></article>
+<div class="mod-mas apila"><span class="mod-name">¿No ves lo tuyo?</span><p class="mod-desc">Estas listas son lo que más nos piden, no un catálogo cerrado. Si lo que necesitas no aparece, escríbenos y lo miramos.</p><a class="btn ghost sm" href="https://wa.me/573332791710?text=Hola%20LQS%2C%20necesito%20algo%20que%20no%20est%C3%A1%20en%20la%20lista%3A">Preguntar por WhatsApp</a></div>
+  </div>
+
+  <div class="eyebrow" style="margin:30px 0 12px">En apertura · se cotizan a pedido</div>
+  <div class="pared">
+    <div class="apertura"><span class="mod-name">Música</span><span class="mod-desc">Grabación, mezcla</span><span class="mod-price">a pedido</span></div>
+<div class="apertura"><span class="mod-name">Producción física</span><span class="mod-desc">Prototipo, corte láser</span><span class="mod-price">a pedido</span></div>
+<div class="apertura"><span class="mod-name">Joyería</span><span class="mod-desc">Diseño y 3D</span><span class="mod-price">a pedido</span></div>
+  </div>
+</section>
+
+<div class="barra-sel" id="barra-sel" hidden>
+  <div>
+    <b id="barra-n">0 servicios</b>
+    <span class="mono" id="barra-lista"></span>
+  </div>
+  <div class="barra-acc">
+    <button class="btn ghost sm" type="button" id="barra-limpiar">Limpiar</button>
+    <a class="btn v sm" id="barra-ir" href="#cot">Ver el estimado →</a>
+  </div>
+</div>
+
+
+<!-- ============ DESCUENTOS ============ -->
+<section class="seccion" id="descuentos">
+  <div class="eyebrow">Cómo baja el precio</div>
+  <h2 style="margin-bottom:8px">Dos formas, no se suman</h2>
+  <p class="dim" style="max-width:60ch;margin-bottom:20px">Aplica la que más te convenga de las dos.
+    No se acumulan entre sí: una sola, la mayor.</p>
+
+  <div class="pared">
+    <!-- Mecánica A -->
+    <div class="desc-caja">
+      <div class="desc-cab">
+        <h3>Sumando áreas</h3>
+        <span class="mono desc-tope">hasta 35%</span>
+      </div>
+      <p class="dim" style="font-size:13.5px;margin-bottom:16px">Cada área que entra baja el total.
+        Conectar ahorra trabajo real —un brief, un interlocutor, activos que se reutilizan— y el
+        precio lo refleja.</p>
+      <ol class="escalera" id="escalera"></ol>
     </div>
-    <div>
-      <p class="lede">Levantar una marca toma tiempo, pasos y presupuesto, y casi nunca se resuelve
-        de una sola vez. Por eso trabajamos por áreas: tomas la que necesitas hoy y sumamos
-        las demás cuando tenga sentido.</p>
-      <div class="acc">
-        <a class="btn" href="cotizador.html">Arma tu ecosistema</a>
-        <a class="btn ghost" href="muestras.html">Ver muestras</a>
+
+    <!-- Mecánica B -->
+    <div class="desc-caja">
+      <div class="desc-cab">
+        <h3>Planes armados</h3>
+        <span class="mono desc-tope">hasta 20%</span>
+      </div>
+      <p class="dim" style="font-size:13.5px;margin-bottom:16px">Combinaciones que ya sabemos que
+        funcionan juntas. Si tomas una entera, el descuento aparece solo.</p>
+      <div class="planes" id="planes"></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ 04 ECOSISTEMA ============ -->
+<section class="seccion" id="ecosistema">
+  <div class="eyebrow">Paso 1 · Qué necesitas</div>
+  <h2 style="margin-bottom:8px">Elige las áreas</h2>
+  <p class="dim" style="max-width:58ch;margin-bottom:20px">Cuando dos o más entran a la misma pared
+    dejan de ser servicios sueltos, y el precio lo refleja. Puedes cambiarlas cuando quieras.</p>
+  <div class="pared">
+    <div class="eco">
+      <div class="eco-head">
+        <div class="chips" id="eco-chips" style="margin:0"></div>
+        <button class="btn ghost sm" id="limpiar" type="button">Limpiar</button>
+      </div>
+      <div class="pared-eco grano" id="pared">
+        <div class="eco-memphis"></div>
+        <div class="eco-vacio" id="vacio">Ninguna área elegida todavía — los bloques viven separados.</div>
+      </div>
+      <div class="datos">
+        <div class="dato"><span>Áreas</span><b id="n-mod">0</b></div>
+        <div class="dato" id="d-inicial" hidden><span>Inversión inicial</span><b id="inicial">$0</b></div>
+        <div class="dato" id="d-mensual" hidden><span>Mensualidad</span><b id="mensual">$0</b></div>
+        <div class="dato ok" id="d-desc" hidden><span id="desc-nombre">Ahorro por conectar</span><b id="desc">0%</b></div>
+        <p class="razon" id="razon">Elige dos o más para que los bloques compartan pared.</p>
+      </div>
+    </div>
+    <div class="aviso" id="aviso" hidden>
+      <b>Redes se cobra aparte.</b> Es mensual y las demás áreas son por proyecto — no se suman en un mismo total.
+      El descuento por conectar aplica al trabajo inicial, no a la mensualidad.
+    </div>
+    <div class="aviso" id="alcance" hidden></div>
+  </div>
+</section>
+
+
+<!-- ============ 09 COTIZADOR ============ -->
+<section class="seccion" id="cotizador">
+  <div class="pared">
+    <div class="cot" id="cot">
+      <div class="paso">
+        <div class="paso-n">Lo que elegiste</div>
+        <p id="cot-resumen">Todavía no has elegido nada. Abre un área arriba y marca lo que necesitas.</p>
+      </div>
+      <div class="paso">
+        <div class="paso-n">Para quién es</div>
+        <div class="seg" id="seg-escala">
+          <button type="button" data-v="emprendedor" aria-pressed="true">Emprendedor</button>
+          <button type="button" data-v="empresa" aria-pressed="false">Empresa</button>
+          <button type="button" data-v="evento" aria-pressed="false">Evento</button>
+        </div>
+      </div>
+      <div class="paso">
+        <div class="paso-n">El estimado</div>
+        <div class="cot-total">
+          <span class="cara cot-cara" id="cot-cara" aria-hidden="true"></span>
+          <div class="dato" id="c-inicial"><span>Inversión inicial</span><b id="c-inicial-v">$0</b></div>
+          <div class="dato" id="c-mensual" hidden><span>Mensualidad</span><b id="c-mensual-v">$0</b></div>
+          <p class="razon" id="c-razon" style="color:rgba(253,251,247,.75)">Es un estimado sobre tarifas «desde».
+            El número final sale de una conversación corta.</p>
+        </div>
+        <div class="cot-cierre">
+          <a class="btn" id="wa" href="#" target="_blank" rel="noopener">Enviar por WhatsApp</a>
+          <a class="btn ghost claro" id="correo" href="#">Enviar por correo</a>
+          <span class="mono" style="font-size:12px;opacity:.6">Llega directo, con todo lo que elegiste.
+            Respondemos con propuesta formal en 24 horas.</span>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 
-<!-- ============ 02 EL PROBLEMA ============ -->
-<section class="seccion">
+<!-- ============ ASESORÍA ============ -->
+<section class="seccion" id="asesoria">
   <div class="pared">
-    <div class="p-suelto apila">
-      <div class="eyebrow" style="margin:0">Hoy</div>
-      <div class="sueltas">
-        <svg class="forma" viewBox="0 0 44 44"><circle cx="22" cy="22" r="20" fill="#C4A8F5"/></svg>
-        <svg class="forma" viewBox="0 0 44 44"><rect width="44" height="44" rx="6" fill="#F7B2AB"/></svg>
-        <svg class="forma" viewBox="0 0 44 44"><path d="M22 2 42 42 2 42Z" fill="#BFE0A8"/></svg>
-        <svg class="forma" viewBox="0 0 44 44"><rect width="44" height="44" fill="#A8CBF5" transform="rotate(45 22 22) scale(.72) translate(8 8)"/></svg>
-        <svg class="forma" viewBox="0 0 44 44"><path d="M2 42 A20 20 0 0 1 42 42Z" fill="#F7D9A6"/></svg>
+    <div class="ases apila">
+      <div class="ases-txt">
+        <div class="eyebrow" style="color:var(--papel);opacity:.65">Sin costo · veinte minutos</div>
+        <h2 class="ases-tit">¿Todavía no sabes por dónde empezar?</h2>
+        <p class="ases-p">Casi nadie llega sabiéndolo, y está bien. Nos cuentas qué tienes en mente
+          —o qué te tiene atascado— y te decimos qué haríamos nosotros, en qué orden y con qué
+          empezaríamos si fuera nuestro.</p>
+        <p class="ases-p"><b>Si al final no somos lo que necesitas, te lo decimos igual</b> y te
+          apuntamos a dónde sí. Preferimos eso a arrancar un proyecto que no era.</p>
+        <div class="ases-acc">
+          <a class="btn claro" href="https://wa.me/573332791710?text=Hola%20LQS%2C%20quiero%20agendar%20la%20asesor%C3%ADa.%20Les%20cuento%3A">
+            Agendar por WhatsApp
+          </a>
+          <a class="btn ghost claro" href="mailto:loqueseaproductionsp1@gmail.com?subject=Quiero%20agendar%20la%20asesor%C3%ADa">
+            Escribir al correo
+          </a>
+        </div>
       </div>
-      <h3>Todo está separado.<br>Y tú terminas coordinando.</h3>
-      <p class="dim" style="font-size:13.5px">Uno hace el video, otro la marca, otro la página.
-        Cada uno con su tiempo, su cotización y su forma de trabajar.</p>
-    </div>
-    <div class="p-junto apila">
-      <div class="eyebrow" style="margin:0;color:inherit;opacity:.6">Con LQS</div>
-      <div class="juntas">
-        <svg class="forma" viewBox="0 0 44 44"><rect width="44" height="44" fill="#C4A8F5"/></svg>
-        <svg class="forma" viewBox="0 0 44 44"><rect width="44" height="44" fill="#A8CBF5"/></svg>
-        <svg class="forma" viewBox="0 0 44 44"><rect width="44" height="44" fill="#BFE0A8"/></svg>
-        <svg class="forma" viewBox="0 0 44 44"><rect width="44" height="44" fill="#F7D9A6"/></svg>
-        <svg class="forma" viewBox="0 0 44 44"><rect width="44" height="44" fill="#F7B2AB"/></svg>
-        <svg class="forma" viewBox="0 0 44 44"><rect width="44" height="44" fill="#F5F2EC"/></svg>
-      </div>
-      <h3>Una sola pared.<br>Un solo interlocutor.</h3>
-      <p style="font-size:13.5px;opacity:.72;max-width:30ch">Vamos por partes, en el orden que te sirva,
-        y cada pieza queda lista para la siguiente.</p>
+      <span class="cara ases-cara" id="ases-cara" aria-hidden="true"></span>
     </div>
   </div>
 </section>
 
 
-<!-- ============ A DÓNDE SIGUE ============ -->
-<section class="seccion">
-  <div class="eyebrow">Por dónde seguir</div>
+<!-- ============ 08 TARIFAS ============ -->
+<section class="seccion" id="tarifas">
+  <div class="eyebrow">Tarifas · el resto está servicio por servicio arriba</div>
+  <h2 style="margin-bottom:20px">Lo que no cabe arriba</h2>
   <div class="pared">
-    <a class="ruta apila" href="nosotros.html" style="--sf:var(--p-violeta)">
-      <span class="ruta-n">01</span>
-      <h3>Quiénes somos</h3>
-      <p>Qué significa ser una agencia creativa modular, por qué existe LQS y cómo trabajamos.</p>
-      <span class="ruta-ir">Conocernos →</span>
-    </a>
-    <a class="ruta apila" href="muestras.html" style="--sf:var(--p-lima)">
-      <span class="ruta-n">02</span>
-      <h3>Muestras</h3>
-      <p>Lo que hemos hecho, por área, con buscador para ir directo a lo tuyo.</p>
-      <span class="ruta-ir">Ver las muestras →</span>
-    </a>
-    <a class="ruta apila" href="cotizador.html" style="--sf:var(--p-ambar)">
-      <span class="ruta-n">03</span>
-      <h3>Armemos el número</h3>
-      <p>Marcas servicio por servicio y el total se arma solo. Llega directo a nuestro WhatsApp.</p>
-      <span class="ruta-ir">Cotizar →</span>
-    </a>
+    <div class="tabla-caja">
+      <h4 style="margin-bottom:6px">Redes — el único mensual</h4>
+      <p class="dim" style="font-size:13px;margin-bottom:16px">Se arma eligiendo una intensidad y un ciclo de cobro.
+        Son dos cosas distintas: cuánto se publica, y cada cuánto pagas.</p>
+      <table>
+        <thead><tr><th>Intensidad</th><th>Al mes</th><th>Community</th><th style="text-align:right">COP / mes</th></tr></thead>
+        <tbody>
+          <tr><td><b>Base</b></td><td>8 publicaciones · 1 red</td><td>2 días por semana</td><td class="cifra">$650.000</td></tr>
+          <tr><td><b>Activo</b></td><td>16 publicaciones · 2 reels · 2 redes</td><td>Días hábiles</td><td class="cifra">$1.290.000</td></tr>
+          <tr><td><b>Full</b></td><td>24 publicaciones · 4 reels · 3 redes</td><td>Diario</td><td class="cifra">$2.190.000</td></tr>
+          <tr><td><b>Temporada</b></td><td>Campaña cerrada de 4 a 8 semanas</td><td>Durante la campaña</td><td class="cifra">desde $990.000</td></tr>
+        </tbody>
+      </table>
+      <table style="margin-top:22px">
+        <thead><tr><th>Ciclo de cobro</th><th>Para quién</th><th style="text-align:right">Ajuste</th></tr></thead>
+        <tbody>
+          <tr><td><b>Mensual</b></td><td>El estándar</td><td class="cifra">precio base</td></tr>
+          <tr><td><b>Quincenal</b></td><td>Negocio con ingresos irregulares</td><td class="cifra">mitad y mitad</td></tr>
+          <tr><td><b>Semanal</b></td><td>Tienda, restaurante, servicios que cobran semanal</td><td class="cifra">+5%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tarifa-nota">
+      <b>Arranque: $290.000, una sola vez</b>, al iniciar cualquier plan de Redes — cubre la auditoría de cuentas,
+      la línea gráfica y el primer calendario. No se cobra si ya trabajaste el área Marca con nosotros.
+      <b>Sin permanencia mínima</b> y aviso de cancelación de 15 días. Los ecosistemas se cotizan: no tienen precio de lista.
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ 10 CONTACTO ============ -->
+<section class="seccion" id="contacto">
+  <div class="eyebrow">O escríbenos directo</div>
+  <h2 style="margin-bottom:8px">Hablemos</h2>
+  <p class="dim" style="max-width:56ch;margin-bottom:20px">Lo que escribas sale directo a nuestro
+    WhatsApp o a nuestro correo. No hay formulario esperando a que alguien lo revise.</p>
+  <div class="pared">
+    <form class="form form-ancho" id="form">
+      <div>
+        <label for="f-nombre">Nombre</label>
+        <input type="text" id="f-nombre" name="nombre" required>
+      </div>
+      <div>
+        <label for="f-correo">Correo o WhatsApp</label>
+        <input type="text" id="f-correo" name="correo" required>
+      </div>
+      <div>
+        <label for="f-msg">Qué necesitas</label>
+        <textarea id="f-msg" name="mensaje" required></textarea>
+      </div>
+      <label class="legal" style="text-transform:none;letter-spacing:0;font-size:12px;font-family:inherit">
+        <input type="checkbox" id="f-legal" required>
+        <span>Autorizo el tratamiento de mis datos conforme a la <a href="legal.html#datos" target="_blank" rel="noopener">política de tratamiento</a> y a la Ley 1581 de 2012.</span>
+      </label>
+      <div class="form-acc">
+        <a class="btn v" id="env-wa" href="#" target="_blank" rel="noopener">Enviar por WhatsApp</a>
+        <a class="btn ghost" id="env-correo" href="#">Enviar por correo</a>
+      </div>
+      <p class="dim" style="font-size:12px" id="form-estado" role="status"></p>
+    </form>
+
   </div>
 </section>
 
@@ -751,7 +909,7 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
         <a href="index.html">Inicio</a><a href="nosotros.html">Quiénes somos</a>
         <a href="cotizador.html#tarifas">Tarifas</a><a href="cotizador.html">Cotizador</a>
         <a href="cotizador.html#contacto">Contacto</a>
-        <a href="en/index.html" hreflang="en" lang="en">See in English</a>
+        <a href="en/cotizador.html" hreflang="en" lang="en">See in English</a>
       </div>
       <div>
         <h5>Contacto</h5>
@@ -1256,7 +1414,7 @@ if (!quieto) document.body.classList.add("arma");
     '<p>Prefer English?</p>' +
     '<small>This site is in Spanish. There is an English version — nothing is saved either way.</small>' +
     '<div class="pregunta-acc">' +
-      '<a href="en/index.html" hreflang="en" lang="en">Yes, in English</a>' +
+      '<a href="en/cotizador.html" hreflang="en" lang="en">Yes, in English</a>' +
       '<button type="button" id="pregunta-no">Seguir en español</button>' +
     '</div>';
   document.body.appendChild(caja);
