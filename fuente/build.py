@@ -455,7 +455,11 @@ def armar(idi):
                 + "\n" + nav.replace('data-pag="%s"' % activa,
                                      'data-pag="%s" aria-current="page"' % activa)
                 + '\n<main class="wrap" id="inicio" data-pagina="%s">\n' % activa
-                + cuerpo + "\n</main>\n" + pie + "\n" + guion)
+                + cuerpo + "\n</main>\n" + pie
+                # El trazo: SVG + JS sin dependencias. Va antes del guión
+                # porque define el custom element que el HTML ya usa.
+                + '\n<script src="{{RAIZ}}lqs-trazo.js"></script>\n'
+                + guion)
         for k, v in LEGAL.items():
             html = html.replace("{{%s}}" % k, v)
         html = (html.replace("{{CORREO}}", CONTACTO["correo"])

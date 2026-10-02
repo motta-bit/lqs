@@ -2,7 +2,12 @@
 import pathlib, subprocess, sys, re, shutil
 
 BASE = pathlib.Path(__file__).parent
-OUT  = BASE.parent / "repo"
+# El sitio se publica EN LA RAIZ DEL PROPIO REPO: fuente/ vive dentro del
+# checkout, asi que el destino es su carpeta madre. Antes decia
+# BASE.parent/"repo", de cuando fuente/ estaba al lado del checkout y no
+# dentro; con la carpeta renombrada a LQS-sitio eso creaba un LQS-sitio/repo/
+# nuevo en cada publicacion y las paginas de verdad nunca se actualizaban.
+OUT  = BASE.parent
 
 subprocess.run([sys.executable, str(BASE / "build.py")], check=True, cwd=BASE)
 sys.path.insert(0, str(BASE))
@@ -60,18 +65,21 @@ for idi in ("es", "en"):
     (OUT / sub / archivo).write_text(doc, encoding="utf-8")
     print(f"  {idi} {archivo:16s} {len(doc):7d} bytes")
 
-# favicon a partir del gato vectorizado
-logo = (BASE / "carita-inline.svg")
-if not logo.exists():
-    logo = BASE.parent / "maqueta" / "carita-inline.svg"
-logo = logo.read_text(encoding="utf-8")
-logo = re.sub(r'\s(width|height)="[^"]*"', '', logo, count=2)
-if "xmlns" not in logo.split(">")[0]:
-    logo = logo.replace("<svg", '<svg xmlns="http://www.w3.org/2000/svg"', 1)
-logo = logo.replace('fill="currentColor"', 'fill="#1A1720"')
-(OUT / "favicon.svg").write_text(logo, encoding="utf-8")
+# El favicon se copia de marca/, que es donde vive el icono DISEÑADO:
+# cuadrado, con el azulejo violeta y el monograma en papel.
+#
+# Antes se generaba a partir de carita-inline.svg, que es el monograma
+# suelto: viewBox 1222x1238 —ni cuadrado ni con fondo—. Como el nombre del
+# archivo no cambia, cada publicacion pisaba el favicon bueno con ese, y el
+# cambio solo se notaba al abrir una pestaña nueva.
+shutil.copy2(BASE.parent / "marca" / "favicon.svg", OUT / "favicon.svg")
 (OUT / ".nojekyll").write_text("", encoding="utf-8")
-print("  favicon.svg y .nojekyll")
+
+# El custom element del trazo vive en fuente/ y se publica en la raiz,
+# que es donde build.py lo enlaza ({{RAIZ}}lqs-trazo.js). Se copiaba a
+# mano y por eso se quedaba viejo cuando cambiaba el original.
+shutil.copy2(BASE / "lqs-trazo.js", OUT / "lqs-trazo.js")
+print("  favicon.svg, .nojekyll y lqs-trazo.js")
 
 if faltan:
     pendientes = [k for k, v in LEGAL.items() if "FALTA:" in v]

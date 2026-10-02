@@ -5,7 +5,9 @@ Sitio de **LQS**, agencia creativa modular. Estamos donde nos necesiten.
 **En línea:** https://motta-bit.github.io/lqs/
 
 Una sola página, sin dependencias ni build: se abre `index.html` y funciona.
-Las únicas peticiones externas son las tipografías de Google Fonts.
+Las únicas peticiones externas son las tipografías de Google Fonts. La de
+titulares, **LQS Display**, no: esa es nuestra y se sirve desde
+`tipos/LQS-Display.woff2`.
 
 ---
 

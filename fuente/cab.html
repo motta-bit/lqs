@@ -2,11 +2,22 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Rubik:wght@400;500;900&family=IBM+Plex+Mono:wght@400;600&family=Newsreader:ital,wght@1,300&display=swap">
 <style>
+/* LQS Display: Syne con el corte de la marca, derivada bajo SIL OFL.
+   Se sirve desde el propio sitio —no desde Google Fonts— porque es nuestra.
+   font-display:swap deja que el titular se vea en Syne mientras llega: las
+   dos tienen los mismos avances, así que el texto no salta de sitio. */
+@font-face{
+  font-family:'LQS Display';
+  src:url('{{RAIZ}}tipos/LQS-Display.woff2') format('woff2');
+  font-weight:800; font-style:normal; font-display:swap;
+}
 :root{
   --papel:#FDFBF7; --crema:#F5F2EC; --tinta:#1A1720; --humo:#4A4453;
   --violeta:#8B3DF0; --azul:#2563EB; --lima:#84CC16; --ambar:#F5A623; --rojo:#F0483C;
   --p-violeta:#C4A8F5; --p-azul:#A8CBF5; --p-lima:#BFE0A8; --p-ambar:#F7D9A6; --p-rojo:#F7B2AB;
   --gap:8px; --r-cont:28px; --r-bloque:20px; --r-int:14px;
+  --grano-fino:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='90' height='90'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.6' numOctaves='4' stitchTiles='stitch'/></filter><rect width='90' height='90' filter='url(%23n)'/></svg>");
+  --grano-tramado:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='3' stitchTiles='stitch'/><feComponentTransfer><feFuncR type='discrete' tableValues='0 0 0 1'/><feFuncG type='discrete' tableValues='0 0 0 1'/><feFuncB type='discrete' tableValues='0 0 0 1'/></feComponentTransfer></filter><rect width='260' height='260' filter='url(%23n)'/></svg>");
   color-scheme:light;
 }
 *{box-sizing:border-box}
@@ -22,7 +33,11 @@ img{max-width:100%}
 .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;
   letter-spacing:.2em;text-transform:uppercase;color:var(--humo);margin:0 0 12px}
 h1,h2,h3,h4{font-family:'Syne',system-ui,sans-serif;font-weight:800;margin:0;text-wrap:balance}
-h1{font-size:clamp(42px,8.4vw,96px);line-height:.78;letter-spacing:-.045em}
+/* El corte solo en H1. Es una tipografia de display: los cortes miden una
+   fraccion del trazo, asi que por debajo de ~34px se empastan y la palabra
+   se lee como mancha. H2 para abajo sigue en Syne limpia. */
+h1{font-family:'LQS Display','Syne',system-ui,sans-serif;
+  font-size:clamp(42px,8.4vw,96px);line-height:.78;letter-spacing:-.035em}
 h2{font-size:clamp(28px,4.4vw,52px);line-height:.85;letter-spacing:-.03em}
 h3{font-size:clamp(20px,2.4vw,30px);line-height:1;letter-spacing:-.025em}
 h4{font-size:19px;line-height:1.12;letter-spacing:-.02em}
@@ -66,6 +81,7 @@ p{margin:0}
   .top .wordmark{display:none}
   .top > .btn.v{display:none}
   .marca .cara{width:30px;height:30px}
+  .marca lqs-trazo svg{width:30px;height:30px}
   .nav{gap:14px;font-size:12.5px;margin-left:auto}
   .nav a{opacity:.72}
 }
@@ -87,14 +103,54 @@ p{margin:0}
   padding:clamp(28px,5vw,56px);min-height:min(78vh,620px);
   display:flex;flex-direction:column;justify-content:space-between;gap:30px}
 .hero h1{font-size:clamp(96px,19vw,230px);line-height:.8;letter-spacing:-.05em}
+/* La S del nombre va en Syne limpia. En el hero LQS no es un titular:
+   es la marca, y de las tres letras la S es la que peor aguanta el corte
+   —sus dos curvas se cruzan y las vetas se juntan en el medio—. Dejarla
+   entera ancla la palabra; la L y la Q llevan el corte. */
+.s-limpia{font-family:'Syne',system-ui,sans-serif}
 .hero .lema{font-family:'Syne',system-ui,sans-serif;font-weight:800;
   font-size:clamp(24px,4.2vw,50px);line-height:1;letter-spacing:-.03em;margin-top:clamp(10px,1.6vw,22px)}
 .hero .lede{max-width:44ch;font-size:clamp(15px,1.7vw,18px)}
 .hero .acc{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
-.h-forma{position:absolute;border-radius:50%;background:var(--p-ambar);opacity:.7;
-  right:-70px;top:-70px;width:min(300px,46vw);aspect-ratio:1}
-.h-forma2{position:absolute;right:7%;bottom:8%;width:clamp(72px,8vw,112px);aspect-ratio:1;
-  border-radius:8px;background:var(--azul);opacity:.38;transform:rotate(12deg)}
+/* Siluetas orgánicas granuladas. Las genera formas/siluetas.py sumando de
+   dos a cinco lóbulos con amplitud chica —pocos lóbulos, curva suave por
+   construcción— y descarta cualquiera con un giro de más de 62°, así que no
+   hay puntas. Van como clipPath en objectBoundingBox: escalan con la caja.
+
+   Tres capas de textura y ninguna toca el borde: el degradado de cuerpo, un
+   tramado de puntos enmascarado en diagonal (la densidad crece hacia la
+   sombra, y eso es lo que se lee como volumen) y un grano fino parejo que le
+   quita el acabado de plástico. El grano vive dentro; la silueta queda dura.
+   Esa es la diferencia entre granulado y disperso. */
+/* multiply sobre papel; sobre campo de color, soft-light. Con multiply
+   encima del degradado del hero las siluetas salían gris verdoso: el modo
+   las apaga en vez de asentarlas. */
+.blob{position:absolute;mix-blend-mode:multiply;isolation:isolate;pointer-events:none;
+  animation:flotar var(--t,22s) ease-in-out infinite alternate;animation-delay:var(--d,0s)}
+.blob::before,.blob::after{content:"";position:absolute;inset:0}
+.blob::before{background-image:var(--grano-tramado);mix-blend-mode:multiply;opacity:.46;
+  -webkit-mask-image:linear-gradient(145deg,transparent 6%,#000 82%);
+  mask-image:linear-gradient(145deg,transparent 6%,#000 82%)}
+.blob::after{background-image:var(--grano-fino);mix-blend-mode:overlay;opacity:.46}
+.hero .blob,.pared[style] .blob{mix-blend-mode:soft-light}
+/* Las que se desvanecen se disuelven EN GRANO: la máscara adelgaza el
+   tramado antes de apagarlo, en vez de volver la forma translúcida. */
+.blob.humo{-webkit-mask-image:linear-gradient(var(--a,155deg),#000 18%,rgba(0,0,0,.2) 68%,transparent 94%);
+  mask-image:linear-gradient(var(--a,155deg),#000 18%,rgba(0,0,0,.2) 68%,transparent 94%)}
+@keyframes flotar{
+  0%{transform:translate(0,0) rotate(0deg) scale(1)}
+  50%{transform:translate(calc(var(--x,10px)*.6),var(--y,-8px)) rotate(var(--r,3deg)) scale(1.03)}
+  100%{transform:translate(var(--x,10px),calc(var(--y,-8px)*.3)) rotate(calc(var(--r,3deg)*-.7)) scale(.99)}
+}
+.h-forma{position:absolute;right:-64px;top:-70px;width:min(260px,42vw);height:min(230px,38vw);
+  background:linear-gradient(140deg,var(--p-ambar),var(--p-violeta));
+  clip-path:url(#sil1);--t:24s;--x:-14px;--y:9px;--r:4deg}
+.h-forma2{position:absolute;right:9%;bottom:6%;width:clamp(96px,11vw,150px);height:clamp(84px,9.6vw,132px);
+  background:linear-gradient(200deg,var(--p-azul),var(--p-lima));
+  clip-path:url(#sil7);--t:19s;--d:-7s;--x:11px;--y:-13px;--r:-5deg}
+.h-forma3{position:absolute;left:-40px;bottom:-30px;width:clamp(80px,9vw,124px);height:clamp(70px,8vw,108px);
+  background:linear-gradient(20deg,var(--p-rojo),var(--p-ambar));
+  clip-path:url(#sil5);--t:27s;--d:-12s;--x:9px;--y:12px;--r:3deg;--a:165deg}
 
 /* entrada: los bloques se arman. Sin JS o con reduced-motion ya están armados. */
 .arma .apila{animation:apila .72s cubic-bezier(.2,.9,.25,1) both}
@@ -119,15 +175,39 @@ p{margin:0}
 
 /* ---------- encabezado de página ---------- */
 .pagina-encab{padding-top:104px;padding-bottom:0}
-.tit-pagina{font-family:'Syne',system-ui,sans-serif;font-weight:800;margin:0;
-  font-size:clamp(34px,6vw,68px);line-height:.92;letter-spacing:-.04em;text-wrap:balance}
+.tit-pagina{font-family:'LQS Display','Syne',system-ui,sans-serif;font-weight:800;margin:0;
+  font-size:clamp(40px,6vw,68px);line-height:.92;letter-spacing:-.03em;text-wrap:balance}
 .bajada{max-width:58ch;margin-top:14px;font-size:clamp(15px,1.7vw,17px)}
 
 /* ---------- rutas del inicio ---------- */
-.ruta{grid-column:span 2;background:var(--sf,var(--crema));border-radius:var(--r-cont);
-  padding:26px;min-height:210px;display:flex;flex-direction:column;gap:10px;
+/* Tres reglas del sistema que estas tarjetas no cumplían:
+   «Pastel nunca directo sobre Papel: borde en Tinta o fondo Crema» — iban sin
+   borde. «Grano de granito en cada superficie de color» — no lo llevaban. Y
+   usaban --r-cont (28), que es el radio del CONTENEDOR; dentro de una pared
+   va --r-bloque (20), y por eso se veían blandas. */
+.ruta{grid-column:span 2;background:var(--sf,var(--crema));
+  border:2px solid var(--tinta);border-radius:var(--r-bloque);
+  padding:24px;min-height:210px;display:flex;flex-direction:column;gap:10px;
   color:var(--tinta);text-decoration:none;position:relative;overflow:hidden;
-  transition:transform .14s,box-shadow .14s}
+  isolation:isolate;transition:transform .18s cubic-bezier(.4,0,.2,1),box-shadow .18s cubic-bezier(.4,0,.2,1)}
+.ruta::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background-image:var(--grano-fino);opacity:.22;mix-blend-mode:multiply}
+/* Sombra DURA, del color del borde. Una difusa sobre pastel se ve sucia;
+   esta se lee como papel levantado — y solo funciona porque hay borde. */
+.ruta:hover{transform:translateY(-3px);box-shadow:4px 4px 0 var(--tinta)}
+.ruta-cab{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+/* El monograma dibujándose, arriba del LQS del hero. Se le deja aire abajo
+   porque el h1 tiene line-height .78 y sin esto se le monta encima. */
+.h-marca{margin:0 0 14px;line-height:0}
+.h-marca lqs-trazo{display:block}
+/* OJO con el nombre: `.ficha` ya existe en el sitio — es la tarjeta de la
+   galería de muestras, con fondo papel y span 2. Llamar a esto igual hacía
+   que la regla de allá ganara y el ícono saliera como un bloque blanco. */
+.ruta-ficha{width:38px;height:38px;border-radius:var(--r-int);background:var(--tinta);
+  color:var(--papel);display:grid;place-items:center;flex:none}
+.ruta-ficha svg{width:19px;height:19px;display:block}
+.ruta-ir span{display:inline-block;transition:transform .18s}
+.ruta:hover .ruta-ir span{transform:translateX(4px)}
 .ruta:hover{transform:translateY(-4px);box-shadow:0 8px 0 var(--tinta)}
 .ruta:focus-visible{outline:3px solid var(--violeta);outline-offset:3px}
 .ruta-n{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;
@@ -330,8 +410,8 @@ p{margin:0}
   display:flex;flex-direction:column;justify-content:center;gap:10px}
 .err-cara{width:clamp(66px,9vw,96px);aspect-ratio:1;display:block;color:var(--tinta);margin-bottom:8px}
 .err-cod{font-size:11px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;opacity:.65}
-.err-tit{font-family:'Syne';font-weight:800;font-size:clamp(40px,8vw,88px);
-  line-height:.86;letter-spacing:-.045em}
+.err-tit{font-family:'LQS Display','Syne',system-ui,sans-serif;font-weight:800;
+  font-size:clamp(40px,8vw,88px);line-height:.86;letter-spacing:-.035em}
 .err-txt{max-width:46ch;font-size:clamp(15px,1.7vw,18px);margin-top:6px}
 .err .acc{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
 
@@ -584,8 +664,8 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
   .seccion{padding:40px 0 8px}
   .pagina-encab{padding-top:88px}
   h1{line-height:.88}
-  .h-forma{width:190px;right:-60px;top:-60px}
-  .h-forma2{display:none}
+  .h-forma{width:190px;height:168px;right:-56px;top:-58px}
+  .h-forma2,.h-forma3{display:none}
   .dato{flex:1 1 130px;min-width:0}
   .hero{min-height:0;gap:22px}
   .caso-vis{min-height:220px}
@@ -595,3 +675,7 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
   *{animation:none!important;transition:none!important}
 }
 </style>
+
+<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+<defs><clipPath id="sil0" clipPathUnits="objectBoundingBox"><path d="M0.9321,0.5622 C0.9187,0.5910 0.9071,0.6158 0.8968,0.6452 C0.8865,0.6747 0.8832,0.7065 0.8702,0.7386 C0.8572,0.7708 0.8433,0.8079 0.8187,0.8382 C0.7942,0.8686 0.7604,0.8983 0.7228,0.9206 C0.6852,0.9430 0.6392,0.9598 0.5932,0.9722 C0.5472,0.9846 0.4964,0.9930 0.4466,0.9950 C0.3968,0.9970 0.3422,0.9959 0.2945,0.9843 C0.2468,0.9728 0.1966,0.9527 0.1604,0.9258 C0.1243,0.8989 0.0958,0.8593 0.0775,0.8229 C0.0592,0.7864 0.0563,0.7432 0.0509,0.7073 C0.0454,0.6714 0.0489,0.6387 0.0448,0.6076 C0.0406,0.5765 0.0326,0.5505 0.0260,0.5207 C0.0194,0.4909 0.0068,0.4605 0.0050,0.4289 C0.0032,0.3973 0.0050,0.3626 0.0153,0.3310 C0.0257,0.2995 0.0454,0.2685 0.0671,0.2394 C0.0888,0.2103 0.1160,0.1832 0.1455,0.1564 C0.1750,0.1295 0.2067,0.1013 0.2442,0.0785 C0.2817,0.0556 0.3251,0.0316 0.3707,0.0193 C0.4163,0.0071 0.4698,0.0013 0.5177,0.0050 C0.5656,0.0087 0.6152,0.0245 0.6583,0.0415 C0.7014,0.0584 0.7398,0.0834 0.7762,0.1066 C0.8126,0.1298 0.8464,0.1540 0.8766,0.1807 C0.9068,0.2073 0.9377,0.2352 0.9575,0.2665 C0.9772,0.2978 0.9917,0.3342 0.9950,0.3685 C0.9983,0.4028 0.9878,0.4401 0.9773,0.4724 C0.9668,0.5046 0.9455,0.5334 0.9321,0.5622 Z"/></clipPath><clipPath id="sil1" clipPathUnits="objectBoundingBox"><path d="M0.3092,0.9886 C0.2658,0.9974 0.2112,1.0055 0.1679,0.9950 C0.1246,0.9845 0.0767,0.9593 0.0496,0.9258 C0.0224,0.8924 0.0062,0.8397 0.0050,0.7942 C0.0038,0.7487 0.0241,0.6944 0.0423,0.6528 C0.0605,0.6113 0.0949,0.5762 0.1143,0.5451 C0.1337,0.5139 0.1519,0.4944 0.1588,0.4660 C0.1657,0.4377 0.1582,0.4115 0.1555,0.3748 C0.1528,0.3380 0.1390,0.2906 0.1424,0.2455 C0.1459,0.2004 0.1538,0.1432 0.1762,0.1040 C0.1987,0.0648 0.2376,0.0267 0.2772,0.0102 C0.3167,-0.0063 0.3704,-0.0059 0.4133,0.0050 C0.4563,0.0159 0.5006,0.0480 0.5349,0.0756 C0.5692,0.1033 0.5946,0.1424 0.6192,0.1711 C0.6438,0.1998 0.6599,0.2262 0.6824,0.2477 C0.7049,0.2692 0.7271,0.2824 0.7540,0.2999 C0.7810,0.3175 0.8141,0.3308 0.8441,0.3531 C0.8742,0.3754 0.9095,0.4014 0.9343,0.4338 C0.9591,0.4662 0.9827,0.5071 0.9928,0.5475 C1.0030,0.5880 1.0045,0.6359 0.9950,0.6764 C0.9855,0.7169 0.9629,0.7592 0.9356,0.7905 C0.9083,0.8218 0.8684,0.8474 0.8312,0.8643 C0.7939,0.8812 0.7497,0.8870 0.7122,0.8919 C0.6748,0.8967 0.6387,0.8915 0.6065,0.8935 C0.5743,0.8955 0.5488,0.8957 0.5190,0.9038 C0.4893,0.9119 0.4632,0.9279 0.4282,0.9421 C0.3932,0.9562 0.3526,0.9798 0.3092,0.9886 Z"/></clipPath><clipPath id="sil2" clipPathUnits="objectBoundingBox"><path d="M0.7789,0.1311 C0.8106,0.1601 0.8349,0.1904 0.8620,0.2187 C0.8892,0.2471 0.9196,0.2713 0.9417,0.3011 C0.9639,0.3309 0.9874,0.3637 0.9950,0.3975 C1.0026,0.4312 0.9969,0.4702 0.9872,0.5034 C0.9775,0.5366 0.9518,0.5670 0.9368,0.5967 C0.9217,0.6264 0.9069,0.6505 0.8969,0.6814 C0.8869,0.7124 0.8879,0.7471 0.8767,0.7823 C0.8654,0.8175 0.8546,0.8613 0.8293,0.8926 C0.8039,0.9240 0.7648,0.9532 0.7246,0.9703 C0.6843,0.9873 0.6334,0.9912 0.5876,0.9950 C0.5419,0.9988 0.4963,0.9946 0.4502,0.9932 C0.4042,0.9918 0.3575,0.9934 0.3111,0.9868 C0.2648,0.9803 0.2121,0.9737 0.1720,0.9539 C0.1320,0.9341 0.0934,0.9021 0.0709,0.8680 C0.0484,0.8339 0.0423,0.7873 0.0371,0.7493 C0.0319,0.7112 0.0413,0.6733 0.0398,0.6396 C0.0382,0.6058 0.0336,0.5785 0.0278,0.5469 C0.0220,0.5154 0.0063,0.4833 0.0050,0.4502 C0.0037,0.4171 0.0059,0.3796 0.0200,0.3486 C0.0341,0.3175 0.0628,0.2893 0.0895,0.2639 C0.1162,0.2386 0.1498,0.2201 0.1801,0.1962 C0.2104,0.1724 0.2373,0.1466 0.2713,0.1207 C0.3053,0.0948 0.3411,0.0603 0.3841,0.0410 C0.4271,0.0218 0.4812,0.0044 0.5292,0.0050 C0.5772,0.0056 0.6304,0.0234 0.6721,0.0444 C0.7137,0.0654 0.7473,0.1020 0.7789,0.1311 Z"/></clipPath><clipPath id="sil3" clipPathUnits="objectBoundingBox"><path d="M0.6167,0.9773 C0.5770,0.9881 0.5312,1.0029 0.4919,0.9950 C0.4526,0.9871 0.4125,0.9555 0.3808,0.9298 C0.3490,0.9041 0.3308,0.8636 0.3013,0.8407 C0.2719,0.8179 0.2397,0.8100 0.2043,0.7926 C0.1689,0.7753 0.1193,0.7633 0.0888,0.7366 C0.0583,0.7098 0.0353,0.6699 0.0213,0.6320 C0.0073,0.5940 0.0064,0.5500 0.0050,0.5090 C0.0036,0.4680 0.0027,0.4250 0.0128,0.3860 C0.0230,0.3471 0.0425,0.3075 0.0661,0.2754 C0.0898,0.2432 0.1264,0.2197 0.1549,0.1931 C0.1834,0.1665 0.2082,0.1407 0.2371,0.1158 C0.2659,0.0909 0.2935,0.0591 0.3278,0.0435 C0.3621,0.0279 0.4046,0.0250 0.4428,0.0222 C0.4809,0.0194 0.5170,0.0298 0.5566,0.0269 C0.5962,0.0241 0.6367,0.0073 0.6804,0.0050 C0.7240,0.0027 0.7803,-0.0045 0.8184,0.0130 C0.8565,0.0304 0.8886,0.0724 0.9088,0.1100 C0.9290,0.1476 0.9297,0.1991 0.9398,0.2387 C0.9499,0.2784 0.9602,0.3118 0.9694,0.3479 C0.9786,0.3839 0.9920,0.4188 0.9950,0.4551 C0.9980,0.4914 0.9917,0.5284 0.9873,0.5656 C0.9828,0.6027 0.9775,0.6396 0.9683,0.6778 C0.9592,0.7161 0.9530,0.7610 0.9324,0.7951 C0.9118,0.8292 0.8784,0.8599 0.8447,0.8824 C0.8111,0.9049 0.7684,0.9143 0.7304,0.9301 C0.6924,0.9459 0.6565,0.9665 0.6167,0.9773 Z"/></clipPath><clipPath id="sil4" clipPathUnits="objectBoundingBox"><path d="M0.1336,0.5742 C0.1240,0.5455 0.1042,0.5226 0.0859,0.4902 C0.0676,0.4578 0.0373,0.4205 0.0238,0.3797 C0.0103,0.3388 -0.0017,0.2877 0.0050,0.2452 C0.0117,0.2027 0.0344,0.1571 0.0640,0.1248 C0.0936,0.0926 0.1403,0.0690 0.1827,0.0518 C0.2252,0.0347 0.2741,0.0291 0.3185,0.0220 C0.3629,0.0148 0.4057,0.0118 0.4492,0.0089 C0.4926,0.0061 0.5362,0.0011 0.5792,0.0050 C0.6222,0.0089 0.6692,0.0148 0.7072,0.0325 C0.7451,0.0503 0.7827,0.0793 0.8068,0.1116 C0.8310,0.1440 0.8440,0.1889 0.8523,0.2267 C0.8605,0.2644 0.8539,0.3049 0.8563,0.3381 C0.8587,0.3713 0.8567,0.3972 0.8664,0.4258 C0.8760,0.4545 0.8958,0.4774 0.9141,0.5098 C0.9324,0.5422 0.9627,0.5795 0.9762,0.6203 C0.9897,0.6612 1.0017,0.7123 0.9950,0.7548 C0.9883,0.7973 0.9656,0.8429 0.9360,0.8752 C0.9064,0.9074 0.8597,0.9310 0.8173,0.9482 C0.7748,0.9653 0.7259,0.9709 0.6815,0.9780 C0.6371,0.9852 0.5943,0.9882 0.5508,0.9911 C0.5074,0.9939 0.4638,0.9989 0.4208,0.9950 C0.3778,0.9911 0.3308,0.9852 0.2928,0.9675 C0.2549,0.9497 0.2173,0.9207 0.1932,0.8884 C0.1690,0.8560 0.1560,0.8111 0.1477,0.7733 C0.1395,0.7356 0.1461,0.6951 0.1437,0.6619 C0.1413,0.6287 0.1433,0.6028 0.1336,0.5742 Z"/></clipPath><clipPath id="sil5" clipPathUnits="objectBoundingBox"><path d="M0.5473,0.0206 C0.5858,0.0305 0.6231,0.0461 0.6558,0.0643 C0.6886,0.0825 0.7182,0.1058 0.7439,0.1297 C0.7695,0.1536 0.7905,0.1810 0.8095,0.2075 C0.8285,0.2340 0.8431,0.2616 0.8581,0.2888 C0.8732,0.3160 0.8859,0.3424 0.8998,0.3708 C0.9137,0.3992 0.9284,0.4271 0.9417,0.4592 C0.9549,0.4913 0.9704,0.5255 0.9792,0.5634 C0.9881,0.6013 0.9970,0.6444 0.9950,0.6866 C0.9930,0.7289 0.9856,0.7766 0.9674,0.8168 C0.9492,0.8570 0.9202,0.8986 0.8855,0.9278 C0.8509,0.9570 0.8041,0.9807 0.7592,0.9919 C0.7144,1.0031 0.6615,1.0027 0.6162,0.9950 C0.5709,0.9873 0.5251,0.9665 0.4874,0.9455 C0.4497,0.9245 0.4178,0.8945 0.3898,0.8690 C0.3617,0.8435 0.3412,0.8159 0.3191,0.7925 C0.2970,0.7691 0.2790,0.7489 0.2571,0.7286 C0.2352,0.7084 0.2122,0.6921 0.1877,0.6711 C0.1633,0.6501 0.1347,0.6295 0.1104,0.6026 C0.0861,0.5758 0.0593,0.5448 0.0417,0.5100 C0.0241,0.4752 0.0092,0.4341 0.0050,0.3940 C0.0008,0.3540 0.0044,0.3092 0.0166,0.2698 C0.0287,0.2303 0.0510,0.1902 0.0778,0.1572 C0.1045,0.1243 0.1404,0.0948 0.1771,0.0721 C0.2137,0.0495 0.2565,0.0325 0.2978,0.0213 C0.3391,0.0101 0.3834,0.0051 0.4250,0.0050 C0.4666,0.0049 0.5088,0.0107 0.5473,0.0206 Z"/></clipPath><clipPath id="sil6" clipPathUnits="objectBoundingBox"><path d="M0.0338,0.6693 C0.0197,0.6370 0.0087,0.6027 0.0050,0.5690 C0.0013,0.5353 0.0062,0.5005 0.0114,0.4674 C0.0165,0.4342 0.0277,0.4033 0.0359,0.3701 C0.0442,0.3368 0.0500,0.3036 0.0610,0.2678 C0.0719,0.2320 0.0805,0.1905 0.1015,0.1552 C0.1225,0.1199 0.1512,0.0810 0.1872,0.0560 C0.2232,0.0309 0.2720,0.0130 0.3175,0.0050 C0.3630,-0.0030 0.4145,0.0022 0.4602,0.0077 C0.5058,0.0132 0.5494,0.0263 0.5914,0.0380 C0.6334,0.0498 0.6739,0.0618 0.7121,0.0782 C0.7503,0.0946 0.7893,0.1127 0.8206,0.1367 C0.8520,0.1607 0.8795,0.1912 0.9001,0.2221 C0.9206,0.2530 0.9321,0.2887 0.9439,0.3220 C0.9556,0.3553 0.9624,0.3880 0.9707,0.4217 C0.9791,0.4553 0.9899,0.4884 0.9940,0.5237 C0.9980,0.5589 1.0026,0.5976 0.9950,0.6331 C0.9874,0.6685 0.9709,0.7057 0.9485,0.7364 C0.9261,0.7671 0.8924,0.7931 0.8607,0.8173 C0.8290,0.8414 0.7936,0.8604 0.7584,0.8813 C0.7232,0.9023 0.6890,0.9247 0.6496,0.9430 C0.6103,0.9614 0.5671,0.9830 0.5224,0.9916 C0.4776,1.0003 0.4257,1.0034 0.3810,0.9950 C0.3363,0.9866 0.2909,0.9647 0.2540,0.9413 C0.2172,0.9179 0.1872,0.8844 0.1598,0.8547 C0.1323,0.8249 0.1103,0.7936 0.0893,0.7627 C0.0683,0.7318 0.0478,0.7016 0.0338,0.6693 Z"/></clipPath><clipPath id="sil7" clipPathUnits="objectBoundingBox"><path d="M0.6278,0.9419 C0.5941,0.9697 0.5469,0.9930 0.5057,0.9950 C0.4644,0.9970 0.4156,0.9788 0.3803,0.9536 C0.3451,0.9285 0.3159,0.8818 0.2940,0.8440 C0.2721,0.8063 0.2630,0.7609 0.2487,0.7269 C0.2343,0.6930 0.2259,0.6662 0.2079,0.6405 C0.1899,0.6149 0.1655,0.5984 0.1406,0.5729 C0.1157,0.5475 0.0809,0.5217 0.0583,0.4881 C0.0357,0.4545 0.0122,0.4119 0.0050,0.3712 C-0.0022,0.3305 0.0017,0.2825 0.0151,0.2438 C0.0286,0.2052 0.0571,0.1679 0.0858,0.1392 C0.1145,0.1106 0.1528,0.0894 0.1874,0.0718 C0.2220,0.0542 0.2587,0.0435 0.2932,0.0336 C0.3277,0.0238 0.3611,0.0174 0.3944,0.0126 C0.4276,0.0079 0.4601,0.0052 0.4929,0.0050 C0.5257,0.0048 0.5580,0.0071 0.5911,0.0115 C0.6243,0.0159 0.6573,0.0220 0.6916,0.0313 C0.7258,0.0406 0.7619,0.0507 0.7966,0.0673 C0.8313,0.0838 0.8697,0.1033 0.8996,0.1305 C0.9295,0.1577 0.9601,0.1929 0.9760,0.2306 C0.9919,0.2683 0.9996,0.3157 0.9950,0.3567 C0.9904,0.3978 0.9699,0.4420 0.9485,0.4768 C0.9271,0.5116 0.8923,0.5395 0.8667,0.5656 C0.8411,0.5916 0.8143,0.6081 0.7950,0.6329 C0.7757,0.6577 0.7654,0.6819 0.7509,0.7144 C0.7364,0.7470 0.7286,0.7901 0.7081,0.8280 C0.6876,0.8659 0.6616,0.9140 0.6278,0.9419 Z"/></clipPath><clipPath id="sil8" clipPathUnits="objectBoundingBox"><path d="M0.9938,0.7821 C0.9890,0.8259 0.9802,0.8799 0.9546,0.9147 C0.9290,0.9495 0.8831,0.9775 0.8404,0.9909 C0.7978,1.0042 0.7428,0.9968 0.6987,0.9950 C0.6545,0.9932 0.6150,0.9820 0.5757,0.9802 C0.5364,0.9784 0.5011,0.9855 0.4629,0.9843 C0.4246,0.9830 0.3809,0.9864 0.3460,0.9728 C0.3112,0.9592 0.2765,0.9320 0.2536,0.9025 C0.2308,0.8730 0.2221,0.8291 0.2087,0.7959 C0.1954,0.7627 0.1915,0.7321 0.1737,0.7035 C0.1558,0.6748 0.1272,0.6547 0.1017,0.6241 C0.0762,0.5935 0.0369,0.5585 0.0208,0.5200 C0.0047,0.4815 -0.0034,0.4323 0.0050,0.3929 C0.0134,0.3535 0.0445,0.3156 0.0712,0.2837 C0.0978,0.2518 0.1351,0.2294 0.1650,0.2014 C0.1948,0.1735 0.2195,0.1442 0.2503,0.1159 C0.2811,0.0875 0.3116,0.0497 0.3497,0.0313 C0.3877,0.0128 0.4365,-0.0005 0.4785,0.0050 C0.5205,0.0105 0.5664,0.0391 0.6016,0.0640 C0.6368,0.0889 0.6616,0.1294 0.6896,0.1543 C0.7176,0.1793 0.7393,0.1971 0.7695,0.2137 C0.7997,0.2303 0.8388,0.2353 0.8709,0.2539 C0.9031,0.2725 0.9417,0.2954 0.9624,0.3252 C0.9831,0.3550 0.9914,0.3964 0.9950,0.4327 C0.9986,0.4690 0.9858,0.5063 0.9839,0.5429 C0.9819,0.5794 0.9819,0.6120 0.9835,0.6518 C0.9852,0.6917 0.9986,0.7383 0.9938,0.7821 Z"/></clipPath><clipPath id="sil9" clipPathUnits="objectBoundingBox"><path d="M0.3264,0.8084 C0.3018,0.7808 0.2779,0.7727 0.2460,0.7579 C0.2140,0.7430 0.1619,0.7416 0.1347,0.7193 C0.1074,0.6970 0.0926,0.6578 0.0825,0.6241 C0.0725,0.5903 0.0838,0.5530 0.0744,0.5168 C0.0650,0.4805 0.0378,0.4468 0.0262,0.4066 C0.0146,0.3664 -0.0057,0.3135 0.0050,0.2755 C0.0157,0.2374 0.0560,0.2026 0.0904,0.1785 C0.1247,0.1544 0.1740,0.1453 0.2111,0.1307 C0.2482,0.1161 0.2787,0.0996 0.3129,0.0909 C0.3470,0.0823 0.3827,0.0800 0.4161,0.0790 C0.4495,0.0780 0.4793,0.0915 0.5134,0.0852 C0.5475,0.0789 0.5793,0.0545 0.6207,0.0411 C0.6620,0.0278 0.7209,-0.0015 0.7615,0.0050 C0.8021,0.0115 0.8411,0.0465 0.8642,0.0801 C0.8873,0.1137 0.8858,0.1688 0.9002,0.2065 C0.9146,0.2441 0.9350,0.2718 0.9508,0.3060 C0.9666,0.3402 0.9959,0.3761 0.9950,0.4119 C0.9941,0.4478 0.9665,0.4893 0.9456,0.5211 C0.9247,0.5529 0.8857,0.5729 0.8698,0.6026 C0.8539,0.6323 0.8582,0.6639 0.8502,0.6993 C0.8423,0.7347 0.8405,0.7817 0.8219,0.8150 C0.8034,0.8482 0.7706,0.8741 0.7392,0.8988 C0.7077,0.9236 0.6716,0.9475 0.6331,0.9636 C0.5947,0.9796 0.5483,1.0017 0.5084,0.9950 C0.4686,0.9883 0.4244,0.9545 0.3941,0.9234 C0.3638,0.8923 0.3511,0.8359 0.3264,0.8084 Z"/></clipPath></defs>
+</svg>
