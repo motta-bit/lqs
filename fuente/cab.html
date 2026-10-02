@@ -67,9 +67,12 @@ p{margin:0}
   transition:background .25s,color .25s,box-shadow .25s}
 .top.pegada{background:var(--tinta);color:var(--papel);box-shadow:0 6px 24px rgba(26,23,32,.16)}
 .top.pegada .nav a{color:var(--papel)}
-.marca{display:flex;align-items:center;gap:10px;font-family:'Syne';font-weight:800;
-  font-size:21px;letter-spacing:-.03em;color:inherit;text-decoration:none}
-.marca .cara{display:block;width:34px;height:34px;flex:none}
+.marca{display:flex;align-items:center;gap:9px;font-family:'Syne';font-weight:800;
+  font-size:18px;letter-spacing:-.03em;color:inherit;text-decoration:none}
+/* Mismo criterio que en el hero, a escala de barra: el azulejo crece y
+   la palabra cede. En móvil la palabra ya no aparece —solo el logo. */
+.marca .cara{display:block;width:42px;height:42px;flex:none}
+.marca .cara svg,.marca .cara img{width:100%;height:auto;display:block}
 .nav{display:flex;gap:20px;font-size:13.5px}
 .nav a{color:var(--tinta);text-decoration:none;opacity:.8}
 .nav a:hover{opacity:1;text-decoration:underline;text-underline-offset:4px}
@@ -102,14 +105,24 @@ p{margin:0}
   background:linear-gradient(140deg,var(--p-violeta),var(--p-rojo));color:#1A1720;
   padding:clamp(28px,5vw,56px);min-height:min(78vh,620px);
   display:flex;flex-direction:column;justify-content:space-between;gap:30px}
-.hero h1{font-size:clamp(96px,19vw,230px);line-height:.8;letter-spacing:-.05em}
+/* La firma del hero: el LOGO manda y las letras lo acompañan al lado.
+   Antes el monograma iba de 104 px encima de un LQS de hasta 230: la
+   marca por la que queremos que nos reconozcan era lo más chico de la
+   pantalla. Ahora el azulejo mide el doble que la altura de mayúscula
+   de las letras, que es la proporción en la que un logotipo se lee como
+   el elemento principal y la palabra como su firma. */
+.h-firma{display:flex;align-items:center;gap:clamp(12px,2.2vw,26px);margin-bottom:6px}
+.h-firma lqs-trazo{flex:none;width:clamp(104px,21vw,268px);display:block;line-height:0}
+.h-firma lqs-trazo svg,.h-firma lqs-trazo img{width:100%;height:auto;display:block}
+.hero h1{font-size:clamp(52px,10.4vw,132px);line-height:.8;letter-spacing:-.045em}
 /* La S del nombre va en Syne limpia. En el hero LQS no es un titular:
    es la marca, y de las tres letras la S es la que peor aguanta el corte
    —sus dos curvas se cruzan y las vetas se juntan en el medio—. Dejarla
    entera ancla la palabra; la L y la Q llevan el corte. */
 .s-limpia{font-family:'Syne',system-ui,sans-serif}
 .hero .lema{font-family:'Syne',system-ui,sans-serif;font-weight:800;
-  font-size:clamp(24px,4.2vw,50px);line-height:1;letter-spacing:-.03em;margin-top:clamp(10px,1.6vw,22px)}
+  font-size:clamp(19px,3vw,36px);line-height:1.02;letter-spacing:-.03em;
+  margin-top:clamp(8px,1.2vw,16px)}
 .hero .lede{max-width:44ch;font-size:clamp(15px,1.7vw,18px)}
 .hero .acc{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
 /* Siluetas orgánicas granuladas. Las genera formas/siluetas.py sumando de
@@ -198,8 +211,7 @@ p{margin:0}
 .ruta-cab{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
 /* El monograma dibujándose, arriba del LQS del hero. Se le deja aire abajo
    porque el h1 tiene line-height .78 y sin esto se le monta encima. */
-.h-marca{margin:0 0 14px;line-height:0}
-.h-marca lqs-trazo{display:block}
+
 /* Respaldo del logo. <lqs-trazo> se pinta por JavaScript: si el script no
    llega —red caída, JS desactivado, un navegador sin custom elements— el
    elemento se queda con altura cero y el hero sale SIN LOGO. Medido: 0 px
