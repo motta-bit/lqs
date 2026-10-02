@@ -220,6 +220,16 @@ p{margin:0}
    porque el h1 tiene line-height .78 y sin esto se le monta encima. */
 .h-marca{margin:0 0 14px;line-height:0}
 .h-marca lqs-trazo{display:block}
+/* Respaldo del logo. <lqs-trazo> se pinta por JavaScript: si el script no
+   llega —red caída, JS desactivado, un navegador sin custom elements— el
+   elemento se queda con altura cero y el hero sale SIN LOGO. Medido: 0 px
+   de alto y 0 de contenido.
+   Dentro del elemento va el logo completo como <img>. Cuando el componente
+   arranca lo reemplaza, así que normalmente no se ve; el retraso de 1,5 s
+   evita que asome y se redibuje cuando el script simplemente va lento. */
+lqs-trazo>img{display:block;opacity:0;animation:trazo-respaldo 0s linear 1.5s forwards}
+lqs-trazo:defined>img{display:none}
+@keyframes trazo-respaldo{to{opacity:1}}
 /* OJO con el nombre: `.ficha` ya existe en el sitio — es la tarjeta de la
    galería de muestras, con fondo papel y span 2. Llamar a esto igual hacía
    que la regla de allá ganara y el ícono saliera como un bloque blanco. */
@@ -705,7 +715,7 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
 
 <!-- ============ CABECERA ============ -->
 <header class="top" id="top">
-  <a class="marca" href="index.html"><lqs-trazo class="cara" tam="34" cuando="hover" duracion="2400"></lqs-trazo><span class="wordmark">LQS</span></a>
+  <a class="marca" href="index.html"><lqs-trazo class="cara" tam="34" cuando="hover" duracion="2400"><img src="marca/lqs-principal.svg" alt="" width="34" height="34"></lqs-trazo><span class="wordmark">LQS</span></a>
   <nav class="nav">
     <a href="nosotros.html" data-pag="nosotros">Nosotros</a>
     <a href="muestras.html" data-pag="muestras" aria-current="page">Muestras</a>
