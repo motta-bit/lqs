@@ -134,7 +134,23 @@ p{margin:0}
 .h-firma{display:flex;align-items:center;gap:clamp(12px,2.2vw,26px);margin-bottom:6px}
 .h-firma lqs-trazo{flex:none;width:clamp(104px,21vw,268px);display:block;line-height:0}
 .h-firma lqs-trazo svg,.h-firma lqs-trazo img{width:100%;height:auto;display:block}
-.hero h1{font-size:clamp(52px,10.4vw,132px);line-height:.8;letter-spacing:-.045em}
+/* El wordmark va en MINUSCULA: en la tipografía cortada la caja baja de
+   las letras agarra mucha mejor textura que la mayúscula —la l recibe
+   las vetas en diagonal y la q se corta en el cuenco, donde se ve—.
+   Se hace con text-transform y NO escribiendo «lqs» en el HTML: así el
+   texto sigue siendo LQS para Google, para quien lo copie y para un
+   lector de pantalla, y solo cambia lo que se dibuja.
+   El cuerpo sube de 132 a 172 px porque la altura de x de Syne es 500 y
+   la de mayúscula 650: al mismo cuerpo, la minúscula se ve un 23% más
+   chica. 132 × 650/500 = 172 deja las letras del mismo tamaño aparente.
+   Y el interlineado sube de .80 a .88: la cola de la q baja a -0,20 em y
+   con .80 se salía de su línea y se le montaba al lema.
+   El tracking se afloja de -.045em a -.01em: ese valor venía de la
+   mayúscula. La l minúscula es angosta (360 de avance contra 943 de la
+   L) y a -.045 su asta se metía en el cuenco de la q — las dos letras
+   se leían como una sola mancha. */
+.hero h1{font-size:clamp(68px,13.6vw,172px);line-height:.88;letter-spacing:-.01em;
+  text-transform:lowercase}
 /* La S del nombre va en Syne limpia. En el hero LQS no es un titular:
    es la marca, y de las tres letras la S es la que peor aguanta el corte
    —sus dos curvas se cruzan y las vetas se juntan en el medio—. Dejarla
