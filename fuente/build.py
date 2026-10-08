@@ -93,12 +93,12 @@ EXPRESS = ["Panfletos", "Presentaciones", "Edición de fotos", "Arreglos de cost
 # Lo que quede con FALTA sale marcado en rojo en la página y publicar.py avisa.
 FALTA = '<mark class="falta">FALTA: %s</mark>'
 LEGAL = {
-    "RAZON":       FALTA % "razón social o nombre completo",
-    "NIT":         FALTA % "NIT o cédula",
-    "DOMICILIO":   FALTA % "ciudad de domicilio",
-    "DIRECCION":   FALTA % "dirección de notificaciones",
-    "RESPONSABLE": FALTA % "quién atiende las solicitudes de datos",
-    "VIGENCIA":    "17 de septiembre de 2026",
+    "RAZON":       "Caleb Parra Vargas",
+    "NIT":         "",
+    "DOMICILIO":   "Medellín, Antioquia",
+    "DIRECCION":   "Calle 61 #48-7, Medellín",
+    "RESPONSABLE": "Caleb Parra Vargas — loqueseaproductionsp1@gmail.com",
+    "VIGENCIA":    "4 de octubre de 2026",
 }
 
 CONTACTO = {
