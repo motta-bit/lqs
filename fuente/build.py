@@ -87,7 +87,7 @@ RECOMENDADO = "Presencia"
 AREA_COMPLETA = 10   # tomar todos los servicios de una sola área
 
 # Express: encargos chicos que no pasan por cotizador. Se piden y se entregan.
-EXPRESS = ["Panfletos", "Presentaciones", "Edición de fotos", "Arreglos de costura"]
+EXPRESS = ["Panfletos", "Carteles", "Avisos", "Presentaciones", "Edición de fotos", "Arreglos de costura"]
 
 # Datos que la ley exige y que hay que llenar antes de publicar la página legal.
 # Lo que quede con FALTA sale marcado en rojo en la página y publicar.py avisa.
@@ -170,7 +170,7 @@ EN_UNIDAD = {
 EN_APERTURA = [("Music", "Recording, mixing"),
                ("Physical production", "Prototype, laser cutting"),
                ("Jewellery", "Design and 3D")]
-EN_EXPRESS = ["Flyers", "Presentations", "Photo editing", "Sewing repairs"]
+EN_EXPRESS = ["Flyers", "Posters", "Notices", "Presentations", "Photo editing", "Sewing repairs"]
 EN_PLANES = {"Arranque": ("Starter", "Identity, and something to show it with"),
              "Presencia": ("Presence", "The face, the house, and whoever keeps it up"),
              "Evento completo": ("Full event", "Set-up, check-in and coverage")}

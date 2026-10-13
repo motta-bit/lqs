@@ -158,6 +158,11 @@ p{margin:0}
 .h-pato{position:absolute;right:clamp(4px,2vw,30px);bottom:0;
   height:clamp(135px,30vw,400px);width:auto;transform:scaleX(-1);
   z-index:1;pointer-events:none;user-select:none}
+/* Las chispas de la marca: el par de estrellas (una grande, una chica) que
+   aparece en las piezas. Van en la esquina superior derecha del hero. */
+.chispa{position:absolute;pointer-events:none;user-select:none;z-index:2}
+.chispa-a{top:clamp(14px,3vw,38px);right:clamp(24px,7vw,92px);width:clamp(32px,5vw,60px)}
+.chispa-b{top:clamp(42px,6vw,82px);right:clamp(6px,3.5vw,46px);width:clamp(18px,3vw,34px)}
 /* Siluetas orgánicas granuladas. Las genera formas/siluetas.py sumando de
    dos a cinco lóbulos con amplitud chica —pocos lóbulos, curva suave por
    construcción— y descarta cualquiera con un giro de más de 62°, así que no
@@ -758,6 +763,8 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
     <div class="blob h-forma2"></div>
     <div class="blob humo h-forma3"></div>
     <img class="h-pato" src="marca/to-parado.png" alt="" aria-hidden="true">
+    <img class="chispa chispa-a" src="marca/chispa.svg" alt="" aria-hidden="true">
+    <img class="chispa chispa-b" src="marca/chispa.svg" alt="" aria-hidden="true">
     <div>
       <div class="eyebrow" style="color:#1A1720;opacity:.7">Agencia creativa modular · Estamos donde nos necesiten</div>
       
