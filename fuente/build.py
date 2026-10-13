@@ -89,6 +89,22 @@ AREA_COMPLETA = 10   # tomar todos los servicios de una sola área
 # Express: encargos chicos que no pasan por cotizador. Se piden y se entregan.
 EXPRESS = ["Panfletos", "Carteles", "Avisos", "Presentaciones", "Edición de fotos", "Arreglos de costura"]
 
+# Tono propio de cada área SOLO para las tarjetas de «explora por área» en Muestras.
+# Los pasteles de MODULOS tienen dos pares repetidos (Video/Eventos en lila, Foto/
+# Automatización en azul) y el lila es además el morado de la página: ahí las áreas
+# se confundían entre sí y con el fondo. Para que la modularidad se lea como autonomía,
+# cada área lleva aquí un matiz distinto y ninguno morado. Se indexa por el slug del
+# icono, que no cambia con el idioma. No toca el cotizador: eso sigue con MODULOS.
+AREA_TONO = {
+    "video":          "#F2975A",  # naranja
+    "foto":           "#58B6D8",  # cian
+    "marca":          "#E7B544",  # ámbar
+    "redes":          "#79C257",  # verde
+    "web":            "#EC6F6F",  # coral
+    "eventos":        "#D879B4",  # magenta
+    "automatizacion": "#4CB0A4",  # teal
+}
+
 # Datos que la ley exige y que hay que llenar antes de publicar la página legal.
 # Lo que quede con FALTA sale marcado en rojo en la página y publicar.py avisa.
 FALTA = '<mark class="falta">FALTA: %s</mark>'
@@ -273,7 +289,7 @@ PAGINAS = {
         "titulo": "Muestras — LQS",
         "desc": ("Lo que hemos hecho, por area: video, foto, marca, redes, digital, eventos y "
                  "automatizacion. Se filtra por area y se busca por lo que necesites."),
-        "partes": ["encab-muestras", "galeria", "antesdespues", "express"],
+        "partes": ["encab-muestras", "areas", "galeria", "antesdespues", "express"],
     },
     "legal.html": {
         "titulo": "Términos, datos y cookies — LQS",
@@ -416,6 +432,30 @@ def armar(idi):
     expr = "".join('<span class="ex-item">%s</span>' % e
                    for e in (EN_EXPRESS if idi == "en" else EXPRESS))
 
+    # Exploración por área en Muestras: una tarjeta por área (con su color e
+    # icono) que se abre y muestra lo que hacemos ahí. Es <details> nativo:
+    # expande sin JS. Express entra como una tarjeta más, con su icono.
+    def areas_explora():
+        def tarj(color, ico, nom, desc, items, extra=""):
+            return ('<details class="area-cd%s" style="--c:%s">'
+                    '<summary><span class="area-ico ico" data-ico="%s"></span>'
+                    '<span class="area-tx"><span class="area-nom">%s</span>'
+                    '<span class="area-desc">%s</span></span>'
+                    '<span class="area-mas" aria-hidden="true"></span></summary>'
+                    '<ul class="area-serv">%s</ul></details>'
+                    % (extra, color, ico, nom, desc, items))
+        cds = [tarj(AREA_TONO.get(ico, color), ico, n, desc,
+                    "".join('<li>%s</li>' % s["n"] for s in servs))
+               for n, ico, color, desc, servs in mods_i]
+        exd = ("Sin cotizador: se pide por WhatsApp y se entrega el mismo día."
+               if idi == "es" else "No quote: ask on WhatsApp, same-day delivery.")
+        cds.append(tarj("#F4D000", "reloj", "Express", exd,
+                        "".join('<li>%s</li>' % e
+                                for e in (EN_EXPRESS if idi == "en" else EXPRESS)),
+                        extra=" area-xp"))
+        return '<div class="areas-rej">%s</div>' % "".join(cds)
+    areas_html = areas_explora()
+
     datos = json.dumps([{"nombre": m[0], "ico": m[1], "color": m[2], "desc": m[3],
                          "serv": [{"n": s["n"], "p": s["p"], "m": s["m"], "u": s["u"], "g": s["g"]}
                                   for s in m[4]]} for m in mods_i], ensure_ascii=False)
@@ -428,7 +468,8 @@ def armar(idi):
         if nombre.startswith("encab-"):
             return encabezado(nombre, idi)
         t = (carpeta / (nombre + ".html")).read_text(encoding="utf-8")
-        return t.replace("{{MODULOS}}", mods).replace("{{APERTURA}}", apert).replace("{{EXPRESS}}", expr)
+        return (t.replace("{{MODULOS}}", mods).replace("{{APERTURA}}", apert)
+                 .replace("{{EXPRESS}}", expr).replace("{{AREAS}}", areas_html))
 
     guion = ((BASE / "guion.html").read_text(encoding="utf-8")
              .replace("/*CARITA_JS*/", (BASE / "carita.js").read_text(encoding="utf-8"))

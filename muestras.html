@@ -439,6 +439,49 @@ lqs-trazo:defined>img{display:none}
 .ex-item{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.02em;
   background:rgba(253,251,247,.12);border-radius:999px;padding:9px 16px}
 
+/* ---------- explora por área (Muestras) ----------
+   Una tarjeta <details> por área, cada una con su color propio (--c, inyectado
+   por build) para que la modularidad se lea como autonomía: siete acentos
+   distintos, ninguno morado como la página. Expande sin JS. */
+.areas-rej{grid-column:span 6;display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:var(--gap)}
+.area-cd{--c:var(--tinta);background:var(--papel);border:2px solid var(--tinta);
+  border-radius:var(--r-bloque);overflow:hidden;align-self:start;padding:0;
+  transition:box-shadow .15s ease}
+.area-cd[open]{box-shadow:0 8px 0 -3px var(--c)}
+.area-cd>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:13px;
+  padding:15px 16px 15px 20px;position:relative}
+.area-cd>summary::-webkit-details-marker{display:none}
+/* la cruz genérica de los FAQ (summary::after, y su «−» al abrir) no va aquí:
+   el indicador es .area-mas. El open necesita su propia especificidad o revive. */
+.area-cd>summary::after,.area-cd[open]>summary::after{content:none}
+/* franja de color del área, pegada al borde izquierdo */
+.area-cd>summary::before{content:"";position:absolute;left:0;top:0;bottom:0;width:7px;
+  background:var(--c)}
+.area-cd>summary:hover{background:color-mix(in srgb,var(--c) 12%,var(--papel))}
+.area-ico.ico{width:36px;height:36px;flex:none;border-radius:var(--r-int);
+  background:var(--c);padding:7px}
+.area-tx{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
+.area-nom{font-family:'Syne';font-weight:800;font-size:17px;letter-spacing:-.02em;line-height:1}
+.area-desc{font-size:12px;color:var(--humo);line-height:1.3}
+/* el «más»: una cruz que al abrir pierde la barra vertical y queda en «−» */
+.area-mas{flex:none;width:22px;height:22px;position:relative}
+.area-mas::before,.area-mas::after{content:"";position:absolute;background:var(--tinta);
+  border-radius:2px;transition:transform .2s ease}
+.area-mas::before{left:3px;right:3px;top:10px;height:2px}
+.area-mas::after{top:3px;bottom:3px;left:10px;width:2px}
+.area-cd[open] .area-mas::after{transform:scaleY(0)}
+.area-serv{list-style:none;margin:0;padding:2px 18px 16px 25px;
+  display:flex;flex-direction:column;gap:8px;border-top:1.5px dashed rgba(26,23,32,.14)}
+.area-serv li{font-size:13.5px;line-height:1.35;position:relative;padding-left:16px}
+.area-serv li::before{content:"";position:absolute;left:0;top:6px;width:7px;height:7px;
+  border-radius:50%;background:var(--c)}
+/* Express no pasa por cotizador: se dice en la propia tarjeta */
+.area-xp .area-nom::after{content:"· sin cotizador";font-family:'IBM Plex Mono',monospace;
+  font-weight:600;font-size:9.5px;letter-spacing:.03em;color:var(--humo);margin-left:7px;
+  white-space:nowrap}
+@media(max-width:560px){.areas-rej{grid-template-columns:1fr}}
+
 /* ---------- 12 documentos legales ---------- */
 .doc-ind{grid-column:span 6;display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;
   background:var(--crema);border-radius:var(--r-bloque);padding:16px 22px;
@@ -757,6 +800,14 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
 
 <main class="wrap" id="inicio" data-pagina="muestras">
 <section class="seccion pagina-encab"><div class="eyebrow">Muestras</div><h1 class="tit-pagina">Lo que hemos hecho</h1><p class="dim bajada">Por área, filtrable, y con buscador para cuando ya sabes qué necesitas.</p></section>
+
+<!-- ============ EXPLORA POR ÁREA ============ -->
+<section class="seccion" id="areas-explora">
+  <div class="eyebrow">Explora por área · toca para ver qué hacemos en cada una</div>
+  <h2 style="margin-bottom:20px">Lo que ofrecemos, por área</h2>
+  <div class="areas-rej"><details class="area-cd" style="--c:#F2975A"><summary><span class="area-ico ico" data-ico="video"></span><span class="area-tx"><span class="area-nom">Video</span><span class="area-desc">Reels, YouTube, comerciales</span></span><span class="area-mas" aria-hidden="true"></span></summary><ul class="area-serv"><li>Reels y contenido vertical</li><li>Entrevistas</li><li>Video para YouTube, acabado cinematográfico</li><li>Podcast: grabación y cortes</li><li>Comerciales y piezas de publicidad</li></ul></details><details class="area-cd" style="--c:#58B6D8"><summary><span class="area-ico ico" data-ico="foto"></span><span class="area-tx"><span class="area-nom">Foto</span><span class="area-desc">Producto, publicidad, sesiones</span></span><span class="area-mas" aria-hidden="true"></span></summary><ul class="area-serv"><li>Retoque y edición</li><li>Sesión a una persona</li><li>Foto de producto</li><li>Foto para portafolio</li><li>Foto para publicidad</li><li>Sesión al equipo</li></ul></details><details class="area-cd" style="--c:#E7B544"><summary><span class="area-ico ico" data-ico="marca"></span><span class="area-tx"><span class="area-nom">Marca</span><span class="area-desc">Identidad, empaques, consultoría</span></span><span class="area-mas" aria-hidden="true"></span></summary><ul class="area-serv"><li>Solo el logo</li><li>Diseño de accesorios de marca</li><li>Consultoría de ADN y orientación de marca</li><li>Empaques</li><li>Rediseño de una marca que ya existe</li><li>Diseño de marca desde cero</li></ul></details><details class="area-cd" style="--c:#79C257"><summary><span class="area-ico ico" data-ico="redes"></span><span class="area-tx"><span class="area-nom">Redes</span><span class="area-desc">Contenido, calendario, community</span></span><span class="area-mas" aria-hidden="true"></span></summary><ul class="area-serv"><li>Publicaciones sueltas</li><li>Comercial corto para pauta</li><li>Paquete de publicaciones</li><li>Respuesta de comentarios y mensajes</li><li>Social manager</li><li>Plan mensual con calendario de publicación</li></ul></details><details class="area-cd" style="--c:#EC6F6F"><summary><span class="area-ico ico" data-ico="web"></span><span class="area-tx"><span class="area-nom">Digital</span><span class="area-desc">Sitios, catálogos, menús</span></span><span class="area-mas" aria-hidden="true"></span></summary><ul class="area-serv"><li>Menú digital con código QR</li><li>Landing para una campaña</li><li>Blog</li><li>Portafolio web</li><li>Catálogo en línea</li><li>Página web</li></ul></details><details class="area-cd" style="--c:#D879B4"><summary><span class="area-ico ico" data-ico="eventos"></span><span class="area-tx"><span class="area-nom">Eventos</span><span class="area-desc">Logística, registro, cobertura</span></span><span class="area-mas" aria-hidden="true"></span></summary><ul class="area-serv"><li>Diseño de accesorios del evento</li><li>Fondos y carruseles para conferencia</li><li>Registro y control de invitados</li><li>Cobertura en foto y video</li><li>Insta foto: la foto llega el mismo día</li><li>Logística completa del día</li></ul></details><details class="area-cd" style="--c:#4CB0A4"><summary><span class="area-ico ico" data-ico="automatizacion"></span><span class="area-tx"><span class="area-nom">Automatización</span><span class="area-desc">WhatsApp, Instagram, seguimiento</span></span><span class="area-mas" aria-hidden="true"></span></summary><ul class="area-serv"><li>Reporte automático de números cada semana</li><li>WhatsApp Business: catálogo y respuestas</li><li>Solicitudes que llegan directo, sin bandeja</li><li>Respuestas automáticas en Instagram</li><li>Agente de WhatsApp que responde y cotiza</li></ul></details><details class="area-cd area-xp" style="--c:#F4D000"><summary><span class="area-ico ico" data-ico="reloj"></span><span class="area-tx"><span class="area-nom">Express</span><span class="area-desc">Sin cotizador: se pide por WhatsApp y se entrega el mismo día.</span></span><span class="area-mas" aria-hidden="true"></span></summary><ul class="area-serv"><li>Panfletos</li><li>Carteles</li><li>Avisos</li><li>Presentaciones</li><li>Edición de fotos</li><li>Arreglos de costura</li></ul></details></div>
+</section>
+
 
 <!-- ============ GALERÍA ============ -->
 <section class="seccion" id="galeria">
