@@ -1,4 +1,5 @@
 import pathlib, json, re
+from urllib.parse import quote
 
 BASE = pathlib.Path(__file__).parent
 P = BASE / "partes"
@@ -88,6 +89,38 @@ AREA_COMPLETA = 10   # tomar todos los servicios de una sola área
 
 # Express: encargos chicos que no pasan por cotizador. Se piden y se entregan.
 EXPRESS = ["Panfletos", "Carteles", "Avisos", "Presentaciones", "Edición de fotos", "Arreglos de costura"]
+
+# Paquetes por sector: en Muestras, en vez de un buscador vacío, mostramos
+# combos «starter» con los servicios más necesarios de cada sector, como
+# recomendación para empezar. Cada servicio listado existe ya en MODULOS, así
+# que el nombre coincide y el botón de WhatsApp lo nombra tal cual.
+# (nombre, slug de icono, color propio, para quién, [servicios recomendados])
+PAQUETES = [
+ ("Artistas emergentes", "foto", "#E7B544",
+  "Para mostrar tu obra y que se vea profesional desde el primer vistazo.",
+  ["Foto para portafolio", "Portafolio web", "Reels y contenido vertical"]),
+ ("Músicos emergentes", "video", "#EC6F6F",
+  "Lo mínimo para sonar y verse como artista: imagen, video y presencia.",
+  ["Sesión a una persona", "Reels y contenido vertical",
+   "Diseño de accesorios de marca", "Paquete de publicaciones"]),
+ ("Marcas emergentes", "marca", "#58B6D8",
+  "Nace con identidad, con qué venderte y con quién sostenga tus redes.",
+  ["Diseño de marca desde cero", "Foto de producto", "Paquete de publicaciones"]),
+ ("Transición digital para empresas", "automatizacion", "#4CB0A4",
+  "Pasa tu operación a digital: presencia, orden y procesos que corren solos.",
+  ["Página web", "WhatsApp Business: catálogo y respuestas",
+   "Reporte automático de números cada semana", "Respuestas automáticas en Instagram"]),
+]
+EN_PAQUETES = {
+ "Artistas emergentes": ("Emerging artists",
+   "To show your work and have it look professional at first glance."),
+ "Músicos emergentes": ("Emerging musicians",
+   "The minimum to sound and look like an artist: image, video and presence."),
+ "Marcas emergentes": ("Emerging brands",
+   "Born with identity, with something to sell you and someone to keep your social up."),
+ "Transición digital para empresas": ("Digital transition for companies",
+   "Move your operation to digital: presence, order and processes that run on their own."),
+}
 
 # Tono propio de cada área SOLO para las tarjetas de «explora por área» en Muestras.
 # Los pasteles de MODULOS tienen dos pares repetidos (Video/Eventos en lila, Foto/
@@ -490,7 +523,7 @@ PAGINAS = {
         "titulo": "Muestras — LQS",
         "desc": ("Lo que hemos hecho, por area: video, foto, marca, redes, digital, eventos y "
                  "automatizacion. Se filtra por area y se busca por lo que necesites."),
-        "partes": ["encab-muestras", "areas", "galeria", "antesdespues", "express"],
+        "partes": ["encab-muestras", "areas", "paquetes", "antesdespues", "express"],
     },
     "legal.html": {
         "titulo": "Términos, datos y cookies — LQS",
@@ -595,6 +628,33 @@ def encabezado(clave, idi):
             '<p class="dim bajada">%s</p>'
             '</section>' % (eyebrow, titulo, bajada))
 
+def paquetes_html(idi):
+    """Tarjetas de paquetes por sector para Muestras. El botón lleva a WhatsApp
+       con el paquete y sus servicios ya escritos; {{WHATSAPP}} se reemplaza al final."""
+    tag = "Starter" if idi == "es" else "Starter"
+    cta = "Armar este paquete →" if idi == "es" else "Build this pack →"
+    incluye = "Incluye" if idi == "es" else "Includes"
+    out = []
+    for nom_es, ico, color, para_es, servs in PAQUETES:
+        nom = EN_PAQUETES[nom_es][0] if idi == "en" else nom_es
+        para = EN_PAQUETES[nom_es][1] if idi == "en" else para_es
+        servs_disp = [EN_SERV.get(s, s) if idi == "en" else s for s in servs]
+        lis = "".join("<li>%s</li>" % s for s in servs_disp)
+        txt = (("Hola LQS, me interesa el paquete «%s»: %s." % (nom, ", ".join(servs_disp)))
+               if idi == "es" else
+               ("Hi LQS, I'm interested in the «%s» pack: %s." % (nom, ", ".join(servs_disp))))
+        href = "https://wa.me/{{WHATSAPP}}?text=" + quote(txt)
+        out.append('<article class="paq" style="--c:%s">'
+                   '<div class="paq-cab"><span class="paq-ico ico" data-ico="%s"></span>'
+                   '<span class="paq-tag">%s</span></div>'
+                   '<h3 class="paq-nom">%s</h3>'
+                   '<p class="paq-para">%s</p>'
+                   '<span class="paq-lab">%s</span>'
+                   '<ul class="paq-serv">%s</ul>'
+                   '<a class="btn sm paq-cta" href="%s">%s</a></article>'
+                   % (color, ico, tag, nom, para, incluye, lis, href, cta))
+    return '<div class="paq-rej">%s</div>' % "".join(out)
+
 logo = (P.parent / "carita-inline.svg")
 if not logo.exists():
     logo = P.parent.parent / "maqueta" / "carita-inline.svg"
@@ -687,6 +747,7 @@ def armar(idi):
         return ('<div class="areas-rej">%s</div>' % "".join(cds),
                 json.dumps(fichas, ensure_ascii=False))
     areas_html, fichas_json = areas_explora()
+    paq_html = paquetes_html(idi)
 
     datos = json.dumps([{"nombre": m[0], "ico": m[1], "color": m[2], "desc": m[3],
                          "serv": [{"n": s["n"], "p": s["p"], "m": s["m"], "u": s["u"], "g": s["g"]}
@@ -702,7 +763,7 @@ def armar(idi):
         t = (carpeta / (nombre + ".html")).read_text(encoding="utf-8")
         return (t.replace("{{MODULOS}}", mods).replace("{{APERTURA}}", apert)
                  .replace("{{EXPRESS}}", expr).replace("{{AREAS}}", areas_html)
-                 .replace("{{FICHAS}}", fichas_json))
+                 .replace("{{FICHAS}}", fichas_json).replace("{{PAQUETES}}", paq_html))
 
     guion = ((BASE / "guion.html").read_text(encoding="utf-8")
              .replace("/*CARITA_JS*/", (BASE / "carita.js").read_text(encoding="utf-8"))
