@@ -105,6 +105,207 @@ AREA_TONO = {
     "automatizacion": "#4CB0A4",  # teal
 }
 
+# Ficha de cada servicio para la ventana flotante de Muestras: «qué es» en una
+# frase y una «recomendación de uso» concreta. Indexada por el nombre en español
+# (el que vive en MODULOS/EXPRESS), así no depende del idioma de visualización.
+# El hueco de imagen/video queda vacío a propósito: se llena cuando haya muestra.
+FICHA = {
+ # Video
+ "Reels y contenido vertical": ("Clips verticales (9:16) para Reels, TikTok y Shorts, con edición ágil y texto en pantalla.",
+   "Sube 2–4 al mes para que el algoritmo te muestre; los primeros 3 segundos deciden si se quedan."),
+ "Entrevistas": ("Grabación de una conversación a una o dos cámaras, con audio limpio y cortes listos.",
+   "Deja la versión larga en YouTube y saca 3–4 cortes verticales para redes: una grabación, varias piezas."),
+ "Video para YouTube, acabado cinematográfico": ("Pieza más larga con color, sonido y ritmo tratados como cine.",
+   "Úsala como pieza ancla de un lanzamiento o historia de marca; luego se despieza en cortos."),
+ "Podcast: grabación y cortes": ("Montaje del episodio a varias cámaras y audio, más los cortes para promocionarlo.",
+   "Mantén una frecuencia fija (semanal o quincenal); los cortes son los que traen oyentes nuevos."),
+ "Comerciales y piezas de publicidad": ("Comercial con guion, producción y post, pensado para pauta o campaña.",
+   "Hazlo cuando vayas a invertir en pauta: una buena pieza baja el costo por resultado."),
+ # Foto
+ "Retoque y edición": ("Ajuste de luz, color y limpieza sobre una foto que ya tienes.",
+   "Úsalo para unificar el feed o rescatar material viejo antes de reinvertir en una sesión."),
+ "Sesión a una persona": ("45 minutos, 10 fotos finales: retrato para perfil, marca personal o equipo.",
+   "Perfecto para LinkedIn, el «sobre nosotros» y prensa; agéndala cuando cambies de cargo o de imagen."),
+ "Foto de producto": ("Fotos limpias del producto, con fondo y luz controlados.",
+   "Son la base de tu catálogo y tu pauta; un buen set rinde meses en redes y tienda."),
+ "Foto para portafolio": ("Set con intención editorial para mostrar tu trabajo o tu oferta.",
+   "Vale más mostrar 6 fotos fuertes que 30 flojas; úsalas en tu web y propuestas."),
+ "Foto para publicidad": ("Imágenes con dirección de arte para una campaña o pauta.",
+   "Resérvala cuando tengas el mensaje claro: la foto trabaja con el copy, no sola."),
+ "Sesión al equipo": ("Retratos coherentes de todo el equipo, mismo estilo y luz.",
+   "Dan confianza en la web y en propuestas; repítela cada vez que entre gente nueva."),
+ # Marca
+ "Solo el logo": ("El símbolo y el logotipo en sus versiones y formatos de uso.",
+   "Es el punto de partida, no el final; acompáñalo de color y tipografía para que se sostenga."),
+ "Diseño de accesorios de marca": ("Piezas aplicadas: tarjetas, firmas, plantillas, merch.",
+   "Pídelo cuando ya tengas el logo; es lo que hace que la marca se vea «armada»."),
+ "Consultoría de ADN y orientación de marca": ("Sesión de estrategia: qué dices, a quién y cómo suenas.",
+   "Hazla antes de diseñar nada: ahorra rediseños y decisiones al azar."),
+ "Empaques": ("Diseño del empaque listo para imprimir, con medidas y troquel.",
+   "Clave en producto físico: el empaque es tu vendedor en el punto de venta."),
+ "Rediseño de una marca que ya existe": ("Actualización de una identidad que ya tienes, sin perder lo reconocible.",
+   "Cuando la marca «ya no te representa» pero no quieres empezar de cero."),
+ "Diseño de marca desde cero": ("Identidad completa: estrategia, logo, color, tipografía y aplicaciones.",
+   "Para arrancar bien o para un giro grande; es la base de todo lo demás."),
+ # Redes
+ "Publicaciones sueltas": ("Piezas individuales a demanda, para una fecha o un anuncio.",
+   "Úsalas para tapar huecos puntuales; para crecer conviene un plan con calendario."),
+ "Comercial corto para pauta": ("Pieza breve y directa pensada para anuncios pagos.",
+   "Acompáñala de presupuesto de pauta: sin inversión no despega."),
+ "Paquete de publicaciones": ("6 piezas coherentes entre sí, listas para programar.",
+   "Ideal para sostener presencia un mes sin improvisar cada día."),
+ "Respuesta de comentarios y mensajes": ("Gestión diaria de comentarios, DMs y dudas.",
+   "Responder rápido vende; actívalo si recibes preguntas que se quedan sin contestar."),
+ "Social manager": ("Plan Base: alguien lleva tus redes de forma constante.",
+   "Para cuando ya no te da la vida publicar; la constancia es lo que mueve la aguja."),
+ "Plan mensual con calendario de publicación": ("Plan Activo: estrategia, calendario y producción cada mes.",
+   "El paso completo: deja de pensar qué subir y enfócate en tu negocio."),
+ # Digital
+ "Menú digital con código QR": ("Menú web que se abre con un QR, fácil de actualizar.",
+   "Perfecto para restaurantes y cafés: cambias precios sin reimprimir nada."),
+ "Landing para una campaña": ("Una sola página enfocada en una acción (comprar, registrarse, escribir).",
+   "Úsala con pauta y manda todo el tráfico ahí para medir mejor."),
+ "Blog": ("Sitio con artículos, pensado para aparecer en Google.",
+   "Juega a largo plazo: suma visitas que no pagas, pero necesita publicar seguido."),
+ "Portafolio web": ("Web para mostrar tu trabajo con orden y jerarquía.",
+   "Tu mejor propuesta vive en un link, no en un PDF; ideal para freelancers y estudios."),
+ "Catálogo en línea": ("Catálogo navegable de productos o servicios, con fichas.",
+   "Cuando tienes muchos productos y quieres que te escriban con el producto ya claro."),
+ "Página web": ("Sitio completo de varias secciones, hecho a tu medida.",
+   "La casa propia de tu marca; todo lo demás (redes, pauta) debería llevar aquí."),
+ # Eventos
+ "Diseño de accesorios del evento": ("Piezas gráficas del evento: señalética, escarapelas, pantallas.",
+   "Dan la sensación de «evento cuidado»; defínelos con tiempo para imprimir."),
+ "Fondos y carruseles para conferencia": ("Plantillas y fondos para las pantallas y presentaciones.",
+   "Unifican la imagen en tarima: todo se ve de la misma marca."),
+ "Registro y control de invitados": ("Registro de asistentes y control en puerta, con contacto después del evento.",
+   "Clave si quieres volver a hablarle a quien asistió: el evento no termina ese día."),
+ "Cobertura en foto y video": ("Registro del evento en foto y video, con entrega editada.",
+   "Es el material que alimenta tus redes los meses siguientes; no lo dejes por fuera."),
+ "Insta foto: la foto llega el mismo día": ("Los asistentes reciben su foto el mismo día del evento.",
+   "Genera que compartan en el momento; ideal para activaciones de marca."),
+ "Logística completa del día": ("Nos encargamos del montaje, los tiempos y la operación del día.",
+   "Para cuando quieres estar en tu evento, no corriendo detrás de él."),
+ # Automatización
+ "Reporte automático de números cada semana": ("Un resumen de tus métricas llega solo cada semana.",
+   "Para decidir con datos sin perder horas armando reportes."),
+ "WhatsApp Business: catálogo y respuestas": ("Montaje de WhatsApp Business con catálogo y respuestas rápidas.",
+   "Si vendes por WhatsApp, ordena el caos y responde más rápido."),
+ "Solicitudes que llegan directo, sin bandeja": ("Los pedidos caen directo donde los atiendes, sin formularios perdidos.",
+   "Úsalo si se te traspapelan solicitudes: menos fricción, menos ventas perdidas."),
+ "Respuestas automáticas en Instagram": ("Respuestas automáticas a mensajes y comentarios frecuentes.",
+   "Para no dejar a nadie en visto cuando llega una ola de mensajes."),
+ "Agente de WhatsApp que responde y cotiza": ("Un asistente que responde dudas y arma cotizaciones por WhatsApp.",
+   "Cuando el volumen te supera: atiende 24/7 y te pasa solo lo que importa."),
+ # Express
+ "Panfletos": ("Volantes informativos o promocionales, listos para imprimir o compartir.",
+   "Para una promo o un evento puntual; claros y con una sola acción."),
+ "Carteles": ("Afiches para pared, vitrina o redes.",
+   "Un mensaje grande y legible a distancia; no los llenes de texto."),
+ "Avisos": ("Piezas de aviso: horarios, cambios, anuncios cortos.",
+   "Para comunicar algo puntual rápido y que se vea ordenado."),
+ "Presentaciones": ("Diapositivas con tu marca, ordenadas y claras.",
+   "Para vender, enseñar o pitchear: una buena presentación sostiene la reunión."),
+ "Edición de fotos": ("Ajustes rápidos sobre fotos que ya tienes.",
+   "Para salir del paso con buen material sin montar una sesión."),
+ "Arreglos de costura": ("Ajustes y arreglos de prendas.",
+   "Lo pequeño que nadie más te resuelve el mismo día."),
+}
+EN_FICHA = {
+ "Reels y contenido vertical": ("Vertical clips (9:16) for Reels, TikTok and Shorts, with snappy edits and on-screen text.",
+   "Post 2–4 a month so the algorithm shows you; the first 3 seconds decide if they stay."),
+ "Entrevistas": ("A conversation shot on one or two cameras, clean audio and ready-to-post cuts.",
+   "Leave the long version on YouTube and pull 3–4 vertical cuts for social: one shoot, many pieces."),
+ "Video para YouTube, acabado cinematográfico": ("A longer piece with color, sound and pacing treated like film.",
+   "Use it as the anchor of a launch or brand story; then break it into shorts."),
+ "Podcast: grabación y cortes": ("Episode edit on several cameras and audio, plus the clips to promote it.",
+   "Keep a fixed cadence (weekly or biweekly); the clips are what bring new listeners."),
+ "Comerciales y piezas de publicidad": ("A commercial with script, production and post, built for paid media.",
+   "Do it when you'll invest in ads: a good piece lowers your cost per result."),
+ "Retoque y edición": ("Light, color and clean-up on a photo you already have.",
+   "Use it to unify your feed or rescue old material before reinvesting in a shoot."),
+ "Sesión a una persona": ("45 minutes, 10 final photos: portrait for profile, personal brand or team.",
+   "Perfect for LinkedIn, the «about us» and press; book it when you change role or image."),
+ "Foto de producto": ("Clean product shots with controlled background and light.",
+   "They're the base of your catalogue and ads; a good set lasts months in social and store."),
+ "Foto para portafolio": ("An editorial set to show your work or your offer.",
+   "Six strong photos beat thirty weak ones; use them on your site and proposals."),
+ "Foto para publicidad": ("Images with art direction for a campaign or paid media.",
+   "Book it once the message is clear: the photo works with the copy, not alone."),
+ "Sesión al equipo": ("Consistent portraits of the whole team, same style and light.",
+   "They build trust on the site and in proposals; repeat whenever new people join."),
+ "Solo el logo": ("The symbol and wordmark in their versions and usage formats.",
+   "It's the starting point, not the end; pair it with color and type so it holds up."),
+ "Diseño de accesorios de marca": ("Applied pieces: cards, signatures, templates, merch.",
+   "Ask for it once you have the logo; it's what makes a brand look «put together»."),
+ "Consultoría de ADN y orientación de marca": ("A strategy session: what you say, to whom and how you sound.",
+   "Do it before designing anything: it saves redesigns and random decisions."),
+ "Empaques": ("Packaging design ready to print, with measurements and die-cut.",
+   "Key for physical products: packaging is your salesperson at the point of sale."),
+ "Rediseño de una marca que ya existe": ("An update of an identity you already have, without losing what's recognizable.",
+   "When the brand «no longer represents you» but you don't want to start from scratch."),
+ "Diseño de marca desde cero": ("Full identity: strategy, logo, color, type and applications.",
+   "To start right or for a big pivot; it's the base of everything else."),
+ "Publicaciones sueltas": ("Individual pieces on demand, for a date or an announcement.",
+   "Use them to fill specific gaps; to grow, a plan with a calendar works better."),
+ "Comercial corto para pauta": ("A short, direct piece built for paid ads.",
+   "Pair it with an ad budget: without investment it won't take off."),
+ "Paquete de publicaciones": ("6 pieces that hang together, ready to schedule.",
+   "Ideal to sustain presence for a month without improvising every day."),
+ "Respuesta de comentarios y mensajes": ("Daily handling of comments, DMs and questions.",
+   "Replying fast sells; turn it on if questions pile up unanswered."),
+ "Social manager": ("Base plan: someone runs your social media consistently.",
+   "For when you no longer have time to post; consistency is what moves the needle."),
+ "Plan mensual con calendario de publicación": ("Active plan: strategy, calendar and production every month.",
+   "The full step: stop thinking about what to post and focus on your business."),
+ "Menú digital con código QR": ("A web menu that opens with a QR, easy to update.",
+   "Perfect for restaurants and cafés: change prices without reprinting anything."),
+ "Landing para una campaña": ("A single page focused on one action (buy, sign up, message).",
+   "Use it with ads and send all the traffic there to measure better."),
+ "Blog": ("A site with articles, built to show up on Google.",
+   "A long game: it adds visits you don't pay for, but needs regular posting."),
+ "Portafolio web": ("A site to show your work with order and hierarchy.",
+   "Your best proposal lives in a link, not a PDF; ideal for freelancers and studios."),
+ "Catálogo en línea": ("A browsable catalogue of products or services, with detail pages.",
+   "When you have many products and want people to write with the product already clear."),
+ "Página web": ("A full multi-section site, built to measure.",
+   "Your brand's own house; everything else (social, ads) should lead here."),
+ "Diseño de accesorios del evento": ("The event's graphics: signage, badges, screens.",
+   "They give the feel of a «well-run event»; define them early to print in time."),
+ "Fondos y carruseles para conferencia": ("Templates and backdrops for the screens and presentations.",
+   "They unify the image on stage: everything looks like the same brand."),
+ "Registro y control de invitados": ("Guest check-in and door control, with contact after the event.",
+   "Key if you want to reach out again to who attended: the event doesn't end that day."),
+ "Cobertura en foto y video": ("A record of the event in photo and video, delivered edited.",
+   "It's the material that feeds your social for months; don't leave it out."),
+ "Insta foto: la foto llega el mismo día": ("Guests get their photo the same day of the event.",
+   "It gets them sharing in the moment; ideal for brand activations."),
+ "Logística completa del día": ("We handle the set-up, the timing and the running of the day.",
+   "For when you want to be at your event, not chasing after it."),
+ "Reporte automático de números cada semana": ("A summary of your metrics arrives on its own each week.",
+   "To decide with data without losing hours building reports."),
+ "WhatsApp Business: catálogo y respuestas": ("WhatsApp Business set up with catalogue and quick replies.",
+   "If you sell on WhatsApp, it tidies the chaos and replies faster."),
+ "Solicitudes que llegan directo, sin bandeja": ("Requests land straight where you handle them, no lost forms.",
+   "Use it if requests slip through the cracks: less friction, fewer lost sales."),
+ "Respuestas automáticas en Instagram": ("Automatic replies to frequent messages and comments.",
+   "So no one is left on read when a wave of messages arrives."),
+ "Agente de WhatsApp que responde y cotiza": ("An assistant that answers questions and builds quotes on WhatsApp.",
+   "When volume overwhelms you: it works 24/7 and passes you only what matters."),
+ "Panfletos": ("Informational or promotional flyers, ready to print or share.",
+   "For a promo or a specific event; clear and with a single action."),
+ "Carteles": ("Posters for wall, window or social.",
+   "One big, legible-from-afar message; don't fill them with text."),
+ "Avisos": ("Notice pieces: hours, changes, short announcements.",
+   "To communicate something specific fast and have it look tidy."),
+ "Presentaciones": ("Slides in your brand, ordered and clear.",
+   "To sell, teach or pitch: a good deck holds the meeting together."),
+ "Edición de fotos": ("Quick adjustments on photos you already have.",
+   "To get by with good material without setting up a shoot."),
+ "Arreglos de costura": ("Adjustments and repairs on garments.",
+   "The small thing no one else solves for you the same day."),
+}
+
 # Datos que la ley exige y que hay que llenar antes de publicar la página legal.
 # Lo que quede con FALTA sale marcado en rojo en la página y publicar.py avisa.
 FALTA = '<mark class="falta">FALTA: %s</mark>'
@@ -432,29 +633,60 @@ def armar(idi):
     expr = "".join('<span class="ex-item">%s</span>' % e
                    for e in (EN_EXPRESS if idi == "en" else EXPRESS))
 
-    # Exploración por área en Muestras: una tarjeta por área (con su color e
-    # icono) que se abre y muestra lo que hacemos ahí. Es <details> nativo:
-    # expande sin JS. Express entra como una tarjeta más, con su icono.
+    # Exploración por área en Muestras: una tarjeta <details> por área, con su
+    # color e icono. Van en acordeón (name=) para que solo una esté abierta a la
+    # vez —así, cuando haya muestras pesadas, no se despliegan todas juntas—.
+    # Dentro, cada servicio es un «cuadro»: al tocarlo abre una ventana flotante
+    # que crece desde el cuadro (la lógica vive en partes/areas.html). Los datos
+    # de cada cuadro (qué es, recomendación de uso) salen en {{FICHAS}} como JSON.
+    FICHA_I = EN_FICHA if idi == "en" else FICHA
     def areas_explora():
-        def tarj(color, ico, nom, desc, items, extra=""):
-            return ('<details class="area-cd%s" style="--c:%s">'
+        fichas = []
+        def precio_corto(p, m):
+            return (fmt(p) + (" " + U["mes"] if m else "")) if p else U["porAlcance"]
+        def tarj(color, ico, nom, desc, cuadros, extra=""):
+            return ('<details class="area-cd%s" name="muestras-area" style="--c:%s">'
                     '<summary><span class="area-ico ico" data-ico="%s"></span>'
                     '<span class="area-tx"><span class="area-nom">%s</span>'
                     '<span class="area-desc">%s</span></span>'
                     '<span class="area-mas" aria-hidden="true"></span></summary>'
-                    '<ul class="area-serv">%s</ul></details>'
-                    % (extra, color, ico, nom, desc, items))
-        cds = [tarj(AREA_TONO.get(ico, color), ico, n, desc,
-                    "".join('<li>%s</li>' % s["n"] for s in servs))
-               for n, ico, color, desc, servs in mods_i]
+                    '<div class="mstra-rej">%s</div></details>'
+                    % (extra, color, ico, nom, desc, cuadros))
+        def cuadro(nom_disp, precio, idx):
+            return ('<button class="mstra" type="button" data-f="%d">'
+                    '<span class="mstra-mini" aria-hidden="true"></span>'
+                    '<span class="mstra-tx"><span class="mstra-n">%s</span>'
+                    '<span class="mstra-p mono">%s</span></span></button>'
+                    % (idx, nom_disp, precio))
+        cds = []
+        for n_es, ico, color_mod, desc_es, servs_es in MODULOS:
+            color = AREA_TONO.get(ico, color_mod)
+            nom_a = EN_AREAS[n_es][0] if idi == "en" else n_es
+            desc_a = EN_AREAS[n_es][1] if idi == "en" else desc_es
+            cuadros = []
+            for s in servs_es:
+                n_disp = EN_SERV.get(s["n"], s["n"]) if idi == "en" else s["n"]
+                que, uso = FICHA_I.get(s["n"], ("", ""))
+                pc = precio_corto(s["p"], s["m"])
+                fichas.append({"n": n_disp, "area": nom_a, "ico": ico, "color": color,
+                               "p": pc, "que": que, "uso": uso})
+                cuadros.append(cuadro(n_disp, pc, len(fichas) - 1))
+            cds.append(tarj(color, ico, nom_a, desc_a, "".join(cuadros)))
+        # Express como una tarjeta más: encargos a pedido, sin cotizador.
         exd = ("Sin cotizador: se pide por WhatsApp y se entrega el mismo día."
                if idi == "es" else "No quote: ask on WhatsApp, same-day delivery.")
-        cds.append(tarj("#F4D000", "reloj", "Express", exd,
-                        "".join('<li>%s</li>' % e
-                                for e in (EN_EXPRESS if idi == "en" else EXPRESS)),
-                        extra=" area-xp"))
-        return '<div class="areas-rej">%s</div>' % "".join(cds)
-    areas_html = areas_explora()
+        ex_src = EN_EXPRESS if idi == "en" else EXPRESS
+        expr_p = "A pedido" if idi == "es" else "On request"
+        cuadros = []
+        for j, e_es in enumerate(EXPRESS):
+            que, uso = FICHA_I.get(e_es, ("", ""))
+            fichas.append({"n": ex_src[j], "area": "Express", "ico": "reloj",
+                           "color": "#F4D000", "p": expr_p, "que": que, "uso": uso})
+            cuadros.append(cuadro(ex_src[j], expr_p, len(fichas) - 1))
+        cds.append(tarj("#F4D000", "reloj", "Express", exd, "".join(cuadros), extra=" area-xp"))
+        return ('<div class="areas-rej">%s</div>' % "".join(cds),
+                json.dumps(fichas, ensure_ascii=False))
+    areas_html, fichas_json = areas_explora()
 
     datos = json.dumps([{"nombre": m[0], "ico": m[1], "color": m[2], "desc": m[3],
                          "serv": [{"n": s["n"], "p": s["p"], "m": s["m"], "u": s["u"], "g": s["g"]}
@@ -469,7 +701,8 @@ def armar(idi):
             return encabezado(nombre, idi)
         t = (carpeta / (nombre + ".html")).read_text(encoding="utf-8")
         return (t.replace("{{MODULOS}}", mods).replace("{{APERTURA}}", apert)
-                 .replace("{{EXPRESS}}", expr).replace("{{AREAS}}", areas_html))
+                 .replace("{{EXPRESS}}", expr).replace("{{AREAS}}", areas_html)
+                 .replace("{{FICHAS}}", fichas_json))
 
     guion = ((BASE / "guion.html").read_text(encoding="utf-8")
              .replace("/*CARITA_JS*/", (BASE / "carita.js").read_text(encoding="utf-8"))

@@ -3,4 +3,84 @@
   <div class="eyebrow">Explore by area · tap to see what we do in each</div>
   <h2 style="margin-bottom:20px">What we offer, by area</h2>
   {{AREAS}}
+
+  <!-- Data for each box's floating window. It is JSON, not rendered. -->
+  <script type="application/json" id="fichas-data">{{FICHAS}}</script>
+
+  <!-- Floating window: grows from the box that opened it (bento style). -->
+  <dialog class="mstra-dlg" id="mstra-dlg" aria-label="Sample detail" data-wa="{{WHATSAPP}}">
+    <div class="mstra-caja">
+      <button class="mstra-x" type="button" aria-label="Close">&times;</button>
+      <div class="mstra-media">
+        <span class="mstra-media-nota">Sample coming soon</span>
+      </div>
+      <div class="mstra-info">
+        <span class="mstra-chip"><span class="mstra-chip-ico ico" aria-hidden="true"></span><span data-campo="area"></span></span>
+        <h3 data-campo="n"></h3>
+        <span class="mstra-precio mono" data-campo="p"></span>
+        <div class="mstra-bloque"><span class="mstra-lab">What it is</span><p data-campo="que"></p></div>
+        <div class="mstra-bloque"><span class="mstra-lab">How to use it</span><p data-campo="uso"></p></div>
+        <a class="btn sm mstra-cta" href="#">Ask about this on WhatsApp</a>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+  (function () {
+    var dlg = document.getElementById('mstra-dlg');
+    if (!dlg || typeof dlg.showModal !== 'function') return;  // no <dialog>, boxes open nothing
+    var datos = [];
+    try { datos = JSON.parse(document.getElementById('fichas-data').textContent); } catch (e) {}
+    var caja = dlg.querySelector('.mstra-caja');
+    var rej  = document.querySelector('.areas-rej');
+    var wa   = dlg.getAttribute('data-wa');
+    var cta  = dlg.querySelector('.mstra-cta');
+    var icoN = dlg.querySelector('.mstra-chip-ico');
+    var abridor = null;
+    var lento = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function set(campo, val) {
+      var el = dlg.querySelector('[data-campo="' + campo + '"]');
+      if (el) el.textContent = val || '';
+    }
+    function rect(el) { return el.getBoundingClientRect(); }
+
+    function animar(desde, hacia, ida) {
+      var dx = desde.left - hacia.left, dy = desde.top - hacia.top;
+      var sx = Math.max(desde.width / hacia.width, 0.05);
+      var sy = Math.max(desde.height / hacia.height, 0.05);
+      var chico = { transformOrigin: 'top left', transform: 'translate(' + dx + 'px,' + dy + 'px) scale(' + sx + ',' + sy + ')', opacity: ida ? 0.35 : 0.15 };
+      var grande = { transformOrigin: 'top left', transform: 'none', opacity: 1 };
+      return caja.animate(ida ? [chico, grande] : [grande, chico],
+        { duration: ida ? 300 : 230, easing: ida ? 'cubic-bezier(.2,.75,.25,1)' : 'cubic-bezier(.4,0,.9,.45)' });
+    }
+
+    function abrir(btn) {
+      var f = datos[+btn.dataset.f];
+      if (!f) return;
+      abridor = btn;
+      dlg.style.setProperty('--c', f.color);
+      set('area', f.area); set('n', f.n); set('p', f.p); set('que', f.que); set('uso', f.uso);
+      if (icoN && window.Iconos) icoN.innerHTML = Iconos.html(f.ico);
+      if (cta) cta.href = 'https://wa.me/' + wa + '?text=' + encodeURIComponent('Hi LQS, I am interested in: ' + f.n + '.');
+      var desde = rect(btn);
+      dlg.showModal();
+      if (!lento) animar(desde, rect(caja), true);
+    }
+
+    function cerrar() {
+      if (lento || !abridor) { dlg.close(); return; }
+      var a = animar(rect(abridor), rect(caja), false);
+      a.onfinish = function () { dlg.close(); };
+    }
+
+    if (rej) rej.addEventListener('click', function (e) {
+      var b = e.target.closest('.mstra');
+      if (b) abrir(b);
+    });
+    dlg.querySelector('.mstra-x').addEventListener('click', cerrar);
+    dlg.addEventListener('click', function (e) { if (e.target === dlg) cerrar(); });   // click outside
+    dlg.addEventListener('cancel', function (e) { e.preventDefault(); cerrar(); });    // Esc
+  })();
+  </script>
 </section>
