@@ -152,6 +152,12 @@ p{margin:0}
   margin-top:clamp(8px,1.2vw,16px)}
 .hero .lede{max-width:44ch;font-size:clamp(15px,1.7vw,18px)}
 .hero .acc{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+/* La mascota TO. se asoma en la esquina del hero, volteada para mirar hacia
+   el mensaje. El overflow:hidden del hero la recorta limpia contra el borde.
+   Va en el espacio vacío de la derecha, así no pisa el texto ni los botones. */
+.h-pato{position:absolute;right:clamp(4px,2vw,30px);bottom:0;
+  height:clamp(135px,30vw,400px);width:auto;transform:scaleX(-1);
+  z-index:1;pointer-events:none;user-select:none}
 /* Siluetas orgánicas granuladas. Las genera formas/siluetas.py sumando de
    dos a cinco lóbulos con amplitud chica —pocos lóbulos, curva suave por
    construcción— y descarta cualquiera con un giro de más de 62°, así que no
@@ -751,6 +757,7 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
     <div class="blob h-forma"></div>
     <div class="blob h-forma2"></div>
     <div class="blob humo h-forma3"></div>
+    <img class="h-pato" src="marca/to-parado.png" alt="" aria-hidden="true">
     <div>
       <div class="eyebrow" style="color:#1A1720;opacity:.7">Agencia creativa modular · Estamos donde nos necesiten</div>
       
