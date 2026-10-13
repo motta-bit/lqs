@@ -20,7 +20,7 @@
  *
  * Atributos, todos opcionales:
  *   tam        lado en px (120)
- *   fondo      color del azulejo, o "none" para el trazo solo (#8B3DF0)
+ *   fondo      color del azulejo, o "none" para el trazo solo (#C4A8F5)
  *   trazo      color del trazo (#FDFBF7)
  *   duracion   ms de toda la secuencia (3000)
  *   retraso    ms antes de arrancar (0)
@@ -72,7 +72,7 @@
     var A = function (k, d) { return el.getAttribute(k) || d; };
 
     var tam = parseFloat(A("tam", 120));
-    var fondo = A("fondo", "#8B3DF0");
+    var fondo = A("fondo", "#C4A8F5");
     var trazo = A("trazo", "#FDFBF7");
     var dur = parseFloat(A("duracion", 3000));
     var esperar = parseFloat(A("retraso", 0));
