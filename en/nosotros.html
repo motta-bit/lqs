@@ -579,6 +579,15 @@ lqs-trazo:defined>img{display:none}
 .paq-serv li{font-size:13.5px;line-height:1.3;position:relative;padding-left:21px}
 .paq-serv li::before{content:"✓";position:absolute;left:0;top:-1px;color:var(--c);font-weight:800}
 .paq-cta{align-self:flex-start;margin-top:auto}
+/* carrusel de LQS dentro de Paquetes: los líos que los paquetes resuelven */
+.paq-suena{margin-top:26px}
+.paq-suena h3{font-family:'Syne';font-weight:800;font-size:clamp(18px,2.4vw,24px);letter-spacing:-.02em}
+.paq-suena .dim{margin:4px 0 14px;font-size:14px}
+.paq-carrusel{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;
+  padding:2px 2px 12px;scrollbar-width:thin}
+.paq-pieza{flex:0 0 auto;width:min(224px,66vw);aspect-ratio:4/5;scroll-snap-align:start;
+  border-radius:var(--r-int);overflow:hidden;border:2px solid var(--tinta);background:var(--crema)}
+.paq-pieza img{width:100%;height:100%;object-fit:cover;display:block}
 
 
 /* ---------- 12 documentos legales ---------- */

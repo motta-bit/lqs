@@ -57,6 +57,17 @@ body{background:var(--fondo);color:var(--tiza);font-family:var(--cuerpo);line-he
 .cierre img{width:clamp(52px,8vw,74px);height:auto;border-radius:14px}
 .cierre p{color:var(--gris);font-size:.9rem;max-width:60ch}
 .cierre b{color:var(--tiza);font-weight:600}
+/* ---- el sitio (capturas) ---- */
+.sitio h2{font-family:var(--disp);font-weight:700;font-size:clamp(1.4rem,3vw,1.9rem);letter-spacing:-.025em}
+.sitio>p{color:var(--gris);max-width:56ch;margin:8px 0 22px;font-size:.95rem}
+.sitio-rej{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))}
+.captura{background:var(--tarjeta);border:1px solid var(--linea);border-radius:18px;overflow:hidden}
+.captura img{width:100%;height:auto;display:block}
+.captura figcaption{font-family:var(--mono);font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--gris);padding:11px 15px}
+/* ---- hoja de poses de la mascota ---- */
+.to-hoja{margin-top:14px;background:var(--papel);border-radius:22px;padding:16px;overflow:hidden}
+.to-hoja img{width:100%;height:auto;display:block;border-radius:12px}
 @media(max-width:620px){.hero{grid-template-columns:1fr}.to{grid-template-columns:1fr}
   .to-pato{justify-self:center}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -77,12 +88,23 @@ body{background:var(--fondo);color:var(--tiza);font-family:var(--cuerpo);line-he
     </div>
   </header>
 
+  <section class="sitio">
+    <h2>La marca, en su propia casa</h2>
+    <p>El sitio de LQS es la marca funcionando: el azulejo que se dibuja solo, la mascota en el hero
+      y un cotizador modular que arma el precio mientras marcas lo que necesitas.</p>
+    <div class="sitio-rej">
+      <figure class="captura"><img src="img/marca/sitio-home.webp" alt="Página de inicio de LQS con el logo y la mascota TO." loading="lazy"><figcaption>Inicio · el mejor amigo de tus ideas</figcaption></figure>
+      <figure class="captura"><img src="img/marca/sitio-cotizador.webp" alt="Cotizador modular de LQS por áreas" loading="lazy"><figcaption>Cotizador · marca lo que necesitas y el total se arma solo</figcaption></figure>
+    </div>
+  </section>
+
   <section class="to">
     <div class="to-tx">
       <i>La mascota</i>
       <h2>TO., el pato que acompaña</h2>
       <p>Un personaje propio que le pone cara a la marca: aparece en el sitio, en las piezas y en las
         esquinas donde una marca necesita calidez. De línea simple para que viaje en cualquier tamaño.</p>
+      <figure class="to-hoja"><img src="img/marca/to-hoja.webp" alt="Hoja de poses de TO.: acostado, de pie, saludando y primeros planos"></figure>
     </div>
     <img class="to-pato" src="img/marca/to-parado.png" alt="TO., la mascota pato de LQS, de pie">
   </section>

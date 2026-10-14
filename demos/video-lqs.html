@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Video · piezas de LQS</title>
+<meta name="description" content="Pequeñas partes de video hechas por LQS: el reel, el comercial y los teasers de lanzamiento, en bucle.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Rubik:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --fondo:#0d0d0f; --tarjeta:#17141c; --tiza:#fdfbf7; --gris:#8b8593;
+  --lila:#C4A8F5; --linea:rgba(253,251,247,.12);
+  --disp:'Syne',system-ui,sans-serif; --cuerpo:'Rubik',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--fondo);color:var(--tiza);font-family:var(--cuerpo);line-height:1.6;
+  -webkit-font-smoothing:antialiased;padding:clamp(20px,5vw,64px);min-height:100dvh}
+.env{max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:clamp(28px,5vw,46px)}
+.eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--lila);display:flex;align-items:center;gap:12px}
+.eyebrow::before{content:"";width:34px;height:2px;background:var(--lila)}
+header h1{font-family:var(--disp);font-weight:800;font-size:clamp(2.2rem,6.4vw,3.8rem);
+  line-height:.95;letter-spacing:-.04em;margin-top:14px}
+header p{color:var(--gris);max-width:56ch;margin-top:14px;font-size:1rem}
+h2{font-family:var(--disp);font-weight:700;font-size:clamp(1.3rem,2.8vw,1.7rem);
+  letter-spacing:-.025em;margin-bottom:14px}
+video{display:block;width:100%;height:100%;object-fit:cover;background:#000}
+.vid{position:relative;border-radius:16px;overflow:hidden;background:var(--tarjeta);
+  border:1px solid var(--linea)}
+.vid .et{position:absolute;left:10px;bottom:10px;z-index:2;font-family:var(--mono);font-size:.62rem;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--tiza);background:rgba(13,13,15,.6);
+  backdrop-filter:blur(4px);border-radius:999px;padding:4px 10px}
+/* destacadas 9:16 */
+.vert{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(190px,46%),1fr))}
+.vert .vid{aspect-ratio:9/16}
+/* teasers 1:1 */
+.rej{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(min(180px,100%),1fr))}
+.rej .vid{aspect-ratio:1/1}
+footer{color:var(--gris);font-size:.88rem;border-top:1px solid var(--linea);padding-top:22px;max-width:72ch}
+footer b{color:var(--tiza);font-weight:600}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="env">
+
+  <div class="eyebrow">Video · piezas y teasers</div>
+
+  <header>
+    <h1>Pequeñas partes,<br>a toda hora</h1>
+    <p>Lo que hemos hecho en movimiento: el reel y el comercial de la marca, el emblema que se
+      dibuja solo y los diez teasers del lanzamiento. Todo en bucle, sin sonido.</p>
+  </header>
+
+  <section>
+    <h2>La marca en movimiento</h2>
+    <div class="vert">
+      <div class="vid"><span class="et">Reel</span><video src="clips/reel-vertical.mp4" autoplay muted loop playsinline preload="metadata"></video></div>
+      <div class="vid"><span class="et">Emblema · se dibuja solo</span><video src="clips/emblema-vertical.mp4" autoplay muted loop playsinline preload="metadata"></video></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Teasers de lanzamiento</h2>
+    <div class="rej">
+      <div class="vid"><span class="et">Algo</span><video src="clips/teaser-01.mp4" autoplay muted loop playsinline preload="metadata"></video></div>
+      <div class="vid"><span class="et">Lo que sea</span><video src="clips/teaser-04.mp4" autoplay muted loop playsinline preload="metadata"></video></div>
+      <div class="vid"><span class="et">Modular</span><video src="clips/teaser-06.mp4" autoplay muted loop playsinline preload="metadata"></video></div>
+      <div class="vid"><span class="et">Logo</span><video src="clips/teaser-07.mp4" autoplay muted loop playsinline preload="metadata"></video></div>
+      <div class="vid"><span class="et">Todos lados</span><video src="clips/teaser-09.mp4" autoplay muted loop playsinline preload="metadata"></video></div>
+      <div class="vid"><span class="et">Se acerca</span><video src="clips/teaser-10.mp4" autoplay muted loop playsinline preload="metadata"></video></div>
+    </div>
+  </section>
+
+  <footer>Piezas de video producidas por <b>LQS</b>: reel, comercial, emblema animado y la campaña de
+    teasers del lanzamiento. En bucle y sin sonido para esta muestra; las versiones finales llevan audio.</footer>
+
+</div>
+</body>
+</html>

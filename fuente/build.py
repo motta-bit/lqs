@@ -137,9 +137,10 @@ DEMOS = {
  "Menú digital con código QR": ("restaurante.html",  "img/portadas/restaurante.webp", "#E0531C", "Rescoldo"),
  "Blog":                       ("revista-moda.html", "img/portadas/revista.webp",     "#7b5cff", "Tendido"),
  "Portafolio web":             ("mezcal.html",       "img/portadas/mezcal.webp",      "#C65A16", "Casa Tepemete"),
- # LQS mostrándose a sí misma y su trabajo de redes para Vita Nova + LQS
+ # LQS mostrándose a sí misma, su video y su trabajo de redes para Vita Nova
+ "Reels y contenido vertical": ("video-lqs.html",    "img/portadas/video.webp",       "#8B5CF6", "LQS"),
  "Diseño de marca desde cero": ("marca-lqs.html",    "img/portadas/marca.webp",       "#8B5CF6", "LQS"),
- "Publicaciones sueltas":      ("redes-lqs.html",    "img/portadas/redes.webp",       "#6D5AE6", "Vita Nova · LQS"),
+ "Publicaciones sueltas":      ("redes-lqs.html",    "img/portadas/redes.webp",       "#6D5AE6", "Vita Nova"),
  # Operación de un restaurante: parrilla + bots de WhatsApp/Instagram + reporte
  "WhatsApp Business: catálogo y respuestas": ("automatizacion.html", "img/portadas/automatizacion.webp", "#1f8a4c", "Turno"),
 }
