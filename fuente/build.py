@@ -735,11 +735,17 @@ def armar(idi):
                     '<div class="mstra-rej">%s</div></details>'
                     % (extra, color, ico, nom, desc, cuadros))
         envivo = "En vivo" if idi == "es" else "Live"
+        ver_demo = "Ver muestra →" if idi == "es" else "See sample →"
+        ver_serv = "Ver →" if idi == "es" else "View →"
         # Los cuadros forman un bento: el que tiene muestra en vivo ocupa 2×2
         # (tamaño destacado, con su portada de fondo); si un área no tiene demo,
         # el primer cuadro se ensancha para que no quede una rejilla plana.
+        # Cada cuadro lleva un «Ver →» para que se note que se toca para abrirlo.
         def cuadro(nom_disp, precio, idx, demo=None, cls=""):
             extra = (" " + cls) if cls else ""
+            foot = ('<span class="mstra-foot"><span class="mstra-p mono">%s</span>'
+                    '<span class="mstra-ver">%s</span></span>'
+                    % (precio, ver_demo if demo else ver_serv))
             if demo:
                 arch, img, tono, marca = demo
                 mini = ('<span class="mstra-mini" aria-hidden="true">'
@@ -747,14 +753,12 @@ def armar(idi):
                 badge = '<span class="mstra-badge">%s</span>' % envivo
                 return ('<button class="mstra mstra-live%s" type="button" data-f="%d" '
                         'style="--t:%s">%s%s<span class="mstra-cap">'
-                        '<span class="mstra-n">%s</span>'
-                        '<span class="mstra-p mono">%s</span></span></button>'
-                        % (extra, idx, tono, mini, badge, nom_disp, precio))
+                        '<span class="mstra-n">%s</span>%s</span></button>'
+                        % (extra, idx, tono, mini, badge, nom_disp, foot))
             return ('<button class="mstra%s" type="button" data-f="%d">'
                     '<span class="mstra-mini" aria-hidden="true"></span>'
-                    '<span class="mstra-cap"><span class="mstra-n">%s</span>'
-                    '<span class="mstra-p mono">%s</span></span></button>'
-                    % (extra, idx, nom_disp, precio))
+                    '<span class="mstra-cap"><span class="mstra-n">%s</span>%s</span></button>'
+                    % (extra, idx, nom_disp, foot))
 
         def ficha_demo(nombre_es):
             d = DEMOS.get(nombre_es)

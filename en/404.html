@@ -443,12 +443,14 @@ lqs-trazo:defined>img{display:none}
    Una tarjeta <details> por área, cada una con su color propio (--c, inyectado
    por build) para que la modularidad se lea como autonomía: siete acentos
    distintos, ninguno morado como la página. Expande sin JS. */
-.areas-rej{grid-column:span 6;display:grid;
+.areas-rej{grid-column:span 6;display:grid;grid-auto-flow:dense;
   grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:var(--gap)}
 .area-cd{--c:var(--tinta);background:var(--papel);border:2px solid var(--tinta);
   border-radius:var(--r-bloque);overflow:hidden;align-self:start;padding:0;
   transition:box-shadow .15s ease}
-.area-cd[open]{box-shadow:0 8px 0 -3px var(--c)}
+/* al abrir, el área toma todo el ancho: el bento de dentro respira y el resto
+   de áreas se reacomoda alrededor (flujo denso). Solo hay una abierta a la vez. */
+.area-cd[open]{grid-column:1/-1;box-shadow:0 8px 0 -3px var(--c)}
 .area-cd>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:13px;
   padding:15px 16px 15px 20px;position:relative}
 .area-cd>summary::-webkit-details-marker{display:none}
@@ -481,35 +483,42 @@ lqs-trazo:defined>img{display:none}
    distinto tamaño (la muestra en vivo ocupa 2×2; el primer cuadro de un área
    sin demo se ensancha). Columnas fijas y filas cuadradas para que en el móvil
    no se estiren ni pierdan la info; flujo denso para que no queden huecos. */
-.mstra-rej{display:grid;grid-template-columns:repeat(2,1fr);grid-auto-rows:116px;
-  grid-auto-flow:dense;gap:8px;padding:6px 14px 14px;border-top:1.5px dashed rgba(26,23,32,.14)}
-@media(min-width:560px){.mstra-rej{grid-template-columns:repeat(3,1fr)}}
-@media(min-width:900px){.mstra-rej{grid-template-columns:repeat(4,1fr)}}
+.mstra-rej{display:grid;grid-template-columns:repeat(auto-fill,minmax(164px,1fr));
+  grid-auto-rows:130px;grid-auto-flow:dense;gap:10px;padding:10px 16px 18px;
+  border-top:1.5px dashed rgba(26,23,32,.14)}
+@media(max-width:420px){.mstra-rej{grid-template-columns:repeat(2,1fr);grid-auto-rows:122px}}
 .mstra{position:relative;overflow:hidden;cursor:pointer;font:inherit;color:var(--tinta);
-  text-align:left;border:1.5px solid rgba(26,23,32,.14);border-radius:var(--r-int);padding:0;
-  background:color-mix(in srgb,var(--c) 22%,var(--papel));
+  text-align:left;border:1.5px solid rgba(26,23,32,.16);border-radius:var(--r-int);padding:0;
+  background:color-mix(in srgb,var(--c) 16%,var(--papel));
   display:flex;flex-direction:column;justify-content:flex-end;
-  transition:transform .13s,box-shadow .13s}
-.mstra:hover{transform:translateY(-2px);box-shadow:0 7px 0 -3px var(--c)}
-.mstra:focus-visible{outline:2px solid var(--tinta);outline-offset:2px}
+  transition:transform .13s,box-shadow .13s,border-color .13s}
+.mstra:hover,.mstra:focus-visible{transform:translateY(-3px);box-shadow:0 9px 0 -3px var(--c);
+  border-color:var(--c);outline:none}
 .mstra-wide{grid-column:span 2}
 .mstra-live{grid-column:span 2;grid-row:span 2}       /* muestra en vivo = pieza grande */
 .mstra-mini{position:absolute;inset:0;z-index:0}
 .mstra-mini img{width:100%;height:100%;object-fit:cover;display:block}
-/* leyenda abajo: banda clara sobre el tinte; sobre foto va velo oscuro */
-.mstra-cap{position:relative;z-index:1;margin-top:auto;padding:9px 11px;
-  display:flex;flex-direction:column;gap:2px}
-.mstra-n{font-weight:700;font-size:12.5px;line-height:1.18}
-.mstra-p{font-size:10px;letter-spacing:.01em}
-.mstra:not(.mstra-live) .mstra-cap{background:linear-gradient(0deg,var(--papel) 58%,transparent)}
+/* leyenda abajo: nombre + pie con precio y el «Ver →» que deja claro que se toca */
+.mstra-cap{position:relative;z-index:1;margin-top:auto;padding:11px 12px;
+  display:flex;flex-direction:column;gap:7px}
+.mstra-n{font-weight:700;font-size:13px;line-height:1.2;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.mstra-foot{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.mstra-p{font-size:10.5px;letter-spacing:.01em}
+.mstra-ver{font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
+  display:inline-flex;align-items:center;gap:4px;white-space:nowrap;opacity:.9}
+.mstra:hover .mstra-ver,.mstra:focus-visible .mstra-ver{opacity:1}
+.mstra:not(.mstra-live) .mstra-cap{background:linear-gradient(0deg,var(--papel) 64%,transparent)}
 .mstra:not(.mstra-live) .mstra-p{color:var(--humo)}
+.mstra:not(.mstra-live) .mstra-ver{color:var(--tinta)}
 .mstra-live .mstra-cap{color:var(--papel);
-  background:linear-gradient(0deg,rgba(13,13,15,.86),rgba(13,13,15,.15) 70%,transparent)}
-.mstra-live .mstra-n{font-size:14px}
+  background:linear-gradient(0deg,rgba(13,13,15,.9),rgba(13,13,15,.25) 72%,transparent)}
+.mstra-live .mstra-n{font-size:15px;-webkit-line-clamp:2}
 .mstra-live .mstra-p{color:rgba(253,251,247,.82)}
+.mstra-live .mstra-ver{color:var(--papel)}
 .mstra-live::after{content:"";position:absolute;inset:0;z-index:0;mix-blend-mode:multiply;
-  opacity:.18;background:var(--t,transparent)}
-.mstra-badge{position:absolute;top:8px;left:8px;z-index:2;display:inline-flex;align-items:center;gap:5px;
+  opacity:.16;background:var(--t,transparent)}
+.mstra-badge{position:absolute;top:9px;left:9px;z-index:2;display:inline-flex;align-items:center;gap:5px;
   font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.1em;
   text-transform:uppercase;background:var(--papel);color:var(--tinta);border-radius:999px;padding:4px 9px}
 .mstra-badge::before{content:"";width:6px;height:6px;border-radius:50%;background:#2ecc71}
