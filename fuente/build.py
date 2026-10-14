@@ -123,29 +123,17 @@ EN_PAQUETES = {
 }
 
 # Muestras en vivo: cuatro páginas demo de una sola pantalla que viven en
-# demos/ (carpeta autocontenida, copiada tal cual; rutas relativas). Cada una
-# enseña hasta dónde llega una página LQS sin librerías. Se abren en pestaña
-# nueva porque son pantalla completa. (archivo, portada, color propio de la
-# demo, sector, nombre, qué hace)
-PROYECTOS = [
- ("tienda-ropa.html",  "img/bolsos/rojo-noche.webp", "#1b35ff", "Tienda de bolsos", "Atelier Norte",
-  "Marroquinería suiza: la tipografía se sale del lienzo y el mosaico se arma solo."),
- ("restaurante.html",  "img/mesa/salsa-vertida.webp", "#E0531C", "Restaurante", "Rescoldo",
-  "La carta es una rueda: gira con el scroll y cada plato abre su ficha al llegar al frente."),
- ("revista-moda.html", "img/moda/ilu-cinco.webp",     "#7b5cff", "Revista de moda", "Tendido",
-  "Un tendido de imágenes que se arma solo y seis ilustraciones, cada una con su halo de color."),
- ("mezcal.html",       "img/agave/campo.webp",        "#C65A16", "Mezcal", "Casa Tepemete",
-  "Destilería de mezcal: el degradé del horno y rosetas de agave que crecen solas en cada visita."),
-]
-EN_PROYECTOS = {
- "Atelier Norte": ("Bag shop",
-   "Swiss leather goods: the type runs off the canvas and the mosaic assembles itself."),
- "Rescoldo": ("Restaurant",
-   "The menu is a wheel: it turns with the scroll and each dish opens its page as it reaches the front."),
- "Tendido": ("Fashion magazine",
-   "A spread of images that lays itself out, and six illustrations, each with its own halo of color."),
- "Casa Tepemete": ("Mezcal",
-   "A mezcal distillery: the kiln's gradient and agave rosettes that grow on their own each visit."),
+# demos/ (carpeta autocontenida, rutas relativas, sin librerías). Cada una va
+# ATADA al servicio que le corresponde: al abrir ese cuadro en su área, la
+# ventana flotante muestra la muestra en vivo con su portada y un enlace para
+# abrirla (pantalla completa, pestaña nueva). El resto de cuadros siguen «en
+# camino» y se van llenando. Clave = nombre del servicio en español (el de
+# MODULOS). (archivo, portada, color propio de la demo, marca)
+DEMOS = {
+ "Catálogo en línea":        ("tienda-ropa.html",  "img/bolsos/rojo-noche.webp", "#1b35ff", "Atelier Norte"),
+ "Página web":               ("restaurante.html",  "img/mesa/salsa-vertida.webp", "#E0531C", "Rescoldo"),
+ "Blog":                     ("revista-moda.html", "img/moda/ilu-cinco.webp",     "#7b5cff", "Tendido"),
+ "Landing para una campaña": ("mezcal.html",        "img/agave/campo.webp",        "#C65A16", "Casa Tepemete"),
 }
 
 # Tono propio de cada área SOLO para las tarjetas de «explora por área» en Muestras.
@@ -549,7 +537,7 @@ PAGINAS = {
         "titulo": "Muestras — LQS",
         "desc": ("Lo que hemos hecho, por area: video, foto, marca, redes, digital, eventos y "
                  "automatizacion. Se filtra por area y se busca por lo que necesites."),
-        "partes": ["encab-muestras", "proyectos", "areas", "paquetes", "antesdespues", "express"],
+        "partes": ["encab-muestras", "areas", "paquetes", "antesdespues", "express"],
     },
     "legal.html": {
         "titulo": "Términos, datos y cookies — LQS",
@@ -681,26 +669,6 @@ def paquetes_html(idi):
                    % (color, ico, tag, nom, para, incluye, lis, href, cta))
     return '<div class="paq-rej">%s</div>' % "".join(out)
 
-def proyectos_html(idi):
-    """Tarjetas de las muestras en vivo (demos/). Abren en pestaña nueva.
-       {{RAIZ}} se resuelve al final: demos/ en español, ../demos/ en inglés."""
-    ver = "Ver muestra en vivo →" if idi == "es" else "See it live →"
-    out = []
-    for arch, img, tono, sector_es, nom, tag_es in PROYECTOS:
-        sector = EN_PROYECTOS[nom][0] if idi == "en" else sector_es
-        tag = EN_PROYECTOS[nom][1] if idi == "en" else tag_es
-        alt = ("Muestra: %s · %s" if idi == "es" else "Sample: %s · %s") % (nom, sector)
-        out.append('<a class="proy" style="--t:%s" href="{{RAIZ}}demos/%s" '
-                   'target="_blank" rel="noopener">'
-                   '<span class="proy-vis"><img src="{{RAIZ}}demos/%s" alt="%s" loading="lazy"></span>'
-                   '<span class="proy-cuerpo">'
-                   '<span class="proy-sector mono">%s</span>'
-                   '<span class="proy-nom">%s</span>'
-                   '<span class="proy-tag">%s</span>'
-                   '<span class="proy-ver mono">%s</span></span></a>'
-                   % (tono, arch, img, alt, sector, nom, tag, ver))
-    return '<div class="proy-rej">%s</div>' % "".join(out)
-
 logo = (P.parent / "carita-inline.svg")
 if not logo.exists():
     logo = P.parent.parent / "maqueta" / "carita-inline.svg"
@@ -758,25 +726,52 @@ def armar(idi):
                     '<span class="area-mas" aria-hidden="true"></span></summary>'
                     '<div class="mstra-rej">%s</div></details>'
                     % (extra, color, ico, nom, desc, cuadros))
-        def cuadro(nom_disp, precio, idx):
-            return ('<button class="mstra" type="button" data-f="%d">'
+        envivo = "En vivo" if idi == "es" else "Live"
+        # Los cuadros forman un bento: el que tiene muestra en vivo ocupa 2×2
+        # (tamaño destacado, con su portada de fondo); si un área no tiene demo,
+        # el primer cuadro se ensancha para que no quede una rejilla plana.
+        def cuadro(nom_disp, precio, idx, demo=None, cls=""):
+            extra = (" " + cls) if cls else ""
+            if demo:
+                arch, img, tono, marca = demo
+                mini = ('<span class="mstra-mini" aria-hidden="true">'
+                        '<img src="{{RAIZ}}demos/%s" alt="" loading="lazy"></span>' % img)
+                badge = '<span class="mstra-badge">%s</span>' % envivo
+                return ('<button class="mstra mstra-live%s" type="button" data-f="%d" '
+                        'style="--t:%s">%s%s<span class="mstra-cap">'
+                        '<span class="mstra-n">%s</span>'
+                        '<span class="mstra-p mono">%s</span></span></button>'
+                        % (extra, idx, tono, mini, badge, nom_disp, precio))
+            return ('<button class="mstra%s" type="button" data-f="%d">'
                     '<span class="mstra-mini" aria-hidden="true"></span>'
-                    '<span class="mstra-tx"><span class="mstra-n">%s</span>'
+                    '<span class="mstra-cap"><span class="mstra-n">%s</span>'
                     '<span class="mstra-p mono">%s</span></span></button>'
-                    % (idx, nom_disp, precio))
+                    % (extra, idx, nom_disp, precio))
+
+        def ficha_demo(nombre_es):
+            d = DEMOS.get(nombre_es)
+            if not d:
+                return None
+            return {"arch": "{{RAIZ}}demos/" + d[0], "img": "{{RAIZ}}demos/" + d[1],
+                    "tono": d[2], "marca": d[3]}
+
         cds = []
         for n_es, ico, color_mod, desc_es, servs_es in MODULOS:
             color = AREA_TONO.get(ico, color_mod)
             nom_a = EN_AREAS[n_es][0] if idi == "en" else n_es
             desc_a = EN_AREAS[n_es][1] if idi == "en" else desc_es
+            hay_demo = any(s["n"] in DEMOS for s in servs_es)
             cuadros = []
-            for s in servs_es:
+            for k, s in enumerate(servs_es):
                 n_disp = EN_SERV.get(s["n"], s["n"]) if idi == "en" else s["n"]
                 que, uso = FICHA_I.get(s["n"], ("", ""))
                 pc = precio_corto(s["p"], s["m"])
+                demo = DEMOS.get(s["n"])
                 fichas.append({"n": n_disp, "area": nom_a, "ico": ico, "color": color,
-                               "p": pc, "que": que, "uso": uso})
-                cuadros.append(cuadro(n_disp, pc, len(fichas) - 1))
+                               "p": pc, "que": que, "uso": uso, "demo": ficha_demo(s["n"])})
+                # un área sin demo: el primer cuadro se ensancha, para dar ritmo
+                cls = "mstra-wide" if (not hay_demo and k == 0) else ""
+                cuadros.append(cuadro(n_disp, pc, len(fichas) - 1, demo, cls))
             cds.append(tarj(color, ico, nom_a, desc_a, "".join(cuadros)))
         # Express como una tarjeta más: encargos a pedido, sin cotizador.
         exd = ("Sin cotizador: se pide por WhatsApp y se entrega el mismo día."
@@ -787,14 +782,14 @@ def armar(idi):
         for j, e_es in enumerate(EXPRESS):
             que, uso = FICHA_I.get(e_es, ("", ""))
             fichas.append({"n": ex_src[j], "area": "Express", "ico": "reloj",
-                           "color": "#F4D000", "p": expr_p, "que": que, "uso": uso})
-            cuadros.append(cuadro(ex_src[j], expr_p, len(fichas) - 1))
+                           "color": "#F4D000", "p": expr_p, "que": que, "uso": uso, "demo": None})
+            cuadros.append(cuadro(ex_src[j], expr_p, len(fichas) - 1,
+                                  cls="mstra-wide" if j == 0 else ""))
         cds.append(tarj("#F4D000", "reloj", "Express", exd, "".join(cuadros), extra=" area-xp"))
         return ('<div class="areas-rej">%s</div>' % "".join(cds),
                 json.dumps(fichas, ensure_ascii=False))
     areas_html, fichas_json = areas_explora()
     paq_html = paquetes_html(idi)
-    proy_html = proyectos_html(idi)
 
     datos = json.dumps([{"nombre": m[0], "ico": m[1], "color": m[2], "desc": m[3],
                          "serv": [{"n": s["n"], "p": s["p"], "m": s["m"], "u": s["u"], "g": s["g"]}
@@ -810,8 +805,7 @@ def armar(idi):
         t = (carpeta / (nombre + ".html")).read_text(encoding="utf-8")
         return (t.replace("{{MODULOS}}", mods).replace("{{APERTURA}}", apert)
                  .replace("{{EXPRESS}}", expr).replace("{{AREAS}}", areas_html)
-                 .replace("{{FICHAS}}", fichas_json).replace("{{PAQUETES}}", paq_html)
-                 .replace("{{PROYECTOS}}", proy_html))
+                 .replace("{{FICHAS}}", fichas_json).replace("{{PAQUETES}}", paq_html))
 
     guion = ((BASE / "guion.html").read_text(encoding="utf-8")
              .replace("/*CARITA_JS*/", (BASE / "carita.js").read_text(encoding="utf-8"))

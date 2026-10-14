@@ -477,21 +477,42 @@ lqs-trazo:defined>img{display:none}
   white-space:nowrap}
 @media(max-width:560px){.areas-rej{grid-template-columns:1fr}}
 
-/* Cuadros dentro de cada área: cada uno abre la ventana flotante. */
-.mstra-rej{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:8px;
-  padding:4px 14px 14px;border-top:1.5px dashed rgba(26,23,32,.14)}
-.mstra{display:flex;flex-direction:column;gap:8px;text-align:left;cursor:pointer;font:inherit;
-  color:var(--tinta);background:var(--crema);border:1.5px solid rgba(26,23,32,.12);
-  border-radius:var(--r-int);padding:9px;transition:border-color .13s,transform .13s,box-shadow .13s}
-.mstra:hover{border-color:var(--c);transform:translateY(-2px);box-shadow:0 6px 0 -3px var(--c)}
-.mstra:focus-visible{outline:2px solid var(--c);outline-offset:2px}
-/* miniatura: hueco para la muestra; por ahora un tinte del color del área */
-.mstra-mini{aspect-ratio:16/10;border-radius:9px;position:relative;overflow:hidden;
-  background:color-mix(in srgb,var(--c) 28%,var(--papel))}
-.mstra-mini::after{content:"";position:absolute;inset:0;
-  background:radial-gradient(120% 120% at 18% 8%,rgba(255,255,255,.6),transparent 62%)}
-.mstra-n{font-weight:700;font-size:12.5px;line-height:1.22;display:block}
-.mstra-p{font-size:10px;color:var(--humo);display:block;margin-top:3px;letter-spacing:.01em}
+/* Cuadros dentro de cada área: un bento de celdas cuadradas con piezas de
+   distinto tamaño (la muestra en vivo ocupa 2×2; el primer cuadro de un área
+   sin demo se ensancha). Columnas fijas y filas cuadradas para que en el móvil
+   no se estiren ni pierdan la info; flujo denso para que no queden huecos. */
+.mstra-rej{display:grid;grid-template-columns:repeat(2,1fr);grid-auto-rows:116px;
+  grid-auto-flow:dense;gap:8px;padding:6px 14px 14px;border-top:1.5px dashed rgba(26,23,32,.14)}
+@media(min-width:560px){.mstra-rej{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:900px){.mstra-rej{grid-template-columns:repeat(4,1fr)}}
+.mstra{position:relative;overflow:hidden;cursor:pointer;font:inherit;color:var(--tinta);
+  text-align:left;border:1.5px solid rgba(26,23,32,.14);border-radius:var(--r-int);padding:0;
+  background:color-mix(in srgb,var(--c) 22%,var(--papel));
+  display:flex;flex-direction:column;justify-content:flex-end;
+  transition:transform .13s,box-shadow .13s}
+.mstra:hover{transform:translateY(-2px);box-shadow:0 7px 0 -3px var(--c)}
+.mstra:focus-visible{outline:2px solid var(--tinta);outline-offset:2px}
+.mstra-wide{grid-column:span 2}
+.mstra-live{grid-column:span 2;grid-row:span 2}       /* muestra en vivo = pieza grande */
+.mstra-mini{position:absolute;inset:0;z-index:0}
+.mstra-mini img{width:100%;height:100%;object-fit:cover;display:block}
+/* leyenda abajo: banda clara sobre el tinte; sobre foto va velo oscuro */
+.mstra-cap{position:relative;z-index:1;margin-top:auto;padding:9px 11px;
+  display:flex;flex-direction:column;gap:2px}
+.mstra-n{font-weight:700;font-size:12.5px;line-height:1.18}
+.mstra-p{font-size:10px;letter-spacing:.01em}
+.mstra:not(.mstra-live) .mstra-cap{background:linear-gradient(0deg,var(--papel) 58%,transparent)}
+.mstra:not(.mstra-live) .mstra-p{color:var(--humo)}
+.mstra-live .mstra-cap{color:var(--papel);
+  background:linear-gradient(0deg,rgba(13,13,15,.86),rgba(13,13,15,.15) 70%,transparent)}
+.mstra-live .mstra-n{font-size:14px}
+.mstra-live .mstra-p{color:rgba(253,251,247,.82)}
+.mstra-live::after{content:"";position:absolute;inset:0;z-index:0;mix-blend-mode:multiply;
+  opacity:.18;background:var(--t,transparent)}
+.mstra-badge{position:absolute;top:8px;left:8px;z-index:2;display:inline-flex;align-items:center;gap:5px;
+  font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;background:var(--papel);color:var(--tinta);border-radius:999px;padding:4px 9px}
+.mstra-badge::before{content:"";width:6px;height:6px;border-radius:50%;background:#2ecc71}
 
 /* ---------- ventana flotante de la muestra (crece desde el cuadro) ---------- */
 .mstra-dlg{--c:var(--tinta);border:0;padding:16px;margin:0;inset:0;width:100%;height:100%;
@@ -506,10 +527,17 @@ lqs-trazo:defined>img{display:none}
 .mstra-x{position:absolute;top:12px;right:12px;z-index:3;width:34px;height:34px;cursor:pointer;
   border:2px solid var(--tinta);border-radius:50%;background:var(--papel);color:var(--tinta);
   font-size:20px;line-height:1;display:grid;place-items:center}
-.mstra-media{aspect-ratio:16/9;display:grid;place-items:center;border-bottom:2px solid var(--tinta);
-  background:color-mix(in srgb,var(--c) 22%,var(--papel))}
+.mstra-media{position:relative;aspect-ratio:16/9;overflow:hidden;display:grid;place-items:center;
+  border-bottom:2px solid var(--tinta);background:color-mix(in srgb,var(--c) 22%,var(--papel))}
+.mstra-media-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .mstra-media-nota{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;
   text-transform:uppercase;color:var(--humo)}
+/* enlace a la muestra en vivo, sobre la portada */
+.mstra-media-ver{position:absolute;right:14px;bottom:14px;z-index:2;text-decoration:none;
+  font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.03em;
+  background:var(--papel);color:var(--tinta);border:2px solid var(--tinta);border-radius:999px;
+  padding:7px 14px;box-shadow:0 6px 16px -6px rgba(13,13,15,.5)}
+.mstra-media-ver:hover{background:var(--tinta);color:var(--papel)}
 .mstra-info{padding:clamp(18px,3.2vw,28px);display:flex;flex-direction:column;gap:11px}
 .mstra-chip{display:inline-flex;align-items:center;gap:7px;align-self:flex-start;background:var(--c);
   border-radius:999px;padding:5px 13px 5px 7px;font-size:11px;font-weight:700;letter-spacing:.04em;
@@ -543,28 +571,6 @@ lqs-trazo:defined>img{display:none}
 .paq-serv li::before{content:"✓";position:absolute;left:0;top:-1px;color:var(--c);font-weight:800}
 .paq-cta{align-self:flex-start;margin-top:auto}
 
-/* ---------- muestras en vivo (demos) ----------
-   La portada es una foto de la propia página con un velo de su color (--t);
-   el color del demo solo vive en el velo, la etiqueta, el foco y la sombra
-   dura del hover —guiño a las propias demos—, nunca en una franja lateral. */
-.proy-rej{display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:var(--gap)}
-.proy{--t:var(--tinta);text-decoration:none;color:var(--tinta);background:var(--papel);
-  border:2px solid var(--tinta);border-radius:var(--r-cont);overflow:hidden;
-  display:flex;flex-direction:column;transition:transform .14s ease,box-shadow .14s ease}
-.proy:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 -1px var(--t)}
-.proy:focus-visible{outline:3px solid var(--t);outline-offset:3px}
-.proy-vis{position:relative;aspect-ratio:16/10;overflow:hidden;background:#0b0b0c}
-.proy-vis img{width:100%;height:100%;object-fit:cover;display:block;
-  transition:transform .5s cubic-bezier(.22,1,.3,1)}
-.proy:hover .proy-vis img{transform:scale(1.05)}
-.proy-vis::after{content:"";position:absolute;inset:0;mix-blend-mode:multiply;opacity:.26;
-  background:linear-gradient(200deg,transparent 34%,rgba(13,13,15,.6)),
-             linear-gradient(0deg,var(--t),var(--t))}
-.proy-cuerpo{padding:15px 18px 18px;display:flex;flex-direction:column;gap:5px}
-.proy-sector{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--t)}
-.proy-nom{font-family:'Syne';font-weight:800;font-size:20px;letter-spacing:-.025em;line-height:1.05}
-.proy-tag{font-size:13px;line-height:1.4;color:var(--humo)}
-.proy-ver{margin-top:8px;font-size:11px;font-weight:600;letter-spacing:.03em;color:var(--t)}
 
 /* ---------- 12 documentos legales ---------- */
 .doc-ind{grid-column:span 6;display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;

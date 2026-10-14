@@ -12,7 +12,9 @@
     <div class="mstra-caja">
       <button class="mstra-x" type="button" aria-label="Cerrar">&times;</button>
       <div class="mstra-media">
+        <img class="mstra-media-img" alt="" hidden>
         <span class="mstra-media-nota">Muestra en camino</span>
+        <a class="mstra-media-ver" target="_blank" rel="noopener" hidden>Ver en vivo →</a>
       </div>
       <div class="mstra-info">
         <span class="mstra-chip"><span class="mstra-chip-ico ico" aria-hidden="true"></span><span data-campo="area"></span></span>
@@ -36,6 +38,9 @@
     var wa   = dlg.getAttribute('data-wa');
     var cta  = dlg.querySelector('.mstra-cta');
     var icoN = dlg.querySelector('.mstra-chip-ico');
+    var mImg = dlg.querySelector('.mstra-media-img');
+    var mNota = dlg.querySelector('.mstra-media-nota');
+    var mVer = dlg.querySelector('.mstra-media-ver');
     var abridor = null;
     var lento = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -62,6 +67,16 @@
       dlg.style.setProperty('--c', f.color);
       set('area', f.area); set('n', f.n); set('p', f.p); set('que', f.que); set('uso', f.uso);
       if (icoN && window.Iconos) icoN.innerHTML = Iconos.html(f.ico);
+      // muestra en vivo: si la ficha tiene demo, la portada llena el hueco
+      if (f.demo) {
+        mImg.src = f.demo.img; mImg.alt = f.demo.marca || ''; mImg.hidden = false;
+        mNota.hidden = true;
+        mVer.href = f.demo.arch; mVer.hidden = false;
+        dlg.style.setProperty('--t', f.demo.tono);
+      } else {
+        mImg.hidden = true; mImg.removeAttribute('src');
+        mNota.hidden = false; mVer.hidden = true;
+      }
       if (cta) cta.href = 'https://wa.me/' + wa + '?text=' + encodeURIComponent('Hola LQS, me interesa: ' + f.n + '.');
       var desde = rect(btn);
       dlg.showModal();
