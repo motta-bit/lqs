@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LQS · Identidad modular</title>
+<meta name="description" content="La marca propia de LQS: un sistema que se arma por áreas. Azulejo, mascota TO y una marca por cada área.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Rubik:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --fondo:#0d0d0f; --tarjeta:#17141c; --tiza:#fdfbf7; --gris:#8b8593;
+  --lila:#C4A8F5; --papel:#FDFBF7; --linea:rgba(253,251,247,.12);
+  --disp:'Syne',system-ui,sans-serif; --cuerpo:'Rubik',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+img{display:block;max-width:100%}
+body{background:var(--fondo);color:var(--tiza);font-family:var(--cuerpo);line-height:1.6;
+  -webkit-font-smoothing:antialiased;padding:clamp(20px,5vw,64px);min-height:100dvh}
+.env{max-width:1060px;margin:0 auto;display:flex;flex-direction:column;gap:clamp(34px,6vw,64px)}
+.eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--lila);display:flex;align-items:center;gap:12px}
+.eyebrow::before{content:"";width:34px;height:2px;background:var(--lila)}
+/* ---- hero ---- */
+.hero{display:grid;grid-template-columns:auto 1fr;gap:clamp(18px,3vw,36px);align-items:center}
+.hero-azulejo{width:clamp(92px,13vw,148px);height:auto;border-radius:22px;
+  box-shadow:0 18px 40px -22px rgba(0,0,0,.65)}
+.hero h1{font-family:var(--disp);font-weight:800;font-size:clamp(2.3rem,7vw,4.2rem);
+  line-height:.92;letter-spacing:-.04em}
+.hero h1 b{color:var(--lila);font-weight:800}
+.hero p{color:var(--gris);max-width:52ch;margin-top:14px;font-size:1rem}
+/* ---- bloque TO ---- */
+.to{display:grid;grid-template-columns:1fr auto;gap:clamp(16px,3vw,40px);align-items:center;
+  background:var(--tarjeta);border:1px solid var(--linea);border-radius:26px;
+  padding:clamp(22px,3.5vw,40px);overflow:hidden}
+.to-tx i{font-style:normal;font-family:var(--mono);font-size:.68rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--lila)}
+.to-tx h2{font-family:var(--disp);font-weight:700;font-size:clamp(1.5rem,3.4vw,2.1rem);
+  letter-spacing:-.03em;margin:6px 0 8px}
+.to-tx p{color:var(--gris);max-width:46ch;font-size:.95rem}
+.to-pato{width:clamp(120px,20vw,210px);height:auto;filter:drop-shadow(0 16px 30px rgba(0,0,0,.45))}
+/* ---- marcas de área ---- */
+.areas h2{font-family:var(--disp);font-weight:700;font-size:clamp(1.4rem,3vw,1.9rem);
+  letter-spacing:-.025em}
+.areas>p{color:var(--gris);max-width:56ch;margin:8px 0 22px;font-size:.95rem}
+.rej{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(min(140px,100%),1fr))}
+.marca{background:var(--papel);border-radius:18px;padding:18px 16px 14px;
+  display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
+.marca img{width:72px;height:72px}
+.marca span{font-family:var(--mono);font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;
+  color:#4a4453}
+/* ---- wordmark cierre ---- */
+.cierre{display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  border-top:1px solid var(--linea);padding-top:clamp(20px,4vw,34px)}
+.cierre img{width:clamp(52px,8vw,74px);height:auto;border-radius:14px}
+.cierre p{color:var(--gris);font-size:.9rem;max-width:60ch}
+.cierre b{color:var(--tiza);font-weight:600}
+@media(max-width:620px){.hero{grid-template-columns:1fr}.to{grid-template-columns:1fr}
+  .to-pato{justify-self:center}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="env">
+
+  <div class="eyebrow">Marca propia · LQS</div>
+
+  <header class="hero">
+    <img class="hero-azulejo" src="img/marca/lqs-azulejo.svg" alt="Azulejo de LQS, el monograma sobre teja lila">
+    <div>
+      <h1>Una marca que<br>se arma por <b>áreas</b></h1>
+      <p>LQS es modular hasta en su propia identidad: un azulejo, una mascota y una marca distinta
+        para cada área, que funcionan solas y encajan entre sí. Esto es lo que hacemos para otros,
+        hecho primero con nosotros.</p>
+    </div>
+  </header>
+
+  <section class="to">
+    <div class="to-tx">
+      <i>La mascota</i>
+      <h2>TO., el pato que acompaña</h2>
+      <p>Un personaje propio que le pone cara a la marca: aparece en el sitio, en las piezas y en las
+        esquinas donde una marca necesita calidez. De línea simple para que viaje en cualquier tamaño.</p>
+    </div>
+    <img class="to-pato" src="img/marca/to-parado.png" alt="TO., la mascota pato de LQS, de pie">
+  </section>
+
+  <section class="areas">
+    <h2>Una marca por cada área</h2>
+    <p>Siete áreas de trabajo y los encargos Express, cada una con su propio monograma sobre el azulejo.
+      El mismo ADN, ocho señales distintas.</p>
+    <div class="rej">
+      <div class="marca"><img src="img/marca/lqs-video.svg" alt="Marca del área Video"><span>Video</span></div>
+      <div class="marca"><img src="img/marca/lqs-foto.svg" alt="Marca del área Foto"><span>Foto</span></div>
+      <div class="marca"><img src="img/marca/lqs-marca.svg" alt="Marca del área Marca"><span>Marca</span></div>
+      <div class="marca"><img src="img/marca/lqs-redes.svg" alt="Marca del área Redes"><span>Redes</span></div>
+      <div class="marca"><img src="img/marca/lqs-digital.svg" alt="Marca del área Digital"><span>Digital</span></div>
+      <div class="marca"><img src="img/marca/lqs-eventos.svg" alt="Marca del área Eventos"><span>Eventos</span></div>
+      <div class="marca"><img src="img/marca/lqs-automatizacion.svg" alt="Marca del área Automatización"><span>Automatización</span></div>
+      <div class="marca"><img src="img/marca/lqs-express.svg" alt="Marca del área Express"><span>Express</span></div>
+    </div>
+  </section>
+
+  <footer class="cierre">
+    <img src="img/marca/lqs-azulejo.svg" alt="">
+    <p>Identidad completa de <b>LQS (Lo Que Sea)</b>: estrategia, azulejo, mascota, color y tipografía,
+      más una marca aplicada por área. La misma línea con la que levantamos la marca de quien nos busca.</p>
+  </footer>
+
+</div>
+</body>
+</html>
