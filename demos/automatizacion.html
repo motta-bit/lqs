@@ -1,0 +1,864 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Turno</title>
+<meta name="description" content="Contenido y conversación de un restaurante en un día: la parrilla de publicaciones, el bot de WhatsApp con su menú, la regla que responde comentarios por mensaje directo y el reporte de cierre.">
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   TURNO · contenido y conversación
+
+   Qué es: la operación de un día de Rescoldo —el restaurante de la
+   otra muestra— vista desde atrás. La parrilla de lo que se publica,
+   los dos bots que contestan lo que esa parrilla genera, y el reporte
+   que llega al cierre.
+
+   Por qué no se parece a las otras cuatro: aquellas son piezas
+   editoriales y llevan su propia tipografía de autor. Esta es una
+   HERRAMIENTA, y una herramienta se lee mejor con la letra del
+   sistema: ya trae tamaño óptico, tracking y ajuste de legibilidad
+   resueltos. De paso la página no pide ni una fuente a la red, así
+   que no hay nada que esperar ni que falle.
+
+   El bot no es un vídeo ni un bucle: es una máquina de estados de
+   verdad. Lo que se toca decide a dónde va la conversación, y cada
+   respuesta puede enseñar la regla que la disparó —que es lo que un
+   cliente necesita ver para entender qué está comprando.
+
+   Nota sobre las plataformas: se nombran porque hay que decir cuál
+   es, y la cromática las evoca, pero los glifos son geométricos
+   propios. No se reproducen sus logos.
+   ═══════════════════════════════════════════════════════════════ */
+:root{
+  --papel:#f6f6f4; --lienzo:#fff; --tinta:#15141a; --media:#5f5c69;
+  --tenue:#6a6675; --linea:#e4e2dd; --linea-f:#f0eeea;
+  --verde:#1f8a4c;        /* bot · validado contra la burbuja clara */
+  --azul:#2f6df0;         /* persona · ΔE 26,3 en deuteranopia */
+  --ig-a:#f0a02a; --ig-b:#e5357f; --ig-c:#8c3ae0;
+  --brasa:#d6552a; --brasa-tx:#b8431c;
+  --r:14px; --r-g:22px;
+  --pad:clamp(16px,4vw,60px);
+  --sombra:0 1px 2px rgba(21,20,26,.05), 0 12px 32px -14px rgba(21,20,26,.22);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--papel);color:var(--tinta);
+  font:400 100%/1.55 system-ui,-apple-system,'Segoe UI',sans-serif;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%}
+::selection{background:var(--tinta);color:var(--papel)}
+
+/* Tracking específico por tamaño: lo grande se aprieta, el cuerpo se
+   queda en cero, lo diminuto en versalitas se abre. Un solo valor para
+   todo está mal en alguna parte. */
+.disp{font-size:clamp(2rem,5.2vw,3.9rem);line-height:1.02;letter-spacing:-.03em;
+  font-weight:650;text-wrap:balance}
+h2{font-size:clamp(1.35rem,2.8vw,2.1rem);line-height:1.1;letter-spacing:-.022em;
+  font-weight:640}
+h3{font-size:1rem;line-height:1.25;letter-spacing:-.012em;font-weight:620}
+.et{font-size:.67rem;line-height:1.4;letter-spacing:.14em;text-transform:uppercase;
+  font-weight:560;color:var(--tenue)}
+.cuerpo{color:var(--media);max-width:62ch}
+
+.env{max-width:1240px;margin:0 auto;padding:0 var(--pad)}
+.sec{padding:clamp(40px,7vw,96px) 0;border-top:1px solid var(--linea)}
+.sec:first-of-type{border-top:0}
+.tit{display:flex;flex-direction:column;gap:12px;margin-bottom:clamp(22px,3.4vw,40px)}
+
+/* ── cabecera ───────────────────────────────────────────────── */
+header.port{padding:clamp(34px,6vw,86px) 0 clamp(26px,4vw,52px)}
+header.port .disp{max-width:19ch}
+header.port .cuerpo{margin-top:16px;font-size:clamp(1rem,1.5vw,1.14rem)}
+.sellos{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
+.sello{display:inline-flex;align-items:center;gap:7px;background:var(--lienzo);
+  border:1px solid var(--linea);border-radius:999px;padding:7px 14px;
+  font-size:.76rem;font-weight:520;color:var(--media)}
+.sello i{width:7px;height:7px;border-radius:50%;background:var(--pt,var(--verde));flex:none}
+
+/* ── LA PARRILLA ────────────────────────────────────────────────
+   Las celdas entran desordenadas y cada una se acomoda con un muelle
+   críticamente amortiguado: llega y se queda, sin rebote. Es una
+   retícula, no un objeto lanzado; el rebote sería mentira. */
+.filtros{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.filtro{all:unset;cursor:pointer;padding:8px 15px;border-radius:999px;
+  border:1px solid var(--linea);background:var(--lienzo);
+  font-size:.8rem;font-weight:530;color:var(--media);
+  transition:transform .12s ease,background .16s,color .16s,border-color .16s}
+.filtro:hover{border-color:#cfccc6}
+.filtro:active{transform:scale(.97)}
+.filtro[aria-pressed="true"]{background:var(--tinta);color:var(--papel);border-color:var(--tinta)}
+.filtro:focus-visible{outline:2px solid var(--tinta);outline-offset:2px}
+
+.parrilla{display:grid;gap:clamp(6px,1vw,12px);
+  grid-template-columns:repeat(2,1fr)}
+@media (min-width:620px){.parrilla{grid-template-columns:repeat(3,1fr)}}
+@media (min-width:980px){.parrilla{grid-template-columns:repeat(4,1fr)}}
+.pub{position:relative;aspect-ratio:1;border-radius:var(--r);overflow:hidden;
+  background:#e8e6e1;cursor:pointer;will-change:transform;
+  border:0;padding:0;display:block;width:100%;text-align:left;font:inherit;color:inherit}
+.pub img{width:100%;height:100%;object-fit:cover;
+  transition:transform .7s cubic-bezier(.22,1,.3,1)}
+.pub:hover img{transform:scale(1.045)}
+.pub:focus-visible{outline:2px solid var(--tinta);outline-offset:3px}
+.pub[hidden]{display:none}
+/* el pie: aparece al apuntar, y en táctil se queda puesto */
+.pub .velo{position:absolute;inset:0;display:flex;flex-direction:column;
+  justify-content:flex-end;gap:6px;padding:12px;color:#fff;
+  background:linear-gradient(to top,rgba(10,9,13,.86) 4%,rgba(10,9,13,.28) 46%,transparent 72%);
+  opacity:0;transition:opacity .22s ease}
+.pub:hover .velo,.pub:focus-visible .velo{opacity:1}
+@media (hover:none){.pub .velo{opacity:1;
+  background:linear-gradient(to top,rgba(10,9,13,.8) 2%,transparent 56%)}}
+.pub .pie{font-size:.78rem;line-height:1.3;font-weight:520;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pub .nums{display:flex;gap:12px;font-size:.68rem;font-weight:520;
+  color:rgba(255,255,255,.86);font-variant-numeric:tabular-nums}
+.pub .nums span{display:inline-flex;align-items:center;gap:4px}
+.pub .nums svg{width:11px;height:11px;fill:none;stroke:currentColor;stroke-width:2}
+.pub .marca{position:absolute;top:9px;left:9px;z-index:2;
+  font-size:.6rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:#fff;background:rgba(10,9,13,.52);backdrop-filter:blur(6px);
+  padding:4px 8px;border-radius:999px}
+.pub .hora{position:absolute;top:9px;right:9px;z-index:2;
+  font-size:.6rem;font-weight:600;color:#fff;background:rgba(10,9,13,.52);
+  backdrop-filter:blur(6px);padding:4px 8px;border-radius:999px;
+  font-variant-numeric:tabular-nums}
+.vacio{grid-column:1/-1;padding:34px 0;color:var(--tenue);font-size:.9rem}
+
+/* ── LOS TELÉFONOS ──────────────────────────────────────────── */
+.duo{display:grid;gap:clamp(20px,3vw,40px);align-items:start}
+@media (min-width:900px){.duo{grid-template-columns:1fr 1fr}}
+.canal{display:flex;flex-direction:column;gap:14px}
+.canal > header{display:flex;flex-direction:column;gap:7px}
+.canal .plat{display:inline-flex;align-items:center;gap:9px;font-size:.78rem;
+  font-weight:580;color:var(--media)}
+.canal .plat .glifo{width:19px;height:19px;border-radius:6px;flex:none;
+  display:grid;place-items:center}
+.canal .plat .glifo svg{width:12px;height:12px}
+
+/* El aparato: una sola pieza reutilizada con dos pieles. */
+.tel{background:var(--lienzo);border:1px solid var(--linea);
+  border-radius:var(--r-g);box-shadow:var(--sombra);overflow:hidden;
+  display:flex;flex-direction:column;height:clamp(440px,64vh,560px)}
+.tel .barra{display:flex;align-items:center;gap:10px;padding:11px 14px;
+  border-bottom:1px solid var(--linea-f);flex:none;
+  background:rgba(255,255,255,.82);backdrop-filter:blur(12px) saturate(170%)}
+.tel .av{width:30px;height:30px;border-radius:50%;flex:none;display:grid;
+  place-items:center;color:#fff;font-size:.72rem;font-weight:650;
+  background:linear-gradient(140deg,#2b2730,#56505f)}
+.tel .quien{min-width:0;line-height:1.25}
+.tel .quien b{display:block;font-size:.84rem;font-weight:600}
+.tel .quien span{display:block;font-size:.68rem;color:var(--tenue)}
+.tel .reset{all:unset;margin-left:auto;cursor:pointer;flex:none;
+  font-size:.7rem;font-weight:560;color:var(--media);
+  padding:6px 11px;border-radius:999px;border:1px solid var(--linea);
+  transition:transform .12s ease,background .16s}
+.tel .reset:hover{background:var(--papel)}
+.tel .reset:active{transform:scale(.96)}
+.tel .reset:focus-visible{outline:2px solid var(--tinta);outline-offset:2px}
+
+.hilo{flex:1;overflow-y:auto;overscroll-behavior:contain;
+  padding:16px 14px 10px;display:flex;flex-direction:column;gap:8px;
+  background:var(--fondo-hilo,#f3f1ec);scroll-behavior:smooth}
+.hilo::-webkit-scrollbar{width:7px}
+.hilo::-webkit-scrollbar-thumb{background:rgba(21,20,26,.16);border-radius:4px}
+
+/* La burbuja entra desde el lado de quien la manda: si sale por la
+   derecha, vuelve por la derecha. */
+.msj{max-width:84%;padding:9px 12px;border-radius:15px;font-size:.86rem;
+  line-height:1.42;position:relative;word-wrap:break-word;
+  animation:llega .34s cubic-bezier(.22,1,.3,1) both}
+.msj.de-ellos{align-self:flex-start;background:var(--lienzo);
+  border-bottom-left-radius:5px;box-shadow:0 1px 1px rgba(21,20,26,.07);
+  --dx:-10px}
+.msj.mio{align-self:flex-end;background:var(--mio,#dcf6c8);
+  border-bottom-right-radius:5px;--dx:10px}
+@keyframes llega{
+  from{opacity:0;transform:translate3d(var(--dx),9px,0) scale(.97)}
+  to{opacity:1;transform:none}
+}
+.msj .sello-h{display:block;margin-top:4px;font-size:.62rem;color:var(--tenue);
+  text-align:right;font-variant-numeric:tabular-nums}
+.msj b{font-weight:620}
+.msj ul{list-style:none;margin:7px 0 2px;display:flex;flex-direction:column;gap:5px}
+.msj li{display:flex;gap:9px;align-items:baseline;font-size:.84rem}
+.msj li i{font-style:normal;font-weight:650;color:var(--brasa-tx);min-width:1.1em}
+.msj .precio{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--media);
+  font-size:.8rem;padding-left:10px}
+
+/* avisos dietéticos: icono y texto, nunca solo el color */
+.av-d{display:inline-flex;align-items:center;gap:4px;font-size:.6rem;
+  font-weight:620;letter-spacing:.04em;text-transform:uppercase;
+  padding:2px 7px;border-radius:999px;border:1px solid currentColor;
+  margin-left:6px;vertical-align:1px}
+.av-d svg{width:9px;height:9px;fill:currentColor}
+.av-d.pic{color:#b8431c}
+.av-d.veg{color:#1b7a43}
+
+/* la tarjeta de confirmación */
+.tarj{background:var(--lienzo);border:1px solid var(--linea);border-radius:11px;
+  padding:11px 12px;margin-top:7px;display:flex;flex-direction:column;gap:7px}
+.tarj .fila{display:flex;justify-content:space-between;gap:12px;font-size:.78rem}
+.tarj .fila span:first-child{color:var(--tenue)}
+.tarj .fila span:last-child{font-weight:580;font-variant-numeric:tabular-nums}
+
+/* escribiendo… */
+.escribe{align-self:flex-start;background:var(--lienzo);border-radius:15px;
+  border-bottom-left-radius:5px;padding:12px 14px;display:flex;gap:4px;
+  box-shadow:0 1px 1px rgba(21,20,26,.07);animation:llega .3s cubic-bezier(.22,1,.3,1) both;--dx:-10px}
+.escribe i{width:6px;height:6px;border-radius:50%;background:var(--tenue);
+  animation:bota 1.25s ease-in-out infinite}
+.escribe i:nth-child(2){animation-delay:.16s}
+.escribe i:nth-child(3){animation-delay:.32s}
+@keyframes bota{0%,62%,100%{opacity:.35;transform:none}31%{opacity:1;transform:translateY(-3px)}}
+
+/* las opciones: la respuesta del visitante */
+.opts{flex:none;border-top:1px solid var(--linea-f);padding:11px 12px;
+  display:flex;flex-wrap:wrap;gap:7px;background:var(--lienzo);min-height:56px;
+  align-content:center}
+.opt{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:7px;
+  padding:9px 14px;border-radius:999px;border:1px solid var(--linea);
+  font-size:.81rem;font-weight:540;background:var(--papel);
+  transition:transform .11s ease,background .16s,border-color .16s}
+.opt:hover{background:#eceae5;border-color:#d5d2cc}
+/* la respuesta va en el pointer-down, no al soltar */
+.opt:active{transform:scale(.965);background:#e3e0da}
+.opt:focus-visible{outline:2px solid var(--tinta);outline-offset:2px}
+.opt i{font-style:normal;font-weight:680;color:var(--brasa-tx);font-variant-numeric:tabular-nums}
+.opts .espera{font-size:.76rem;color:var(--tenue);padding:9px 2px}
+
+/* la regla detrás de cada respuesta */
+.regla{align-self:flex-start;max-width:84%;font-size:.68rem;line-height:1.4;
+  color:var(--media);background:#ebe8ff;border:1px solid #d9d4ff;
+  border-radius:9px;padding:6px 9px;display:flex;gap:6px;
+  animation:llega .3s cubic-bezier(.22,1,.3,1) both;--dx:-8px}
+.regla svg{width:11px;height:11px;flex:none;margin-top:2px;stroke:#5b4bd6;
+  fill:none;stroke-width:2}
+.regla b{color:var(--tinta)}
+
+.interruptor{display:inline-flex;align-items:center;gap:9px;cursor:pointer;
+  font-size:.78rem;font-weight:530;color:var(--media);user-select:none}
+/* Ocultamiento visual estándar: 1px recortado, no 0×0. Con tamaño cero
+   el control sigue en el orden de tabulación pero queda fuera del
+   alcance de parte de las tecnologías de asistencia y de cualquier
+   automatización; con 1px y clip-path sigue siendo un objetivo real. */
+.interruptor input{position:absolute;width:1px;height:1px;margin:-1px;
+  padding:0;border:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.interruptor .pista-s{width:38px;height:22px;border-radius:999px;
+  background:var(--linea);position:relative;flex:none;
+  transition:background .2s cubic-bezier(.22,1,.3,1)}
+.interruptor .pista-s::after{content:'';position:absolute;top:3px;left:3px;
+  width:16px;height:16px;border-radius:50%;background:#fff;
+  box-shadow:0 1px 3px rgba(21,20,26,.28);
+  transition:transform .26s cubic-bezier(.22,1,.3,1)}
+.interruptor input:checked + .pista-s{background:#5b4bd6}
+.interruptor input:checked + .pista-s::after{transform:translateX(16px)}
+.interruptor input:focus-visible + .pista-s{outline:2px solid var(--tinta);outline-offset:2px}
+
+/* ── las reglas, en lista ───────────────────────────────────── */
+.reglas{display:grid;gap:10px;grid-template-columns:1fr}
+@media (min-width:760px){.reglas{grid-template-columns:1fr 1fr}}
+.rg{display:flex;gap:12px;background:var(--lienzo);border:1px solid var(--linea);
+  border-radius:var(--r);padding:14px 15px}
+.rg .ic{width:30px;height:30px;border-radius:9px;flex:none;display:grid;
+  place-items:center;background:var(--papel);border:1px solid var(--linea-f)}
+.rg .ic svg{width:14px;height:14px;fill:none;stroke:var(--media);stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round}
+.rg div > b{display:block;font-size:.86rem;font-weight:600;margin-bottom:2px}
+.rg div > span{display:block;font-size:.79rem;color:var(--media);line-height:1.45}
+.rg code{font:inherit;font-size:.76rem;background:var(--papel);
+  border:1px solid var(--linea-f);border-radius:5px;padding:1px 5px;color:var(--tinta)}
+
+/* ── EL REPORTE ─────────────────────────────────────────────────
+   Cuatro cifras y una proporción. No es una gráfica: son cifras
+   titular, que es la forma correcta cuando no hay ni categorías que
+   comparar ni eje de tiempo. La única relación parte-todo que hay
+   —bot contra persona— va en UNA barra de dos segmentos con etiqueta
+   directa en cada uno, nunca en un pastel. */
+.reporte{display:grid;gap:clamp(20px,3vw,40px);align-items:start}
+@media (min-width:860px){.reporte{grid-template-columns:minmax(0,340px) 1fr}}
+.cifras{display:grid;gap:9px;grid-template-columns:1fr 1fr}
+.cifra{background:var(--lienzo);border:1px solid var(--linea);
+  border-radius:var(--r);padding:14px 15px}
+.cifra b{display:block;font-size:1.8rem;line-height:1.05;letter-spacing:-.03em;
+  font-weight:650;font-variant-numeric:tabular-nums}
+.cifra span{display:block;font-size:.74rem;color:var(--media);margin-top:4px;line-height:1.35}
+.cifra.ancha{grid-column:1/-1}
+.cifra.ancha b{font-size:1.18rem;letter-spacing:-.018em}
+
+/* la barra de proporción */
+.prop{margin-top:9px}
+.prop .barra{display:flex;gap:2px;height:10px}     /* 2px de superficie entre rellenos */
+.prop .barra span{display:block;background:var(--c);min-width:4px}
+.prop .barra span:first-child{border-radius:5px 0 0 5px}
+.prop .barra span:last-child{border-radius:0 5px 5px 0}
+.prop .etq{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:9px;
+  font-size:.73rem;color:var(--media);font-variant-numeric:tabular-nums}
+.prop .etq span{display:inline-flex;align-items:center;gap:6px}
+.prop .etq i{width:9px;height:9px;border-radius:3px;flex:none}
+
+/* ── cierre ─────────────────────────────────────────────────── */
+.cierre{display:flex;flex-wrap:wrap;gap:16px 28px;align-items:center;
+  justify-content:space-between;padding:clamp(28px,5vw,56px) 0}
+.cierre a{text-decoration:none;background:var(--tinta);color:var(--papel);
+  padding:14px 26px;border-radius:999px;font-size:.84rem;font-weight:560;
+  transition:transform .12s ease,filter .16s}
+.cierre a:hover{filter:brightness(1.22)}
+.cierre a:active{transform:scale(.975)}
+.cierre a:focus-visible{outline:2px solid var(--tinta);outline-offset:3px}
+.pie-p{padding:0 0 clamp(34px,6vw,70px);font-size:.75rem;color:var(--tenue);
+  line-height:1.6;max-width:76ch}
+.pie-p a{color:var(--media)}
+
+/* Movimiento reducido: se cambia el desplazamiento por una
+   aparición, no se quita el aviso de que algo llegó. */
+@media (prefers-reduced-motion:reduce){
+  .hilo{scroll-behavior:auto}
+  .msj,.escribe,.regla{animation:aparece .2s ease both}
+  @keyframes aparece{from{opacity:0}to{opacity:1}}
+  .escribe i{animation:none;opacity:.6}
+  .pub img,.filtro,.opt,.cierre a,.interruptor .pista-s,
+  .interruptor .pista-s::after{transition:none}
+  .pub:hover img{transform:none}
+  .pub{transform:none !important}
+}
+@media (prefers-reduced-transparency:reduce){
+  .tel .barra{background:var(--lienzo);backdrop-filter:none}
+  .pub .marca,.pub .hora{background:rgba(10,9,13,.86);backdrop-filter:none}
+}
+@media (prefers-contrast:more){
+  :root{--linea:#9e9aa4;--linea-f:#bdb9c2;--media:#3b3844;--tenue:#56525e}
+}
+</style>
+</head>
+<body>
+
+<div class="env">
+
+<header class="port">
+  <p class="et">Muestra · operación de un restaurante</p>
+  <h1 class="disp" style="margin-top:12px">Lo que se publica y lo que contesta, el mismo día.</h1>
+  <p class="cuerpo">Un turno de Rescoldo visto desde atrás: la parrilla de publicaciones,
+    los dos bots que atienden lo que esa parrilla genera y el reporte que llega al cierre.
+    Los bots de abajo funcionan: lo que toques decide a dónde va la conversación.</p>
+  <div class="sellos">
+    <span class="sello"><i></i>WhatsApp Business · menú y reservas</span>
+    <span class="sello" style="--pt:var(--ig-b)"><i></i>Instagram · comentario a mensaje directo</span>
+    <span class="sello" style="--pt:var(--brasa)"><i></i>Reporte diario a las 21:30</span>
+  </div>
+</header>
+
+<!-- ═══ LA PARRILLA ═══ -->
+<section class="sec" aria-labelledby="t-parrilla">
+  <div class="tit">
+    <p class="et">(01) La parrilla</p>
+    <h2 id="t-parrilla">Doce publicaciones, programadas con una semana.</h2>
+    <p class="cuerpo">Cada una sale a su hora sin que nadie la suba a mano. Apunta a
+      cualquiera para ver el pie y cómo le fue.</p>
+  </div>
+  <div class="filtros" id="filtros" role="group" aria-label="Filtrar publicaciones"></div>
+  <div class="parrilla" id="parrilla"></div>
+</section>
+
+<!-- ═══ LAS CONVERSACIONES ═══ -->
+<section class="sec" aria-labelledby="t-chats">
+  <div class="tit">
+    <p class="et">(02) Las conversaciones</p>
+    <h2 id="t-chats">Dos canales, el mismo cerebro.</h2>
+    <p class="cuerpo">El de WhatsApp abre con un menú y lleva la reserva hasta
+      confirmarla. El de Instagram no espera a que pregunten: lee el comentario y
+      contesta por mensaje directo.</p>
+    <label class="interruptor" style="margin-top:6px">
+      <input type="checkbox" id="verReglas">
+      <span class="pista-s" aria-hidden="true"></span>
+      Mostrar la regla detrás de cada respuesta
+    </label>
+  </div>
+
+  <div class="duo">
+
+    <div class="canal">
+      <header>
+        <span class="plat">
+          <span class="glifo" style="background:#1f8a4c">
+            <svg viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.4A10 10 0 1 0 12 2Z"/></svg>
+          </span>
+          WhatsApp Business
+        </span>
+        <h3>Menú, carta y reserva</h3>
+      </header>
+      <div class="tel" style="--fondo-hilo:#efe7de;--mio:#dcf6c8">
+        <div class="barra">
+          <span class="av" aria-hidden="true">R</span>
+          <span class="quien"><b>Rescoldo</b><span id="est-wa">en línea</span></span>
+          <button class="reset" type="button" data-reset="wa">Reiniciar</button>
+        </div>
+        <div class="hilo" id="hilo-wa" role="log" aria-live="polite" aria-label="Conversación de WhatsApp"></div>
+        <div class="opts" id="opts-wa"></div>
+      </div>
+    </div>
+
+    <div class="canal">
+      <header>
+        <span class="plat">
+          <span class="glifo" style="background:linear-gradient(135deg,var(--ig-a),var(--ig-b) 55%,var(--ig-c))">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/></svg>
+          </span>
+          Instagram
+        </span>
+        <h3>Del comentario al mensaje directo</h3>
+      </header>
+      <div class="tel" style="--fondo-hilo:#fafafa;--mio:#e6ddff">
+        <div class="barra">
+          <span class="av" aria-hidden="true" style="background:linear-gradient(140deg,var(--ig-a),var(--ig-b) 55%,var(--ig-c))">R</span>
+          <span class="quien"><b>rescoldo.mde</b><span id="est-ig">bandeja de entrada</span></span>
+          <button class="reset" type="button" data-reset="ig">Reiniciar</button>
+        </div>
+        <div class="hilo" id="hilo-ig" role="log" aria-live="polite" aria-label="Conversación de Instagram"></div>
+        <div class="opts" id="opts-ig"></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ LAS REGLAS ═══ -->
+<section class="sec" aria-labelledby="t-reglas">
+  <div class="tit">
+    <p class="et">(03) Lo que queda configurado</p>
+    <h2 id="t-reglas">Seis reglas, y ninguna necesita a nadie despierto.</h2>
+  </div>
+  <div class="reglas" id="reglas"></div>
+</section>
+
+<!-- ═══ EL REPORTE ═══ -->
+<section class="sec" aria-labelledby="t-reporte">
+  <div class="tit">
+    <p class="et">(04) El cierre</p>
+    <h2 id="t-reporte">A las 21:30 llega el día, por mensaje.</h2>
+    <p class="cuerpo">Sin entrar a ningún panel. Las mismas cifras que vería el
+      administrador, en el chat donde ya está.</p>
+  </div>
+  <div class="reporte">
+    <div class="tel" style="--fondo-hilo:#efe7de;height:auto">
+      <div class="barra">
+        <span class="av" aria-hidden="true">R</span>
+        <span class="quien"><b>Reportes Rescoldo</b><span>hoy 21:30</span></span>
+      </div>
+      <div class="hilo" style="padding-bottom:16px;overflow:visible" id="hilo-rep"></div>
+    </div>
+    <div>
+      <div class="cifras">
+        <div class="cifra"><b>23</b><span>Reservas confirmadas</span></div>
+        <div class="cifra"><b>184</b><span>Mensajes atendidos</span></div>
+        <div class="cifra"><b>4 s</b><span>Primera respuesta, mediana</span></div>
+        <div class="cifra"><b>2</b><span>Reservas caídas</span></div>
+        <div class="cifra ancha"><b>Costilla, naranjo</b><span>Plato más pedido · 31 de 96 platos</span></div>
+      </div>
+      <div class="prop">
+        <div class="barra" role="img"
+             aria-label="De 184 mensajes, 143 los resolvió el bot (78%) y 41 pasaron a una persona (22%)">
+          <span style="width:78%;--c:var(--verde)"></span>
+          <span style="width:22%;--c:var(--azul)"></span>
+        </div>
+        <div class="etq">
+          <span><i style="background:var(--verde)"></i>Resueltos por el bot · 143 · 78%</span>
+          <span><i style="background:var(--azul)"></i>Pasaron a una persona · 41 · 22%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="cierre">
+  <h2 style="max-width:20ch">¿Montamos esto sobre tu operación?</h2>
+  <a href="#contacto">Hablar con LQS</a>
+</div>
+
+<p class="pie-p">
+  Muestra de un cliente ficticio. Las cifras, los nombres y las conversaciones son
+  de ejemplo. Las plataformas se nombran porque hay que decir cuál es; los glifos
+  son geométricos propios y no reproducen sus logos. Las imágenes son material de
+  referencia recopilado en <a href="https://www.cosmos.so">Cosmos</a>, no son
+  trabajo de LQS y no están licenciadas para publicación.
+  Un solo archivo, sin librerías, sin fuentes externas.
+</p>
+
+</div>
+
+<script>
+'use strict';
+const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ═══ (01) LA PARRILLA ═══════════════════════════════════════ */
+const PUBS = [
+  {f:'carbon',        g:'Carta',  h:'19:00', pie:'Pulpo. Dos horas de fuego bajo y un golpe final de llama directa.', me:1840, co:62, alt:'Plato oscuro con un emplatado pequeño sobre un lecho de carbón'},
+  {f:'salsa-vertida', g:'Carta',  h:'13:30', pie:'La costilla se termina en la mesa, no en la cocina.', me:2310, co:94, alt:'Una mano vertiendo salsa oscura sobre una pieza de carne'},
+  {f:'brasa-tabla',   g:'Fuego',  h:'06:40', pie:'La parrilla a las seis y cuarenta. Todavía no ha entrado nadie.', me:980, co:21, alt:'Pieza asada sobre una tabla de madera junto a la parrilla'},
+  {f:'cenital-luz',   g:'Carta',  h:'20:10', pie:'Trucha de Guatapé. Se retira antes de que la carne se cierre.', me:1420, co:38, alt:'Plato blanco visto desde arriba, atravesado por una franja de luz'},
+  {f:'caviar',        g:'Fuego',  h:'17:55', pie:'Una prueba que hoy no entró en carta. Mañana se decide.', me:760, co:44, alt:'Emplatado con caviar, fotografiado con poca profundidad de campo'},
+  {f:'verde-hoja',    g:'Carta',  h:'12:15', pie:'Berenjena entera. Nada de origen animal la toca.', me:1680, co:57, alt:'Hoja verde asada sobre una crema clara, en plato oscuro'},
+  {f:'mesa-vino',     g:'Sala',   h:'18:45', pie:'Mesa de cuatro, siete de la noche. Quedan dos.', me:640, co:29, alt:'Mesa de madera con un plato y una copa de vino tinto'},
+  {f:'ostras',        g:'Carta',  h:'11:00', pie:'Llegaron del Pacífico esta mañana. Se acaban hoy.', me:1120, co:73, alt:'Ostras abiertas sobre un plato blanco'},
+  {f:'tabla-madera',  g:'Fuego',  h:'16:20', pie:'Se corta aquí, a la vista, y no en la cocina.', me:890, co:18, alt:'Emplatado servido sobre una tabla de madera'},
+  {f:'cuenco',        g:'Sala',   h:'21:05', pie:'Lo que queda de la ceniza alimenta el horno de mañana.', me:540, co:12, alt:'Cuenco oscuro con un emplatado de jamón y crema'},
+  {f:'crema',        g:'Fuego',  h:'15:10', pie:'Fondo de naranjo, nueve horas de reducción.', me:1050, co:33, alt:'Plato claro con una crema roja en el centro'},
+  {f:'burrata',       g:'Carta',  h:'22:00', pie:'El postre lo define la pastelería cada tarde. Siempre hay dos.', me:1960, co:81, alt:'Cúpula blanca con salsa roja sobre un plato moteado'}
+];
+const GRUPOS = ['Todas','Carta','Fuego','Sala'];
+const mil = n => n >= 1000 ? (n/1000).toFixed(1).replace('.0','') + ' mil' : String(n);
+
+const ICO_ME = '<svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-9.3A3.9 3.9 0 0 1 12 8a3.9 3.9 0 0 1 7 2.7C19 15.6 12 20 12 20Z"/></svg>';
+const ICO_CO = '<svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.3A8 8 0 1 1 20 12Z"/></svg>';
+
+document.getElementById('parrilla').innerHTML = PUBS.map((p,i)=>`
+  <button class="pub" type="button" data-g="${p.g}" data-i="${i}">
+    <img src="img/mesa/${p.f}.webp" alt="${esc(p.alt)}" loading="${i<4?'eager':'lazy'}">
+    <span class="marca">${p.g}</span><span class="hora">${p.h}</span>
+    <span class="velo">
+      <span class="pie">${esc(p.pie)}</span>
+      <span class="nums">
+        <span>${ICO_ME}${mil(p.me)}</span>
+        <span>${ICO_CO}${p.co}</span>
+      </span>
+    </span>
+  </button>`).join('') + '<p class="vacio" id="vacio" hidden>No hay publicaciones de ese tipo.</p>';
+
+document.getElementById('filtros').innerHTML = GRUPOS.map((g,i)=>
+  `<button class="filtro" type="button" data-g="${g}" aria-pressed="${i===0}">${g}</button>`).join('');
+
+const celdas = [...document.querySelectorAll('.pub')];
+document.getElementById('filtros').addEventListener('click', e=>{
+  const b = e.target.closest('.filtro'); if(!b) return;
+  const g = b.dataset.g;
+  document.querySelectorAll('.filtro').forEach(x=>x.setAttribute('aria-pressed', String(x===b)));
+  let vistos = 0;
+  celdas.forEach(c=>{
+    const ok = g==='Todas' || c.dataset.g===g;
+    c.hidden = !ok; if(ok) vistos++;
+  });
+  document.getElementById('vacio').hidden = vistos > 0;
+});
+
+/* Las celdas llegan desordenadas y se acomodan. El estado por defecto
+   es el colocado: el desorden lo pone el JS, así que si el script no
+   corre la parrilla se ve igual de bien. */
+(function(){
+  if(quieto) return;
+  const muelle = p => p<=0 ? 0 : 1-Math.exp(-7.2*p)*(1+7.2*p);
+  /* El desvío lateral va topado a 12px porque el margen de la página en
+     móvil son 16: con ±26 la primera columna salía del lienzo y
+     parpadeaba una barra horizontal durante la entrada. Se topa la
+     causa en vez de recortar el contenedor, que se comería el anillo
+     de foco de las celdas. */
+  const piezas = celdas.map((el,i)=>({el,
+    dx:(Math.random()*2-1)*12, dy:14+Math.random()*26,
+    esp:(i%4)*0.045 + Math.floor(i/4)*0.07 + Math.random()*0.07}));
+  let t0=null;
+  const pon = t => {
+    let listas=0;
+    for(const p of piezas){
+      const k = muelle(t - p.esp);
+      if(k>0.999){ listas++; p.el.style.transform=''; p.el.style.opacity=''; continue; }
+      const u = 1-k;
+      p.el.style.transform = `translate3d(${p.dx*u}px, ${p.dy*u}px, 0)`;
+      p.el.style.opacity = (0.25 + 0.75*k).toFixed(3);
+    }
+    return listas === piezas.length;
+  };
+  const cuadro = ts => { if(t0===null) t0=ts; if(pon((ts-t0)/1000)) return;
+    requestAnimationFrame(cuadro); };
+  pon(0);
+  const obs = new IntersectionObserver(es=>{
+    if(es[0].isIntersecting){ obs.disconnect(); requestAnimationFrame(cuadro); }
+  },{threshold:.08});
+  obs.observe(document.getElementById('parrilla'));
+})();
+
+/* ═══ (02) EL MOTOR DE CONVERSACIÓN ══════════════════════════
+   Una sola máquina, dos guiones. Cada nodo dice qué manda el bot y
+   qué puede contestar el visitante; la opción elegida nombra el
+   siguiente nodo. No hay bucle ni vídeo: el recorrido lo decide quien
+   toca, y por eso se puede volver y tomar otra rama. */
+const ICO_RG = '<svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></svg>';
+const PIC = '<span class="av-d pic"><svg viewBox="0 0 14 14"><path d="M7 1c2 1 1 2.4 1.6 3C10 5.3 12 6.2 12 8.6 12 11 9.8 13 7 13S2 11 2 8.6C2 6 4.4 4.6 5.4 3 6 2 5.4 1.6 7 1Z"/></svg>Picante</span>';
+const VEG = '<span class="av-d veg"><svg viewBox="0 0 14 14"><path d="M12.6 1.4C7 1 2.4 3 1.6 7.4c-.4 2.3.5 4.3 1.8 5.2.5-2.6 2-5 4.4-6.6-1.8 1.9-3 4.3-3.3 6.9 2 .6 4.6-.2 6.2-2.4C13.3 8 13.2 4 12.6 1.4Z"/></svg>Vegano</span>';
+
+const CARTA_HTML = `La carta de hoy:
+  <ul>
+    <li><i>1</i>Pulpo a la brasa${PIC}<span class="precio">$62.000</span></li>
+    <li><i>2</i>Costilla, naranjo<span class="precio">$54.000</span></li>
+    <li><i>3</i>Trucha de Guatapé<span class="precio">$48.000</span></li>
+    <li><i>4</i>Berenjena entera${VEG}<span class="precio">$36.000</span></li>
+    <li><i>5</i>Postre del día<span class="precio">$22.000</span></li>
+  </ul>`;
+
+const GUION_WA = {
+  inicio:{
+    bot:['Hola 👋 Soy el asistente de Rescoldo. Contesto a toda hora; si hace falta una persona, te paso con ella.',
+         'Responde con el número de lo que necesitas:'],
+    regla:'Mensaje nuevo sin conversación abierta → <b>menú principal</b>',
+    opts:[['1','Reservar mesa','personas'],['2','Ver la carta','carta'],
+          ['3','Horarios y cómo llegar','donde'],['4','Hablar con una persona','humano']]
+  },
+  personas:{
+    bot:['Perfecto. ¿Para cuántas personas?'],
+    regla:'Opción <b>1</b> → flujo de reserva, paso 1 de 3',
+    opts:[['','2','dia'],['','4','dia'],['','6','dia'],['','Más de 6','grupo']],
+    guarda:'personas'
+  },
+  dia:{
+    bot:['¿Qué día?'],
+    regla:'Paso 2 de 3. La agenda se consulta en vivo, no se promete lo que no hay',
+    opts:[['','Hoy','hora'],['','Mañana','hora'],['','Este sábado','hora']],
+    guarda:'dia'
+  },
+  hora:{
+    bot:['Quedan estas horas. El turno es único, así que la mesa es tuya toda la noche.'],
+    regla:'Paso 3 de 3. Solo se ofrecen las horas con cupo real',
+    opts:[['','19:00','confirma'],['','20:30','confirma'],['','21:45','confirma']],
+    guarda:'hora'
+  },
+  confirma:{
+    bot:(c)=>[`Lista. Te esperamos.
+      <div class="tarj">
+        <div class="fila"><span>Personas</span><span>${esc(c.personas||'4')}</span></div>
+        <div class="fila"><span>Día</span><span>${esc(c.dia||'Hoy')}</span></div>
+        <div class="fila"><span>Hora</span><span>${esc(c.hora||'20:30')}</span></div>
+        <div class="fila"><span>Código</span><span>RSC-4471</span></div>
+      </div>`,
+      'Te llega un recordatorio dos horas antes. Si algo cambia, responde <b>CAMBIAR</b> y lo movemos.'],
+    regla:'Reserva escrita en la agenda → confirmación, código y recordatorio programado',
+    opts:[['','Ver la carta','carta'],['','Volver al menú','inicio']]
+  },
+  grupo:{
+    bot:['Para más de seis preferimos armarlo a mano: hay mesa larga, pero toca cuadrar la cocina.',
+         'Te paso con Marcela, que lleva los grupos.'],
+    regla:'Grupo grande → <b>no</b> lo cierra el bot, pasa a una persona',
+    opts:[['','Está bien','humano'],['','Volver al menú','inicio']]
+  },
+  carta:{
+    bot:[CARTA_HTML,
+         'El postre cambia a diario. Si tienes alguna restricción, dime cuál y te digo qué te sirve.'],
+    regla:'Opción <b>2</b> → carta del día, con los avisos de picante y vegano',
+    opts:[['','Reservar mesa','personas'],['','Soy vegano','vegano'],['','Volver al menú','inicio']]
+  },
+  vegano:{
+    bot:['La berenjena entera es vegana: tahini, miel de caña y ajonjolí, nada de origen animal.',
+         'El postre depende del día; cuando llegues te decimos si el de hoy sirve. Y si avisas al reservar, la cocina te prepara uno.'],
+    regla:'Palabra clave <b>vegano</b> → filtra la carta y marca la reserva con la restricción',
+    opts:[['','Reservar mesa','personas'],['','Volver al menú','inicio']]
+  },
+  donde:{
+    bot:['Estamos en la Carrera 35 #8—14, Laureles. Hay parqueadero en la 34.',
+         'De martes a sábado, de 19:00 a 23:00. Domingo y lunes cerramos.'],
+    regla:'Opción <b>3</b> → ficha del local, siempre la misma respuesta',
+    opts:[['','Reservar mesa','personas'],['','Volver al menú','inicio']]
+  },
+  humano:{
+    bot:['Listo, le escribí a Marcela. Contesta en menos de diez minutos dentro del horario.',
+         'Mientras tanto te dejo la conversación abierta; no tienes que repetir nada.'],
+    regla:'Derivación → la persona recibe el historial completo, el visitante no repite nada',
+    opts:[['','Volver al menú','inicio']],
+    estado:'Marcela está escribiendo…'
+  }
+};
+
+const GUION_IG = {
+  inicio:{
+    bot:['<b>Comentario nuevo</b> en la publicación de las 13:30:',
+         '<b>@valentina.rs</b> · «se ve increíble 😍 cuánto cuesta la costilla?»'],
+    regla:'El comentario entra. La regla busca <code>precio · cuánto · vale · carta</code>',
+    opts:[['','Disparar la regla','dispara']]
+  },
+  dispara:{
+    bot:['Respondido en público: «Te lo mandamos al directo 🔥»',
+         'Y en el directo, de una:'],
+    regla:'Coincide <b>«cuánto cuesta»</b> → responder el comentario y abrir el mensaje directo',
+    opts:[['','Ver el directo','directo']]
+  },
+  directo:{
+    bot:['Hola Valentina 👋 La costilla de naranjo está en $54.000. Esta es la carta de hoy:',
+         CARTA_HTML,
+         '¿Te aparto mesa?'],
+    regla:'Mensaje directo con la carta del día, siempre actualizada desde la misma fuente',
+    opts:[['','Sí, para el sábado','reserva'],['','Solo preguntaba','cierra']]
+  },
+  reserva:{
+    bot:['Perfecto. ¿Para cuántas personas el sábado?',
+         'Desde aquí sigue igual que en WhatsApp: es el mismo flujo, solo cambia el canal.'],
+    regla:'El flujo de reserva es uno solo. Instagram y WhatsApp entran al mismo sitio',
+    opts:[['','Reiniciar la muestra','inicio']]
+  },
+  cierra:{
+    bot:['Sin problema. Te dejo el enlace de la carta por si acaso, y aquí estamos.',
+         'Quedó marcada como <b>interesada</b>: si no vuelve en catorce días, le llega una invitación.'],
+    regla:'Conversación cerrada sin reserva → se etiqueta y entra a seguimiento a 14 días',
+    opts:[['','Reiniciar la muestra','inicio']]
+  }
+};
+
+function Chat(idHilo, idOpts, guion, idEstado){
+  const hilo = document.getElementById(idHilo);
+  const opts = document.getElementById(idOpts);
+  const estado = idEstado ? document.getElementById(idEstado) : null;
+  const estadoBase = estado ? estado.textContent : '';
+  let ctx = {}, turno = 0, temporizadores = [], actual = null;
+
+  const limpia = () => { temporizadores.forEach(clearTimeout); temporizadores = []; };
+  const espera = (fn, ms) => temporizadores.push(setTimeout(fn, ms));
+  const abajo = () => { hilo.scrollTop = hilo.scrollHeight; };
+  /* La hora no es la del visitante: es la de la conversación. Con el
+     reloj real, quien abra la página a la una de la madrugada ve un
+     chat de restaurante a esa hora y la ficción se cae. Arranca a las
+     19:04 y avanza un minuto cada dos mensajes. */
+  let reloj = 19*60 + 4, paso = 0;
+  const hora = () => {
+    if(++paso % 2 === 0) reloj++;
+    return `${Math.floor(reloj/60)}:${String(reloj%60).padStart(2,'0')}`;
+  };
+
+  function burbuja(html, mia){
+    const d = document.createElement('div');
+    d.className = 'msj ' + (mia ? 'mio' : 'de-ellos');
+    d.innerHTML = html + `<span class="sello-h">${hora()}</span>`;
+    hilo.appendChild(d); abajo();
+  }
+  function reglaDe(txt){
+    if(!document.getElementById('verReglas').checked) return;
+    const d = document.createElement('div');
+    d.className = 'regla';
+    d.innerHTML = ICO_RG + `<span><b>Regla:</b> ${txt}</span>`;
+    hilo.appendChild(d); abajo();
+  }
+  function escribiendo(){
+    const d = document.createElement('div');
+    d.className = 'escribe'; d.setAttribute('aria-hidden','true');
+    d.innerHTML = '<i></i><i></i><i></i>';
+    hilo.appendChild(d); abajo();
+    return d;
+  }
+  /* Mientras el bot "escribe" no hay opciones porque la conversación
+     todavía no ofrece ninguna — no es un bloqueo, es el estado real.
+     Por eso el retardo es corto y Reiniciar nunca se desactiva. */
+  function pintaOpts(lista, miTurno){
+    if(miTurno !== turno) return;
+    opts.innerHTML = lista.map(([n,t,d])=>
+      `<button class="opt" type="button" data-destino="${d}" data-txt="${esc(t)}">${
+        n ? `<i>${n}</i>` : ''}${esc(t)}</button>`).join('');
+  }
+  function esperando(){ opts.innerHTML = '<span class="espera">Escribiendo…</span>'; }
+
+  function nodo(clave){
+    const n = guion[clave];
+    if(!n) return;
+    actual = n;
+    const miTurno = ++turno;
+    limpia();
+    esperando();
+    if(estado) estado.textContent = n.estado || estadoBase;
+    const mensajes = typeof n.bot === 'function' ? n.bot(ctx) : n.bot;
+    /* Tres mensajes seguidos sumaban 2,4 s antes de que apareciera la
+       primera opción. En un chat real eso es verosímil; en una muestra
+       es una espera. Se recorta sin perder el gesto de «está
+       escribiendo». */
+    let t = 0;
+    mensajes.forEach((m, i)=>{
+      const pausa = i === 0 ? 220 : 380;
+      t += pausa;
+      espera(()=>{
+        if(miTurno !== turno) return;
+        const esc_ = escribiendo();
+        espera(()=>{
+          if(miTurno !== turno){ esc_.remove(); return; }
+          esc_.remove(); burbuja(m, false);
+          if(i === mensajes.length - 1){
+            if(n.regla) reglaDe(n.regla);
+            pintaOpts(n.opts, miTurno);
+          }
+        }, quieto ? 60 : 300);
+      }, t);
+      t += quieto ? 60 : 300;
+    });
+  }
+
+  opts.addEventListener('click', e=>{
+    const b = e.target.closest('.opt'); if(!b) return;
+    const destino = b.dataset.destino;
+    /* El dato se guarda en la clave que pidió el nodo DONDE ESTAMOS, no
+       buscándolo por el guion: dos nodos pueden ofrecer la misma opción
+       y la búsqueda devolvía el primero que coincidiera. */
+    if(actual && actual.guarda) ctx[actual.guarda] = b.dataset.txt;
+    if(destino === 'inicio') ctx = {};
+    burbuja(esc(b.dataset.txt), true);
+    opts.innerHTML = '';
+    espera(()=>nodo(destino), 260);
+  });
+
+  this.reinicia = () => { limpia(); turno++; ctx = {}; reloj = 19*60 + 4; paso = 0;
+    hilo.innerHTML = ''; nodo('inicio'); };
+  this.arranca  = () => { if(!hilo.children.length) nodo('inicio'); };
+}
+
+const chats = {
+  wa: new Chat('hilo-wa','opts-wa',GUION_WA,'est-wa'),
+  ig: new Chat('hilo-ig','opts-ig',GUION_IG,'est-ig')
+};
+document.querySelectorAll('[data-reset]').forEach(b=>
+  b.addEventListener('click', ()=>chats[b.dataset.reset].reinicia()));
+
+/* Arrancan al entrar en pantalla: si el visitante llega con el scroll
+   abajo, la conversación no se le pierde arriba. */
+(function(){
+  const obs = new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(!e.isIntersecting) return;
+      const cual = e.target.id === 'hilo-wa' ? 'wa' : 'ig';
+      chats[cual].arranca(); obs.unobserve(e.target);
+    });
+  },{threshold:.25});
+  ['hilo-wa','hilo-ig'].forEach(id=>obs.observe(document.getElementById(id)));
+})();
+
+/* El interruptor de reglas es retroactivo hacia adelante: no reescribe
+   lo ya dicho, pero anota lo que venga. Reiniciar lo aplica a todo. */
+
+/* ═══ (03) LAS REGLAS ════════════════════════════════════════ */
+const REGLAS = [
+  ['rayo','Comentario con intención de compra','Si un comentario trae alguna de estas palabras —<code>precio</code> <code>cuánto</code> <code>vale</code> <code>carta</code>— se responde en público y se manda la carta al directo.'],
+  ['reloj','Fuera de horario','De 23:00 a 11:00 el bot atiende solo, avisa a qué hora contesta una persona y deja la conversación abierta.'],
+  ['mesa','Reserva de principio a fin','Personas, día y hora contra la agenda real. Confirma con código y programa el recordatorio de dos horas antes.'],
+  ['mano','Cuándo NO contesta el bot','Grupos de más de seis, quejas y cualquier mensaje con la palabra <code>alergia</code> pasan a una persona con el historial completo.'],
+  ['hoja','Restricciones alimentarias','Las palabras <code>vegano</code> <code>vegetariano</code> <code>sin gluten</code> filtran la carta y quedan marcadas en la reserva.'],
+  ['sobre','Seguimiento a catorce días','Quien pregunta y no reserva queda etiquetado. A los catorce días recibe una invitación, una sola vez.']
+];
+const GLIFOS = {
+  rayo:'<path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/>',
+  reloj:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  mesa:'<path d="M3 10h18M5 10v10M19 10v10M4 6h16l1 4H3l1-4Z"/>',
+  mano:'<path d="M8 11V5a2 2 0 1 1 4 0v6m0-4a2 2 0 1 1 4 0v4m0-2a2 2 0 1 1 4 0v6a6 6 0 0 1-6 6h-2a6 6 0 0 1-6-6v-5a2 2 0 1 1 4 0"/>',
+  hoja:'<path d="M20 4C10 4 4 9 4 16c0 2 1 3 2 4 1-6 5-10 10-12-4 3-7 7-8 12 5 1 12-2 12-16Z"/>',
+  sobre:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>'
+};
+document.getElementById('reglas').innerHTML = REGLAS.map(([g,t,d])=>`
+  <div class="rg">
+    <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24">${GLIFOS[g]}</svg></span>
+    <div><b>${esc(t)}</b><span>${d}</span></div>
+  </div>`).join('');
+
+/* ═══ (04) EL REPORTE ════════════════════════════════════════ */
+document.getElementById('hilo-rep').innerHTML = `
+  <div class="msj de-ellos" style="max-width:100%;animation:none">
+    <b>Cierre de hoy · martes</b><br>
+    23 reservas confirmadas, 2 caídas. 96 platos salieron de la parrilla.<br><br>
+    De 184 mensajes, el bot resolvió 143 y 41 pasaron a Marcela. La mediana de
+    primera respuesta fue de 4 segundos.<br><br>
+    Lo más pedido: <b>costilla, naranjo</b> (31). El pulpo se acabó a las 21:10
+    y quedaron 6 personas pidiéndolo.<br>
+    <span class="sello-h">21:30</span>
+  </div>`;
+</script>
+</body>
+</html>
