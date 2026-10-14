@@ -543,6 +543,29 @@ lqs-trazo:defined>img{display:none}
 .paq-serv li::before{content:"✓";position:absolute;left:0;top:-1px;color:var(--c);font-weight:800}
 .paq-cta{align-self:flex-start;margin-top:auto}
 
+/* ---------- muestras en vivo (demos) ----------
+   La portada es una foto de la propia página con un velo de su color (--t);
+   el color del demo solo vive en el velo, la etiqueta, el foco y la sombra
+   dura del hover —guiño a las propias demos—, nunca en una franja lateral. */
+.proy-rej{display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:var(--gap)}
+.proy{--t:var(--tinta);text-decoration:none;color:var(--tinta);background:var(--papel);
+  border:2px solid var(--tinta);border-radius:var(--r-cont);overflow:hidden;
+  display:flex;flex-direction:column;transition:transform .14s ease,box-shadow .14s ease}
+.proy:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 -1px var(--t)}
+.proy:focus-visible{outline:3px solid var(--t);outline-offset:3px}
+.proy-vis{position:relative;aspect-ratio:16/10;overflow:hidden;background:#0b0b0c}
+.proy-vis img{width:100%;height:100%;object-fit:cover;display:block;
+  transition:transform .5s cubic-bezier(.22,1,.3,1)}
+.proy:hover .proy-vis img{transform:scale(1.05)}
+.proy-vis::after{content:"";position:absolute;inset:0;mix-blend-mode:multiply;opacity:.26;
+  background:linear-gradient(200deg,transparent 34%,rgba(13,13,15,.6)),
+             linear-gradient(0deg,var(--t),var(--t))}
+.proy-cuerpo{padding:15px 18px 18px;display:flex;flex-direction:column;gap:5px}
+.proy-sector{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--t)}
+.proy-nom{font-family:'Syne';font-weight:800;font-size:20px;letter-spacing:-.025em;line-height:1.05}
+.proy-tag{font-size:13px;line-height:1.4;color:var(--humo)}
+.proy-ver{margin-top:8px;font-size:11px;font-weight:600;letter-spacing:.03em;color:var(--t)}
+
 /* ---------- 12 documentos legales ---------- */
 .doc-ind{grid-column:span 6;display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;
   background:var(--crema);border-radius:var(--r-bloque);padding:16px 22px;
@@ -861,6 +884,16 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
 
 <main class="wrap" id="inicio" data-pagina="muestras">
 <section class="seccion pagina-encab"><div class="eyebrow">Muestras</div><h1 class="tit-pagina">Lo que hemos hecho</h1><p class="dim bajada">Por área, filtrable, y con buscador para cuando ya sabes qué necesitas.</p></section>
+
+<!-- ============ MUESTRAS EN VIVO (demos) ============ -->
+<section class="seccion" id="proyectos">
+  <div class="eyebrow">Muestras en vivo · páginas de una sola pantalla, hechas por LQS</div>
+  <h2 style="margin-bottom:6px">Cuatro mundos, cuatro páginas</h2>
+  <p class="dim" style="margin:0 0 20px;max-width:62ch">Cada una toma una referencia distinta y la lleva a otro oficio, con fotografía
+    real y sin librerías. Ábrelas: se leen enteras y el movimiento se apaga si pides menos animación.</p>
+  <div class="proy-rej"><a class="proy" style="--t:#1b35ff" href="demos/tienda-ropa.html" target="_blank" rel="noopener"><span class="proy-vis"><img src="demos/img/bolsos/rojo-noche.webp" alt="Muestra: Atelier Norte · Tienda de bolsos" loading="lazy"></span><span class="proy-cuerpo"><span class="proy-sector mono">Tienda de bolsos</span><span class="proy-nom">Atelier Norte</span><span class="proy-tag">Marroquinería suiza: la tipografía se sale del lienzo y el mosaico se arma solo.</span><span class="proy-ver mono">Ver muestra en vivo →</span></span></a><a class="proy" style="--t:#E0531C" href="demos/restaurante.html" target="_blank" rel="noopener"><span class="proy-vis"><img src="demos/img/mesa/salsa-vertida.webp" alt="Muestra: Rescoldo · Restaurante" loading="lazy"></span><span class="proy-cuerpo"><span class="proy-sector mono">Restaurante</span><span class="proy-nom">Rescoldo</span><span class="proy-tag">La carta es una rueda: gira con el scroll y cada plato abre su ficha al llegar al frente.</span><span class="proy-ver mono">Ver muestra en vivo →</span></span></a><a class="proy" style="--t:#7b5cff" href="demos/revista-moda.html" target="_blank" rel="noopener"><span class="proy-vis"><img src="demos/img/moda/ilu-cinco.webp" alt="Muestra: Tendido · Revista de moda" loading="lazy"></span><span class="proy-cuerpo"><span class="proy-sector mono">Revista de moda</span><span class="proy-nom">Tendido</span><span class="proy-tag">Un tendido de imágenes que se arma solo y seis ilustraciones, cada una con su halo de color.</span><span class="proy-ver mono">Ver muestra en vivo →</span></span></a><a class="proy" style="--t:#C65A16" href="demos/mezcal.html" target="_blank" rel="noopener"><span class="proy-vis"><img src="demos/img/agave/campo.webp" alt="Muestra: Casa Tepemete · Mezcal" loading="lazy"></span><span class="proy-cuerpo"><span class="proy-sector mono">Mezcal</span><span class="proy-nom">Casa Tepemete</span><span class="proy-tag">Destilería de mezcal: el degradé del horno y rosetas de agave que crecen solas en cada visita.</span><span class="proy-ver mono">Ver muestra en vivo →</span></span></a></div>
+</section>
+
 
 <!-- ============ EXPLORA POR ÁREA ============ -->
 <section class="seccion" id="areas-explora">

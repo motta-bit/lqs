@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cuatro mundos</title>
+<meta name="description" content="Cuatro páginas de una sola pantalla hechas por LQS: cada una adapta una referencia distinta y la lleva a otro oficio.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Rubik:wght@400;500;700&family=IBM+Plex+Mono:wght@400&display=swap">
+<style>
+:root{
+  --fondo:#0d0d0f; --tarjeta:#1a1720; --tiza:#fdfbf7; --gris:#8b8593;
+  --linea:rgba(253,251,247,.12);
+  --disp:'Syne',system-ui,sans-serif; --cuerpo:'Rubik',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+img{display:block;max-width:100%}
+body{background:var(--fondo);color:var(--tiza);font-family:var(--cuerpo);
+  line-height:1.6;-webkit-font-smoothing:antialiased;
+  padding:clamp(20px,5vw,60px);min-height:100dvh}
+.env{max-width:1100px;margin:0 auto;display:flex;flex-direction:column;
+  gap:clamp(26px,4vw,48px)}
+header h1{font-family:var(--disp);font-weight:800;
+  font-size:clamp(2.1rem,6vw,3.6rem);line-height:1;letter-spacing:-.04em}
+header p{color:var(--gris);max-width:58ch;margin-top:12px;font-size:.98rem}
+.rejilla{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr))}
+a.caja{text-decoration:none;color:inherit;background:var(--tarjeta);
+  border:1px solid var(--linea);border-radius:20px;overflow:hidden;
+  display:flex;flex-direction:column;
+  box-shadow:5px 5px 0 rgba(26,23,32,.5);
+  transition:transform .14s ease, box-shadow .14s ease}
+a.caja:hover{transform:translate(2px,2px);box-shadow:3px 3px 0 var(--tono)}
+a.caja:active{transform:translate(4px,4px);box-shadow:1px 1px 0 var(--tono)}
+a.caja:focus-visible{outline:3px solid var(--tono);outline-offset:3px}
+/* La muestra ya no es un degradé que imita la página: es una foto de
+   la propia página. Encima, un velo con el color de cada una, para
+   que las cuatro tarjetas se lean como una serie y no como cuatro
+   fotos sueltas. */
+.muestra{position:relative;height:142px;overflow:hidden;background:#0b0b0c}
+.muestra img{width:100%;height:100%;object-fit:cover;display:block;
+  transition:transform .5s cubic-bezier(.22,1,.3,1)}
+a.caja:hover .muestra img{transform:scale(1.05)}
+.muestra::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(200deg,transparent 32%,rgba(13,13,15,.72)),
+             linear-gradient(0deg,var(--tono),var(--tono));
+  mix-blend-mode:multiply;opacity:.3}
+.cuerpo{padding:18px 20px 20px;display:flex;flex-direction:column;gap:5px}
+/* El rótulo NO usa --tono. Ese color está elegido para la sombra dura
+   y el foco, donde solo tiene que verse como forma; de texto a .62rem
+   sobre la tarjeta oscura, el azul #1b35ff se queda en 1,9:1. --rotulo
+   es la versión aclarada de cada uno, ya medida contra #1a1720. */
+.cuerpo i{font-style:normal;font-family:var(--mono);font-size:.62rem;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--rotulo,var(--tono))}
+.cuerpo h2{font-family:var(--disp);font-weight:700;font-size:1.18rem;
+  letter-spacing:-.025em}
+.cuerpo p{font-size:.86rem;color:var(--gris)}
+.cuerpo small{margin-top:9px;padding-top:10px;border-top:1px solid var(--linea);
+  font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;color:var(--gris)}
+footer{color:var(--gris);font-size:.82rem;padding-top:8px;max-width:70ch}
+</style>
+</head>
+<body>
+<div class="env">
+
+  <header>
+    <h1>Cuatro mundos</h1>
+    <p>Cuatro páginas de una sola pantalla. Cada una adapta una referencia
+      distinta y la lleva a un oficio que no era el suyo, para ver hasta dónde
+      aguanta el lenguaje antes de romperse. Las cuatro van con fotografía real.</p>
+  </header>
+
+  <div class="rejilla">
+
+    <a class="caja" href="tienda-ropa.html"
+       style="--tono:#1b35ff;--rotulo:#8d99ff">
+      <div class="muestra"><img src="img/bolsos/rojo-noche.webp" alt="Bolso rojo iluminado a contraluz sobre fondo negro" loading="lazy"></div>
+      <div class="cuerpo">
+        <i>Tienda de bolsos</i>
+        <h2>Atelier Norte</h2>
+        <p>Marroquinería suiza: la tipografía se sale del lienzo y el mosaico se arma solo.</p>
+        <small>Monocromo + un azul · el bolso aparece donde pone el cursor</small>
+      </div>
+    </a>
+
+    <a class="caja" href="restaurante.html"
+       style="--tono:#ff5b1e;--rotulo:#ff8a52">
+      <div class="muestra"><img src="img/mesa/salsa-vertida.webp" alt="Una mano vertiendo salsa oscura sobre una pieza de carne" loading="lazy"></div>
+      <div class="cuerpo">
+        <i>Restaurante</i>
+        <h2>Rescoldo</h2>
+        <p>La carta es una rueda: gira con el scroll y cada plato abre su ficha al llegar al frente.</p>
+        <small>El fuego del fondo cambia de temperatura con cada plato</small>
+      </div>
+    </a>
+
+    <a class="caja" href="revista-moda.html"
+       style="--tono:#7b5cff;--rotulo:#ab96ff">
+      <div class="muestra"><img src="img/moda/ilu-cinco.webp" alt="Ilustración en risografía de cinco figuras de pie" loading="lazy"></div>
+      <div class="cuerpo">
+        <i>Revista de moda e ilustración</i>
+        <h2>Tendido</h2>
+        <p>Un tendido de imágenes que se arma solo y seis ilustraciones, cada una con su halo de color.</p>
+        <small>Todo degradé · la foto aparece donde pone el cursor</small>
+      </div>
+    </a>
+
+    <a class="caja" href="mezcal.html"
+       style="--tono:#d4641f;--rotulo:#e49a62">
+      <div class="muestra"><img src="img/agave/campo.webp" alt="Campo de agave en hileras al pie de un cerro seco" loading="lazy"></div>
+      <div class="cuerpo">
+        <i>Aleatoria</i>
+        <h2>Casa Tepemete</h2>
+        <p>Destilería de mezcal. El degradé del horno y rosetas de agave que crecen solas.</p>
+        <small>Cada visita ve una planta distinta</small>
+      </div>
+    </a>
+
+  </div>
+
+  <footer>Las cuatro son de un solo archivo, sin librerías. Todas responden a
+    <b style="color:var(--tiza);font-weight:500">prefers-reduced-motion</b>: el
+    movimiento se apaga, el color y el contenido no.</footer>
+
+</div>
+</body>
+</html>

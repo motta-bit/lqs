@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rescoldo</title>
+<meta name="description" content="Cocina de brasa: la carta es una rueda que gira con el scroll y abre la ficha del plato al llegar al frente.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,600;1,6..96,400&family=Jost:wght@300;400;500&display=swap">
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   RESCOLDO · la carta como rueda
+
+   Lo que cambió: antes era un pasillo horizontal, un plato por
+   pantalla. Ahora es una RUEDA lateral. Los platos van montados en
+   una circunferencia cuyo centro queda fuera del lienzo, así que
+   solo se ve el arco de este lado; el scroll la hace girar y el
+   plato que llega al frente abre su ficha.
+
+   Por qué una rueda y no un carrusel recto: en una carta el visitante
+   no va «del uno al cinco», va mirando. La rueda deja ver de dónde
+   vienes y qué falta sin sacar nada de la pantalla, y el plato
+   siguiente asoma por abajo antes de que lo elijas.
+
+   Color   carbón #0c0907 · humo #a8988c · lumbre #ffe3b0
+           cada plato trae su brasa, y el fuego del fondo se INTERPOLA
+           de un plato al siguiente: cambia contigo, no por un corte
+   Tipo    Bodoni Moda, cuyo contraste de asta fina y gruesa es el
+           mismo de llama y sombra; Jost 300 para lo que no grita
+   ═══════════════════════════════════════════════════════════════ */
+:root{
+  --carbon:#0c0907; --humo:#a8988c; --lumbre:#ffe3b0;
+  --linea:rgba(255,227,176,.16);
+  --picante:#ff7a4d; --vegano:#9fd06a;
+  --disp:'Bodoni Moda',Georgia,serif;
+  --cuerpo:'Jost',system-ui,sans-serif;
+  --m:clamp(18px,4.4vw,70px);
+  --f1:255,91,30; --f2:255,165,25;   /* el fuego vivo: lo mueve el scroll */
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--carbon);color:var(--lumbre);font-family:var(--cuerpo);
+  font-weight:300;line-height:1.6;-webkit-font-smoothing:antialiased;
+  overflow-x:hidden}
+::selection{background:rgb(var(--f1));color:var(--carbon)}
+img{display:block;max-width:100%}
+
+#fuego{position:fixed;inset:0;z-index:0;width:100%;height:100%;display:block;
+  pointer-events:none}
+.velo{position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(130% 92% at 50% 114%,transparent 4%,rgba(12,9,7,.44) 42%,rgba(12,9,7,.84) 78%)}
+
+/* ── portada ────────────────────────────────────────────────── */
+.portada{position:relative;z-index:2;min-height:100dvh;display:grid;
+  grid-template-rows:auto 1fr auto;padding:var(--m)}
+.barra{display:flex;flex-wrap:wrap;gap:14px;align-items:baseline;
+  justify-content:space-between;font-size:.7rem;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--humo)}
+.barra b{font-family:var(--disp);font-weight:600;font-size:1.15rem;
+  letter-spacing:.14em;color:var(--lumbre)}
+.portada .centro{align-self:center;max-width:min(100%,900px)}
+.portada h1{font-family:var(--disp);font-weight:400;
+  font-size:clamp(2.8rem,8.4vw,6.4rem);line-height:.98;letter-spacing:-.02em;
+  max-width:14ch;text-wrap:balance}
+.portada h1 i{font-style:italic;color:rgb(var(--f2))}
+.portada p{margin-top:20px;font-size:clamp(.96rem,1.5vw,1.14rem);
+  max-width:40ch;color:var(--humo)}
+.baja{display:flex;flex-wrap:wrap;gap:10px 28px;align-items:center;
+  padding-top:18px;border-top:1px solid var(--linea);
+  font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--humo)}
+.baja .pt{width:6px;height:6px;border-radius:50%;background:rgb(var(--f1));
+  box-shadow:0 0 12px rgb(var(--f1));animation:late 2.4s ease-in-out infinite}
+@keyframes late{0%,100%{opacity:.4}50%{opacity:1}}
+.baja .flecha{margin-left:auto;display:flex;align-items:center;gap:9px;color:var(--lumbre)}
+.baja .flecha i{font-style:normal;animation:cae 1.9s ease-in-out infinite}
+@keyframes cae{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(4px);opacity:1}}
+
+/* ── LA RUEDA ───────────────────────────────────────────────────
+   Una pista alta que se queda pegada mientras la rueda gira. El alto
+   de la pista ES el recorrido. El scroll no se secuestra: quien
+   quiera salir sigue bajando y sale. */
+.pista{position:relative;z-index:2}
+.pegado{position:sticky;top:0;height:100dvh;overflow:hidden}
+.escena{position:relative;height:100%;padding:calc(var(--m) + 44px) var(--m)}
+
+/* El centro de la rueda cae fuera del lienzo: `left`/`top` los pone el
+   JS en píxeles porque dependen del alto real de la ventana, no solo
+   del ancho, y un clamp de CSS no sabe de los dos a la vez. */
+.rueda{position:absolute;left:var(--cx);top:var(--cy);width:0;height:0;z-index:1}
+.plato{position:absolute;left:0;top:0;
+  width:var(--tam);height:var(--tam);
+  margin:calc(var(--tam) / -2) 0 0 calc(var(--tam) / -2);
+  border-radius:50%;overflow:hidden;will-change:transform,opacity}
+.plato canvas{width:100%;height:100%;display:block}
+.plato img{position:absolute;inset:7%;width:86%;height:86%;
+  object-fit:cover;border-radius:50%}
+/* El plato del frente lleva el halo. Es lo que ata la ficha de texto a
+   la pieza que la está produciendo. */
+.plato::after{content:'';position:absolute;inset:0;border-radius:50%;
+  box-shadow:inset 0 0 0 1px rgba(255,227,176,.22);
+  opacity:0;transition:opacity .3s}
+.plato.sel::after{opacity:1}
+.plato.sel{box-shadow:0 0 120px -18px rgb(var(--f1))}
+
+/* la muesca: dice dónde está «el frente» antes de que llegue nada */
+.muesca{position:absolute;left:var(--cx);top:var(--cy);z-index:0;
+  width:0;height:0;pointer-events:none}
+.muesca i{position:absolute;right:calc(var(--r) + var(--tam) / 2 + 16px);
+  top:-1px;display:block;width:clamp(22px,4vw,54px);height:1px;
+  background:linear-gradient(90deg,transparent,rgb(var(--f2)))}
+
+/* ── la ficha del plato que está al frente ──────────────────── */
+.fichas{position:relative;z-index:2;max-width:min(100%,42ch);height:100%;
+  display:grid;align-content:center}
+/* La columna de texto no puede pasar del borde izquierdo del plato.
+   Con un ancho fijo de 42ch choca: a 1000px de ventana el radio baja a
+   330 y el plato entra 48px dentro del texto. Atada a la propia
+   geometría de la rueda, el hueco se mantiene a cualquier ancho. */
+@media (min-width:900px){
+  .fichas{max-width:min(42ch,
+    calc(var(--cx) - var(--r) - var(--tam) / 2 - var(--m) - 40px))}
+}
+.ficha{display:flex;flex-direction:column;gap:13px;min-width:0}
+.ficha .idx{font-family:var(--disp);font-style:italic;font-size:1rem;color:rgb(var(--f2))}
+.ficha h2{font-family:var(--disp);font-weight:400;
+  font-size:clamp(1.9rem,5.6vw,4.2rem);line-height:1;letter-spacing:-.02em;
+  text-wrap:balance}
+.ficha .desc{color:var(--humo);max-width:40ch;font-size:clamp(.9rem,1.3vw,1.02rem)}
+.ings{display:flex;flex-wrap:wrap;gap:8px}
+.ings span{font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;
+  padding:7px 13px;border:1px solid var(--linea);border-radius:999px;
+  color:var(--humo);white-space:nowrap}
+.ficha .pie-f{display:flex;flex-wrap:wrap;gap:10px 24px;align-items:baseline;
+  padding-top:13px;border-top:1px solid var(--linea);margin-top:3px}
+.ficha .pz{font-family:var(--disp);font-size:1.45rem;font-variant-numeric:tabular-nums}
+.ficha .nota{font-size:.64rem;letter-spacing:.18em;text-transform:uppercase;color:var(--humo)}
+
+/* ── los avisos ──────────────────────────────────────────────
+   Un aviso dietético es una afirmación, no un adorno: va con su
+   propio color, su propia forma y su texto completo, y nunca
+   depende solo del color para leerse. */
+.avisos{display:flex;flex-wrap:wrap;gap:8px}
+.aviso{display:inline-flex;align-items:center;gap:7px;
+  font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;
+  padding:6px 13px 6px 10px;border-radius:999px;
+  border:1px solid currentColor;white-space:nowrap}
+.aviso svg{width:13px;height:13px;flex:none;fill:currentColor}
+.aviso.picante{color:var(--picante)}
+.aviso.vegano{color:var(--vegano)}
+
+/* el riel: dice dónde estás, cuánto falta, y lleva */
+.riel{position:fixed;left:var(--m);right:var(--m);bottom:20px;z-index:6;
+  display:flex;gap:8px;align-items:center;opacity:0;visibility:hidden;
+  transition:opacity .4s,visibility 0s linear .4s}
+.riel.on{opacity:1;visibility:visible;transition-delay:0s}
+.riel button{all:unset;flex:1;height:32px;cursor:pointer;display:grid;align-items:center}
+.riel button i{display:block;height:2px;background:rgba(255,227,176,.22);
+  position:relative;overflow:hidden;font-style:normal;border-radius:2px}
+.riel button i::after{content:'';position:absolute;inset:0;transform-origin:left;
+  transform:scaleX(0);background:rgb(var(--f1));transition:transform .3s ease}
+.riel button[aria-current="true"] i::after{transform:scaleX(1)}
+.riel button:focus-visible{outline:2px solid rgb(var(--f2));outline-offset:2px}
+.riel .cual{font-family:var(--disp);font-style:italic;font-size:.8rem;
+  color:var(--humo);min-width:6ch;text-align:right;font-variant-numeric:tabular-nums}
+
+/* ── cierre ─────────────────────────────────────────────────── */
+.cierre{position:relative;z-index:2;min-height:72dvh;display:grid;
+  place-content:center;justify-items:center;gap:22px;text-align:center;padding:var(--m)}
+.cierre h2{font-family:var(--disp);font-weight:400;font-style:italic;
+  font-size:clamp(1.8rem,5.6vw,3.8rem);line-height:1.04;max-width:16ch}
+.cierre a{text-decoration:none;font-size:.74rem;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--carbon);
+  background:linear-gradient(104deg,rgb(var(--f2)),rgb(var(--f1)));
+  padding:17px 38px;border-radius:999px;font-weight:500;
+  transition:transform .14s cubic-bezier(.22,1,.3,1),filter .18s}
+.cierre a:hover{filter:brightness(1.1)}
+.cierre a:active{transform:scale(.97)}
+.cierre a:focus-visible{outline:2px solid rgb(var(--f2));outline-offset:4px}
+.cierre small{color:var(--humo);font-size:.74rem;letter-spacing:.14em}
+
+/* ── El estado por defecto es la carta ENTERA, legible ─────────
+   Sin JavaScript las cinco fichas están una debajo de otra con su
+   foto al lado. El apilado y la rueda los monta el propio script
+   (`html.js`), así que si falla no se pierde ni un plato ni un
+   precio. */
+.ficha{padding:clamp(26px,5vw,60px) 0;border-top:1px solid var(--linea)}
+.fichas .ficha:first-child{border-top:0}
+.rueda,.muesca{display:none}
+html.js .ficha{padding:0;border-top:0}
+html.js .rueda,html.js .muesca{display:block}
+/* Apiladas: solo la del frente se ve. Van en la misma celda de la
+   retícula, no en absolute, para que la columna la dimensione la
+   ficha más alta y el texto no salte de sitio al cambiar de plato. */
+html.js .fichas{grid-template-areas:'f'}
+/* En angosto el texto va arriba y la rueda estrictamente debajo: si la
+   ficha se centra, el plato de atrás le pasa por encima a las
+   palabras. El JS saca de esta altura dónde poner el centro. */
+@media (max-width:899px){
+  html.js .fichas{height:auto;align-content:start}
+  html.js .muesca{display:none}
+}
+html.js .ficha{grid-area:f;opacity:0;visibility:hidden;pointer-events:none}
+html.js .ficha.sel{opacity:1;visibility:visible;pointer-events:auto;
+  animation:llega .5s cubic-bezier(.19,1,.22,1) both}
+@keyframes llega{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* ── cuando la rueda no cabe ──────────────────────────────────
+   Dos casos la desmontan: movimiento reducido, y una ventana tan
+   corta que no queda banda libre para un plato legible debajo del
+   texto (un 320×568 con la ficha más alta). Los dos acaban en lo
+   mismo —la carta apilada, cada plato con su foto— así que lo pone
+   una sola clase que decide el JS, en vez de dos bloques iguales.
+   Forzar la rueda en 124px de hueco sería peor que no tenerla. */
+html.apretado .pista{height:auto !important}
+html.apretado .pegado{position:static;height:auto;overflow:visible}
+html.apretado .escena{height:auto;padding:clamp(30px,6vw,70px) var(--m)}
+html.apretado .rueda,html.apretado .muesca{display:none}
+html.apretado .fichas{grid-template-areas:none;height:auto;
+  align-content:start;max-width:min(100%,56ch)}
+html.apretado .ficha{grid-area:auto;opacity:1;visibility:visible;
+  pointer-events:auto;animation:none;
+  padding:clamp(26px,5vw,60px) 0;border-top:1px solid var(--linea)}
+html.apretado .fichas .ficha:first-child{border-top:0}
+html.apretado .riel{display:none}
+
+@media (prefers-reduced-motion:reduce){
+  .baja .pt,.baja .flecha i{animation:none}
+}
+</style>
+</head>
+<body>
+
+<canvas id="fuego" aria-hidden="true"></canvas>
+<div class="velo" aria-hidden="true"></div>
+
+<header class="portada">
+  <div class="barra">
+    <b>Rescoldo</b>
+    <span>Laureles · Medellín</span>
+  </div>
+  <div class="centro">
+    <h1>Trabajamos el <i>fuego</i> hasta que cabe en un bocado</h1>
+    <p>Brasa de naranjo y temperatura sostenida. La carta se cierra cada
+      mañana, cuando ya se sabe qué llegó al mercado.</p>
+  </div>
+  <div class="baja">
+    <span class="pt" aria-hidden="true"></span>
+    <span>Veintidós puestos, un turno</span>
+    <span>Mar a sáb · 19—23</span>
+    <span class="flecha">Gira la carta <i aria-hidden="true">↓</i></span>
+  </div>
+</header>
+
+<section class="pista" id="pista" aria-label="La carta">
+  <div class="pegado">
+    <div class="escena">
+      <div class="fichas" id="fichas"></div>
+      <div class="muesca" aria-hidden="true"><i></i></div>
+      <div class="rueda" id="rueda" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
+
+<nav class="riel" id="riel" aria-label="Platos"></nav>
+
+<section class="cierre">
+  <h2>La reserva se confirma hablando</h2>
+  <a href="#reserva">Llamar al restaurante</a>
+  <small>+57 333 279 1710 · de 15 a 18</small>
+</section>
+
+<script>
+const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* Cada plato trae SU fuego. Ese par de colores es lo que la hoguera
+   interpola al girar de un plato al siguiente: el fondo cambia de
+   temperatura contigo, no de un salto.
+
+   Los avisos son afirmaciones sobre la comida, así que los
+   ingredientes tienen que sostenerlos: la berenjena no lleva nada de
+   origen animal —la miel de caña es jarabe de caña, no de abeja— y el
+   ají de árbol del pulpo es el que justifica el aviso de picante. */
+const CARTA = [
+  {i:'I',  n:'Pulpo a la brasa', pz:'$62.000', f1:[255,91,30],  f2:[255,165,25],
+   d:'Cocción larga a temperatura baja y un golpe final de llama directa. La fibra cede; la piel no.',
+   ing:['Papa criolla','Pimentón quemado','Ají de árbol','Aceite de ajo'],
+   avisos:['picante'],
+   foto:'carbon', alt:'Plato oscuro con un emplatado pequeño sobre un lecho de carbón'},
+  {i:'II', n:'Costilla, naranjo', pz:'$54.000', f1:[214,58,24], f2:[255,124,32],
+   d:'Ocho horas de humo de naranjo a fuego indirecto. Se separa del hueso sin cuchillo.',
+   ing:['Cerdo de montaña','Encurtido de cebolla','Melaza de caña'],
+   avisos:[],
+   foto:'salsa-vertida', alt:'Una mano vertiendo salsa oscura sobre una pieza de carne'},
+  {i:'III',n:'Trucha de Guatapé', pz:'$48.000', f1:[255,138,61], f2:[255,209,102],
+   d:'Entera sobre la brasa, piel contra el calor. Se retira antes de que la carne se cierre.',
+   ing:['Mantequilla de hierbas','Limón asado','Alcaparra'],
+   avisos:[],
+   foto:'cenital-luz', alt:'Plato blanco visto desde arriba, atravesado por una franja de luz'},
+  {i:'IV', n:'Berenjena entera', pz:'$36.000', f1:[164,74,196], f2:[255,124,96],
+   d:'Enterrada en ceniza viva hasta que colapsa sola. Nada de origen animal la toca.',
+   ing:['Tahini de ajonjolí','Miel de caña','Ajonjolí tostado'],
+   avisos:['vegano'],
+   foto:'verde-hoja', alt:'Hoja verde asada sobre una crema clara, en plato oscuro'},
+  {i:'V',  n:'Postre del día', pz:'$22.000', f1:[255,176,86], f2:[255,230,172],
+   d:'Lo define la pastelería cada tarde. Siempre hay dos en carta.',
+   ing:['Cambia a diario'],
+   avisos:[],
+   foto:'burrata', alt:'Cúpula blanca con salsa roja sobre un plato moteado'}
+];
+const N = CARTA.length;
+const PASO = 360 / N;                       // separación entre platos en la rueda
+
+/* Los avisos. El icono va en el marcado, no como fondo de CSS, para que
+   siga ahí en alto contraste y al imprimir; y cada uno lleva su texto,
+   porque un aviso que solo se distingue por el color no es un aviso. */
+const AVISOS = {
+  picante:{t:'Picante', svg:'<path d="M7 1c2 1 1 2.4 1.6 3C10 5.3 12 6.2 12 8.6 12 11 9.8 13 7 13S2 11 2 8.6C2 6 4.4 4.6 5.4 3 6 2 5.4 1.6 7 1Z"/>'},
+  vegano:{t:'Vegano',  svg:'<path d="M12.6 1.4C7 1 2.4 3 1.6 7.4c-.4 2.3.5 4.3 1.8 5.2.5-2.6 2-5 4.4-6.6-1.8 1.9-3 4.3-3.3 6.9 2 .6 4.6-.2 6.2-2.4C13.3 8 13.2 4 12.6 1.4Z"/>'}
+};
+const pinta_aviso = k => `<span class="aviso ${k}">
+  <svg viewBox="0 0 14 14" aria-hidden="true">${AVISOS[k].svg}</svg>${AVISOS[k].t}</span>`;
+
+/* ── las fichas ─────────────────────────────────────────────── */
+document.getElementById('fichas').innerHTML = CARTA.map((p,k)=>`
+  <article class="ficha${k===0?' sel':''}" data-k="${k}">
+    <div class="idx">(${p.i})</div>
+    <h2>${p.n}</h2>
+    <p class="desc">${p.d}</p>
+    ${p.avisos.length?`<div class="avisos">${p.avisos.map(pinta_aviso).join('')}</div>`:''}
+    <div class="ings">${p.ing.map(x=>`<span>${x}</span>`).join('')}</div>
+    <div class="pie-f"><span class="pz">${p.pz}</span><span class="nota">Sale de la parrilla</span></div>
+  </article>`).join('');
+
+/* ── los platos de la rueda ─────────────────────────────────── */
+const rueda = document.getElementById('rueda');
+rueda.innerHTML = CARTA.map((p,k)=>`
+  <div class="plato" data-k="${k}">
+    <canvas aria-hidden="true"></canvas>
+    <img src="img/mesa/${p.foto}.webp" alt="" loading="${k<2?'eager':'lazy'}">
+  </div>`).join('');
+
+/* La brasa de cada plato, dibujada una sola vez: una pieza quieta
+   puede ser única sin costar un cuadro por segundo. */
+document.querySelectorAll('.plato canvas').forEach((cv,k)=>{
+  const p=CARTA[k], g=cv.getContext('2d'), d=Math.min(devicePixelRatio||1,2);
+  const L=420; cv.width=L*d; cv.height=L*d; g.setTransform(d,0,0,d,0,0);
+  const S=L/2;
+  g.fillStyle='#140e0b'; g.fillRect(0,0,L,L);
+  g.globalCompositeOperation='lighter';
+  const anillos=12+k*6;
+  for(let a=0;a<anillos;a++){
+    const t=a/anillos, rad=S*(0.1+t*0.9), ang=k*0.7+t*Math.PI*2.2;
+    const cx=S+Math.cos(ang)*S*0.09*t, cy=S+Math.sin(ang)*S*0.09*t;
+    const gr=g.createRadialGradient(cx,cy,rad*0.5,cx,cy,rad);
+    gr.addColorStop(0,`rgba(${p.f2.join(',')},0)`);
+    gr.addColorStop(.74,`rgba(${p.f1.join(',')},${0.09+0.15*(1-t)})`);
+    gr.addColorStop(1,`rgba(${p.f1.join(',')},0)`);
+    g.fillStyle=gr; g.beginPath(); g.arc(cx,cy,rad,0,7); g.fill();
+  }
+  for(let c=0;c<15+k*7;c++){
+    const ang=Math.random()*7, rad=S*(0.16+Math.random()*0.76);
+    g.fillStyle=`rgba(${p.f2.join(',')},${0.35+Math.random()*0.5})`;
+    g.beginPath(); g.arc(S+Math.cos(ang)*rad,S+Math.sin(ang)*rad,1+Math.random()*3.2,0,7); g.fill();
+  }
+  g.globalCompositeOperation='source-over';
+});
+
+/* ── EL GIRO ────────────────────────────────────────────────────
+   El centro de la rueda cae fuera del lienzo por la derecha, así que
+   solo se ve el arco izquierdo. «El frente» son los 180° —el punto
+   más a la izquierda de la circunferencia—, que es donde el plato
+   queda junto a su ficha.
+
+   Cada plato se coloca con rotate(θ) translateX(R) rotate(−θ): el
+   segundo giro lo devuelve a la vertical, así que viaja por el arco
+   sin voltearse. Una foto de comida boca abajo no es un efecto. */
+const pista=document.getElementById('pista'), riel=document.getElementById('riel');
+const platos=[...document.querySelectorAll('.plato')];
+const fichas=[...document.querySelectorAll('.ficha')];
+let actual=-1, f1=[255,91,30], f2=[255,165,25], G={R:0,T:0,cx:0,cy:0};
+
+riel.innerHTML = CARTA.map((p,k)=>
+  `<button type="button" data-k="${k}" aria-label="Ir a ${p.n}"><i></i></button>`).join('')
+  + '<span class="cual" id="cual"></span>';
+const cual=document.getElementById('cual');
+
+/* Dos geometrías, no una encogida.
+
+   Ancho: el centro cae fuera por la derecha, se ve el arco izquierdo y
+   el frente son los 180° —el punto más a la izquierda—, junto a la
+   ficha. El radio depende del ancho Y del alto: en apaisado corto, un
+   radio sacado solo del ancho se sale por arriba y por abajo.
+
+   Angosto: una rueda lateral en 390px no es una rueda, es un estorbo
+   —el plato de atrás se monta sobre el texto—. Ahí el centro cae por
+   DEBAJO del lienzo, así que se ve el arco de arriba: los platos
+   barren la franja inferior y el frente son los 270°, lo más alto del
+   arco. El centro sale del alto real de la ficha más alta, que cambia
+   con el plato y con el ancho, así que no puede ser un porcentaje. */
+const escena = document.querySelector('.escena');
+const cajaFichas = document.getElementById('fichas');
+
+/* El mínimo por debajo del cual un plato deja de ser un plato y pasa
+   a ser una miniatura. Si no hay esta banda libre, no hay rueda. */
+const MINIMO = 165;
+let apretado = quieto;
+
+function geometria(){
+  const W=innerWidth, H=innerHeight, ancho = W>=900;
+  let R,T,cx,cy,frente;
+  if(ancho){
+    apretado = quieto;
+    R = Math.min(460, Math.max(280, Math.min(W*0.33, H*0.46)));
+    T = R*0.78;  cx = W - R*0.38;  cy = H*0.5;  frente = 180;
+  }else{
+    /* Se mide con la clase quitada: si se consulta el alto de la ficha
+       mientras la página está apilada, sale el alto de las cinco
+       juntas y la rueda no volvería nunca. */
+    document.documentElement.classList.remove('apretado');
+    const pad = parseFloat(getComputedStyle(escena).paddingTop) || 0;
+    /* Las fichas están apiladas en la misma celda y ocultas con
+       visibility, no con display, así que la celda sigue midiendo lo
+       que mide la más alta. Por eso aquí hay un número y no un cero. */
+    const banda = pad + cajaFichas.offsetHeight + 16;   // donde acaba el texto
+    const libre = H - banda;
+    apretado = quieto || libre < MINIMO;
+    R = W*0.52;
+    T = Math.min(W*0.52, Math.max(MINIMO, libre)*0.86);
+    /* El plato va centrado en la banda libre, no colgado del borde de
+       abajo: colgado dejaba 230px de aire muerto entre el precio y el
+       plato. El centro de la rueda se deduce de ahí restando el radio. */
+    cx = W*0.5;  cy = (banda + H)/2 + R;  frente = 270;
+  }
+  document.documentElement.classList.toggle('apretado', apretado);
+  G = { R, T, cx, cy, frente };
+  const s=document.documentElement.style;
+  s.setProperty('--r',  R+'px');
+  s.setProperty('--tam',T+'px');
+  s.setProperty('--cx', cx+'px');
+  s.setProperty('--cy', cy+'px');
+}
+
+function altoPista(){ pista.style.height = apretado ? '' : (N*100)+'vh'; }
+
+const mezcla=(a,b,t)=>a.map((v,i)=>Math.round(v+(b[i]-v)*t));
+
+/* Distancia angular al frente, de 0 a 180. El frente no siempre son
+   los 180°: en angosto la rueda es un dial y el frente son los 270°. */
+const alFrente = a => Math.abs(((a-G.frente)%360+540)%360-180);
+
+function coloca(rho){
+  for(let k=0;k<N;k++){
+    const th = G.frente - k*PASO + rho;
+    /* 110° de margen: con los 72° que separan a dos platos, el vecino
+       queda en 0,35 de cercanía —se ve, pero claramente detrás. Con un
+       margen más corto el vecino desaparecía y la rueda dejaba de
+       leerse como rueda. */
+    const cerca = Math.max(0, 1 - alFrente(th)/110);
+    const esc = 0.58 + 0.42*cerca;
+    const el = platos[k];
+    el.style.transform = `rotate(${th}deg) translateX(${G.R}px) rotate(${-th}deg) scale(${esc.toFixed(3)})`;
+    el.style.opacity = (0.16 + 0.84*cerca).toFixed(3);
+    el.style.zIndex = Math.round(cerca*10);
+  }
+}
+
+function gira(){
+  if(apretado) return;
+  const r=pista.getBoundingClientRect();
+  const total=pista.offsetHeight-innerHeight;
+  if(total<=0) return;
+  const p=Math.min(1,Math.max(0,(-r.top)/total));
+  const bruto=p*(N-1);
+  coloca(bruto*PASO);
+
+  const k=Math.min(N-2,Math.floor(bruto)), t=bruto-k;
+  f1=mezcla(CARTA[k].f1, CARTA[k+1].f1, t);
+  f2=mezcla(CARTA[k].f2, CARTA[k+1].f2, t);
+  const raiz=document.documentElement.style;
+  raiz.setProperty('--f1', f1.join(',')); raiz.setProperty('--f2', f2.join(','));
+
+  const n=Math.round(bruto);
+  if(n!==actual){
+    actual=n;
+    fichas.forEach((f,i)=>f.classList.toggle('sel', i===n));
+    platos.forEach((f,i)=>f.classList.toggle('sel', i===n));
+    riel.querySelectorAll('button').forEach((b,i)=>b.setAttribute('aria-current', i===n?'true':'false'));
+    cual.textContent=`${n+1} / ${N}`;
+  }
+  riel.classList.toggle('on', r.top<innerHeight*0.55 && r.bottom>innerHeight*0.45);
+}
+
+document.documentElement.classList.add('js');
+geometria(); altoPista();
+if(!apretado) coloca(0);
+addEventListener('resize', ()=>{ geometria(); altoPista(); gira(); });
+addEventListener('scroll', ()=>requestAnimationFrame(gira), {passive:true});
+gira();
+
+riel.addEventListener('click', e=>{
+  const b=e.target.closest('button'); if(!b||apretado) return;
+  const k=+b.dataset.k, total=pista.offsetHeight-innerHeight;
+  scrollTo({top: pista.offsetTop + (k/(N-1))*total, behavior:'smooth'});
+});
+
+/* ── LA HOGUERA ────────────────────────────────────────────────
+   Lee los colores vivos de las variables que mueve el scroll, así que
+   el fuego cambia de temperatura al cambiar de plato sin ningún corte.
+   Los lee de una variable de JS, no del CSS computado: consultar el
+   estilo calculado sesenta veces por segundo cuesta más que el fuego. */
+(function(){
+  const cv=document.getElementById('fuego'), g=cv.getContext('2d');
+  let W,H,ch=[],raf=null;
+  const CANT = innerWidth<760 ? 48 : 85;
+  function medir(){
+    const d=Math.min(devicePixelRatio||1,2);
+    W=innerWidth; H=innerHeight;
+    cv.width=W*d; cv.height=H*d; g.setTransform(d,0,0,d,0,0);
+  }
+  const nace=()=>({x:W*(0.5+(Math.random()-0.5)*1.05), y:H+Math.random()*70,
+    r:12+Math.random()*86, sub:0.4+Math.random()*1.6, der:(Math.random()-0.5)*0.4,
+    vida:0, max:230+Math.random()*340, cal:Math.random()});
+  /* Se siembra DESPUÉS de medir. Sembrar antes deja W y H sin definir, las
+     partículas nacen con coordenadas NaN y createRadialGradient revienta en
+     el primer cuadro. */
+  function sembrar(){ ch=Array.from({length:CANT},()=>{const c=nace(); c.vida=Math.random()*c.max; return c;}); }
+
+  function pinta(){
+    g.clearRect(0,0,W,H);
+    g.fillStyle='#0c0907'; g.fillRect(0,0,W,H);
+    g.globalCompositeOperation='lighter';
+    for(const c of ch){
+      c.vida++; c.y-=c.sub; c.x+=c.der; c.der+=(Math.random()-0.5)*0.05;
+      if(c.vida>c.max||c.y<-c.r){ Object.assign(c,nace()); continue; }
+      const k=c.vida/c.max, vive=1-k, rad=c.r*(0.7+k*0.8), col=c.cal>0.5?f2:f1;
+      const gr=g.createRadialGradient(c.x,c.y,0,c.x,c.y,rad);
+      gr.addColorStop(0,`rgba(${col.join(',')},${0.22*vive})`);
+      gr.addColorStop(.45,`rgba(${col.join(',')},${0.11*vive})`);
+      gr.addColorStop(1,`rgba(${col.join(',')},0)`);
+      g.fillStyle=gr; g.beginPath(); g.arc(c.x,c.y,rad,0,7); g.fill();
+    }
+    g.globalCompositeOperation='source-over';
+    raf=requestAnimationFrame(pinta);
+  }
+  function fija(){
+    g.fillStyle='#0c0907'; g.fillRect(0,0,W,H);
+    g.globalCompositeOperation='lighter';
+    for(let i=0;i<34;i++){
+      const x=W*(0.5+(Math.random()-0.5)*0.9), y=H*(0.6+Math.random()*0.5), r=40+Math.random()*110;
+      const gr=g.createRadialGradient(x,y,0,x,y,r);
+      gr.addColorStop(0,'rgba(255,165,25,.12)'); gr.addColorStop(1,'rgba(255,91,30,0)');
+      g.fillStyle=gr; g.beginPath(); g.arc(x,y,r,0,7); g.fill();
+    }
+    g.globalCompositeOperation='source-over';
+  }
+  medir(); sembrar();
+  if(quieto) fija(); else raf=requestAnimationFrame(pinta);
+  addEventListener('resize', ()=>{ medir(); sembrar(); if(quieto) fija(); });
+  document.addEventListener('visibilitychange', ()=>{
+    if(quieto) return;
+    if(document.hidden){ cancelAnimationFrame(raf); raf=null; }
+    else if(!raf) raf=requestAnimationFrame(pinta);
+  });
+})();
+</script>
+</body>
+</html>

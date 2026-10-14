@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tendido</title>
+<meta name="description" content="Moda e ilustración como puesta en escena: un tendido que se arma solo, campos de degradé que respiran y la imagen que aparece donde pone el cursor.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;700;800;900&family=Manrope:wght@300;400;500;700&display=swap">
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   TENDIDO · moda e ilustración
+
+   De dónde viene: la planta y el movimiento son los de Atelier
+   Norte —columna de identidad fija, titular que sube desde su
+   máscara, retícula que se arma con muelle, lámina que sigue al
+   cursor— porque eso era lo que funcionaba. Lo que cambia es el
+   material: aquí la página no es monocroma con un acento, es
+   TODO degradé, y la mitad del contenido son ilustraciones, que
+   son obra y no ornamento, así que mandan sobre su espacio.
+
+   Color   lienzo #07070a. Encima, campos de tres paradas que se
+           mueven: ninguna superficie grande queda plana ni se
+           repite igual dos veces.
+   Tipo    Big Shoulders Display 900 condensada para el cartel;
+           Manrope 300 para rótulos y créditos, que se callan.
+   Ritmo   imagen, color, imagen. El texto no pasa de dos líneas
+           en ningún sitio: esto se pasa, no se lee.
+   ═══════════════════════════════════════════════════════════════ */
+:root{
+  --lienzo:#07070a; --tiza:#f6f4f1; --humo:#8d8795;
+  --linea:rgba(246,244,241,.14);
+  --disp:'Big Shoulders Display',Impact,sans-serif;
+  --cuerpo:'Manrope',system-ui,sans-serif;
+  --col:clamp(16px,4vw,56px);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--lienzo);color:var(--tiza);font-family:var(--cuerpo);
+  font-weight:300;line-height:1.5;-webkit-font-smoothing:antialiased;
+  overflow-x:hidden}
+::selection{background:var(--tiza);color:var(--lienzo)}
+img{display:block;max-width:100%}
+
+/* ── planta ─────────────────────────────────────────────────── */
+/* `min-width:0` en las dos columnas: una pista `1fr` tiene
+   `min-width:auto` y crece hasta caber su contenido; con un titular
+   en `nowrap` eso infla la columna y la página scrollea de lado. */
+.marco{display:grid;grid-template-columns:1fr;min-height:100dvh;
+  position:relative;z-index:1}
+.marco > *{min-width:0}
+@media (min-width:900px){
+  .marco{grid-template-columns:clamp(230px,22vw,320px) 1fr}
+}
+
+/* el aura de fondo: un solo campo para toda la página, por detrás
+   de todo, que se mueve muy despacio */
+/* El sobreancho va SOLO en vertical. Un fixed con `inset:-25%` se
+   sale 98px por cada lado en un móvil y eso cuenta para el ancho
+   scrolleable: aparece una barra horizontal de la nada. Arriba y
+   abajo puede crecer cuanto quiera. */
+.aura{position:fixed;inset:-25% 0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(38% 42% at 14% 18%, #7b5cff, transparent 66%),
+    radial-gradient(34% 38% at 86% 26%, #ff3d9a, transparent 64%),
+    radial-gradient(46% 50% at 52% 92%, #0a3f8f, transparent 70%);
+  opacity:.5; filter:saturate(1.2);
+  animation:deriva 34s ease-in-out infinite alternate}
+@keyframes deriva{
+  from{transform:translate3d(0,0,0) scale(1)}
+  to{transform:translate3d(3%,-4%,0) scale(1.12)}
+}
+
+/* columna fija: la cabecera no se mueve, el número sí */
+.lado{padding:var(--col);display:flex;flex-direction:column;gap:22px;
+  border-bottom:1px solid var(--linea);
+  background:rgba(7,7,10,.5);backdrop-filter:blur(14px)}
+@media (min-width:900px){
+  .lado{position:sticky;top:0;height:100dvh;justify-content:space-between;
+    border-bottom:0;border-right:1px solid var(--linea)}
+}
+.cabeza{font-family:var(--disp);font-weight:900;font-size:clamp(1.9rem,3.4vw,2.6rem);
+  line-height:.86;letter-spacing:-.03em;text-transform:uppercase}
+/* `line-height` explícito: el <i> es hijo de un titular con .86 y lo
+   heredaba, así que sus dos líneas se montaban entre sí y contra el
+   cabezal. Lo que sirve al cartel no sirve al rótulo. */
+.cabeza i{display:block;font-family:var(--cuerpo);font-style:normal;
+  font-size:.56rem;font-weight:400;line-height:1.7;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--humo);margin-top:14px}
+.lado nav{display:flex;flex-direction:column;gap:3px;font-size:.72rem;
+  letter-spacing:.07em}
+.lado nav a{color:var(--humo);text-decoration:none;padding:4px 0;
+  width:max-content;position:relative;transition:color .18s}
+.lado nav a::after{content:'';position:absolute;left:0;right:100%;bottom:2px;
+  height:1px;background:var(--tiza);transition:right .32s cubic-bezier(.22,1,.3,1)}
+.lado nav a:hover{color:var(--tiza)}
+.lado nav a:hover::after{right:0}
+.lado nav a:focus-visible{outline:2px solid var(--tiza);outline-offset:3px}
+.pie-lado{font-size:.62rem;letter-spacing:.1em;color:var(--humo);line-height:1.9;
+  text-transform:uppercase}
+
+/* ── EL TENDIDO: la retícula que se arma sola ─────────────────
+   Las piezas entran giradas y fuera de sitio y cada una se acomoda
+   con su muelle. El azar está en el estado INICIAL —giro, desvío,
+   retardo—, nunca en el final: el destino es una retícula exacta. */
+.tendido{position:relative;display:grid;gap:2px;
+  grid-template-columns:repeat(4,1fr);
+  height:clamp(240px,36vw,420px);overflow:hidden;
+  border-bottom:1px solid var(--linea);background:#111016}
+@media (min-width:760px){.tendido{grid-template-columns:repeat(8,1fr)}}
+.tes{position:relative;overflow:hidden;background:#17161d;will-change:transform}
+.tes img{width:100%;height:100%;object-fit:cover}
+/* un velo de color por encima: unifica diez fotos de diez sesiones
+   distintas en una sola portada */
+.tendido::before{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:linear-gradient(118deg,rgba(123,92,255,.42),transparent 46%,rgba(255,61,154,.38));
+  mix-blend-mode:screen}
+.tendido::after{content:'';position:absolute;left:0;right:0;bottom:0;height:96px;
+  z-index:3;pointer-events:none;
+  background:linear-gradient(to top,rgba(7,7,10,.82),transparent)}
+.tendido .rot{position:absolute;left:var(--col);bottom:18px;z-index:4;
+  font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--tiza)}
+
+/* ── el titular que no cabe ─────────────────────────────────── */
+.grito{padding:clamp(26px,5vw,60px) 0 clamp(20px,4vw,44px) var(--col);
+  overflow:hidden;border-bottom:1px solid var(--linea)}
+.grito h1{font-family:var(--disp);font-weight:900;
+  font-size:clamp(4rem,16vw,12rem);line-height:.8;letter-spacing:-.02em;
+  text-transform:uppercase;white-space:nowrap}
+/* cada palabra sube desde debajo de su propia máscara */
+.mask{display:block;overflow:hidden}
+.mask > span{display:block;transform:translateY(102%);
+  animation:sube .9s cubic-bezier(.19,1,.22,1) forwards}
+.mask:nth-of-type(2) > span{animation-delay:.09s}
+.mask:nth-of-type(3) > span{animation-delay:.18s}
+@keyframes sube{to{transform:translateY(0)}}
+/* La palabra en degradé: el color:transparent va SOLO dentro del
+   @supports. Sin background-clip la palabra quedaría invisible en
+   vez de sólida, y es el titular de la página. */
+.tinte{color:var(--tiza)}
+@supports ((-webkit-background-clip:text) or (background-clip:text)){
+  .tinte{background:linear-gradient(96deg,#ff3d9a,#ffb26b 46%,#7b5cff);
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+}
+.grito .bajo{display:flex;flex-wrap:wrap;gap:10px 34px;align-items:baseline;
+  margin-top:26px;padding-right:var(--col);
+  font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--humo)}
+.grito .bajo b{color:var(--tiza);font-weight:500}
+
+/* ── manifiesto ─────────────────────────────────────────────── */
+.dicho{display:grid;gap:26px;padding:clamp(34px,6vw,76px) var(--col);
+  border-bottom:1px solid var(--linea)}
+@media (min-width:760px){.dicho{grid-template-columns:1fr 1.25fr;gap:56px}}
+.dicho .et{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--humo)}
+.dicho p{font-family:var(--disp);font-weight:700;text-transform:uppercase;
+  font-size:clamp(1.6rem,4vw,3rem);line-height:.98;letter-spacing:-.015em;
+  max-width:18ch}
+.dicho p em{font-style:normal;color:var(--humo)}
+
+/* ── LAS ILUSTRACIONES ────────────────────────────────────────
+   Son obra, no adorno: cada una tiene su propio campo de color y su
+   propia velocidad. Van en una retícula desalineada a propósito, y
+   derivan al hacer scroll a ritmos distintos, así que nunca se ven
+   como una fila de cromos. */
+/* `overflow:clip` por los halos: cada obra proyecta un degradado con
+   `inset:-14%`, que en la primera columna se sale del lienzo y mete
+   una barra horizontal. Va `clip` y no `hidden` porque clip no crea
+   contenedor de scroll y no rompe nada que dependa de sticky. */
+.obra-zona{padding:clamp(40px,7vw,96px) var(--col);
+  border-bottom:1px solid var(--linea);overflow:clip}
+.obra-zona > .et{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--humo);margin-bottom:clamp(22px,3vw,40px)}
+/* `align-items:start` para que todo cuelgue de arriba: con el
+   estiramiento por defecto, una obra más alta inflaba la fila y
+   dejaba a sus vecinas con un hueco debajo que se leía como error.
+   Colgando, el borde inferior desigual se lee como un pliego. */
+.obras{display:grid;gap:clamp(16px,2.4vw,34px);align-items:start;
+  grid-template-columns:repeat(2,1fr)}
+@media (min-width:860px){.obras{grid-template-columns:repeat(6,1fr)}}
+.obra{position:relative;will-change:transform}
+/* Ningún tramo baja de dos columnas: a una columna la obra queda en
+   140px, que es una miniatura y no una pieza presentada. */
+@media (min-width:860px){
+  .obra:nth-child(1),.obra:nth-child(2){grid-column:span 3}
+  .obra:nth-child(3),.obra:nth-child(4),.obra:nth-child(5){grid-column:span 2}
+  .obra:nth-child(6){grid-column:span 3}
+}
+/* la línea del autor, al lado de la obra de cierre */
+.cita{grid-column:span 2;align-self:center;padding:clamp(8px,2vw,24px) 0}
+@media (min-width:860px){.cita{grid-column:span 3}}
+.cita blockquote{font-family:var(--disp);font-weight:700;text-transform:uppercase;
+  font-size:clamp(1.4rem,3.4vw,2.6rem);line-height:1;letter-spacing:-.015em;
+  max-width:16ch}
+.cita cite{display:block;margin-top:16px;font-family:var(--cuerpo);
+  font-style:normal;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--humo)}
+/* el halo: el campo de color que cada obra proyecta por detrás */
+/* `screen` y no composición normal: el halo cae sobre el aura
+   violeta del fondo, y en modo normal un color a .78 de opacidad se
+   mezclaba con ella y se apagaba. En screen suma luz, que es lo que
+   hace un color saliéndose de su marco. */
+.obra::before{content:'';position:absolute;inset:-16%;z-index:0;
+  background:radial-gradient(58% 58% at 50% 46%, var(--halo), transparent 70%);
+  filter:blur(30px);opacity:.9;mix-blend-mode:screen}
+.obra figure{position:relative;z-index:1;overflow:hidden;border-radius:2px}
+.obra img{width:100%;height:auto;
+  transition:transform .7s cubic-bezier(.22,1,.3,1)}
+.obra:hover img{transform:scale(1.035)}
+.obra figcaption{display:flex;gap:8px 18px;flex-wrap:wrap;align-items:baseline;
+  justify-content:space-between;position:relative;z-index:1;
+  margin-top:11px;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--humo)}
+.obra figcaption b{color:var(--tiza);font-weight:500}
+
+/* ── el sumario, con la lámina ──────────────────────────────── */
+.sumario{border-bottom:1px solid var(--linea)}
+.fila{display:grid;grid-template-columns:auto 1fr auto;gap:18px;
+  align-items:center;padding:clamp(16px,2.4vw,24px) var(--col);
+  border-top:1px solid var(--linea);cursor:pointer;position:relative;
+  transition:background .22s,color .22s}
+.fila:first-child{border-top:0}
+.fila .num{font-size:.64rem;color:var(--humo);letter-spacing:.08em;transition:color .22s}
+.fila h3{font-family:var(--disp);font-weight:800;text-transform:uppercase;
+  font-size:clamp(1.1rem,3.4vw,2.1rem);letter-spacing:-.02em;line-height:1}
+.fila .pg{font-size:.72rem;font-variant-numeric:tabular-nums;color:var(--humo);
+  transition:color .22s}
+@media (hover:hover) and (pointer:fine){
+  .fila:hover{background:var(--tiza);color:var(--lienzo)}
+  .fila:hover .num,.fila:hover .pg{color:var(--lienzo)}
+}
+.fila:focus-visible{outline:2px solid var(--tiza);outline-offset:-2px}
+/* En táctil no hay cursor al que seguir, así que la lámina no sirve:
+   ahí la foto va dentro de la fila, que es lo honesto. */
+.fila .mini{display:none;grid-column:1/-1;margin-top:14px}
+.fila .mini img{width:100%;aspect-ratio:4/5;object-fit:cover}
+@media (hover:none){.fila .mini{display:block}}
+
+/* `top:0;left:0` no es decorativo: sin offsets un position:fixed se
+   coloca en su posición ESTÁTICA —el final del documento— y el
+   translate3d lo mueve desde allí, así que la lámina nunca entra en
+   pantalla. Anclada al viewport, el transform ya va en coordenadas
+   de pantalla. */
+.lamina{position:fixed;top:0;left:0;z-index:60;
+  width:min(21vw,240px);aspect-ratio:4/5;
+  pointer-events:none;opacity:0;overflow:hidden;background:#17161d;
+  will-change:transform,opacity}
+.lamina img{width:100%;height:100%;object-fit:cover}
+
+/* ── portada de cierre, a sangre ────────────────────────────── */
+.cierre-foto{position:relative;overflow:hidden;border-bottom:1px solid var(--linea)}
+.cierre-foto img{width:100%;height:clamp(320px,62vw,680px);object-fit:cover;
+  object-position:50% 30%}
+.cierre-foto::before{content:'';position:absolute;inset:0;
+  background:linear-gradient(106deg,rgba(123,92,255,.5),transparent 52%,rgba(255,61,154,.44));
+  mix-blend-mode:screen;pointer-events:none}
+.cierre-foto::after{content:'';position:absolute;left:0;right:0;bottom:0;
+  height:clamp(120px,18vw,200px);pointer-events:none;
+  background:linear-gradient(to top,rgba(7,7,10,.84),transparent)}
+.cierre-foto figcaption{position:absolute;z-index:2;left:var(--col);bottom:var(--col);
+  font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;max-width:44ch}
+
+/* ── marquesina ─────────────────────────────────────────────── */
+.cinta{overflow:hidden;padding:16px 0;border-bottom:1px solid var(--linea);
+  background:rgba(7,7,10,.6)}
+.cinta div{display:flex;gap:46px;width:max-content;animation:corre 30s linear infinite}
+.cinta span{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;
+  white-space:nowrap;color:var(--humo)}
+.cinta span:nth-child(3n){color:var(--tiza)}
+@keyframes corre{to{transform:translateX(-50%)}}
+
+/* ── cierre ─────────────────────────────────────────────────── */
+.cierre{padding:clamp(40px,7vw,90px) var(--col);display:grid;gap:22px}
+.cierre h2{font-family:var(--disp);font-weight:900;
+  font-size:clamp(2rem,7vw,4.6rem);line-height:.9;letter-spacing:-.025em;
+  text-transform:uppercase;max-width:15ch}
+.cierre a{justify-self:start;font-size:.74rem;letter-spacing:.16em;
+  text-transform:uppercase;text-decoration:none;color:var(--lienzo);
+  background:var(--tiza);padding:15px 26px;
+  transition:background .18s,transform .14s}
+.cierre a:hover{background:#ff3d9a;color:var(--tiza)}
+.cierre a:active{transform:translateY(1px)}
+.cierre a:focus-visible{outline:2px solid var(--tiza);outline-offset:3px}
+
+/* El estado por defecto es el VISIBLE. El ocultamiento lo pone el
+   propio JavaScript al arrancar (`html.js`), así que si el script
+   falla la página se lee entera en vez de salir en blanco. */
+.sube-al-ver{transition:opacity .62s cubic-bezier(.22,1,.3,1),transform .62s cubic-bezier(.22,1,.3,1)}
+html.js .sube-al-ver{opacity:0;transform:translateY(22px)}
+html.js .sube-al-ver.visto{opacity:1;transform:none}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .aura{animation:none}
+  .mask > span{animation:none;transform:none}
+  .cinta div{animation:none}
+  /* Con el selector completo: los media queries no suman
+     especificidad, así que `.sube-al-ver{opacity:1}` (0,1,0) perdía
+     contra `html.js .sube-al-ver{opacity:0}` (0,2,0) y la regla no
+     hacía nada — el contenido seguía dependiendo del scroll para
+     aparecer, justo lo que esto venía a evitar. */
+  html.js .sube-al-ver,
+  html.js .sube-al-ver.visto{opacity:1;transform:none;transition:none}
+  .lamina{display:none}
+  .tes,.obra{transform:none !important}
+  .obra img{transition:none}
+}
+</style>
+</head>
+<body>
+
+<div class="aura" aria-hidden="true"></div>
+
+<div class="marco">
+
+  <aside class="lado">
+    <div class="cabeza">TEN<br>DIDO<i>Moda e ilustración · Medellín</i></div>
+    <nav>
+      <a href="#obra">Ilustración</a>
+      <a href="#sumario">Sumario</a>
+      <a href="#cierre">Suscripción</a>
+    </nav>
+    <div class="pie-lado">
+      Número 07<br>
+      Primavera<br>
+      <span style="color:var(--tiza)">68 páginas</span>
+    </div>
+  </aside>
+
+  <main>
+
+    <!-- el tendido: las piezas llegan torcidas y se acomodan -->
+    <section class="tendido" id="tendido">
+      <div class="rot">Número 07 · doce autores, una temporada</div>
+    </section>
+
+    <section class="grito">
+      <h1>
+        <span class="mask"><span>La ropa</span></span>
+        <span class="mask"><span class="tinte">actúa</span></span>
+        <span class="mask"><span>primero</span></span>
+      </h1>
+      <div class="bajo">
+        <span>Dirección de arte</span>
+        <span>Ilustración</span>
+        <span><b>Puesta en escena, no catálogo</b></span>
+      </div>
+    </section>
+
+    <section class="dicho sube-al-ver">
+      <div class="et">(01) El número</div>
+      <p>Doce autores montan la misma escena.
+        <em>Ninguno la resuelve igual.</em></p>
+    </section>
+
+    <!-- las ilustraciones: obra, no adorno -->
+    <section class="obra-zona" id="obra">
+      <div class="et">(02) Ilustración · seis encargos</div>
+      <div class="obras" id="obras"></div>
+    </section>
+
+    <section class="sumario" id="sumario"></section>
+
+    <figure class="cierre-foto sube-al-ver">
+      <img src="img/moda/plumas-campo.webp" alt="Figura tendida entre pastos altos, envuelta en plumas rosadas" loading="lazy" width="1040" height="1300">
+      <figcaption>Cierre · «Caída controlada» · dirección de arte y fotografía, Daniela Restrepo</figcaption>
+    </figure>
+
+    <div class="cinta" aria-hidden="true"><div id="cinta"></div></div>
+
+    <section class="cierre sube-al-ver" id="cierre">
+      <h2>Cuatro entregas al año, en papel</h2>
+      <a href="#cierre">Suscribirse</a>
+    </section>
+
+  </main>
+</div>
+
+<div class="lamina" id="lamina" aria-hidden="true"><img id="limg" alt=""></div>
+
+<script>
+const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* Las fotografías que arman el tendido y salen en la lámina. */
+const FOTOS = [
+  {f:'salto',          t:'Suspensión',          a:'Figura suspendida en el aire con pantalón oscuro y camisa crema'},
+  {f:'cielo',          t:'Contra el cielo',     a:'Modelo recostada sobre un plano blanco contra cielo azul'},
+  {f:'plumas-retrato', t:'Armadura blanda',     a:'Retrato de una modelo envuelta en un abrigo de plumas blancas'},
+  {f:'cresta',         t:'El perfil manda',     a:'Retrato de perfil con el pelo levantado en púas'},
+  {f:'plumas-campo',   t:'Caída controlada',    a:'Figura tendida entre pastos altos, envuelta en plumas rosadas'},
+  {f:'cancha',         t:'Uniforme prestado',   a:'Modelo en cuclillas con balón de baloncesto y falda de encaje'},
+  {f:'barrido',        t:'Movimiento en bruto', a:'Figura caminando, captada con barrido de obturador'},
+  {f:'encaje',         t:'Segunda piel',        a:'Figura agachada con encaje sobre el rostro y medias azules'},
+  {f:'sala',           t:'Escenario vacío',     a:'Hombre sentado con traje gris en una sala de luz cálida'},
+  {f:'blazer-bn',      t:'La línea del hombro', a:'Retrato en blanco y negro de una modelo con blazer abierto'}
+];
+
+/* Las ilustraciones. Cada una trae el color de su propio halo,
+   sacado de la obra: el campo de atrás no es decorativo, es el
+   color de la pieza saliéndose del marco. */
+/* El orden no es el de llegada: está puesto por proporción, para que
+   cada fila junte obras de forma parecida. Las dos de 1.25 arriba,
+   las tres de proporción media en medio, y la más vertical
+   —677×1200— de cierre, donde su altura es una virtud y no un hueco
+   para las vecinas. */
+const OBRAS = [
+  {f:'ilu-sillon',   t:'Reposo',           au:'Tinta y acrílico',       halo:'#1b35ff'},
+  {f:'ilu-colina',   t:'La colina',        au:'Serigrafía · 3 tintas',  halo:'#74bd00'},
+  {f:'ilu-collage',  t:'Escapando',        au:'Collage digital',        halo:'#ff8a3d'},
+  {f:'ilu-labios',   t:'Pincel',           au:'Fotomontaje',            halo:'#19c9c0'},
+  {f:'ilu-cinco',    t:'Los cinco',        au:'Risografía · 5 tintas',  halo:'#ff3d50'},
+  {f:'ilu-manchas',  t:'Salto, con ruido', au:'Collage y trama',        halo:'#a053fd'}
+];
+
+const rf = f => `img/moda/${f}.webp`;
+
+/* ── EL TENDIDO ────────────────────────────────────────────────
+   Dieciséis teselas —las diez fotos, barajadas— entran giradas y
+   fuera de sitio y cada una se acomoda con su propio muelle.
+   El estado por defecto es el colocado: el desorden lo pone el JS
+   al arrancar, así que si el script no corre se ve igual. */
+(function(){
+  const cont = document.getElementById('tendido');
+  const N = 16, teselas = [];
+  for(let i=0;i<N;i++){
+    /* Paso 3, coprimo con 10, para que recorra las diez sin repetir
+       y sin que una fila quede encima de su gemela. */
+    const b = FOTOS[(i*3 + Math.floor(i/8)*2) % FOTOS.length];
+    const d = document.createElement('div');
+    d.className = 'tes';
+    d.innerHTML = `<img src="${rf(b.f)}" alt="" aria-hidden="true" loading="${i<8?'eager':'lazy'}">`;
+    cont.appendChild(d);
+    teselas.push({el:d,
+      dx:(Math.random()*2-1)*70, dy:(Math.random()*2-1)*95,
+      rot:(Math.random()*2-1)*30,
+      esp:((i%8)*0.04)+(Math.floor(i/8)*0.09)+Math.random()*0.12});
+  }
+  if(quieto) return;
+
+  /* muelle críticamente amortiguado: llega y se queda, sin rebote.
+     Es una retícula, no un objeto lanzado: el rebote sería mentira. */
+  const muelle = p => p<=0 ? 0 : 1-Math.exp(-7.2*p)*(1+7.2*p);
+  let t0=null;
+  function pon(t){
+    let listas=0;
+    for(const p of teselas){
+      const k = muelle(t-p.esp);
+      if(k>0.999){ listas++; p.el.style.transform=''; p.el.style.opacity=''; continue; }
+      const u=1-k;
+      p.el.style.transform=`translate3d(${p.dx*u}%, ${p.dy*u}%, 0) rotate(${p.rot*u}deg)`;
+      p.el.style.opacity=(0.3+0.7*k).toFixed(3);
+    }
+    return listas===teselas.length;
+  }
+  function cuadro(ts){
+    if(t0===null) t0=ts;
+    if(pon((ts-t0)/1000)) return;
+    requestAnimationFrame(cuadro);
+  }
+  pon(0);
+  const obs=new IntersectionObserver(es=>{
+    if(es[0].isIntersecting){ obs.disconnect(); requestAnimationFrame(cuadro); }
+  },{threshold:.1});
+  obs.observe(cont);
+})();
+
+/* ── LAS ILUSTRACIONES ─────────────────────────────────────── */
+document.getElementById('obras').innerHTML = OBRAS.map((o,i)=>`
+  <div class="obra" style="--halo:${o.halo}" data-ritmo="${(i%3)-1}">
+    <figure>
+      <img src="${rf(o.f)}" alt="Ilustración «${o.t}» — ${o.au}" loading="lazy">
+    </figure>
+    <figcaption><b>${o.t}</b><span>${o.au}</span></figcaption>
+  </div>`).join('') + `
+  <div class="cita">
+    <blockquote>«Dibujo la pose que ningún cuerpo aguanta»</blockquote>
+    <cite>Andrés Mazo · sobre «Salto, con ruido»</cite>
+  </div>`;
+
+/* Derivan al hacer scroll a ritmos distintos. El valor sale de la
+   posición en pantalla, no de una animación con duración, así que
+   devolverse las trae de vuelta. Se queda en ±26px: más que eso y
+   la retícula deja de leerse como retícula. */
+(function(){
+  if(quieto) return;
+  const obras=[...document.querySelectorAll('.obra')];
+  if(!obras.length) return;
+  let pedido=false;
+  function paso(){
+    pedido=false;
+    const mitad=innerHeight/2;
+    for(const o of obras){
+      const r=o.getBoundingClientRect();
+      if(r.bottom<-200 || r.top>innerHeight+200) continue;
+      const centro=r.top+r.height/2;
+      const d=Math.max(-1,Math.min(1,(centro-mitad)/innerHeight));
+      o.style.transform=`translate3d(0,${(+o.dataset.ritmo)*d*26}px,0)`;
+    }
+  }
+  addEventListener('scroll',()=>{ if(!pedido){pedido=true; requestAnimationFrame(paso);} },{passive:true});
+  addEventListener('resize',paso);
+  paso();
+})();
+
+/* ── EL SUMARIO ─────────────────────────────────────────────── */
+document.getElementById('sumario').innerHTML = FOTOS.map((b,i)=>`
+  <article class="fila" tabindex="0" data-foto="${rf(b.f)}">
+    <span class="num">${String(i+1).padStart(2,'0')}</span>
+    <h3>${b.t}</h3>
+    <span class="pg">p. ${String(8+i*6).padStart(2,'0')}</span>
+    <div class="mini"><img src="${rf(b.f)}" alt="${b.a}" loading="lazy"></div>
+  </article>`).join('');
+
+/* ── LA LÁMINA QUE SIGUE AL CURSOR ─────────────────────────────
+   Persigue el cursor con retardo —no pegada, que se sentiría
+   rígida— y arranca desde donde está el cursor, nunca desde un
+   valor lógico, para que no dé un salto al aparecer. */
+(function(){
+  if(quieto) return;
+  const lam=document.getElementById('lamina'), img=document.getElementById('limg');
+  let x=innerWidth/2,y=innerHeight/2,px=x,py=y,viva=false;
+  function sigue(){
+    px+=(x-px)*0.14; py+=(y-py)*0.14;   // retardo constante = peso
+    lam.style.transform=`translate3d(${px-lam.offsetWidth/2}px,${py-lam.offsetHeight/2}px,0)`;
+    requestAnimationFrame(sigue);
+  }
+  addEventListener('pointermove', e=>{ x=e.clientX; y=e.clientY; }, {passive:true});
+  document.querySelectorAll('.fila').forEach(p=>{
+    p.addEventListener('pointerenter', ()=>{
+      img.src=p.dataset.foto; lam.style.opacity='1';
+      if(!viva){ viva=true; px=x; py=y; sigue(); }
+    });
+    p.addEventListener('pointerleave', ()=>{ lam.style.opacity='0'; });
+  });
+  lam.style.transition='opacity .26s ease';
+})();
+
+/* ── marquesina, duplicada para que el bucle no corte ────────── */
+(function(){
+  const firmas=['Daniela Restrepo','Marta Ocampo','Juan Esteban Ruiz','Lina Gaviria',
+    'Taller Junín','Andrés Mazo','Valentina Ríos','Casa Provenza'];
+  document.getElementById('cinta').innerHTML =
+    [...firmas,...firmas].map(n=>`<span>${n}</span>`).join('');
+})();
+
+/* ── lo que entra al hacer scroll ─────────────────────────────── */
+(function(){
+  document.documentElement.classList.add('js');
+  const obs=new IntersectionObserver(es=>{
+    es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visto'); obs.unobserve(e.target); } });
+  },{threshold:.18, rootMargin:'0px 0px 180px 0px'});
+  document.querySelectorAll('.sube-al-ver').forEach(e=>obs.observe(e));
+})();
+</script>
+</body>
+</html>

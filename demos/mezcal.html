@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Casa Tepemete</title>
+<meta name="description" content="Destilería de mezcal: degradé de horno en el hero, rosetas de agave dibujadas al azar y lotes que se cuentan uno por uno.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;400;500;600&display=swap">
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   CASA TEPEMETE · mezcal de olla
+
+   Color   tierra #0e0b09 · barro #1c1512 · hueso #f2ece1
+           del horno: ladrillo #8f2d0e → cobre #d4641f → sol #e8a23c
+           un verde de penca, #5e7a4a, para lo vivo
+   Tipo    Cormorant Garamond para el display. El serif se justifica
+           aquí y no por «premium»: es un oficio de cuatrocientos
+           años y la letra tiene que pesar lo mismo. Outfit, geométrica
+           y seca, para el cuerpo, para que no suene a anticuario.
+   Planta  Un bloque redondeado con el degradé del horno ocupando la
+           primera pantalla, y debajo el proceso en tierra oscura.
+
+   La roseta de agave se DIBUJA sola al entrar: las pencas crecen
+   desde el centro una por una. El azar está en cuántas pencas,
+   cuánto se abren y cuánto se curvan — nunca en si está bien
+   compuesta. Cada visita ve una planta distinta.
+   ═══════════════════════════════════════════════════════════════ */
+:root{
+  --tierra:#0e0b09; --barro:#1c1512; --hueso:#f2ece1; --polvo:#a3968a;
+  --ladrillo:#8f2d0e; --cobre:#d4641f; --sol:#e8a23c; --penca:#5e7a4a;
+  --linea:rgba(242,236,225,.13);
+  --disp:'Cormorant Garamond',Georgia,serif;
+  --cuerpo:'Outfit',system-ui,sans-serif;
+  --m:clamp(14px,3vw,34px);
+  --p:clamp(22px,5vw,72px);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--tierra);color:var(--hueso);font-family:var(--cuerpo);
+  font-weight:300;line-height:1.62;-webkit-font-smoothing:antialiased;
+  overflow-x:hidden;padding:var(--m)}
+::selection{background:var(--cobre);color:var(--tierra)}
+
+/* ── el horno ───────────────────────────────────────────────── */
+.horno{position:relative;border-radius:clamp(20px,3vw,34px);overflow:hidden;
+  background:linear-gradient(118deg,var(--ladrillo) 0%,var(--cobre) 52%,var(--sol) 100%);
+  color:var(--hueso);padding:var(--p);min-height:clamp(520px,82vh,780px);
+  display:grid;grid-template-rows:auto 1fr auto;gap:26px;isolation:isolate}
+/* grano: sin él un degradé de este tamaño se ve a plástico */
+.horno::before{content:'';position:absolute;inset:0;z-index:0;opacity:.26;
+  mix-blend-mode:overlay;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='4'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)'/%3E%3C/svg%3E")}
+.horno > *{position:relative;z-index:2}
+#agave{position:absolute;inset:0;z-index:1;width:100%;height:100%;
+  pointer-events:none;mix-blend-mode:soft-light;opacity:.9}
+
+.nav{display:flex;flex-wrap:wrap;gap:14px 26px;align-items:center;
+  justify-content:space-between;font-size:.72rem;letter-spacing:.2em;
+  text-transform:uppercase}
+.nav b{font-family:var(--disp);font-weight:600;font-size:1.2rem;letter-spacing:.1em}
+.nav a{color:inherit;text-decoration:none;opacity:.78;transition:opacity .18s}
+.nav a:hover{opacity:1}
+.nav a:focus-visible{outline:2px solid var(--hueso);outline-offset:4px;border-radius:3px}
+.nav .liga{display:flex;gap:22px}
+
+/* El ancho va en px, no en `ch`. La unidad `ch` se resuelve contra el
+   tamaño de letra del PROPIO elemento, y aquí el contenedor hereda los
+   16px del cuerpo: 17ch daban 136px y el titular caía a una palabra por
+   línea. El límite de medida va en el h1, donde sí manda su tamaño. */
+.titular{align-self:center;max-width:min(100%,940px)}
+.titular h1{font-family:var(--disp);font-weight:400;
+  font-size:clamp(2.9rem,8.2vw,6.2rem);line-height:.98;letter-spacing:-.018em;
+  max-width:15ch;text-wrap:balance}
+.titular h1 i{font-style:italic;color:rgba(242,236,225,.72)}
+.titular p{margin-top:18px;font-size:clamp(.96rem,1.5vw,1.12rem);
+  max-width:34ch;color:rgba(242,236,225,.86)}
+
+.cifras{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(min(140px,100%),1fr));
+  padding-top:22px;border-top:1px solid rgba(242,236,225,.3)}
+.cifras div > b{display:block;font-family:var(--disp);font-weight:400;
+  font-size:clamp(1.7rem,3.6vw,2.6rem);line-height:1;letter-spacing:-.01em;
+  font-variant-numeric:tabular-nums}
+.cifras div > span{font-size:.7rem;letter-spacing:.17em;text-transform:uppercase;
+  opacity:.74}
+
+/* ── el proceso ─────────────────────────────────────────────── */
+.proceso{padding:clamp(54px,10vw,130px) var(--p) clamp(30px,6vw,70px)}
+.proceso .et{font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--cobre);margin-bottom:14px}
+.proceso h2{font-family:var(--disp);font-weight:400;
+  font-size:clamp(1.9rem,5.4vw,3.7rem);line-height:1.06;max-width:17ch;
+  margin-bottom:clamp(30px,5vw,60px);text-wrap:balance}
+.pasos{display:grid;gap:1px;background:var(--linea);border-radius:16px;overflow:hidden}
+@media (min-width:820px){.pasos{grid-template-columns:repeat(4,1fr)}}
+.paso{background:var(--barro);padding:clamp(22px,2.6vw,32px);display:flex;
+  flex-direction:column;gap:9px;position:relative;overflow:hidden;
+  transition:background .26s}
+.paso:hover{background:#241b16}
+.paso .n{font-family:var(--disp);font-style:italic;font-size:.9rem;color:var(--cobre)}
+.paso h3{font-family:var(--disp);font-weight:600;font-size:1.22rem;letter-spacing:.005em}
+.paso p{font-size:.86rem;color:var(--polvo);line-height:1.62}
+/* la barra de calor: cada paso tiene su temperatura y se llena al verse */
+.paso .calor{margin-top:auto;padding-top:16px}
+.paso .calor i{display:block;height:3px;border-radius:2px;background:rgba(242,236,225,.12);
+  position:relative;overflow:hidden;font-style:normal}
+.paso .calor i::after{content:'';position:absolute;inset:0;transform-origin:left;
+  transform:scaleX(var(--k,0));background:linear-gradient(90deg,var(--ladrillo),var(--sol));
+  transition:transform 1.2s cubic-bezier(.22,1,.3,1)}
+.paso .calor span{display:block;margin-top:7px;font-size:.64rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--polvo);font-variant-numeric:tabular-nums}
+
+/* ── los lotes ──────────────────────────────────────────────── */
+.lotes{padding:clamp(30px,6vw,70px) var(--p) clamp(54px,10vw,120px)}
+.lotes h2{font-family:var(--disp);font-weight:400;
+  font-size:clamp(1.7rem,4.4vw,3rem);margin-bottom:clamp(24px,4vw,44px)}
+.rejilla{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(236px,100%),1fr))}
+.lote{border:1px solid var(--linea);border-radius:16px;overflow:hidden;
+  background:var(--barro);display:flex;flex-direction:column;
+  transition:transform .26s cubic-bezier(.22,1,.3,1),border-color .26s}
+@media (hover:hover) and (pointer:fine){
+  .lote:hover{transform:translateY(-5px);border-color:var(--cobre)}
+}
+.lote .roseta{aspect-ratio:4/3;background:#160f0c}
+.lote .roseta canvas{width:100%;height:100%;display:block}
+.lote .txt{padding:18px 20px 20px;display:flex;flex-direction:column;gap:5px}
+.lote .txt i{font-style:normal;font-size:.64rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--cobre)}
+.lote .txt h3{font-family:var(--disp);font-weight:600;font-size:1.3rem;line-height:1.15}
+.lote .txt p{font-size:.84rem;color:var(--polvo)}
+.lote .txt .pz{margin-top:9px;padding-top:11px;border-top:1px solid var(--linea);
+  display:flex;justify-content:space-between;align-items:baseline;
+  font-size:.82rem;font-variant-numeric:tabular-nums}
+.lote .txt .pz b{font-weight:500}
+.lote .txt .pz em{font-style:normal;color:var(--polvo);font-size:.7rem;
+  letter-spacing:.1em;text-transform:uppercase}
+
+/* ── cierre ─────────────────────────────────────────────────── */
+/* ── el campo, a sangre ──────────────────────────────────────
+   La página era toda dibujo: horno de degradé y rosetas de canvas.
+   Una foto del campo real es lo que la ancla a un sitio que existe,
+   y es lo único que el dibujo no puede dar. */
+.campo{margin-top:var(--m);border-radius:clamp(20px,3vw,34px);overflow:hidden;
+  position:relative;background:var(--barro)}
+.campo img{width:100%;height:clamp(240px,40vw,520px);object-fit:cover;display:block}
+.campo figcaption{position:absolute;z-index:2;left:var(--p);bottom:var(--p);
+  font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--hueso);max-width:38ch}
+.campo::after{content:'';position:absolute;left:0;right:0;bottom:0;
+  height:clamp(100px,16vw,170px);pointer-events:none;
+  background:linear-gradient(to top,rgba(14,11,9,.8),transparent)}
+
+/* ── la cata: tres fotos, sin texto encima ───────────────────── */
+.cata{margin-top:var(--m);display:grid;gap:var(--m);
+  grid-template-columns:repeat(2,1fr)}
+@media (min-width:760px){.cata{grid-template-columns:repeat(3,1fr)}}
+.cata figure{border-radius:clamp(14px,2vw,22px);overflow:hidden;background:var(--barro)}
+/* La primera ocupa las dos columnas en móvil: en una tira de tres a
+   dos columnas, si no, queda una huérfana abajo. */
+.cata figure:first-child{grid-column:span 2}
+@media (min-width:760px){.cata figure:first-child{grid-column:span 1}}
+.cata img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block;
+  transition:transform .8s cubic-bezier(.22,1,.3,1)}
+@media (hover:hover) and (pointer:fine){.cata figure:hover img{transform:scale(1.04)}}
+.cata figcaption{padding:12px 2px 0;font-size:.62rem;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--polvo)}
+
+.visita{margin-top:var(--m);border-radius:clamp(20px,3vw,34px);overflow:hidden;
+  position:relative;padding:clamp(40px,8vw,100px) var(--p);
+  background:linear-gradient(255deg,var(--ladrillo),var(--barro) 68%);
+  display:grid;gap:22px;justify-items:start}
+.visita::before{content:'';position:absolute;inset:0;opacity:.2;mix-blend-mode:overlay;
+  pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='4'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)'/%3E%3C/svg%3E")}
+.visita > *{position:relative}
+.visita h2{font-family:var(--disp);font-weight:400;
+  font-size:clamp(1.8rem,5.6vw,3.8rem);line-height:1.04;max-width:15ch;text-wrap:balance}
+.visita p{color:rgba(242,236,225,.78);max-width:40ch}
+.visita a{text-decoration:none;background:var(--hueso);color:var(--tierra);
+  padding:15px 32px;border-radius:999px;font-size:.74rem;letter-spacing:.18em;
+  text-transform:uppercase;font-weight:500;
+  transition:transform .14s cubic-bezier(.22,1,.3,1),background .18s}
+.visita a:hover{background:var(--sol)}
+.visita a:active{transform:scale(.97)}
+.visita a:focus-visible{outline:2px solid var(--sol);outline-offset:4px}
+
+.pie{padding:26px var(--p);display:flex;flex-wrap:wrap;gap:12px 26px;
+  justify-content:space-between;font-size:.7rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--polvo)}
+
+/* entradas */
+.ver{transition:opacity .66s cubic-bezier(.22,1,.3,1),transform .66s cubic-bezier(.22,1,.3,1)}
+html.js .ver{opacity:0;transform:translateY(26px)}
+html.js .ver.on{opacity:1;transform:none}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  html.js .ver{opacity:1;transform:none}
+  .paso .calor i::after{transition:none}
+  .lote{transition:none}
+}
+</style>
+</head>
+<body>
+
+<header class="horno">
+  <canvas id="agave" aria-hidden="true"></canvas>
+
+  <div class="nav">
+    <b>Casa Tepemete</b>
+    <div class="liga">
+      <a href="#proceso">Proceso</a>
+      <a href="#lotes">Lotes</a>
+      <a href="#visita">Visita</a>
+    </div>
+  </div>
+
+  <div class="titular">
+    <h1>Ocho años de planta para <i>una sola botella</i></h1>
+    <p>Mezcal de olla de barro, en Santiago Matatlán. Lo que sale del alambique
+      entra tal cual en la botella; cuando el lote se acaba, se acaba.</p>
+  </div>
+
+  <div class="cifras">
+    <div><b id="c1">0</b><span>Años de agave</span></div>
+    <div><b id="c2">0</b><span>Botellas del lote</span></div>
+    <div><b id="c3">0</b><span>Horas en el horno</span></div>
+    <div><b>Olla</b><span>Destilación en barro</span></div>
+  </div>
+</header>
+
+<main>
+
+  <section class="proceso ver" id="proceso">
+    <div class="et">El oficio</div>
+    <h2>Cuatro pasos; el tiempo de cada uno no se negocia</h2>
+    <div class="pasos">
+      <article class="paso">
+        <span class="n">(i)</span><h3>Jima</h3>
+        <p>Se corta la penca cuando la planta está por florecer, no antes. Ocho a doce años.</p>
+        <div class="calor"><i data-k=".18"></i><span>Ambiente · 24°</span></div>
+      </article>
+      <article class="paso">
+        <span class="n">(ii)</span><h3>Horno</h3>
+        <p>Piña enterrada sobre piedra de río y leña de encino. Tres días bajo tierra.</p>
+        <div class="calor"><i data-k="1"></i><span>Horno · 380°</span></div>
+      </article>
+      <article class="paso">
+        <span class="n">(iii)</span><h3>Tahona</h3>
+        <p>Molienda en tahona de piedra, tirada por caballo. La fibra se abre sin que el calor la toque.</p>
+        <div class="calor"><i data-k=".3"></i><span>Ambiente · 26°</span></div>
+      </article>
+      <article class="paso">
+        <span class="n">(iv)</span><h3>Olla</h3>
+        <p>Dos destilaciones en barro. El barro respira y deja un dejo que el cobre no da.</p>
+        <div class="calor"><i data-k=".66"></i><span>Alambique · 92°</span></div>
+      </article>
+    </div>
+  </section>
+
+  <figure class="campo ver">
+    <img src="img/agave/campo.webp" alt="Campo de agave en hileras al pie de un cerro seco" loading="lazy" width="1300" height="867">
+    <figcaption>Santiago Matatlán · ocho a doce años por planta</figcaption>
+  </figure>
+
+  <section class="lotes ver" id="lotes">
+    <h2>Lo que hay ahora</h2>
+    <div class="rejilla" id="rejilla"></div>
+  </section>
+
+  <div class="cata ver">
+    <figure>
+      <img src="img/agave/cata.webp" alt="Hombre de perfil oliendo una copa de mezcal" loading="lazy">
+      <figcaption>La nariz primero</figcaption>
+    </figure>
+    <figure>
+      <img src="img/agave/copas.webp" alt="Copas de mezcal vistas desde arriba sobre una mesa clara" loading="lazy">
+      <figcaption>Cuatro lotes, una mesa</figcaption>
+    </figure>
+    <figure>
+      <img src="img/agave/manos-hielo.webp" alt="Manos sosteniendo vasos sobre un fondo naranja" loading="lazy">
+      <figcaption>A temperatura de cuarto</figcaption>
+    </figure>
+  </div>
+
+  <section class="visita ver" id="visita">
+    <h2>El palenque se abre con cita, y toma media mañana</h2>
+    <p>Cuatro personas por grupo. Se camina el campo, se destapa un horno si
+      lo hay y se cata directo de la olla.</p>
+    <a href="#visita">Pedir una visita</a>
+  </section>
+
+  <div class="pie">
+    <span>Santiago Matatlán · Oaxaca</span>
+    <span>NOM 1146 · Lote a lote</span>
+  </div>
+
+</main>
+
+<script>
+document.documentElement.classList.add('js');
+const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ── LA ROSETA DEL HORNO ───────────────────────────────────────
+   Las pencas crecen desde el centro, una por una. El azar decide
+   cuántas hay, cuánto se abren y cuánto se curvan; nunca decide si
+   la planta está bien compuesta — para eso el ángulo entre pencas
+   se reparte parejo con una pizca de desvío. Caos dentro de orden,
+   que es como crece una planta de verdad. */
+(function(){
+  const cv=document.getElementById('agave'), g=cv.getContext('2d');
+  let W,H,pencas=[],t0=null,raf=null;
+
+  function medir(){
+    const d=Math.min(devicePixelRatio||1,2);
+    W=cv.clientWidth; H=cv.clientHeight;
+    cv.width=W*d; cv.height=H*d; g.setTransform(d,0,0,d,0,0);
+    sembrar();
+  }
+  function sembrar(){
+    const N = 26+Math.floor(Math.random()*16);     // cuántas pencas
+    const base = Math.min(W,H)*(0.42+Math.random()*0.2);
+    pencas = Array.from({length:N},(_,i)=>{
+      const t=i/N;
+      return {
+        ang: t*Math.PI*2 + (Math.random()-0.5)*0.22,  // reparto parejo + desvío
+        largo: base*(0.52+Math.random()*0.66),
+        ancho: base*(0.06+Math.random()*0.07),
+        curva: (Math.random()-0.5)*0.9,
+        esp: t*0.5 + Math.random()*0.3
+      };
+    });
+  }
+  const suave = p => p<=0?0 : p>=1?1 : 1-Math.pow(1-p,3);
+
+  function penca(p,k){
+    const cx=W*0.72, cy=H*0.58;        // descentrada: una planta no está en el medio
+    const L=p.largo*k;
+    const px=cx+Math.cos(p.ang)*L, py=cy+Math.sin(p.ang)*L*0.82;
+    const mx=cx+Math.cos(p.ang+p.curva*0.5)*L*0.55;
+    const my=cy+Math.sin(p.ang+p.curva*0.5)*L*0.55*0.82;
+    const perp=p.ang+Math.PI/2, a=p.ancho*(1-k*0.25);
+    g.beginPath();
+    g.moveTo(cx+Math.cos(perp)*a*0.5, cy+Math.sin(perp)*a*0.5);
+    g.quadraticCurveTo(mx+Math.cos(perp)*a, my+Math.sin(perp)*a, px, py);
+    g.quadraticCurveTo(mx-Math.cos(perp)*a, my-Math.sin(perp)*a,
+                       cx-Math.cos(perp)*a*0.5, cy-Math.sin(perp)*a*0.5);
+    g.closePath();
+  }
+  function pinta(ts){
+    if(t0===null) t0=ts;
+    const t=(ts-t0)/1000;
+    g.clearRect(0,0,W,H);
+    let listas=0;
+    for(const p of pencas){
+      const k=suave((t-p.esp)/1.5);
+      if(k>=1) listas++;
+      if(k<=0) continue;
+      penca(p,k);
+      g.fillStyle=`rgba(255,246,232,${0.05+0.07*k})`;
+      g.fill();
+      g.strokeStyle=`rgba(255,250,240,${0.1+0.16*k})`;
+      g.lineWidth=1.1; g.stroke();
+    }
+    if(listas<pencas.length) raf=requestAnimationFrame(pinta);
+  }
+  function fija(){
+    g.clearRect(0,0,W,H);
+    for(const p of pencas){ penca(p,1);
+      g.fillStyle='rgba(255,246,232,.11)'; g.fill();
+      g.strokeStyle='rgba(255,250,240,.24)'; g.lineWidth=1.1; g.stroke(); }
+  }
+  medir();
+  if(quieto) fija(); else raf=requestAnimationFrame(pinta);
+  addEventListener('resize', ()=>{ medir(); t0=null; cancelAnimationFrame(raf);
+    if(quieto) fija(); else raf=requestAnimationFrame(pinta); });
+})();
+
+/* ── las cifras suben hasta su valor ───────────────────────── */
+(function(){
+  const metas=[['c1',8,''],['c2',412,''],['c3',72,'']];
+  if(quieto){ metas.forEach(([id,v])=>document.getElementById(id).textContent=v); return; }
+  const t0=performance.now(), dur=1500;
+  (function sube(ts){
+    const k=Math.min(1,(ts-t0)/dur), e=1-Math.pow(1-k,3);
+    metas.forEach(([id,v])=>{ document.getElementById(id).textContent=Math.round(v*e); });
+    if(k<1) requestAnimationFrame(sube);
+  })(t0);
+})();
+
+/* ── los lotes, cada uno con su roseta ─────────────────────── */
+(function(){
+  const LOTES=[
+    ['Espadín','Lote 24—A','Ocho años. Humo seco, pimienta blanca y un final largo.','$340.000','47°'],
+    ['Tobalá','Lote 24—C','Silvestre de monte. Floral, casi dulce, y se sostiene en boca.','$520.000','48,5°'],
+    ['Tepeztate','Lote 23—F','Veinticinco años de planta. Herbal, mineral y exigente.','$680.000','49°'],
+    ['Ensamble','Lote 24—B','Espadín y madrecuixe en la misma olla. Un solo ensamble por año.','$430.000','46,5°']
+  ];
+  document.getElementById('rejilla').innerHTML = LOTES.map(([n,l,d,p,gr])=>`
+    <article class="lote">
+      <div class="roseta"><canvas aria-hidden="true"></canvas></div>
+      <div class="txt">
+        <i>${l}</i><h3>${n}</h3><p>${d}</p>
+        <div class="pz"><b>${p}</b><em>${gr} alc.</em></div>
+      </div>
+    </article>`).join('');
+
+  /* Cuatro rosetas, cuatro plantas distintas: mismo código, otra semilla.
+     Se dibujan una sola vez — una pieza quieta puede ser única sin gastar
+     un cuadro por segundo. */
+  document.querySelectorAll('.roseta canvas').forEach((cv,i)=>{
+    const g=cv.getContext('2d'), d=Math.min(devicePixelRatio||1,2);
+    const w=cv.clientWidth||300, h=cv.clientHeight||225;
+    cv.width=w*d; cv.height=h*d; g.setTransform(d,0,0,d,0,0);
+    g.fillStyle='#160f0c'; g.fillRect(0,0,w,h);
+    const cx=w/2, cy=h*0.62, base=Math.min(w,h)*0.46;
+    const N=18+Math.floor(Math.random()*18);
+    const tono=['#d4641f','#5e7a4a','#e8a23c','#8f2d0e'][i];
+    for(let k=0;k<N;k++){
+      const t=k/N, ang=t*Math.PI*2+(Math.random()-0.5)*0.3;
+      const L=base*(0.5+Math.random()*0.72), a=base*(0.05+Math.random()*0.06);
+      const px=cx+Math.cos(ang)*L, py=cy+Math.sin(ang)*L*0.6;
+      const perp=ang+Math.PI/2;
+      g.beginPath();
+      g.moveTo(cx+Math.cos(perp)*a*.5, cy+Math.sin(perp)*a*.5);
+      g.quadraticCurveTo(cx+Math.cos(ang)*L*.55+Math.cos(perp)*a,
+                         cy+Math.sin(ang)*L*.55*0.6+Math.sin(perp)*a, px, py);
+      g.quadraticCurveTo(cx+Math.cos(ang)*L*.55-Math.cos(perp)*a,
+                         cy+Math.sin(ang)*L*.55*0.6-Math.sin(perp)*a,
+                         cx-Math.cos(perp)*a*.5, cy-Math.sin(perp)*a*.5);
+      g.closePath();
+      g.fillStyle=tono+'22'; g.fill();
+      g.strokeStyle=tono+'88'; g.lineWidth=1; g.stroke();
+    }
+  });
+})();
+
+/* ── entradas y barras de calor ────────────────────────────── */
+(function(){
+  const obs=new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(!e.isIntersecting) return;
+      e.target.classList.add('on');
+      e.target.querySelectorAll('.calor i').forEach(b=>b.style.setProperty('--k', b.dataset.k));
+      obs.unobserve(e.target);
+    });
+  },{threshold:.15, rootMargin:'0px 0px 180px 0px'});
+  document.querySelectorAll('.ver').forEach(e=>obs.observe(e));
+})();
+</script>
+</body>
+</html>

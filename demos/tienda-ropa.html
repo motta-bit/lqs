@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Atelier Norte</title>
+<meta name="description" content="Marroquinería de armado expuesto: tipografía suiza sobrescalada, un mosaico que se arma solo y la pieza que aparece donde pone el cursor.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   ATELIER NORTE · marroquinería
+
+   Lo que cambió: la casa pasó de punto a cuero. La planta, la
+   tipografía y el movimiento se quedan —eran lo que funcionaba—,
+   pero ya no dibujo texturas: ahora hay fotos, así que el mosaico
+   y la lámina muestran los bolsos de verdad.
+
+   Color   tinta #0b0b0c · papel #f1efea · pizarra #76736c
+           un solo acento, azul eléctrico #1b35ff, y nada más
+   Tipo    Archivo 900 para el display, recortado por el borde;
+           IBM Plex Mono para los rótulos y las cifras
+   Planta  Columna fija a la izquierda con la identidad; a la
+           derecha, una pila que se lee de arriba abajo. La palabra
+           gigante se sale del lienzo a propósito: lo que no cabe
+           es lo que dice que hay más.
+
+   Movimiento: el mosaico de arriba no se dibuja, se ARMA. Las
+   piezas entran giradas y desordenadas y cada una se acomoda a su
+   sitio con un muelle críticamente amortiguado: llega y se queda,
+   sin rebote, porque es una retícula y no un objeto lanzado.
+   ═══════════════════════════════════════════════════════════════ */
+:root{
+  --tinta:#0b0b0c; --papel:#f1efea; --pizarra:#76736c;
+  --linea:rgba(11,11,12,.14); --azul:#1b35ff;
+  --disp:'Archivo',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --col:clamp(16px,4vw,56px);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--papel);color:var(--tinta);font-family:var(--disp);
+  font-weight:400;line-height:1.45;-webkit-font-smoothing:antialiased;
+  overflow-x:hidden}
+::selection{background:var(--azul);color:var(--papel)}
+img{display:block;max-width:100%}
+
+/* ── planta ─────────────────────────────────────────────────── */
+/* `min-width:0` en las dos columnas: por defecto una pista `1fr` tiene
+   `min-width:auto` y crece hasta caber su contenido. Con un titular en
+   `nowrap` de 13rem eso infla la columna y la página entera scrollea de
+   lado. Es el desbordamiento clásico de CSS Grid. */
+.marco{display:grid;grid-template-columns:1fr;min-height:100dvh}
+.marco > *{min-width:0}
+@media (min-width:900px){
+  .marco{grid-template-columns:clamp(240px,24vw,340px) 1fr}
+}
+
+/* columna fija: la identidad no se mueve, el trabajo sí */
+.lado{padding:var(--col);display:flex;flex-direction:column;gap:22px;
+  border-bottom:1px solid var(--linea)}
+@media (min-width:900px){
+  .lado{position:sticky;top:0;height:100dvh;justify-content:space-between;
+    border-bottom:0;border-right:1px solid var(--linea)}
+}
+.logo{font-weight:900;font-size:1.05rem;letter-spacing:-.04em;line-height:1}
+.logo i{display:block;font-family:var(--mono);font-style:normal;font-size:.58rem;
+  font-weight:400;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--pizarra);margin-top:9px}
+.lado nav{display:flex;flex-direction:column;gap:3px;font-family:var(--mono);
+  font-size:.72rem;letter-spacing:.07em}
+.lado nav a{color:var(--pizarra);text-decoration:none;padding:4px 0;
+  width:max-content;position:relative;transition:color .18s}
+.lado nav a::after{content:'';position:absolute;left:0;right:100%;bottom:2px;
+  height:1px;background:var(--azul);transition:right .32s cubic-bezier(.22,1,.3,1)}
+.lado nav a:hover{color:var(--tinta)}
+.lado nav a:hover::after{right:0}
+.lado nav a:focus-visible{outline:2px solid var(--azul);outline-offset:3px}
+.pie-lado{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;
+  color:var(--pizarra);line-height:1.9}
+
+/* ── el mosaico: la retícula que se arma sola ─────────────────
+   Antes eran rectángulos pintados en un canvas. Ahora son las fotos,
+   en DOM: el navegador compone los transforms en la GPU, las
+   imágenes llevan su alt, y no hay canvas que se contamine. */
+.mosaico{position:relative;display:grid;gap:2px;background:var(--tinta);
+  grid-template-columns:repeat(5,1fr);
+  height:clamp(230px,34vw,380px);overflow:hidden;
+  border-bottom:1px solid var(--linea)}
+@media (min-width:760px){.mosaico{grid-template-columns:repeat(10,1fr)}}
+.tes{position:relative;overflow:hidden;background:#141416;
+  will-change:transform}
+.tes img{width:100%;height:100%;object-fit:cover;
+  filter:grayscale(1) contrast(1.08) brightness(.82)}
+/* unas pocas se quedan en color: el ojo necesita dónde caer */
+.tes.viva img{filter:none}
+/* El rótulo va sobre foto, así que necesita su propio suelo: un
+   degradado al pie. Con solo text-shadow se perdía justo encima de
+   las fotos claras. */
+.mosaico::after{content:'';position:absolute;left:0;right:0;bottom:0;
+  height:92px;z-index:2;pointer-events:none;
+  background:linear-gradient(to top,rgba(11,11,12,.78),transparent)}
+.mosaico .rot{position:absolute;left:var(--col);bottom:18px;z-index:3;
+  font-family:var(--mono);font-size:.6rem;letter-spacing:.22em;
+  text-transform:uppercase;color:#f1efea}
+
+/* ── el titular que no cabe ─────────────────────────────────── */
+.grito{padding:clamp(26px,5vw,60px) 0 clamp(20px,4vw,44px) var(--col);
+  overflow:hidden;border-bottom:1px solid var(--linea)}
+.grito h1{font-weight:900;font-size:clamp(4.2rem,17vw,13rem);line-height:.8;
+  letter-spacing:-.055em;text-transform:uppercase;white-space:nowrap}
+/* cada palabra sube desde debajo de su propia máscara */
+.mask{display:block;overflow:hidden}
+.mask > span{display:block;transform:translateY(102%);
+  animation:sube .9s cubic-bezier(.19,1,.22,1) forwards}
+.mask:nth-of-type(2) > span{animation-delay:.09s}
+.mask:nth-of-type(3) > span{animation-delay:.18s}
+@keyframes sube{to{transform:translateY(0)}}
+.grito .bajo{display:flex;flex-wrap:wrap;gap:10px 34px;align-items:baseline;
+  margin-top:26px;padding-right:var(--col);
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--pizarra)}
+.grito .bajo b{color:var(--azul);font-weight:500}
+
+/* ── manifiesto ─────────────────────────────────────────────── */
+.dicho{display:grid;gap:26px;padding:clamp(34px,6vw,76px) var(--col);
+  border-bottom:1px solid var(--linea)}
+@media (min-width:760px){.dicho{grid-template-columns:1fr 1.25fr;gap:56px}}
+.dicho .et{font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--pizarra)}
+.dicho p{font-size:clamp(1.25rem,2.9vw,2.1rem);line-height:1.22;
+  letter-spacing:-.025em;font-weight:400;max-width:22ch}
+.dicho p em{font-style:normal;color:var(--pizarra)}
+
+/* ── una imagen a sangre, para romper la pila ─────────────────
+   La retícula no puede ser lo único: una página de producto necesita
+   un momento donde la imagen mande y el texto se calle. */
+.sangre{position:relative;border-bottom:1px solid var(--linea);
+  background:var(--tinta);overflow:hidden}
+.sangre img{width:100%;height:clamp(300px,58vw,640px);object-fit:cover;
+  object-position:50% 42%}
+/* Mismo problema que en el mosaico, y peor: sobre el amarillo de la
+   campaña, un rótulo blanco se queda en 1,2:1. El degradado al pie es
+   lo único que aguanta cualquier foto que entre aquí mañana. */
+.sangre::after{content:'';position:absolute;left:0;right:0;bottom:0;
+  height:clamp(110px,16vw,180px);pointer-events:none;
+  background:linear-gradient(to top,rgba(11,11,12,.72),transparent)}
+.sangre figcaption{position:absolute;z-index:2;left:var(--col);bottom:var(--col);
+  font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;
+  text-transform:uppercase;color:#f1efea;max-width:42ch}
+
+/* ── los bolsos ─────────────────────────────────────────────── */
+.bolsos{border-bottom:1px solid var(--linea)}
+.bolso{display:grid;grid-template-columns:auto 1fr auto;gap:18px;
+  align-items:center;padding:clamp(18px,2.6vw,26px) var(--col);
+  border-top:1px solid var(--linea);cursor:pointer;position:relative;
+  background:var(--papel);transition:background .22s, color .22s}
+.bolso:first-child{border-top:0}
+.bolso .num{font-family:var(--mono);font-size:.64rem;color:var(--pizarra);
+  letter-spacing:.08em;transition:color .22s}
+.bolso h3{font-weight:800;font-size:clamp(1.1rem,3.6vw,2.15rem);
+  letter-spacing:-.035em;line-height:1}
+.bolso .pz{font-family:var(--mono);font-size:.78rem;font-variant-numeric:tabular-nums;
+  transition:color .22s}
+@media (hover:hover) and (pointer:fine){
+  .bolso:hover{background:var(--tinta);color:var(--papel)}
+  .bolso:hover .num,.bolso:hover .pz{color:var(--azul)}
+}
+.bolso:active{background:var(--azul);color:var(--papel)}
+.bolso:focus-visible{outline:2px solid var(--azul);outline-offset:-2px}
+
+/* En táctil no hay cursor al que seguir, así que la lámina no sirve:
+   ahí la foto va dentro de la fila, que es lo honesto. */
+.bolso .mini{display:none;grid-column:1/-1;margin-top:14px}
+.bolso .mini img{width:100%;aspect-ratio:4/5;object-fit:cover}
+@media (hover:none){
+  .bolso{grid-template-columns:auto 1fr auto}
+  .bolso .mini{display:block}
+}
+
+/* la lámina que sigue al cursor: el producto aparece donde miras */
+/* `top:0;left:0` no es decorativo: sin offsets, un position:fixed se
+   coloca en su posición ESTÁTICA —el final del documento, 3.500px
+   abajo— y el translate3d lo mueve desde allí, así que la lámina
+   nunca entraba en pantalla. Anclada a la esquina del viewport, el
+   transform ya trabaja en coordenadas de pantalla. */
+.lamina{position:fixed;top:0;left:0;z-index:60;
+  width:min(22vw,250px);aspect-ratio:4/5;
+  pointer-events:none;opacity:0;overflow:hidden;background:var(--tinta);
+  will-change:transform,opacity}
+.lamina img{width:100%;height:100%;object-fit:cover}
+
+/* ── clientes, en marquesina ────────────────────────────────── */
+.cinta{overflow:hidden;background:var(--tinta);color:var(--papel);
+  padding:16px 0;border-bottom:1px solid var(--linea)}
+.cinta div{display:flex;gap:46px;width:max-content;
+  animation:corre 26s linear infinite}
+.cinta span{font-family:var(--mono);font-size:.74rem;letter-spacing:.2em;
+  text-transform:uppercase;white-space:nowrap;opacity:.78}
+.cinta span:nth-child(3n){color:var(--azul);opacity:1}
+@keyframes corre{to{transform:translateX(-50%)}}
+
+/* ── cierre ─────────────────────────────────────────────────── */
+.cierre{padding:clamp(40px,7vw,90px) var(--col);display:grid;gap:22px}
+.cierre h2{font-weight:900;font-size:clamp(2rem,7vw,4.6rem);line-height:.92;
+  letter-spacing:-.045em;text-transform:uppercase;max-width:14ch}
+.cierre a{justify-self:start;font-family:var(--mono);font-size:.74rem;
+  letter-spacing:.16em;text-transform:uppercase;text-decoration:none;
+  color:var(--papel);background:var(--tinta);padding:15px 26px;
+  transition:background .18s,transform .14s}
+.cierre a:hover{background:var(--azul)}
+.cierre a:active{transform:translateY(1px)}
+.cierre a:focus-visible{outline:2px solid var(--azul);outline-offset:3px}
+
+/* lo que entra al hacer scroll llega desde abajo, una sola vez */
+/* El estado por defecto es el VISIBLE. El ocultamiento lo pone el propio
+   JavaScript al arrancar (`html.js`), así que si el script falla o no corre,
+   la página se lee entera en vez de salir en blanco. */
+.sube-al-ver{transition:opacity .62s cubic-bezier(.22,1,.3,1),transform .62s cubic-bezier(.22,1,.3,1)}
+html.js .sube-al-ver{opacity:0;transform:translateY(22px)}
+html.js .sube-al-ver.visto{opacity:1;transform:none}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .mask > span{animation:none;transform:none}
+  .cinta div{animation:none}
+  /* Con el selector completo: los media queries no suman
+     especificidad, así que `.sube-al-ver{opacity:1}` (0,1,0) perdía
+     contra `html.js .sube-al-ver{opacity:0}` (0,2,0) y la regla no
+     hacía nada — el contenido seguía dependiendo del scroll para
+     aparecer, justo lo que esto venía a evitar. */
+  html.js .sube-al-ver,
+  html.js .sube-al-ver.visto{opacity:1;transform:none;transition:none}
+  .lamina{display:none}
+  .tes{transform:none !important}
+}
+</style>
+</head>
+<body>
+
+<div class="marco">
+
+  <aside class="lado">
+    <div>
+      <div class="logo">ATELIER<br>NORTE<i>Marroquinería · Medellín</i></div>
+    </div>
+    <nav>
+      <a href="#taller">Taller</a>
+      <a href="#bolsos">Bolsos</a>
+      <a href="#cierre">Cita</a>
+    </nav>
+    <div class="pie-lado">
+      Carrera 35 #8—14<br>
+      Mar a sáb · 10—19<br>
+      <span style="color:var(--azul)">Temporada 06</span>
+    </div>
+  </aside>
+
+  <main>
+
+    <!-- el mosaico: las piezas llegan torcidas y se acomodan -->
+    <section class="mosaico" id="mosaico">
+      <div class="rot">Vaqueta curtida al vegetal · 20 piezas por modelo</div>
+    </section>
+
+    <section class="grito">
+      <h1>
+        <span class="mask"><span>Armado</span></span>
+        <span class="mask"><span>visible,</span></span>
+        <span class="mask"><span>sin forro</span></span>
+      </h1>
+      <div class="bajo">
+        <span>Curtido vegetal</span>
+        <span>Herraje macizo</span>
+        <span><b>20 piezas por modelo</b></span>
+      </div>
+    </section>
+
+    <section class="dicho sube-al-ver" id="taller">
+      <div class="et">(01) El taller</div>
+      <p>Patronaje propio, costura a mano y nueve días por pieza.
+        <em>El límite no es una postura: es lo que tarda hacerlo así.</em></p>
+    </section>
+
+    <figure class="sangre sube-al-ver">
+      <img src="img/bolsos/amarillo.webp" alt="Composición: un bolso sostenido sobre un fondo amarillo saturado" loading="lazy" width="725" height="1088">
+      <figcaption>(02) Campaña Temporada 06 · dirección de arte en el taller</figcaption>
+    </figure>
+
+    <section class="bolsos" id="bolsos"></section>
+
+    <div class="cinta" aria-hidden="true"><div id="cinta"></div></div>
+
+    <section class="cierre sube-al-ver" id="cierre">
+      <h2>La pieza se prueba en el taller, con cita</h2>
+      <a href="#cierre">Pedir una cita</a>
+    </section>
+
+  </main>
+</div>
+
+<div class="lamina" id="lamina" aria-hidden="true"><img id="limg" alt=""></div>
+
+<script>
+const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* El catálogo. Cada bolso lleva su foto: la misma que arma el mosaico
+   de arriba y la que sale en la lámina al pasar el cursor. */
+const BOLSOS = [
+  {n:'Sobre Junín',      p:'$580.000',   f:'cuero-tabaco',    a:'Sobre de cuero color tabaco sobre fondo azul noche'},
+  {n:'Bolso Nutibara',   p:'$1.240.000', f:'granate-petalos', a:'Bolso granate con pétalos caídos, sobre fondo negro'},
+  {n:'Croco Guayabal',   p:'$1.890.000', f:'manos-croco',     a:'Manos sosteniendo un bolso de piel grabada sobre fondo arena'},
+  {n:'Sobre Provenza',   p:'$720.000',   f:'abrigo-sobre',    a:'Sobre vino sostenido con guantes junto a un abrigo del mismo tono'},
+  {n:'Bolso Pedregal',   p:'$1.150.000', f:'roca',            a:'Bolso rojo apoyado en una roca, sobre fondo claro'},
+  {n:'Charol Laureles',  p:'$860.000',   f:'charol',          a:'Bolso rojo de charol sobre papel blanco'},
+  {n:'Bolso Marfil',     p:'$1.320.000', f:'marfil',          a:'Bolso blanco de asas altas sobre fondo rojo'},
+  {n:'Azul Prado',       p:'$990.000',   f:'azul-notas',      a:'Bolso azul eléctrico sobre un tendido de notas azules'},
+  {n:'Rojo Nocturno',    p:'$1.080.000', f:'rojo-noche',      a:'Bolso rojo iluminado a contraluz sobre fondo negro'},
+  {n:'Bolso Envigado',   p:'$1.450.000', f:'en-mano',         a:'Persona sosteniendo un bolso grande de cuero claro'}
+];
+const ruta = f => `img/bolsos/${f}.webp`;
+
+/* ── EL MOSAICO ────────────────────────────────────────────────
+   Veinte teselas —las diez fotos, dos veces— entran giradas y fuera
+   de sitio, y cada una se acomoda con su propio muelle. El azar está
+   en el estado INICIAL —rotación, desvío, retardo—, nunca en el
+   final: el destino es una retícula exacta. Caos que se ordena.
+
+   El estado por defecto es el colocado. El desorden lo pone el JS al
+   arrancar, así que si el script no corre el mosaico se ve igual. */
+(function(){
+  const cont = document.getElementById('mosaico');
+  const N = 20;
+  const teselas = [];
+  for(let i=0;i<N;i++){
+    /* El orden está barajado a propósito. Con `i % 10` las dos filas
+       salían idénticas, foto por foto y en la misma columna, y se
+       leía como un error. El paso 7 es coprimo con 10, así que
+       recorre las diez sin repetir; el desplazamiento por fila evita
+       que una fila quede encima de su gemela. */
+    const b = BOLSOS[(i*7 + Math.floor(i/10)*3) % BOLSOS.length];
+    const d = document.createElement('div');
+    d.className = 'tes' + (i%7===3 ? ' viva' : '');
+    d.innerHTML = `<img src="${ruta(b.f)}" alt="" aria-hidden="true" loading="${i<10?'eager':'lazy'}">`;
+    cont.appendChild(d);
+    teselas.push({
+      el:d,
+      dx:(Math.random()*2-1)*60,           // de dónde viene, en %
+      dy:(Math.random()*2-1)*90,
+      rot:(Math.random()*2-1)*26,
+      esp:((i%10)*0.035)+(Math.floor(i/10)*0.08)+Math.random()*0.12
+    });
+  }
+  if(quieto) return;
+
+  /* muelle críticamente amortiguado: llega y se queda, sin rebote.
+     Es una retícula, no un objeto lanzado: el rebote sería mentira. */
+  const muelle = p => p<=0 ? 0 : 1-Math.exp(-7.2*p)*(1+7.2*p);
+
+  let t0=null, raf=null;
+  function pon(t){
+    let listas=0;
+    for(const p of teselas){
+      const k = muelle(t-p.esp);
+      if(k>0.999){ listas++; p.el.style.transform=''; p.el.style.opacity=''; continue; }
+      const u = 1-k;
+      p.el.style.transform =
+        `translate3d(${p.dx*u}%, ${p.dy*u}%, 0) rotate(${p.rot*u}deg)`;
+      p.el.style.opacity = (0.35+0.65*k).toFixed(3);
+    }
+    return listas === teselas.length;
+  }
+  function cuadro(ts){
+    if(t0===null) t0=ts;
+    if(pon((ts-t0)/1000)) return;        // acabó: se deja de pintar
+    raf = requestAnimationFrame(cuadro);
+  }
+  pon(0);                                 // deja el desorden ANTES del primer cuadro
+  // Arranca cuando el mosaico está a la vista, no cuando carga la página:
+  // si el visitante llega con el scroll abajo, la animación no se le pierde.
+  const obs = new IntersectionObserver(es=>{
+    if(es[0].isIntersecting){ obs.disconnect(); raf=requestAnimationFrame(cuadro); }
+  },{threshold:.1});
+  obs.observe(cont);
+})();
+
+/* ── LAS FILAS DEL CATÁLOGO ─────────────────────────────────── */
+document.getElementById('bolsos').innerHTML = BOLSOS.map((b,i)=>`
+  <article class="bolso" tabindex="0" data-foto="${ruta(b.f)}">
+    <span class="num">${String(i+1).padStart(2,'0')}</span>
+    <h3>${b.n}</h3>
+    <span class="pz">${b.p}</span>
+    <div class="mini"><img src="${ruta(b.f)}" alt="${b.a}" loading="lazy"></div>
+  </article>`).join('');
+
+/* ── LA LÁMINA QUE SIGUE AL CURSOR ─────────────────────────────
+   La lámina persigue el cursor con retardo —no pegada, que se
+   sentiría rígida— y arranca desde donde está el cursor, nunca
+   desde un valor lógico, para que no dé un salto al aparecer. */
+(function(){
+  if(quieto) return;
+  const lam=document.getElementById('lamina'), img=document.getElementById('limg');
+  let x=innerWidth/2,y=innerHeight/2,px=x,py=y,viva=false;
+
+  function sigue(){
+    px+=(x-px)*0.14; py+=(y-py)*0.14;   // retardo constante = peso
+    lam.style.transform=`translate3d(${px-lam.offsetWidth/2}px,${py-lam.offsetHeight/2}px,0)`;
+    requestAnimationFrame(sigue);
+  }
+  addEventListener('pointermove', e=>{ x=e.clientX; y=e.clientY; }, {passive:true});
+  document.querySelectorAll('.bolso').forEach(p=>{
+    p.addEventListener('pointerenter', ()=>{
+      img.src = p.dataset.foto; lam.style.opacity='1';
+      if(!viva){ viva=true; px=x; py=y; sigue(); }   // arranca donde está el cursor
+    });
+    p.addEventListener('pointerleave', ()=>{ lam.style.opacity='0'; });
+  });
+  lam.style.transition='opacity .26s ease';
+})();
+
+/* ── marquesina de clientes, duplicada para que el bucle no corte ── */
+(function(){
+  const casas=['Curtiembre del Sur','Mercado Carulla','Teatro Pablo Tobón',
+    'Museo de Antioquia','Café Pergamino','Librería Lerner','Hotel Charlee'];
+  const c=document.getElementById('cinta');
+  c.innerHTML = [...casas,...casas].map(n=>`<span>${n}</span>`).join('');
+})();
+
+/* ── lo que entra al hacer scroll ─────────────────────────────── */
+(function(){
+  document.documentElement.classList.add('js');
+  const obs=new IntersectionObserver(es=>{
+    es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visto'); obs.unobserve(e.target); } });
+  },{threshold:.18, rootMargin:'0px 0px 180px 0px'});
+  document.querySelectorAll('.sube-al-ver').forEach(e=>obs.observe(e));
+})();
+</script>
+</body>
+</html>

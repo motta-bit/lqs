@@ -122,6 +122,32 @@ EN_PAQUETES = {
    "Move your operation to digital: presence, order and processes that run on their own."),
 }
 
+# Muestras en vivo: cuatro páginas demo de una sola pantalla que viven en
+# demos/ (carpeta autocontenida, copiada tal cual; rutas relativas). Cada una
+# enseña hasta dónde llega una página LQS sin librerías. Se abren en pestaña
+# nueva porque son pantalla completa. (archivo, portada, color propio de la
+# demo, sector, nombre, qué hace)
+PROYECTOS = [
+ ("tienda-ropa.html",  "img/bolsos/rojo-noche.webp", "#1b35ff", "Tienda de bolsos", "Atelier Norte",
+  "Marroquinería suiza: la tipografía se sale del lienzo y el mosaico se arma solo."),
+ ("restaurante.html",  "img/mesa/salsa-vertida.webp", "#E0531C", "Restaurante", "Rescoldo",
+  "La carta es una rueda: gira con el scroll y cada plato abre su ficha al llegar al frente."),
+ ("revista-moda.html", "img/moda/ilu-cinco.webp",     "#7b5cff", "Revista de moda", "Tendido",
+  "Un tendido de imágenes que se arma solo y seis ilustraciones, cada una con su halo de color."),
+ ("mezcal.html",       "img/agave/campo.webp",        "#C65A16", "Mezcal", "Casa Tepemete",
+  "Destilería de mezcal: el degradé del horno y rosetas de agave que crecen solas en cada visita."),
+]
+EN_PROYECTOS = {
+ "Atelier Norte": ("Bag shop",
+   "Swiss leather goods: the type runs off the canvas and the mosaic assembles itself."),
+ "Rescoldo": ("Restaurant",
+   "The menu is a wheel: it turns with the scroll and each dish opens its page as it reaches the front."),
+ "Tendido": ("Fashion magazine",
+   "A spread of images that lays itself out, and six illustrations, each with its own halo of color."),
+ "Casa Tepemete": ("Mezcal",
+   "A mezcal distillery: the kiln's gradient and agave rosettes that grow on their own each visit."),
+}
+
 # Tono propio de cada área SOLO para las tarjetas de «explora por área» en Muestras.
 # Los pasteles de MODULOS tienen dos pares repetidos (Video/Eventos en lila, Foto/
 # Automatización en azul) y el lila es además el morado de la página: ahí las áreas
@@ -523,7 +549,7 @@ PAGINAS = {
         "titulo": "Muestras — LQS",
         "desc": ("Lo que hemos hecho, por area: video, foto, marca, redes, digital, eventos y "
                  "automatizacion. Se filtra por area y se busca por lo que necesites."),
-        "partes": ["encab-muestras", "areas", "paquetes", "antesdespues", "express"],
+        "partes": ["encab-muestras", "proyectos", "areas", "paquetes", "antesdespues", "express"],
     },
     "legal.html": {
         "titulo": "Términos, datos y cookies — LQS",
@@ -655,6 +681,26 @@ def paquetes_html(idi):
                    % (color, ico, tag, nom, para, incluye, lis, href, cta))
     return '<div class="paq-rej">%s</div>' % "".join(out)
 
+def proyectos_html(idi):
+    """Tarjetas de las muestras en vivo (demos/). Abren en pestaña nueva.
+       {{RAIZ}} se resuelve al final: demos/ en español, ../demos/ en inglés."""
+    ver = "Ver muestra en vivo →" if idi == "es" else "See it live →"
+    out = []
+    for arch, img, tono, sector_es, nom, tag_es in PROYECTOS:
+        sector = EN_PROYECTOS[nom][0] if idi == "en" else sector_es
+        tag = EN_PROYECTOS[nom][1] if idi == "en" else tag_es
+        alt = ("Muestra: %s · %s" if idi == "es" else "Sample: %s · %s") % (nom, sector)
+        out.append('<a class="proy" style="--t:%s" href="{{RAIZ}}demos/%s" '
+                   'target="_blank" rel="noopener">'
+                   '<span class="proy-vis"><img src="{{RAIZ}}demos/%s" alt="%s" loading="lazy"></span>'
+                   '<span class="proy-cuerpo">'
+                   '<span class="proy-sector mono">%s</span>'
+                   '<span class="proy-nom">%s</span>'
+                   '<span class="proy-tag">%s</span>'
+                   '<span class="proy-ver mono">%s</span></span></a>'
+                   % (tono, arch, img, alt, sector, nom, tag, ver))
+    return '<div class="proy-rej">%s</div>' % "".join(out)
+
 logo = (P.parent / "carita-inline.svg")
 if not logo.exists():
     logo = P.parent.parent / "maqueta" / "carita-inline.svg"
@@ -748,6 +794,7 @@ def armar(idi):
                 json.dumps(fichas, ensure_ascii=False))
     areas_html, fichas_json = areas_explora()
     paq_html = paquetes_html(idi)
+    proy_html = proyectos_html(idi)
 
     datos = json.dumps([{"nombre": m[0], "ico": m[1], "color": m[2], "desc": m[3],
                          "serv": [{"n": s["n"], "p": s["p"], "m": s["m"], "u": s["u"], "g": s["g"]}
@@ -763,7 +810,8 @@ def armar(idi):
         t = (carpeta / (nombre + ".html")).read_text(encoding="utf-8")
         return (t.replace("{{MODULOS}}", mods).replace("{{APERTURA}}", apert)
                  .replace("{{EXPRESS}}", expr).replace("{{AREAS}}", areas_html)
-                 .replace("{{FICHAS}}", fichas_json).replace("{{PAQUETES}}", paq_html))
+                 .replace("{{FICHAS}}", fichas_json).replace("{{PAQUETES}}", paq_html)
+                 .replace("{{PROYECTOS}}", proy_html))
 
     guion = ((BASE / "guion.html").read_text(encoding="utf-8")
              .replace("/*CARITA_JS*/", (BASE / "carita.js").read_text(encoding="utf-8"))
