@@ -19,10 +19,14 @@
       <div class="mstra-info">
         <span class="mstra-chip"><span class="mstra-chip-ico ico" aria-hidden="true"></span><span data-campo="area"></span></span>
         <h3 data-campo="n"></h3>
-        <span class="mstra-precio mono" data-campo="p"></span>
-        <div class="mstra-bloque"><span class="mstra-lab">What it is</span><p data-campo="que"></p></div>
-        <div class="mstra-bloque"><span class="mstra-lab">How to use it</span><p data-campo="uso"></p></div>
-        <a class="btn sm mstra-cta" href="#">Ask about this on WhatsApp</a>
+        <p class="mstra-que" data-campo="que"></p>
+        <div class="mstra-precio-bloque">
+          <span class="mstra-tag" data-campo="tag"></span>
+          <div class="mstra-precio-fila"><span class="mstra-pnum" data-campo="pnum"></span><span class="mstra-pmes" data-campo="mes"></span></div>
+          <span class="mstra-pnota" data-campo="nota"></span>
+          <a class="btn mstra-cta" href="#"></a>
+        </div>
+        <p class="mstra-tip"><span class="mstra-tip-ico" aria-hidden="true">💡</span><span data-campo="uso"></span></p>
       </div>
     </div>
   </dialog>
@@ -65,7 +69,11 @@
       if (!f) return;
       abridor = btn;
       dlg.style.setProperty('--c', f.color);
-      set('area', f.area); set('n', f.n); set('p', f.p); set('que', f.que); set('uso', f.uso);
+      set('area', f.area); set('n', f.n); set('que', f.que); set('uso', f.uso);
+      set('pnum', f.pnum); set('mes', f.mes); set('tag', f.tag); set('nota', f.nota);
+      var bloque = dlg.querySelector('.mstra-precio-bloque');
+      if (bloque) bloque.classList.toggle('es-plan', !!f.plan);
+      if (cta) cta.textContent = f.cta || 'Ask on WhatsApp →';
       if (icoN && window.Iconos) icoN.innerHTML = Iconos.html(f.ico);
       // live sample: if the ficha has a demo, its cover fills the slot
       if (f.demo) {

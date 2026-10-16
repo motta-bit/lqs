@@ -547,19 +547,38 @@ lqs-trazo:defined>img{display:none}
   background:var(--papel);color:var(--tinta);border:2px solid var(--tinta);border-radius:999px;
   padding:7px 14px;box-shadow:0 6px 16px -6px rgba(13,13,15,.5)}
 .mstra-media-ver:hover{background:var(--tinta);color:var(--papel)}
-.mstra-info{padding:clamp(18px,3.2vw,28px);display:flex;flex-direction:column;gap:11px}
+/* Info de la ficha: jerarquía clara —nombre, una línea de qué es, y un bloque
+   de precio agrupado (precio grande + tipo + botón)— en vez de datos regados.
+   El tipo (pago único / plan mensual / por alcance / a pedido) es lo que al
+   cliente le importa, así que vive junto al precio. */
+.mstra-info{padding:clamp(18px,3.2vw,26px);display:flex;flex-direction:column;gap:10px}
 .mstra-chip{display:inline-flex;align-items:center;gap:7px;align-self:flex-start;background:var(--c);
   border-radius:999px;padding:5px 13px 5px 7px;font-size:11px;font-weight:700;letter-spacing:.04em;
   text-transform:uppercase;color:var(--tinta)}
 .mstra-chip-ico{width:20px;height:20px;flex:none}
-.mstra-info h3{font-family:'Syne';font-weight:800;font-size:clamp(22px,3.4vw,31px);
-  letter-spacing:-.02em;line-height:1.02}
-.mstra-precio{font-size:12.5px;color:var(--humo)}
-.mstra-precio:empty{display:none}
-.mstra-bloque{display:flex;flex-direction:column;gap:3px}
-.mstra-lab{font-size:10px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--humo)}
-.mstra-bloque p{font-size:14.5px;line-height:1.5}
-.mstra-cta{align-self:flex-start;margin-top:4px}
+.mstra-info h3{font-family:'Syne';font-weight:800;font-size:clamp(22px,3.4vw,30px);
+  letter-spacing:-.02em;line-height:1.04}
+.mstra-que{font-size:14.5px;line-height:1.5;color:var(--humo)}
+/* bloque de precio: todo lo del dinero y la acción, junto */
+.mstra-precio-bloque{margin-top:4px;display:flex;flex-direction:column;gap:9px;
+  background:color-mix(in srgb,var(--c) 18%,var(--papel));
+  border:2px solid color-mix(in srgb,var(--c) 42%,var(--tinta));
+  border-radius:var(--r-bloque);padding:16px 18px}
+.mstra-tag{align-self:flex-start;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;
+  letter-spacing:.11em;text-transform:uppercase;background:var(--tinta);color:var(--papel);
+  border-radius:999px;padding:4px 11px}
+.mstra-tag:empty{display:none}
+.es-plan .mstra-tag{background:var(--c);color:var(--tinta)}   /* plan: etiqueta en color */
+.mstra-precio-fila{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap}
+.mstra-pnum{font-family:'Syne';font-weight:800;font-size:clamp(30px,6.2vw,44px);
+  letter-spacing:-.03em;line-height:.95}
+.mstra-pmes{font-size:15px;font-weight:700;color:var(--humo)}
+.mstra-pmes:empty{display:none}
+.mstra-pnota{font-size:12.5px;line-height:1.4;color:var(--humo)}
+.mstra-cta{align-self:flex-start;margin-top:3px}
+/* recomendación: baja a un tip sutil, deja de competir con lo de arriba */
+.mstra-tip{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;line-height:1.45;color:var(--humo)}
+.mstra-tip-ico{flex:none;font-size:13px;line-height:1.3}
 
 /* ---------- paquetes por sector (Muestras) ----------
    El color del sector vive en el chip del icono, la etiqueta y los checks;

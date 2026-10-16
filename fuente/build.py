@@ -768,6 +768,28 @@ def armar(idi):
             return {"arch": "{{RAIZ}}demos/" + d[0], "img": "{{RAIZ}}demos/" + d[1],
                     "tono": d[2], "marca": d[3]}
 
+        # Campos del bloque de precio de la ficha: separa lo que al cliente le
+        # importa —cuánto y de qué tipo—. Cuatro tipos: pago único (proyecto),
+        # plan mensual (continuo), por alcance (se cotiza) y a pedido (Express).
+        es = idi == "es"
+        def modal_campos(p, m, express=False):
+            if express:
+                return {"pnum": "A pedido" if es else "On request", "mes": "", "tag": "",
+                        "nota": "Sin cotizador · mismo día." if es else "No quote · same-day.",
+                        "plan": False, "cta": "Pedir por WhatsApp →" if es else "Ask on WhatsApp →"}
+            if not p:
+                return {"pnum": "Por alcance" if es else "By scope", "mes": "", "tag": "",
+                        "nota": "Se cotiza según lo que necesites." if es else "Quoted to fit your need.",
+                        "plan": False, "cta": "Cotizar por WhatsApp →" if es else "Get a quote →"}
+            if m:
+                return {"pnum": fmt(p), "mes": "/mes" if es else "/mo",
+                        "tag": "Plan mensual" if es else "Monthly plan",
+                        "nota": "Continuo, mes a mes." if es else "Ongoing, month to month.",
+                        "plan": True, "cta": "Empezar el plan →" if es else "Start the plan →"}
+            return {"pnum": fmt(p), "mes": "", "tag": "Pago único" if es else "One-time",
+                    "nota": "Un brief, una entrega." if es else "One brief, one delivery.",
+                    "plan": False, "cta": "Cotizar por WhatsApp →" if es else "Get a quote →"}
+
         cds = []
         for n_es, ico, color_mod, desc_es, servs_es in MODULOS:
             color = AREA_TONO.get(ico, color_mod)
@@ -780,8 +802,10 @@ def armar(idi):
                 que, uso = FICHA_I.get(s["n"], ("", ""))
                 pc = precio_corto(s["p"], s["m"])
                 demo = DEMOS.get(s["n"])
-                fichas.append({"n": n_disp, "area": nom_a, "ico": ico, "color": color,
-                               "p": pc, "que": que, "uso": uso, "demo": ficha_demo(s["n"])})
+                f = {"n": n_disp, "area": nom_a, "ico": ico, "color": color,
+                     "p": pc, "que": que, "uso": uso, "demo": ficha_demo(s["n"])}
+                f.update(modal_campos(s["p"], s["m"]))
+                fichas.append(f)
                 # un área sin demo: el primer cuadro se ensancha, para dar ritmo
                 cls = "mstra-wide" if (not hay_demo and k == 0) else ""
                 cuadros.append(cuadro(n_disp, pc, len(fichas) - 1, demo, cls))
@@ -794,8 +818,10 @@ def armar(idi):
         cuadros = []
         for j, e_es in enumerate(EXPRESS):
             que, uso = FICHA_I.get(e_es, ("", ""))
-            fichas.append({"n": ex_src[j], "area": "Express", "ico": "reloj",
-                           "color": "#F4D000", "p": expr_p, "que": que, "uso": uso, "demo": None})
+            f = {"n": ex_src[j], "area": "Express", "ico": "reloj",
+                 "color": "#F4D000", "p": expr_p, "que": que, "uso": uso, "demo": None}
+            f.update(modal_campos(None, False, express=True))
+            fichas.append(f)
             cuadros.append(cuadro(ex_src[j], expr_p, len(fichas) - 1,
                                   cls="mstra-wide" if j == 0 else ""))
         cds.append(tarj("#F4D000", "reloj", "Express", exd, "".join(cuadros), extra=" area-xp"))
