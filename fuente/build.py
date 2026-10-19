@@ -16,14 +16,14 @@ def S(nombre, precio=0, mensual=False, unidad="", fuente="propuesto", grupo=""):
 
 # nombre, clave de ícono, superficie pastel, descripción corta, servicios
 MODULOS = [
- ("Video", "video", "#C4A8F5", "Reels, YouTube, comerciales", [
+ ("Video", "video", "#F2975A", "Reels, YouTube, comerciales", [
    S("Reels y contenido vertical",                   150000, fuente="tarifario"),
    S("Entrevistas",                                  350000),
    S("Video para YouTube, acabado cinematográfico",  600000),
    S("Podcast: grabación y cortes",                  500000),
    S("Comerciales y piezas de publicidad",           700000),
  ]),
- ("Foto", "foto", "#A8CBF5", "Producto, publicidad, sesiones", [
+ ("Foto", "foto", "#58B6D8", "Producto, publicidad, sesiones", [
    S("Retoque y edición",                             40000, unidad="por foto", fuente="tarifario"),
    S("Sesión a una persona",                         200000, unidad="45 min, 10 fotos", fuente="tarifario"),
    S("Foto de producto",                             250000),
@@ -31,7 +31,7 @@ MODULOS = [
    S("Foto para publicidad",                         400000),
    S("Sesión al equipo",                             400000),
  ]),
- ("Marca", "marca", "#F7D9A6", "Identidad, empaques, consultoría", [
+ ("Marca", "marca", "#E7B544", "Identidad, empaques, consultoría", [
    S("Solo el logo",                                 150000, grupo="identidad"),
    S("Diseño de accesorios de marca",                250000),
    S("Consultoría de ADN y orientación de marca",    300000),
@@ -39,7 +39,7 @@ MODULOS = [
    S("Rediseño de una marca que ya existe",          650000, grupo="identidad"),
    S("Diseño de marca desde cero",                   750000, grupo="identidad"),
  ]),
- ("Redes", "redes", "#BFE0A8", "Contenido, calendario, community", [
+ ("Redes", "redes", "#79C257", "Contenido, calendario, community", [
    S("Publicaciones sueltas",                         40000, unidad="por pieza", fuente="tarifario", grupo="piezas"),
    S("Comercial corto para pauta",                   250000),
    S("Paquete de publicaciones",                     210000, unidad="6 piezas", grupo="piezas"),
@@ -47,7 +47,7 @@ MODULOS = [
    S("Social manager",                               650000, mensual=True, unidad="plan Base", fuente="tarifario", grupo="plan"),
    S("Plan mensual con calendario de publicación",  1290000, mensual=True, unidad="plan Activo", fuente="tarifario", grupo="plan"),
  ]),
- ("Digital", "web", "#F7B2AB", "Sitios, catálogos, menús", [
+ ("Digital", "web", "#EC6F6F", "Sitios, catálogos, menús", [
    S("Menú digital con código QR",                   450000),
    S("Landing para una campaña",                     600000),
    S("Blog",                                         700000),
@@ -55,7 +55,7 @@ MODULOS = [
    S("Catálogo en línea",                           1000000),
    S("Página web",                                  1300000),
  ]),
- ("Eventos", "eventos", "#C4A8F5", "Logística, registro, cobertura", [
+ ("Eventos", "eventos", "#D879B4", "Logística, registro, cobertura", [
    S("Diseño de accesorios del evento",              350000),
    S("Fondos y carruseles para conferencia",         250000),
    S("Registro y control de invitados",              600000, unidad="con contacto post evento"),
@@ -63,7 +63,7 @@ MODULOS = [
    S("Insta foto: la foto llega el mismo día",       800000),
    S("Logística completa del día",                  1800000),
  ]),
- ("Automatización", "automatizacion", "#A8CBF5", "WhatsApp, Instagram, seguimiento", [
+ ("Automatización", "automatizacion", "#4CB0A4", "WhatsApp, Instagram, seguimiento", [
    S("Reporte automático de números cada semana",    300000),
    S("WhatsApp Business: catálogo y respuestas",     350000),
    S("Solicitudes que llegan directo, sin bandeja",  400000),
