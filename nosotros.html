@@ -500,18 +500,26 @@ lqs-trazo:defined>img{display:none}
 .gv-card{position:relative;overflow:hidden;cursor:pointer;font:inherit;color:var(--papel);
   text-align:left;border:2px solid var(--tinta);border-radius:var(--r-bloque);padding:0;
   display:flex;flex-direction:column;justify-content:flex-end;
-  transition:transform .14s ease,box-shadow .14s ease}
-.gv-card:hover,.gv-card:focus-visible{transform:translateY(-3px);
-  box-shadow:0 10px 0 -3px var(--c);outline:none}
+  transition:transform .24s cubic-bezier(.2,.75,.25,1),box-shadow .24s cubic-bezier(.2,.75,.25,1)}
+.gv-card:hover,.gv-card:focus-visible{transform:translateY(-5px) scale(1.012);outline:none;
+  box-shadow:0 16px 30px -14px color-mix(in srgb,var(--c) 72%,#000),0 10px 0 -4px var(--c)}
 .gv-big{grid-column:span 2;grid-row:span 2}       /* las que tienen muestra en vivo, grandes */
-/* portada placeholder: degradado del color de la categoría + ícono marca de agua */
-.gv-cover{position:absolute;inset:0;z-index:0;
-  background:linear-gradient(145deg,color-mix(in srgb,var(--c) 85%,#000) 0%,var(--c) 55%,color-mix(in srgb,var(--c) 70%,var(--papel)) 100%)}
-.gv-cover-ico.ico{position:absolute;right:-14%;bottom:-12%;width:64%;height:64%;
-  color:var(--papel);opacity:.22}
+/* portada placeholder: degradado vivo del color de la categoría + ícono que reacciona */
+.gv-cover{position:absolute;inset:0;z-index:0;overflow:hidden;
+  background:
+    radial-gradient(120% 92% at 16% 6%,color-mix(in srgb,var(--c) 58%,var(--papel)) 0%,transparent 46%),
+    linear-gradient(142deg,color-mix(in srgb,var(--c) 92%,#000) 0%,var(--c) 52%,color-mix(in srgb,var(--c) 82%,#000) 100%)}
+.gv-cover-ico.ico{position:absolute;right:-14%;bottom:-12%;width:66%;height:66%;color:var(--papel);
+  opacity:.24;transition:transform .4s cubic-bezier(.2,.75,.25,1),opacity .3s ease}
+.gv-card:hover .gv-cover-ico{transform:scale(1.14) rotate(-5deg);opacity:.34}
+/* brillo que barre la tarjeta al pasar el cursor */
+.gv-card::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0;
+  transform:translateX(-70%);
+  background:linear-gradient(115deg,transparent 38%,rgba(253,251,247,.3) 50%,transparent 62%)}
+.gv-card:hover::after{opacity:1;transform:translateX(70%);transition:transform .6s ease,opacity .25s ease}
 .gv-cover-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 /* degradado de luz + info abajo */
-.gv-foot{position:relative;z-index:1;display:flex;align-items:flex-end;gap:9px;
+.gv-foot{position:relative;z-index:2;display:flex;align-items:flex-end;gap:9px;
   padding:12px 13px;background:linear-gradient(0deg,rgba(13,13,15,.82),rgba(13,13,15,.12) 70%,transparent)}
 .gv-cat.ico{width:26px;height:26px;flex:none;color:var(--papel);
   background:rgba(253,251,247,.16);border-radius:8px;padding:5px}
@@ -522,7 +530,7 @@ lqs-trazo:defined>img{display:none}
   text-transform:uppercase;opacity:.9}
 .gv-big .gv-n{font-size:16px;-webkit-line-clamp:3}
 /* medidor de urgencia, solo en Express */
-.gv-urg{position:absolute;top:10px;left:10px;z-index:1;display:flex;align-items:center;gap:6px;
+.gv-urg{position:absolute;top:10px;left:10px;z-index:2;display:flex;align-items:center;gap:6px;
   background:rgba(13,13,15,.55);backdrop-filter:blur(3px);border-radius:999px;padding:4px 9px 4px 8px}
 .gv-urg-lab{font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:600;letter-spacing:.12em;
   text-transform:uppercase;color:rgba(253,251,247,.75)}
@@ -533,10 +541,40 @@ lqs-trazo:defined>img{display:none}
 /* filtro: ocultar; y barrido de entrada escalonado */
 .gv-oculta{display:none}
 @media(prefers-reduced-motion:no-preference){
-  .gv-rej.gv-entra .gv-card{animation:gv-ola .5s cubic-bezier(.2,.75,.25,1) both;
-    animation-delay:calc(var(--i,0) * 38ms)}
+  .gv-rej.gv-entra .gv-card{animation:gv-ola .62s cubic-bezier(.2,.8,.2,1) both;
+    animation-delay:calc(var(--i,0) * 45ms)}
 }
-@keyframes gv-ola{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes gv-ola{0%{opacity:0;transform:translateY(26px) scale(.9)}
+  60%{opacity:1}100%{opacity:1;transform:none}}
+
+/* ---------- bento de áreas (Nosotros): los colores de la marca ---------- */
+.ab-rej{grid-column:span 6;display:grid;grid-auto-flow:dense;gap:10px;
+  grid-template-columns:repeat(auto-fill,minmax(152px,1fr));grid-auto-rows:152px}
+@media(max-width:440px){.ab-rej{grid-template-columns:repeat(2,1fr);grid-auto-rows:146px}}
+.ab-tile{--c:var(--tinta);position:relative;overflow:hidden;border:2px solid var(--tinta);
+  border-radius:var(--r-bloque);padding:15px;color:var(--papel);
+  display:flex;flex-direction:column;justify-content:space-between;gap:10px;
+  background:radial-gradient(110% 82% at 20% 2%,rgba(253,251,247,.20),transparent 54%),
+    linear-gradient(150deg,color-mix(in srgb,var(--c) 84%,#1A1720) 0%,color-mix(in srgb,var(--c) 56%,#1A1720) 100%);
+  transition:transform .24s cubic-bezier(.2,.75,.25,1),box-shadow .24s cubic-bezier(.2,.75,.25,1)}
+.ab-tile:hover{transform:translateY(-5px) scale(1.012);
+  box-shadow:0 16px 30px -14px color-mix(in srgb,var(--c) 72%,#000)}
+.ab-big{grid-column:span 2;grid-row:span 2}
+.ab-ico.ico{width:40px;height:40px;flex:none;color:var(--papel);
+  background:rgba(253,251,247,.18);border-radius:var(--r-int);padding:8px}
+.ab-big .ab-ico.ico{width:54px;height:54px;padding:12px}
+.ab-tx{display:flex;flex-direction:column;gap:3px}
+.ab-n{font-family:'Syne';font-weight:800;font-size:18px;letter-spacing:-.02em;line-height:1}
+.ab-big .ab-n{font-size:clamp(23px,3vw,31px)}
+.ab-d{font-size:12px;line-height:1.3;opacity:.88}
+.ab-big .ab-d{font-size:14px;max-width:34ch}
+.ab-tile::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transform:translateX(-70%);
+  background:linear-gradient(115deg,transparent 38%,rgba(253,251,247,.28) 50%,transparent 62%)}
+.ab-tile:hover::after{opacity:1;transform:translateX(70%);transition:transform .6s ease,opacity .25s ease}
+@media(prefers-reduced-motion:no-preference){
+  .ab-rej.ab-entra .ab-tile{animation:gv-ola .62s cubic-bezier(.2,.8,.2,1) both;
+    animation-delay:calc(var(--i,0) * 60ms)}
+}
 
 /* Cuadros dentro de cada área: un bento de celdas cuadradas con piezas de
    distinto tamaño (la muestra en vivo ocupa 2×2; el primer cuadro de un área
@@ -1024,6 +1062,28 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
         quedó libre.</p>
     </div>
   </div>
+</section>
+
+
+<!-- ============ BENTO DE ÁREAS (color) ============ -->
+<section class="seccion" id="areas-bento">
+  <div class="eyebrow">Ocho frentes · un solo ADN</div>
+  <h2 style="margin-bottom:6px">Modular también en el color</h2>
+  <p class="dim" style="margin:0 0 20px;max-width:58ch">Cada área es su propio mundo —con su color y su señal— y al mismo
+    tiempo encaja con las demás. Esa es la marca: lila de base, y un arcoíris de frentes que se contratan sueltos o juntos.</p>
+  <div class="ab-rej"><div class="ab-tile ab-big" style="--c:#F2975A;--i:0"><span class="ab-ico ico" data-ico="video"></span><span class="ab-tx"><span class="ab-n">Video</span><span class="ab-d">Reels, YouTube, comerciales</span></span></div><div class="ab-tile" style="--c:#58B6D8;--i:1"><span class="ab-ico ico" data-ico="foto"></span><span class="ab-tx"><span class="ab-n">Foto</span><span class="ab-d">Producto, publicidad, sesiones</span></span></div><div class="ab-tile ab-big" style="--c:#E7B544;--i:2"><span class="ab-ico ico" data-ico="marca"></span><span class="ab-tx"><span class="ab-n">Marca</span><span class="ab-d">Identidad, empaques, consultoría</span></span></div><div class="ab-tile" style="--c:#79C257;--i:3"><span class="ab-ico ico" data-ico="redes"></span><span class="ab-tx"><span class="ab-n">Redes</span><span class="ab-d">Contenido, calendario, community</span></span></div><div class="ab-tile" style="--c:#EC6F6F;--i:4"><span class="ab-ico ico" data-ico="web"></span><span class="ab-tx"><span class="ab-n">Digital</span><span class="ab-d">Sitios, catálogos, menús</span></span></div><div class="ab-tile ab-big" style="--c:#D879B4;--i:5"><span class="ab-ico ico" data-ico="eventos"></span><span class="ab-tx"><span class="ab-n">Eventos</span><span class="ab-d">Logística, registro, cobertura</span></span></div><div class="ab-tile" style="--c:#4CB0A4;--i:6"><span class="ab-ico ico" data-ico="automatizacion"></span><span class="ab-tx"><span class="ab-n">Automatización</span><span class="ab-d">WhatsApp, Instagram, seguimiento</span></span></div><div class="ab-tile ab-xp" style="--c:#F4D000;--i:7"><span class="ab-ico ico" data-ico="reloj"></span><span class="ab-tx"><span class="ab-n">Express</span><span class="ab-d">Lo urgente, el mismo día</span></span></div></div>
+  <script>
+  (function () {
+    var rej = document.querySelector('#areas-bento .ab-rej');
+    if (!rej) return;
+    var lento = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (lento || !('IntersectionObserver' in window)) { rej.classList.add('ab-entra'); return; }
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { rej.classList.add('ab-entra'); io.disconnect(); } });
+    }, { threshold: 0.15 });
+    io.observe(rej);
+  })();
+  </script>
 </section>
 
 

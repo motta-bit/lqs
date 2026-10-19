@@ -546,7 +546,7 @@ PAGINAS = {
         "titulo": "Quiénes somos — LQS",
         "desc": ("No solo una agencia creativa: una agencia creativa modular. Por que existe LQS, "
                  "como trabajamos y que hemos hecho."),
-        "partes": ["encab-nosotros", "nosotros", "trabajamos", "casos"],
+        "partes": ["encab-nosotros", "nosotros", "areas-bento", "trabajamos", "casos"],
     },
     "muestras.html": {
         "titulo": "Muestras — LQS",
@@ -683,6 +683,31 @@ def paquetes_html(idi):
                    '<a class="btn sm paq-cta" href="%s">%s</a></article>'
                    % (color, ico, tag, nom, para, incluye, lis, href, cta))
     return '<div class="paq-rej">%s</div>' % "".join(out)
+
+def areas_bento(idi):
+    """Bento colorido de las áreas para Nosotros: los montones de colores de la
+       marca, uno por área + Express. Sin interacción pesada: muestra el ADN
+       modular y de color. Tamaños variados para que se sienta bento."""
+    grandes = {"video", "marca", "eventos"}   # unas más grandes, para ritmo
+    tiles = []
+    i = 0
+    for n_es, ico, color_mod, desc_es, servs in MODULOS:
+        color = AREA_TONO.get(ico, color_mod)
+        nom = EN_AREAS[n_es][0] if idi == "en" else n_es
+        desc = EN_AREAS[n_es][1] if idi == "en" else desc_es
+        cls = " ab-big" if ico in grandes else ""
+        tiles.append('<div class="ab-tile%s" style="--c:%s;--i:%d">'
+                     '<span class="ab-ico ico" data-ico="%s"></span>'
+                     '<span class="ab-tx"><span class="ab-n">%s</span>'
+                     '<span class="ab-d">%s</span></span></div>'
+                     % (cls, color, i, ico, nom, desc))
+        i += 1
+    exd = "Lo urgente, el mismo día" if idi == "es" else "The urgent stuff, same day"
+    tiles.append('<div class="ab-tile ab-xp" style="--c:#F4D000;--i:%d">'
+                 '<span class="ab-ico ico" data-ico="reloj"></span>'
+                 '<span class="ab-tx"><span class="ab-n">Express</span>'
+                 '<span class="ab-d">%s</span></span></div>' % (i, exd))
+    return '<div class="ab-rej">%s</div>' % "".join(tiles)
 
 logo = (P.parent / "carita-inline.svg")
 if not logo.exists():
@@ -838,6 +863,7 @@ def armar(idi):
         return html, json.dumps(fichas, ensure_ascii=False)
     areas_html, fichas_json = areas_explora()
     paq_html = paquetes_html(idi)
+    ab_html = areas_bento(idi)
 
     datos = json.dumps([{"nombre": m[0], "ico": m[1], "color": m[2], "desc": m[3],
                          "serv": [{"n": s["n"], "p": s["p"], "m": s["m"], "u": s["u"], "g": s["g"]}
@@ -853,7 +879,8 @@ def armar(idi):
         t = (carpeta / (nombre + ".html")).read_text(encoding="utf-8")
         return (t.replace("{{MODULOS}}", mods).replace("{{APERTURA}}", apert)
                  .replace("{{EXPRESS}}", expr).replace("{{AREAS}}", areas_html)
-                 .replace("{{FICHAS}}", fichas_json).replace("{{PAQUETES}}", paq_html))
+                 .replace("{{FICHAS}}", fichas_json).replace("{{PAQUETES}}", paq_html)
+                 .replace("{{AREABENTO}}", ab_html))
 
     guion = ((BASE / "guion.html").read_text(encoding="utf-8")
              .replace("/*CARITA_JS*/", (BASE / "carita.js").read_text(encoding="utf-8"))

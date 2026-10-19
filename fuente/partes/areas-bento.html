@@ -1,0 +1,20 @@
+<!-- ============ BENTO DE ÁREAS (color) ============ -->
+<section class="seccion" id="areas-bento">
+  <div class="eyebrow">Ocho frentes · un solo ADN</div>
+  <h2 style="margin-bottom:6px">Modular también en el color</h2>
+  <p class="dim" style="margin:0 0 20px;max-width:58ch">Cada área es su propio mundo —con su color y su señal— y al mismo
+    tiempo encaja con las demás. Esa es la marca: lila de base, y un arcoíris de frentes que se contratan sueltos o juntos.</p>
+  {{AREABENTO}}
+  <script>
+  (function () {
+    var rej = document.querySelector('#areas-bento .ab-rej');
+    if (!rej) return;
+    var lento = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (lento || !('IntersectionObserver' in window)) { rej.classList.add('ab-entra'); return; }
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { rej.classList.add('ab-entra'); io.disconnect(); } });
+    }, { threshold: 0.15 });
+    io.observe(rej);
+  })();
+  </script>
+</section>
