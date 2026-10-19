@@ -70,6 +70,12 @@ MODULOS = [
    S("Respuestas automáticas en Instagram",          400000, unidad="mensajes y comentarios"),
    S("Agente de WhatsApp que responde y cotiza",    1550000, unidad="montaje"),
  ]),
+ ("Ilustración y diseño", "ilustracion", "#8B6FE0", "Portadas, ilustración, tatuajes, comisiones", [
+   S("Portadas e ilustración",        180000, unidad="varía con el detalle"),
+   S("Ilustración de personajes",     250000),
+   S("Diseño de tatoo",                    0),
+   S("Comisiones abiertas",                0),
+ ]),
 ]
 
 APERTURA = [("Música","Grabación, mezcla"),
@@ -165,6 +171,7 @@ AREA_TONO = {
     "web":            "#EC6F6F",  # coral
     "eventos":        "#D879B4",  # magenta
     "automatizacion": "#4CB0A4",  # teal
+    "ilustracion":    "#8B6FE0",  # violeta
 }
 
 # Ficha de cada servicio para la ventana flotante de Muestras: «qué es» en una
@@ -272,6 +279,15 @@ FICHA = {
    "Para salir del paso con buen material sin montar una sesión."),
  "Arreglos de costura": ("Ajustes y arreglos de prendas.",
    "Lo pequeño que nadie más te resuelve el mismo día."),
+ # Ilustración y diseño
+ "Portadas e ilustración": ("Ilustración original para portadas de disco, libro, single o evento.",
+   "Una imagen propia dice más que un banco de fotos: pídela cuando no quieras parecerte a nadie."),
+ "Ilustración de personajes": ("Creación de un personaje o mascota, con sus poses y expresiones.",
+   "Un personaje propio le pone cara a tu marca y viaja a stickers, merch y redes."),
+ "Diseño de tatoo": ("Diseño de tatuaje a medida, listo para que tu tatuador lo calque.",
+   "Llévalo afinado al estudio: ahorras tiempo de silla y sale justo como lo pensaste."),
+ "Comisiones abiertas": ("Encargos de arte a tu idea: lo que imagines, lo ilustramos.",
+   "Si no está en la lista, cuéntanoslo. El límite es tu imaginación."),
 }
 EN_FICHA = {
  "Reels y contenido vertical": ("Vertical clips (9:16) for Reels, TikTok and Shorts, with snappy edits and on-screen text.",
@@ -366,6 +382,14 @@ EN_FICHA = {
    "To get by with good material without setting up a shoot."),
  "Arreglos de costura": ("Adjustments and repairs on garments.",
    "The small thing no one else solves for you the same day."),
+ "Portadas e ilustración": ("Original illustration for album, book, single or event covers.",
+   "Your own image says more than stock: ask for it when you don't want to look like anyone else."),
+ "Ilustración de personajes": ("A character or mascot, with its poses and expressions.",
+   "Your own character gives your brand a face and travels to stickers, merch and social."),
+ "Diseño de tatoo": ("Custom tattoo design, ready for your artist to trace.",
+   "Take it dialed-in to the studio: you save chair time and it comes out just as you pictured it."),
+ "Comisiones abiertas": ("Art commissions to your idea: whatever you imagine, we illustrate.",
+   "If it's not on the list, tell us. The limit is your imagination."),
 }
 
 # Datos que la ley exige y que hay que llenar antes de publicar la página legal.
@@ -397,6 +421,7 @@ EN_AREAS = {
   "Digital": ("Digital", "Sites, catalogues, menus"),
   "Eventos": ("Events", "Logistics, check-in, coverage"),
   "Automatización": ("Automation", "WhatsApp, Instagram, follow-up"),
+  "Ilustración y diseño": ("Illustration & design", "Covers, illustration, tattoos, commissions"),
 }
 EN_SERV = {
   "Reels y contenido vertical": "Reels and vertical content",
@@ -439,12 +464,16 @@ EN_SERV = {
   "Solicitudes que llegan directo, sin bandeja": "Requests that arrive directly, no inbox",
   "Respuestas automáticas en Instagram": "Automatic replies on Instagram",
   "Agente de WhatsApp que responde y cotiza": "WhatsApp agent that answers and quotes",
+  "Portadas e ilustración": "Covers & illustration",
+  "Ilustración de personajes": "Character illustration",
+  "Diseño de tatoo": "Tattoo design",
+  "Comisiones abiertas": "Open commissions",
 }
 EN_UNIDAD = {
   "por foto": "per photo", "45 min, 10 fotos": "45 min, 10 photos", "por pieza": "per piece",
   "6 piezas": "6 pieces", "plan Base": "Base plan", "plan Activo": "Active plan",
   "con contacto post evento": "with post-event follow-up", "montaje": "setup",
-  "mensajes y comentarios": "messages and comments",
+  "mensajes y comentarios": "messages and comments", "varía con el detalle": "varies with detail",
 }
 EN_APERTURA = [("Music", "Recording, mixing"),
                ("Physical production", "Prototype, laser cutting"),

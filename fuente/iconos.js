@@ -44,6 +44,9 @@
     '@keyframes lqs-minutero{to{transform:rotate(360deg)}}',
     '.i-reloj .minutero{animation:lqs-minutero 2.6s linear infinite;transform-origin:22px 22px}',
     '.i-reloj .horario{animation:lqs-minutero 31.2s linear infinite;transform-origin:22px 22px}',
+    /* ilustración · el lápiz traza, como escribiendo */
+    '@keyframes lqs-escribe{0%,100%{transform:translate(0,0)}50%{transform:translate(-1.6px,1.6px)}}',
+    '.i-ilustracion .lapiz{animation:lqs-escribe 2.8s ease-in-out infinite}',
     '@media (prefers-reduced-motion:reduce){.lqs-ico *{animation:none!important}}'
   ].join("\n");
 
@@ -98,7 +101,15 @@
       '<path class="t" d="M22 6.6 V4.6"/>' +
       '<path class="t horario" d="M22 22 V15.4"/>' +
       '<path class="t minutero" d="M22 22 L29.4 22"/>' +
-      '<circle class="s" cx="22" cy="22" r="2.2"/>'
+      '<circle class="s" cx="22" cy="22" r="2.2"/>',
+
+    ilustracion:
+      '<g class="lapiz">' +
+      '<path class="s" d="M28.8 7.4 L34.6 13.2 L31.4 16.4 L25.6 10.6 Z"/>' +
+      '<path class="t" d="M25 11.2 L31.2 17.4 L17.6 31 L11.4 24.8 Z"/>' +
+      '<path class="s" d="M11.4 24.8 L17.6 31 L9.2 33.8 Z"/>' +
+      '</g>' +
+      '<path class="t trazo" d="M7.6 37 q3.6 -3.4 7.2 0 t 7.2 0"/>'
   };
 
   var ALIAS = { "automatización": "automatizacion", auto: "automatizacion" };
@@ -139,6 +150,6 @@
 
   global.Iconos = {
     html: html, montar: montar, auto: auto, CSS: CSS,
-    NOMBRES: ["video", "foto", "marca", "redes", "web", "eventos", "automatizacion", "reloj"]
+    NOMBRES: ["video", "foto", "marca", "redes", "web", "eventos", "automatizacion", "ilustracion", "reloj"]
   };
 })(window);
