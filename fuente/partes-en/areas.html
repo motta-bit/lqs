@@ -1,7 +1,7 @@
 <!-- ============ EXPLORE BY AREA ============ -->
 <section class="seccion" id="areas-explora">
-  <div class="eyebrow">Explore by area · tap to see what we do in each</div>
-  <h2 style="margin-bottom:20px">What we offer, by area</h2>
+  <div class="eyebrow">Gallery · tap a sample to open it</div>
+  <h2 style="margin-bottom:14px">Everything we've done, in one view</h2>
   {{AREAS}}
 
   <!-- Data for each box's floating window. It is JSON, not rendered. -->
@@ -38,7 +38,7 @@
     var datos = [];
     try { datos = JSON.parse(document.getElementById('fichas-data').textContent); } catch (e) {}
     var caja = dlg.querySelector('.mstra-caja');
-    var rej  = document.querySelector('.areas-rej');
+    var rej  = document.querySelector('.gv-rej');
     var wa   = dlg.getAttribute('data-wa');
     var cta  = dlg.querySelector('.mstra-cta');
     var icoN = dlg.querySelector('.mstra-chip-ico');
@@ -98,12 +98,45 @@
     }
 
     if (rej) rej.addEventListener('click', function (e) {
-      var b = e.target.closest('.mstra');
+      var b = e.target.closest('.gv-card');
       if (b) abrir(b);
     });
     dlg.querySelector('.mstra-x').addEventListener('click', cerrar);
     dlg.addEventListener('click', function (e) { if (e.target === dlg) cerrar(); });   // click outside
     dlg.addEventListener('cancel', function (e) { e.preventDefault(); cerrar(); });    // Esc
+  })();
+  </script>
+
+  <script>
+  /* Live gallery: non-invasive category filters + entrance sweep. */
+  (function () {
+    var rej = document.querySelector('.gv-rej');
+    if (!rej) return;
+    var cards = [].slice.call(rej.querySelectorAll('.gv-card'));
+    var lento = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    var chips = [].slice.call(document.querySelectorAll('.gv-chip'));
+    chips.forEach(function (chip) {
+      chip.addEventListener('click', function () {
+        var cat = chip.dataset.cat;
+        chips.forEach(function (c) { c.setAttribute('aria-pressed', c === chip); });
+        var j = 0;
+        cards.forEach(function (card) {
+          var ok = (cat === 'todas' || card.dataset.cat === cat);
+          card.classList.toggle('gv-oculta', !ok);
+          if (ok) { card.style.setProperty('--i', j); j++; }
+        });
+        if (!lento) { rej.classList.remove('gv-entra'); void rej.offsetWidth; rej.classList.add('gv-entra'); }
+      });
+    });
+
+    if (lento || !('IntersectionObserver' in window)) { rej.classList.add('gv-entra'); return; }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { rej.classList.add('gv-entra'); io.disconnect(); }
+      });
+    }, { threshold: 0.12 });
+    io.observe(rej);
   })();
   </script>
 </section>

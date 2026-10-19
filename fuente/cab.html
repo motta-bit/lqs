@@ -459,6 +459,65 @@ lqs-trazo:defined>img{display:none}
   white-space:nowrap}
 @media(max-width:560px){.areas-rej{grid-template-columns:1fr}}
 
+/* ---------- galería viva (Muestras) ----------
+   Bento de una tarjeta por servicio. La portada la pone Motta; mientras no
+   exista va un placeholder con el color e ícono de la categoría. Abajo, sobre
+   un degradado de luz: el símbolo/color de la categoría y «Explorar». Filtros
+   por categoría (chips) y barrido de entrada escalonado. */
+.gv-filtros{grid-column:span 6;display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.gv-chip{--c:var(--humo);display:inline-flex;align-items:center;gap:7px;cursor:pointer;
+  font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.04em;
+  background:var(--papel);color:var(--tinta);border:1.5px solid rgba(26,23,32,.18);
+  border-radius:999px;padding:7px 14px;transition:.13s}
+.gv-chip:hover{border-color:var(--c)}
+.gv-chip[aria-pressed="true"]{background:var(--tinta);color:var(--papel);border-color:var(--tinta)}
+.gv-chip-dot{width:9px;height:9px;border-radius:50%;background:var(--c);flex:none}
+.gv-chip[aria-pressed="true"] .gv-chip-dot{box-shadow:0 0 0 2px var(--papel)}
+
+.gv-rej{grid-column:span 6;display:grid;grid-auto-flow:dense;gap:10px;
+  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));grid-auto-rows:150px}
+@media(max-width:440px){.gv-rej{grid-template-columns:repeat(2,1fr);grid-auto-rows:136px}}
+.gv-card{position:relative;overflow:hidden;cursor:pointer;font:inherit;color:var(--papel);
+  text-align:left;border:2px solid var(--tinta);border-radius:var(--r-bloque);padding:0;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  transition:transform .14s ease,box-shadow .14s ease}
+.gv-card:hover,.gv-card:focus-visible{transform:translateY(-3px);
+  box-shadow:0 10px 0 -3px var(--c);outline:none}
+.gv-big{grid-column:span 2;grid-row:span 2}       /* las que tienen muestra en vivo, grandes */
+/* portada placeholder: degradado del color de la categoría + ícono marca de agua */
+.gv-cover{position:absolute;inset:0;z-index:0;
+  background:linear-gradient(145deg,color-mix(in srgb,var(--c) 85%,#000) 0%,var(--c) 55%,color-mix(in srgb,var(--c) 70%,var(--papel)) 100%)}
+.gv-cover-ico.ico{position:absolute;right:-14%;bottom:-12%;width:64%;height:64%;
+  color:var(--papel);opacity:.22}
+.gv-cover-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+/* degradado de luz + info abajo */
+.gv-foot{position:relative;z-index:1;display:flex;align-items:flex-end;gap:9px;
+  padding:12px 13px;background:linear-gradient(0deg,rgba(13,13,15,.82),rgba(13,13,15,.12) 70%,transparent)}
+.gv-cat.ico{width:26px;height:26px;flex:none;color:var(--papel);
+  background:rgba(253,251,247,.16);border-radius:8px;padding:5px}
+.gv-tx{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.gv-n{font-weight:700;font-size:13px;line-height:1.2;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.gv-ex{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;opacity:.9}
+.gv-big .gv-n{font-size:16px;-webkit-line-clamp:3}
+/* medidor de urgencia, solo en Express */
+.gv-urg{position:absolute;top:10px;left:10px;z-index:1;display:flex;align-items:center;gap:6px;
+  background:rgba(13,13,15,.55);backdrop-filter:blur(3px);border-radius:999px;padding:4px 9px 4px 8px}
+.gv-urg-lab{font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:600;letter-spacing:.12em;
+  text-transform:uppercase;color:rgba(253,251,247,.75)}
+.gv-urg-bars{display:flex;align-items:flex-end;gap:2px;height:12px}
+.gv-urg-bars i{width:3px;border-radius:1px;background:#ff5b3a}
+.gv-urg-bars i:nth-child(1){height:5px}.gv-urg-bars i:nth-child(2){height:9px}.gv-urg-bars i:nth-child(3){height:13px}
+.gv-urg-tx{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.04em;color:var(--papel)}
+/* filtro: ocultar; y barrido de entrada escalonado */
+.gv-oculta{display:none}
+@media(prefers-reduced-motion:no-preference){
+  .gv-rej.gv-entra .gv-card{animation:gv-ola .5s cubic-bezier(.2,.75,.25,1) both;
+    animation-delay:calc(var(--i,0) * 38ms)}
+}
+@keyframes gv-ola{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:none}}
+
 /* Cuadros dentro de cada área: un bento de celdas cuadradas con piezas de
    distinto tamaño (la muestra en vivo ocupa 2×2; el primer cuadro de un área
    sin demo se ensancha). Columnas fijas y filas cuadradas para que en el móvil

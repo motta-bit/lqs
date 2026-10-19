@@ -733,39 +733,35 @@ def armar(idi):
         fichas = []
         def precio_corto(p, m):
             return (fmt(p) + (" " + U["mes"] if m else "")) if p else U["porAlcance"]
-        def tarj(color, ico, nom, desc, cuadros, extra=""):
-            return ('<details class="area-cd%s" name="muestras-area" style="--c:%s">'
-                    '<summary><span class="area-ico ico" data-ico="%s"></span>'
-                    '<span class="area-tx"><span class="area-nom">%s</span>'
-                    '<span class="area-desc">%s</span></span>'
-                    '<span class="area-mas" aria-hidden="true"></span></summary>'
-                    '<div class="mstra-rej">%s</div></details>'
-                    % (extra, color, ico, nom, desc, cuadros))
-        envivo = "En vivo" if idi == "es" else "Live"
-        ver_demo = "Ver muestra →" if idi == "es" else "See sample →"
-        ver_serv = "Ver →" if idi == "es" else "View →"
-        # Los cuadros forman un bento: el que tiene muestra en vivo ocupa 2×2
-        # (tamaño destacado, con su portada de fondo); si un área no tiene demo,
-        # el primer cuadro se ensancha para que no quede una rejilla plana.
-        # Cada cuadro lleva un «Ver →» para que se note que se toca para abrirlo.
-        def cuadro(nom_disp, precio, idx, demo=None, cls=""):
-            extra = (" " + cls) if cls else ""
-            foot = ('<span class="mstra-foot"><span class="mstra-p mono">%s</span>'
-                    '<span class="mstra-ver">%s</span></span>'
-                    % (precio, ver_demo if demo else ver_serv))
-            if demo:
-                arch, img, tono, marca = demo
-                mini = ('<span class="mstra-mini" aria-hidden="true">'
-                        '<img src="{{RAIZ}}demos/%s" alt="" loading="lazy"></span>' % img)
-                badge = '<span class="mstra-badge">%s</span>' % envivo
-                return ('<button class="mstra mstra-live%s" type="button" data-f="%d" '
-                        'style="--t:%s">%s%s<span class="mstra-cap">'
-                        '<span class="mstra-n">%s</span>%s</span></button>'
-                        % (extra, idx, tono, mini, badge, nom_disp, foot))
-            return ('<button class="mstra%s" type="button" data-f="%d">'
-                    '<span class="mstra-mini" aria-hidden="true"></span>'
-                    '<span class="mstra-cap"><span class="mstra-n">%s</span>%s</span></button>'
-                    % (extra, idx, nom_disp, foot))
+        # Galería viva: una tarjeta por servicio en un bento filtrable (sin
+        # acordeón; las categorías se eligen con chips). La portada la pone
+        # Motta en marca/muestras/<slug>.webp; mientras no exista va un
+        # placeholder con el color e ícono de la categoría. Al tocar abre la
+        # ficha (la misma ventana con precio y cotizar). Abajo, sobre un
+        # degradado de luz: el símbolo/color de la categoría y «Explorar».
+        ver = "Explorar" if idi == "es" else "Explore"
+        urg_tx = "Hoy mismo" if idi == "es" else "Same day"
+        urg_lab = "Urgencia" if idi == "es" else "Urgency"
+        def gv_card(nom_disp, idx, ico, color, cat, i, cover_img=None, urgente=False):
+            big = " gv-big" if cover_img else ""
+            if cover_img:
+                cover = ('<span class="gv-cover" aria-hidden="true">'
+                         '<img class="gv-cover-img" src="%s" alt="" loading="lazy"></span>' % cover_img)
+            else:
+                cover = ('<span class="gv-cover" aria-hidden="true">'
+                         '<span class="gv-cover-ico ico" data-ico="%s"></span></span>' % ico)
+            urg = ''
+            if urgente:
+                urg = ('<span class="gv-urg" aria-hidden="true">'
+                       '<span class="gv-urg-lab">%s</span>'
+                       '<span class="gv-urg-bars"><i></i><i></i><i></i></span>'
+                       '<span class="gv-urg-tx">%s</span></span>' % (urg_lab, urg_tx))
+            return ('<button class="gv-card%s" type="button" data-f="%d" data-cat="%s" '
+                    'style="--c:%s;--i:%d" aria-label="%s">%s%s'
+                    '<span class="gv-foot"><span class="gv-cat ico" data-ico="%s"></span>'
+                    '<span class="gv-tx"><span class="gv-n">%s</span>'
+                    '<span class="gv-ex">%s →</span></span></span></button>'
+                    % (big, idx, cat, color, i, nom_disp, cover, urg, ico, nom_disp, ver))
 
         def ficha_demo(nombre_es):
             d = DEMOS.get(nombre_es)
@@ -796,43 +792,50 @@ def armar(idi):
                     "nota": "Un brief, una entrega." if es else "One brief, one delivery.",
                     "plan": False, "cta": "Cotizar por WhatsApp →" if es else "Get a quote →"}
 
-        cds = []
+        chips = [("todas", "Todas" if es else "All", "")]
+        cards = []
+        i = 0
         for n_es, ico, color_mod, desc_es, servs_es in MODULOS:
             color = AREA_TONO.get(ico, color_mod)
             nom_a = EN_AREAS[n_es][0] if idi == "en" else n_es
-            desc_a = EN_AREAS[n_es][1] if idi == "en" else desc_es
-            hay_demo = any(s["n"] in DEMOS for s in servs_es)
-            cuadros = []
-            for k, s in enumerate(servs_es):
+            chips.append((ico, nom_a, color))
+            for s in servs_es:
                 n_disp = EN_SERV.get(s["n"], s["n"]) if idi == "en" else s["n"]
                 que, uso = FICHA_I.get(s["n"], ("", ""))
-                pc = precio_corto(s["p"], s["m"])
                 demo = DEMOS.get(s["n"])
                 f = {"n": n_disp, "area": nom_a, "ico": ico, "color": color,
-                     "p": pc, "que": que, "uso": uso, "demo": ficha_demo(s["n"])}
+                     "p": precio_corto(s["p"], s["m"]), "que": que, "uso": uso,
+                     "demo": ficha_demo(s["n"])}
                 f.update(modal_campos(s["p"], s["m"]))
                 fichas.append(f)
-                # un área sin demo: el primer cuadro se ensancha, para dar ritmo
-                cls = "mstra-wide" if (not hay_demo and k == 0) else ""
-                cuadros.append(cuadro(n_disp, pc, len(fichas) - 1, demo, cls))
-            cds.append(tarj(color, ico, nom_a, desc_a, "".join(cuadros)))
-        # Express como una tarjeta más: encargos a pedido, sin cotizador.
-        exd = ("Sin cotizador: se pide por WhatsApp y se entrega el mismo día."
-               if idi == "es" else "No quote: ask on WhatsApp, same-day delivery.")
+                cover = ("{{RAIZ}}demos/" + demo[1]) if demo else None
+                cards.append(gv_card(n_disp, len(fichas) - 1, ico, color, ico, i, cover_img=cover))
+                i += 1
+        # Express: una categoría más, con medidor de urgencia (entrega inmediata).
+        chips.append(("express", "Express", "#F4D000"))
         ex_src = EN_EXPRESS if idi == "en" else EXPRESS
         expr_p = "A pedido" if idi == "es" else "On request"
-        cuadros = []
         for j, e_es in enumerate(EXPRESS):
             que, uso = FICHA_I.get(e_es, ("", ""))
-            f = {"n": ex_src[j], "area": "Express", "ico": "reloj",
-                 "color": "#F4D000", "p": expr_p, "que": que, "uso": uso, "demo": None}
+            f = {"n": ex_src[j], "area": "Express", "ico": "reloj", "color": "#F4D000",
+                 "p": expr_p, "que": que, "uso": uso, "demo": None}
             f.update(modal_campos(None, False, express=True))
             fichas.append(f)
-            cuadros.append(cuadro(ex_src[j], expr_p, len(fichas) - 1,
-                                  cls="mstra-wide" if j == 0 else ""))
-        cds.append(tarj("#F4D000", "reloj", "Express", exd, "".join(cuadros), extra=" area-xp"))
-        return ('<div class="areas-rej">%s</div>' % "".join(cds),
-                json.dumps(fichas, ensure_ascii=False))
+            cards.append(gv_card(ex_src[j], len(fichas) - 1, "reloj", "#F4D000",
+                                 "express", i, urgente=True))
+            i += 1
+        chip_html = "".join(
+            ('<button class="gv-chip" type="button" data-cat="%s" aria-pressed="%s"%s>'
+             '%s<span>%s</span></button>'
+             % (slug, "true" if slug == "todas" else "false",
+                (' style="--c:%s"' % col) if col else "",
+                ('<span class="gv-chip-dot"></span>' if col else ""), nom))
+            for slug, nom, col in chips)
+        html = ('<div class="gv-filtros" role="group" aria-label="%s">%s</div>'
+                '<div class="gv-rej">%s</div>'
+                % ("Filtrar por categoría" if es else "Filter by category",
+                   chip_html, "".join(cards)))
+        return html, json.dumps(fichas, ensure_ascii=False)
     areas_html, fichas_json = areas_explora()
     paq_html = paquetes_html(idi)
 
