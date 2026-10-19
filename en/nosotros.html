@@ -611,6 +611,16 @@ lqs-trazo:defined>img{display:none}
 .nb-to .nb-tx{position:relative;z-index:1;max-width:60%}
 .nb-swatches{display:flex;gap:5px;height:40px}
 .nb-swatches i{flex:1;border-radius:7px}
+/* firma: el logo y el eslogan con protagonismo */
+.nb-firma{flex-direction:row;align-items:center;gap:clamp(14px,2.6vw,32px);flex-wrap:wrap}
+.nb-firma lqs-trazo{flex:none;width:clamp(90px,11vw,140px);height:auto}
+.nb-firma lqs-trazo img{width:100%;height:auto;display:block}
+.nb-firma-tx{display:flex;flex-direction:column;gap:3px;min-width:min(240px,100%);flex:1}
+.nb-lqs{font-family:'Syne';font-weight:800;font-size:clamp(44px,8vw,82px);letter-spacing:-.05em;
+  line-height:.82;text-transform:uppercase}
+.nb-lema{font-family:'Syne';font-weight:700;font-size:clamp(16px,2.3vw,23px);letter-spacing:-.02em;color:var(--humo)}
+.nb-toderos{font-size:14px;line-height:1.5;margin-top:7px;max-width:50ch}
+.nb-toderos b{color:#8B5CF6}
 @media(prefers-reduced-motion:no-preference){
   .nb-rej.nb-entra .nb{animation:gv-ola .6s cubic-bezier(.2,.8,.2,1) both;
     animation-delay:calc(var(--i,0) * 70ms)}
@@ -1062,58 +1072,39 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
 </header>
 
 <main class="wrap" id="inicio" data-pagina="nosotros">
-<section class="seccion pagina-encab"><div class="eyebrow">Who we are</div><h1 class="tit-pagina">We are not just a creative agency</h1><p class="dim bajada">We are a modular creative agency. Here is what that means, why LQS exists and how we work.</p></section>
+<section class="seccion pagina-encab"><div class="eyebrow">Who we are</div><h1 class="tit-pagina">We bring your ideas to life</h1><p class="dim bajada">A modular creative agency: take the front you need today and add the rest when you want. The limit is your imagination.</p></section>
 
 <!-- ============ 02b WHO WE ARE (bento) ============ -->
 <section class="seccion" id="nosotros">
-  <div class="eyebrow">Who we are</div>
   <div class="nb-rej">
 
-    <article class="nb nb-luz nb-hero" style="grid-column:span 4">
-      <h2>Not just a creative agency.<br>A <em>modular</em> creative agency.</h2>
-      <p class="dim">Creative because we work across several areas at once. Modular because each one is
-        independent: hired on its own, working on its own, and connecting with the rest when it makes sense.</p>
-    </article>
-
-    <article class="nb nb-color nb-lugar" style="--c:#8B5CF6;grid-column:span 2">
-      <span class="nb-ico ico" data-ico="redes" aria-hidden="true"></span>
-      <div class="nb-tx">
-        <h3>Wherever we're needed</h3>
-        <p>80% remote, with clients in LatAm, Spain and the US. When we have to be there, we are.</p>
+    <article class="nb nb-luz nb-firma" style="grid-column:span 4">
+      <lqs-trazo tam="140" cuando="carga" duracion="2600">
+        <img src="../marca/lqs-principal.svg" alt="LQS" width="140" height="140">
+      </lqs-trazo>
+      <div class="nb-firma-tx">
+        <span class="nb-lqs">LQS</span>
+        <span class="nb-lema">Your ideas' best friend</span>
+        <p class="nb-toderos">We're <b>all-rounders</b>: the limit is your imagination. You dream it, we bring it to life.</p>
       </div>
     </article>
 
-    <article class="nb nb-luz" style="grid-column:span 3">
-      <h4>The third way</h4>
-      <p class="dim">Building a brand usually offers two uncomfortable options: an agency that charges for the
-        whole project up front, or loose providers who don't talk to each other. <b>LQS is the third way:</b>
-        take the piece you need today, pay for that, and add the next when you can.</p>
+    <article class="nb nb-color" style="--c:#8B5CF6;grid-column:span 2">
+      <span class="nb-big-word">your idea</span>
+      <p>In the piece you need today, and the next when you want. One front or all eight.</p>
     </article>
 
-    <article class="nb nb-luz" style="grid-column:span 3">
-      <h4>And inside, the same</h4>
-      <p class="dim">For each client we build the team that work needs. Everyone handling more than one area is
-        on purpose: it lets us <b>build the team around the case</b>, instead of forcing the case into whichever
-        area happened to be free.</p>
+    <article class="nb nb-color nb-lugar" style="--c:#4CB0A4;grid-column:span 3">
+      <span class="nb-ico ico" data-ico="redes" aria-hidden="true"></span>
+      <div class="nb-tx">
+        <h3>Wherever we're needed</h3>
+        <p>80% remote, with people in LatAm, Spain and the US. When we have to be there, we are.</p>
+      </div>
     </article>
 
-    <article class="nb nb-color nb-modular" style="--c:#C4A8F5;grid-column:span 2">
-      <span class="nb-big-word">modular</span>
-      <p>Not decoration: it's how we charge, deliver and grow.</p>
-    </article>
-
-    <article class="nb nb-color nb-to" style="--c:#F4D000;grid-column:span 2">
+    <article class="nb nb-color nb-to" style="--c:#F4D000;grid-column:span 3">
       <img class="nb-pato" src="../marca/to-parado.png" alt="" aria-hidden="true">
-      <div class="nb-tx"><h3>TO. tags along</h3><p>The duck that gives the brand a face.</p></div>
-    </article>
-
-    <article class="nb nb-luz nb-paleta" style="grid-column:span 2">
-      <span class="nb-swatches" aria-hidden="true">
-        <i style="background:#F2975A"></i><i style="background:#58B6D8"></i><i style="background:#E7B544"></i>
-        <i style="background:#79C257"></i><i style="background:#EC6F6F"></i><i style="background:#D879B4"></i>
-        <i style="background:#4CB0A4"></i><i style="background:#F4D000"></i>
-      </span>
-      <div class="nb-tx"><h4>One color per front</h4><p class="dim">Lilac at the base and a rainbow of areas.</p></div>
+      <div class="nb-tx"><h3>TO. tags along</h3><p>The duck that gives every idea a face.</p></div>
     </article>
 
   </div>
@@ -1136,10 +1127,10 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
 
 <!-- ============ AREAS BENTO (color) ============ -->
 <section class="seccion" id="areas-bento">
-  <div class="eyebrow">Eight fronts · one DNA</div>
-  <h2 style="margin-bottom:6px">Modular in its color too</h2>
-  <p class="dim" style="margin:0 0 20px;max-width:58ch">Each area is its own world —with its color and its signal— and at the same
-    time it fits with the rest. That's the brand: lilac at the base, and a rainbow of fronts you hire on their own or together.</p>
+  <div class="eyebrow">Eight fronts · one or all</div>
+  <h2 style="margin-bottom:6px">What we can do for your ideas</h2>
+  <p class="dim" style="margin:0 0 20px;max-width:58ch">Take the front you need today and add the rest when it makes
+    sense. Each one works on its own and fits with the others.</p>
   <div class="ab-rej"><div class="ab-tile ab-big" style="--c:#F2975A;--i:0"><span class="ab-ico ico" data-ico="video"></span><span class="ab-tx"><span class="ab-n">Video</span><span class="ab-d">Reels, YouTube, commercials</span></span></div><div class="ab-tile" style="--c:#58B6D8;--i:1"><span class="ab-ico ico" data-ico="foto"></span><span class="ab-tx"><span class="ab-n">Photo</span><span class="ab-d">Product, advertising, sessions</span></span></div><div class="ab-tile ab-big" style="--c:#E7B544;--i:2"><span class="ab-ico ico" data-ico="marca"></span><span class="ab-tx"><span class="ab-n">Brand</span><span class="ab-d">Identity, packaging, consulting</span></span></div><div class="ab-tile" style="--c:#79C257;--i:3"><span class="ab-ico ico" data-ico="redes"></span><span class="ab-tx"><span class="ab-n">Social</span><span class="ab-d">Content, calendar, community</span></span></div><div class="ab-tile" style="--c:#EC6F6F;--i:4"><span class="ab-ico ico" data-ico="web"></span><span class="ab-tx"><span class="ab-n">Digital</span><span class="ab-d">Sites, catalogues, menus</span></span></div><div class="ab-tile ab-big" style="--c:#D879B4;--i:5"><span class="ab-ico ico" data-ico="eventos"></span><span class="ab-tx"><span class="ab-n">Events</span><span class="ab-d">Logistics, check-in, coverage</span></span></div><div class="ab-tile" style="--c:#4CB0A4;--i:6"><span class="ab-ico ico" data-ico="automatizacion"></span><span class="ab-tx"><span class="ab-n">Automation</span><span class="ab-d">WhatsApp, Instagram, follow-up</span></span></div><div class="ab-tile" style="--c:#8B6FE0;--i:7"><span class="ab-ico ico" data-ico="ilustracion"></span><span class="ab-tx"><span class="ab-n">Illustration & design</span><span class="ab-d">Covers, illustration, tattoos, commissions</span></span></div><div class="ab-tile ab-xp" style="--c:#F4D000;--i:8"><span class="ab-ico ico" data-ico="reloj"></span><span class="ab-tx"><span class="ab-n">Express</span><span class="ab-d">The urgent stuff, same day</span></span></div></div>
   <script>
   (function () {

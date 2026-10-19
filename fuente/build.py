@@ -489,7 +489,7 @@ EN_PAGINAS = {
   "nosotros.html": ("Who we are — LQS",
     "Not just a creative agency: a modular creative agency. Why LQS exists and how we work."),
   "muestras.html": ("Work — LQS",
-    "What we have done, by area. Filter by area or search for what you need."),
+    "What we have done, by area. Filter by category and tap a sample to open it."),
   "cotizador.html": ("Quote builder — LQS",
     "Pick service by service and the total builds itself. Each item priced, whole areas discounted."),
   "legal.html": ("Terms, data and cookies — LQS",
@@ -498,10 +498,10 @@ EN_PAGINAS = {
   "404.html": ("This does not exist — LQS", "The page you are looking for is not here."),
 }
 EN_ENCAB = {
- "encab-nosotros": ("Who we are", "We are not just a creative agency",
-   "We are a modular creative agency. Here is what that means, why LQS exists and how we work."),
+ "encab-nosotros": ("Who we are", "We bring your ideas to life",
+   "A modular creative agency: take the front you need today and add the rest when you want. The limit is your imagination."),
  "encab-muestras": ("Work", "What we have done",
-   "By area, filterable, with a search box for when you already know what you need."),
+   "Explore it by area or filter by category. Tap a sample to open it."),
  "encab-legal": ("Legal", "The legal part, in plain words",
    "Terms, data and cookies. Written to be understood on one read, without leaving out what the "
    "law requires. The Spanish version is the one that governs."),
@@ -579,8 +579,8 @@ PAGINAS = {
     },
     "muestras.html": {
         "titulo": "Muestras — LQS",
-        "desc": ("Lo que hemos hecho, por area: video, foto, marca, redes, digital, eventos y "
-                 "automatizacion. Se filtra por area y se busca por lo que necesites."),
+        "desc": ("Lo que hemos hecho, por area: video, foto, marca, redes, digital, eventos, "
+                 "automatizacion e ilustracion. Filtra por categoria y toca una muestra para abrirla."),
         "partes": ["encab-muestras", "areas", "paquetes", "antesdespues", "express"],
     },
     "legal.html": {
@@ -604,10 +604,10 @@ PAGINAS = {
 }
 
 ENCABEZADOS = {
- "encab-nosotros": ("Quiénes somos", "No somos solo una agencia creativa",
-   "Somos una agencia creativa modular. Acá está qué significa eso, por qué existe LQS y cómo trabajamos."),
+ "encab-nosotros": ("Quiénes somos", "Hacemos vivir tus ideas",
+   "Una agencia creativa modular: toma el frente que necesitas hoy y suma los demás cuando quieras. El límite es tu imaginación."),
  "encab-muestras": ("Muestras", "Lo que hemos hecho",
-   "Por área, filtrable, y con buscador para cuando ya sabes qué necesitas."),
+   "Explóralo por área o filtra por categoría. Toca una muestra para abrirla."),
  "encab-legal": ("Legal", "Lo legal, en español",
    "Términos, datos y cookies. Escrito para que se entienda leyéndolo una vez, sin dejar de decir "
    "lo que la ley obliga a decir."),

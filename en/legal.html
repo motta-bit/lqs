@@ -611,6 +611,16 @@ lqs-trazo:defined>img{display:none}
 .nb-to .nb-tx{position:relative;z-index:1;max-width:60%}
 .nb-swatches{display:flex;gap:5px;height:40px}
 .nb-swatches i{flex:1;border-radius:7px}
+/* firma: el logo y el eslogan con protagonismo */
+.nb-firma{flex-direction:row;align-items:center;gap:clamp(14px,2.6vw,32px);flex-wrap:wrap}
+.nb-firma lqs-trazo{flex:none;width:clamp(90px,11vw,140px);height:auto}
+.nb-firma lqs-trazo img{width:100%;height:auto;display:block}
+.nb-firma-tx{display:flex;flex-direction:column;gap:3px;min-width:min(240px,100%);flex:1}
+.nb-lqs{font-family:'Syne';font-weight:800;font-size:clamp(44px,8vw,82px);letter-spacing:-.05em;
+  line-height:.82;text-transform:uppercase}
+.nb-lema{font-family:'Syne';font-weight:700;font-size:clamp(16px,2.3vw,23px);letter-spacing:-.02em;color:var(--humo)}
+.nb-toderos{font-size:14px;line-height:1.5;margin-top:7px;max-width:50ch}
+.nb-toderos b{color:#8B5CF6}
 @media(prefers-reduced-motion:no-preference){
   .nb-rej.nb-entra .nb{animation:gv-ola .6s cubic-bezier(.2,.8,.2,1) both;
     animation-delay:calc(var(--i,0) * 70ms)}

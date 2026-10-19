@@ -611,6 +611,16 @@ lqs-trazo:defined>img{display:none}
 .nb-to .nb-tx{position:relative;z-index:1;max-width:60%}
 .nb-swatches{display:flex;gap:5px;height:40px}
 .nb-swatches i{flex:1;border-radius:7px}
+/* firma: el logo y el eslogan con protagonismo */
+.nb-firma{flex-direction:row;align-items:center;gap:clamp(14px,2.6vw,32px);flex-wrap:wrap}
+.nb-firma lqs-trazo{flex:none;width:clamp(90px,11vw,140px);height:auto}
+.nb-firma lqs-trazo img{width:100%;height:auto;display:block}
+.nb-firma-tx{display:flex;flex-direction:column;gap:3px;min-width:min(240px,100%);flex:1}
+.nb-lqs{font-family:'Syne';font-weight:800;font-size:clamp(44px,8vw,82px);letter-spacing:-.05em;
+  line-height:.82;text-transform:uppercase}
+.nb-lema{font-family:'Syne';font-weight:700;font-size:clamp(16px,2.3vw,23px);letter-spacing:-.02em;color:var(--humo)}
+.nb-toderos{font-size:14px;line-height:1.5;margin-top:7px;max-width:50ch}
+.nb-toderos b{color:#8B5CF6}
 @media(prefers-reduced-motion:no-preference){
   .nb-rej.nb-entra .nb{animation:gv-ola .6s cubic-bezier(.2,.8,.2,1) both;
     animation-delay:calc(var(--i,0) * 70ms)}
@@ -1063,58 +1073,39 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
 </header>
 
 <main class="wrap" id="inicio" data-pagina="nosotros">
-<section class="seccion pagina-encab"><div class="eyebrow">Quiénes somos</div><h1 class="tit-pagina">No somos solo una agencia creativa</h1><p class="dim bajada">Somos una agencia creativa modular. Acá está qué significa eso, por qué existe LQS y cómo trabajamos.</p></section>
+<section class="seccion pagina-encab"><div class="eyebrow">Quiénes somos</div><h1 class="tit-pagina">Hacemos vivir tus ideas</h1><p class="dim bajada">Una agencia creativa modular: toma el frente que necesitas hoy y suma los demás cuando quieras. El límite es tu imaginación.</p></section>
 
 <!-- ============ 02b QUIÉNES SOMOS (bento) ============ -->
 <section class="seccion" id="nosotros">
-  <div class="eyebrow">Quiénes somos</div>
   <div class="nb-rej">
 
-    <article class="nb nb-luz nb-hero" style="grid-column:span 4">
-      <h2>No somos solo una agencia creativa.<br>Somos una agencia creativa <em>modular</em>.</h2>
-      <p class="dim">Creativa porque trabajamos en varias áreas a la vez. Modular porque cada una es
-        independiente: se contrata sola, funciona sola, y se conecta con las demás cuando tenga sentido.</p>
-    </article>
-
-    <article class="nb nb-color nb-lugar" style="--c:#8B5CF6;grid-column:span 2">
-      <span class="nb-ico ico" data-ico="redes" aria-hidden="true"></span>
-      <div class="nb-tx">
-        <h3>Estamos donde nos necesiten</h3>
-        <p>80% remoto, con clientes en LatAm, España y EE. UU. Cuando hay que estar, estamos.</p>
+    <article class="nb nb-luz nb-firma" style="grid-column:span 4">
+      <lqs-trazo tam="140" cuando="carga" duracion="2600">
+        <img src="marca/lqs-principal.svg" alt="LQS" width="140" height="140">
+      </lqs-trazo>
+      <div class="nb-firma-tx">
+        <span class="nb-lqs">LQS</span>
+        <span class="nb-lema">El mejor amigo de tus ideas</span>
+        <p class="nb-toderos">Somos <b>toderos</b>: el límite es tu imaginación. Tú la sueñas, nosotros la hacemos vivir.</p>
       </div>
     </article>
 
-    <article class="nb nb-luz" style="grid-column:span 3">
-      <h4>El tercer camino</h4>
-      <p class="dim">Levantar una marca suele dar dos opciones incómodas: una agencia que cobra el proyecto
-        completo de entrada, o varios proveedores sueltos que no se hablan. <b>LQS es el tercer camino:</b>
-        tomas la pieza que necesitas hoy, pagas esa, y sumas la siguiente cuando puedas.</p>
+    <article class="nb nb-color" style="--c:#8B5CF6;grid-column:span 2">
+      <span class="nb-big-word">tu idea</span>
+      <p>En la pieza que necesites hoy, y en la siguiente cuando quieras. Un frente o los ocho.</p>
     </article>
 
-    <article class="nb nb-luz" style="grid-column:span 3">
-      <h4>Y por dentro, igual</h4>
-      <p class="dim">Para cada cliente se arma el equipo que ese trabajo necesita. Que cada quien domine más
-        de un área es a propósito: permite <b>armar el equipo alrededor del caso</b>, y no meter el caso en
-        el área que quedó libre.</p>
+    <article class="nb nb-color nb-lugar" style="--c:#4CB0A4;grid-column:span 3">
+      <span class="nb-ico ico" data-ico="redes" aria-hidden="true"></span>
+      <div class="nb-tx">
+        <h3>Estamos donde nos necesiten</h3>
+        <p>80% remoto, con gente en LatAm, España y EE. UU. Cuando hay que estar, estamos.</p>
+      </div>
     </article>
 
-    <article class="nb nb-color nb-modular" style="--c:#C4A8F5;grid-column:span 2">
-      <span class="nb-big-word">modular</span>
-      <p>No es un adorno: es la forma en que cobramos, entregamos y crecemos.</p>
-    </article>
-
-    <article class="nb nb-color nb-to" style="--c:#F4D000;grid-column:span 2">
+    <article class="nb nb-color nb-to" style="--c:#F4D000;grid-column:span 3">
       <img class="nb-pato" src="marca/to-parado.png" alt="" aria-hidden="true">
-      <div class="nb-tx"><h3>TO. nos acompaña</h3><p>El pato que le pone cara a la marca.</p></div>
-    </article>
-
-    <article class="nb nb-luz nb-paleta" style="grid-column:span 2">
-      <span class="nb-swatches" aria-hidden="true">
-        <i style="background:#F2975A"></i><i style="background:#58B6D8"></i><i style="background:#E7B544"></i>
-        <i style="background:#79C257"></i><i style="background:#EC6F6F"></i><i style="background:#D879B4"></i>
-        <i style="background:#4CB0A4"></i><i style="background:#F4D000"></i>
-      </span>
-      <div class="nb-tx"><h4>Un color por frente</h4><p class="dim">Lila de base y un arcoíris de áreas.</p></div>
+      <div class="nb-tx"><h3>TO. te acompaña</h3><p>El pato que le pone cara a cada idea.</p></div>
     </article>
 
   </div>
@@ -1137,10 +1128,10 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
 
 <!-- ============ BENTO DE ÁREAS (color) ============ -->
 <section class="seccion" id="areas-bento">
-  <div class="eyebrow">Ocho frentes · un solo ADN</div>
-  <h2 style="margin-bottom:6px">Modular también en el color</h2>
-  <p class="dim" style="margin:0 0 20px;max-width:58ch">Cada área es su propio mundo —con su color y su señal— y al mismo
-    tiempo encaja con las demás. Esa es la marca: lila de base, y un arcoíris de frentes que se contratan sueltos o juntos.</p>
+  <div class="eyebrow">Ocho frentes · uno o todos</div>
+  <h2 style="margin-bottom:6px">Lo que podemos hacer por tus ideas</h2>
+  <p class="dim" style="margin:0 0 20px;max-width:58ch">Toma el frente que necesitas hoy y suma los demás cuando tenga
+    sentido. Cada uno funciona solo y encaja con los otros.</p>
   <div class="ab-rej"><div class="ab-tile ab-big" style="--c:#F2975A;--i:0"><span class="ab-ico ico" data-ico="video"></span><span class="ab-tx"><span class="ab-n">Video</span><span class="ab-d">Reels, YouTube, comerciales</span></span></div><div class="ab-tile" style="--c:#58B6D8;--i:1"><span class="ab-ico ico" data-ico="foto"></span><span class="ab-tx"><span class="ab-n">Foto</span><span class="ab-d">Producto, publicidad, sesiones</span></span></div><div class="ab-tile ab-big" style="--c:#E7B544;--i:2"><span class="ab-ico ico" data-ico="marca"></span><span class="ab-tx"><span class="ab-n">Marca</span><span class="ab-d">Identidad, empaques, consultoría</span></span></div><div class="ab-tile" style="--c:#79C257;--i:3"><span class="ab-ico ico" data-ico="redes"></span><span class="ab-tx"><span class="ab-n">Redes</span><span class="ab-d">Contenido, calendario, community</span></span></div><div class="ab-tile" style="--c:#EC6F6F;--i:4"><span class="ab-ico ico" data-ico="web"></span><span class="ab-tx"><span class="ab-n">Digital</span><span class="ab-d">Sitios, catálogos, menús</span></span></div><div class="ab-tile ab-big" style="--c:#D879B4;--i:5"><span class="ab-ico ico" data-ico="eventos"></span><span class="ab-tx"><span class="ab-n">Eventos</span><span class="ab-d">Logística, registro, cobertura</span></span></div><div class="ab-tile" style="--c:#4CB0A4;--i:6"><span class="ab-ico ico" data-ico="automatizacion"></span><span class="ab-tx"><span class="ab-n">Automatización</span><span class="ab-d">WhatsApp, Instagram, seguimiento</span></span></div><div class="ab-tile" style="--c:#8B6FE0;--i:7"><span class="ab-ico ico" data-ico="ilustracion"></span><span class="ab-tx"><span class="ab-n">Ilustración y diseño</span><span class="ab-d">Portadas, ilustración, tatuajes, comisiones</span></span></div><div class="ab-tile ab-xp" style="--c:#F4D000;--i:8"><span class="ab-ico ico" data-ico="reloj"></span><span class="ab-tx"><span class="ab-n">Express</span><span class="ab-d">Lo urgente, el mismo día</span></span></div></div>
   <script>
   (function () {
