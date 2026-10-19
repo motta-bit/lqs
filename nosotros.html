@@ -621,6 +621,16 @@ lqs-trazo:defined>img{display:none}
 .nb-lema{font-family:'Syne';font-weight:700;font-size:clamp(16px,2.3vw,23px);letter-spacing:-.02em;color:var(--humo)}
 .nb-toderos{font-size:14px;line-height:1.5;margin-top:7px;max-width:50ch}
 .nb-toderos b{color:#8B5CF6}
+/* firma-hero: la marca primero, con aire; el SVG se ajusta a su caja (sin solaparse) */
+.firma-hero{display:flex;align-items:center;gap:clamp(14px,3vw,38px);flex-wrap:wrap;
+  padding:clamp(18px,4vw,40px) 0 clamp(6px,2vw,16px)}
+.firma-logo{display:block;flex:none;width:clamp(96px,13vw,160px);line-height:0}
+.firma-logo svg,.firma-logo img{width:100%;height:auto;display:block}
+.firma-tx{display:flex;flex-direction:column;gap:2px;min-width:0}
+.firma-lqs{font-family:'Syne';font-weight:800;font-size:clamp(56px,12vw,120px);letter-spacing:-.05em;
+  line-height:.8;text-transform:uppercase}
+.firma-lema{font-family:'Syne';font-weight:700;font-size:clamp(17px,3vw,30px);letter-spacing:-.02em;
+  color:var(--humo)}
 @media(prefers-reduced-motion:no-preference){
   .nb-rej.nb-entra .nb{animation:gv-ola .6s cubic-bezier(.2,.8,.2,1) both;
     animation-delay:calc(var(--i,0) * 70ms)}
@@ -1073,26 +1083,28 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
 </header>
 
 <main class="wrap" id="inicio" data-pagina="nosotros">
+<!-- ============ FIRMA (logo + LQS + eslogan) ============ -->
+<section class="seccion firma-hero">
+  <lqs-trazo class="firma-logo" tam="160" cuando="carga" duracion="2600">
+    <img src="marca/lqs-principal.svg" alt="LQS" width="160" height="160">
+  </lqs-trazo>
+  <div class="firma-tx">
+    <span class="firma-lqs">LQS</span>
+    <span class="firma-lema">El mejor amigo de tus ideas</span>
+  </div>
+</section>
+
+
 <section class="seccion pagina-encab"><div class="eyebrow">Quiénes somos</div><h1 class="tit-pagina">Hacemos vivir tus ideas</h1><p class="dim bajada">Una agencia creativa modular: toma el frente que necesitas hoy y suma los demás cuando quieras. El límite es tu imaginación.</p></section>
 
 <!-- ============ 02b QUIÉNES SOMOS (bento) ============ -->
 <section class="seccion" id="nosotros">
   <div class="nb-rej">
 
-    <article class="nb nb-luz nb-firma" style="grid-column:span 4">
-      <lqs-trazo tam="140" cuando="carga" duracion="2600">
-        <img src="marca/lqs-principal.svg" alt="LQS" width="140" height="140">
-      </lqs-trazo>
-      <div class="nb-firma-tx">
-        <span class="nb-lqs">LQS</span>
-        <span class="nb-lema">El mejor amigo de tus ideas</span>
-        <p class="nb-toderos">Somos <b>toderos</b>: el límite es tu imaginación. Tú la sueñas, nosotros la hacemos vivir.</p>
-      </div>
-    </article>
-
-    <article class="nb nb-color" style="--c:#8B5CF6;grid-column:span 2">
-      <span class="nb-big-word">tu idea</span>
-      <p>En la pieza que necesites hoy, y en la siguiente cuando quieras. Un frente o los ocho.</p>
+    <article class="nb nb-color" style="--c:#8B5CF6;grid-column:span 3">
+      <span class="nb-big-word">toderos</span>
+      <p>El límite es tu imaginación. Tú la sueñas, nosotros la hacemos vivir —en la pieza que necesites hoy
+        y en la siguiente cuando quieras.</p>
     </article>
 
     <article class="nb nb-color nb-lugar" style="--c:#4CB0A4;grid-column:span 3">
@@ -1103,7 +1115,12 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
       </div>
     </article>
 
-    <article class="nb nb-color nb-to" style="--c:#F4D000;grid-column:span 3">
+    <article class="nb nb-luz" style="grid-column:span 2">
+      <span class="nb-big-word" style="color:var(--tinta)">tu idea</span>
+      <p class="dim">Un frente o los ocho. Toma el que necesitas y suma los demás cuando tenga sentido.</p>
+    </article>
+
+    <article class="nb nb-color nb-to" style="--c:#F4D000;grid-column:span 4">
       <img class="nb-pato" src="marca/to-parado.png" alt="" aria-hidden="true">
       <div class="nb-tx"><h3>TO. te acompaña</h3><p>El pato que le pone cara a cada idea.</p></div>
     </article>
