@@ -108,7 +108,7 @@
   </script>
 
   <script>
-  /* Live gallery: non-invasive category filters + entrance sweep. */
+  /* Live gallery: category filters + card-by-card reveal on scroll. */
   (function () {
     var rej = document.querySelector('.gv-rej');
     if (!rej) return;
@@ -120,23 +120,33 @@
       chip.addEventListener('click', function () {
         var cat = chip.dataset.cat;
         chips.forEach(function (c) { c.setAttribute('aria-pressed', c === chip); });
-        var j = 0;
+        var k = 0;
         cards.forEach(function (card) {
           var ok = (cat === 'todas' || card.dataset.cat === cat);
           card.classList.toggle('gv-oculta', !ok);
-          if (ok) { card.style.setProperty('--i', j); j++; }
+          if (ok && !lento) {
+            card.classList.remove('gv-visto'); void card.offsetWidth;
+            card.style.animationDelay = (k++ * 45) + 'ms';
+            card.classList.add('gv-visto');
+          }
         });
-        if (!lento) { rej.classList.remove('gv-entra'); void rej.offsetWidth; rej.classList.add('gv-entra'); }
       });
     });
 
-    if (lento || !('IntersectionObserver' in window)) { rej.classList.add('gv-entra'); return; }
+    if (lento || !('IntersectionObserver' in window)) {
+      cards.forEach(function (c) { c.classList.add('gv-visto'); }); return;
+    }
     var io = new IntersectionObserver(function (entries) {
+      var k = 0;
       entries.forEach(function (en) {
-        if (en.isIntersecting) { rej.classList.add('gv-entra'); io.disconnect(); }
+        if (en.isIntersecting) {
+          en.target.style.animationDelay = (k++ * 55) + 'ms';
+          en.target.classList.add('gv-visto');
+          io.unobserve(en.target);
+        }
       });
-    }, { threshold: 0.12 });
-    io.observe(rej);
+    }, { threshold: 0.18, rootMargin: '0px 0px -6% 0px' });
+    cards.forEach(function (c) { io.observe(c); });
   })();
   </script>
 </section>

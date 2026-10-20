@@ -538,48 +538,77 @@ lqs-trazo:defined>img{display:none}
 .gv-urg-bars i{width:3px;border-radius:1px;background:#ff5b3a}
 .gv-urg-bars i:nth-child(1){height:5px}.gv-urg-bars i:nth-child(2){height:9px}.gv-urg-bars i:nth-child(3){height:13px}
 .gv-urg-tx{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.04em;color:var(--papel)}
-/* filtro: ocultar; y barrido de entrada escalonado */
+/* filtro: ocultar; y revelado tarjeta-por-tarjeta al hacer scroll (no todo de golpe) */
 .gv-oculta{display:none}
 @media(prefers-reduced-motion:no-preference){
-  .gv-rej.gv-entra .gv-card{animation:gv-ola .62s cubic-bezier(.2,.8,.2,1) both;
-    animation-delay:calc(var(--i,0) * 45ms)}
+  .gv-card{opacity:0}
+  .gv-card.gv-visto{opacity:1;animation:gv-ola .62s cubic-bezier(.2,.8,.2,1)}
 }
 @keyframes gv-ola{0%{opacity:0;transform:translateY(26px) scale(.9)}
   60%{opacity:1}100%{opacity:1;transform:none}}
 
-/* ---------- bento de áreas (Nosotros): los colores de la marca ---------- */
-.ab-rej{grid-column:span 6;display:grid;grid-auto-flow:dense;gap:10px;
-  grid-template-columns:repeat(auto-fill,minmax(152px,1fr));grid-auto-rows:152px}
-@media(max-width:440px){.ab-rej{grid-template-columns:repeat(2,1fr);grid-auto-rows:146px}}
+/* ---------- bento de áreas (Nosotros): LQS al centro, las áreas alrededor ----------
+   Retícula fija 4×4 con el logo anclado en el centro (grid-area:lqs, 2×2) y los
+   ocho frentes + Express completando el cuadrado con tamaños variados. */
+.ab-rej{grid-column:span 6;display:grid;gap:10px;
+  grid-template-columns:repeat(4,1fr);grid-auto-rows:clamp(144px,15vw,210px);
+  grid-template-areas:
+    "video foto    redes       marca"
+    "video lqs     lqs         marca"
+    "web   lqs     lqs         automatizacion"
+    "eventos eventos ilustracion expr"}
+@media(max-width:720px){
+  .ab-rej{grid-template-columns:repeat(2,1fr);grid-auto-rows:clamp(128px,30vw,168px);
+    grid-template-areas:
+      "video video"
+      "lqs   lqs"
+      "foto  redes"
+      "marca web"
+      "automatizacion eventos"
+      "ilustracion expr"}
+}
 .ab-tile{--c:var(--tinta);position:relative;overflow:hidden;border:2px solid var(--tinta);
-  border-radius:var(--r-bloque);padding:15px;color:var(--papel);
-  display:flex;flex-direction:column;justify-content:space-between;gap:10px;
-  background:radial-gradient(110% 82% at 20% 2%,rgba(253,251,247,.20),transparent 54%),
-    linear-gradient(150deg,color-mix(in srgb,var(--c) 84%,#1A1720) 0%,color-mix(in srgb,var(--c) 56%,#1A1720) 100%);
+  border-radius:var(--r-bloque);padding:16px;color:var(--papel);
+  display:flex;flex-direction:column;justify-content:flex-end;gap:8px;
+  background:radial-gradient(118% 88% at 18% 0%,rgba(253,251,247,.22),transparent 52%),
+    linear-gradient(150deg,color-mix(in srgb,var(--c) 86%,#1A1720) 0%,color-mix(in srgb,var(--c) 52%,#141118) 100%);
   transition:transform .24s cubic-bezier(.2,.75,.25,1),box-shadow .24s cubic-bezier(.2,.75,.25,1)}
 .ab-tile:hover{transform:translateY(-5px) scale(1.012);
   box-shadow:0 16px 30px -14px color-mix(in srgb,var(--c) 72%,#000)}
-.ab-big{grid-column:span 2;grid-row:span 2}
-.ab-ico.ico{width:40px;height:40px;flex:none;color:var(--papel);
-  background:rgba(253,251,247,.18);border-radius:var(--r-int);padding:8px}
-.ab-big .ab-ico.ico{width:54px;height:54px;padding:12px}
-.ab-tx{display:flex;flex-direction:column;gap:3px}
-.ab-n{font-family:'Syne';font-weight:800;font-size:18px;letter-spacing:-.02em;line-height:1}
-.ab-big .ab-n{font-size:clamp(23px,3vw,31px)}
-.ab-d{font-size:12px;line-height:1.3;opacity:.88}
-.ab-big .ab-d{font-size:14px;max-width:34ch}
-.ab-tile::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transform:translateX(-70%);
+/* ícono gigante, cortado y translúcido, como marca de agua dentro del cubo */
+.ab-marca.ico{position:absolute;right:-16%;top:-10%;z-index:0;width:74%;height:74%;
+  color:var(--papel);opacity:.14;pointer-events:none;
+  transition:transform .4s cubic-bezier(.2,.75,.25,1),opacity .3s ease}
+.ab-tile:hover .ab-marca{transform:scale(1.1) rotate(-5deg);opacity:.2}
+.ab-grande .ab-marca{width:62%;height:62%;right:-12%;top:auto;bottom:-10%}
+.ab-ico.ico{position:relative;z-index:1;width:40px;height:40px;flex:none;color:var(--papel);
+  background:rgba(253,251,247,.2);border-radius:var(--r-int);padding:8px;align-self:flex-start;
+  margin-bottom:auto}
+.ab-grande .ab-ico.ico{width:52px;height:52px;padding:11px}
+.ab-tx{position:relative;z-index:1;display:flex;flex-direction:column;gap:3px}
+.ab-n{font-family:'Syne';font-weight:800;font-size:19px;letter-spacing:-.02em;line-height:1}
+.ab-grande .ab-n{font-size:clamp(24px,3vw,33px)}
+.ab-d{font-size:12px;line-height:1.3;opacity:.9}
+.ab-grande .ab-d{font-size:14px;max-width:34ch}
+.ab-tile::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;opacity:0;transform:translateX(-70%);
   background:linear-gradient(115deg,transparent 38%,rgba(253,251,247,.28) 50%,transparent 62%)}
 .ab-tile:hover::after{opacity:1;transform:translateX(70%);transition:transform .6s ease,opacity .25s ease}
 @media(prefers-reduced-motion:no-preference){
-  .ab-rej.ab-entra .ab-tile{animation:gv-ola .62s cubic-bezier(.2,.8,.2,1) both;
-    animation-delay:calc(var(--i,0) * 60ms)}
+  .ab-tile{opacity:0}
+  .ab-tile.ab-visto{opacity:1;animation:gv-ola .6s cubic-bezier(.2,.8,.2,1)}
 }
 
-/* ---------- bento de Nosotros: tiles de luz y de color, con movimiento ---------- */
-.nb-rej{grid-column:span 6;display:grid;grid-template-columns:repeat(6,1fr);gap:12px;grid-auto-flow:dense}
-@media(max-width:820px){.nb-rej{grid-template-columns:repeat(2,1fr)}
-  .nb-rej .nb{grid-column:span 2!important}}
+/* ---------- bento de Nosotros: toderos y TO. son cubos; estamos/tu idea rellenan ---------- */
+.nb-rej{grid-column:span 6;display:grid;gap:12px;
+  grid-template-columns:repeat(4,1fr);grid-auto-rows:clamp(138px,13.5vw,188px);
+  grid-template-areas:
+    "tod tod est est"
+    "tod tod to  to"
+    "idea idea to to"}
+@media(max-width:720px){
+  .nb-rej{grid-template-columns:1fr;grid-auto-rows:auto;
+    grid-template-areas:"tod" "est" "idea" "to"}
+  .nb-cubo{min-height:200px}}
 .nb{position:relative;overflow:hidden;border:2px solid var(--tinta);border-radius:var(--r-cont);
   padding:clamp(18px,2.2vw,26px);display:flex;flex-direction:column;gap:10px;justify-content:space-between;
   transition:transform .24s cubic-bezier(.2,.75,.25,1),box-shadow .24s cubic-bezier(.2,.75,.25,1)}
@@ -621,32 +650,28 @@ lqs-trazo:defined>img{display:none}
 .nb-lema{font-family:'Syne';font-weight:700;font-size:clamp(16px,2.3vw,23px);letter-spacing:-.02em;color:var(--humo)}
 .nb-toderos{font-size:14px;line-height:1.5;margin-top:7px;max-width:50ch}
 .nb-toderos b{color:var(--violeta)}
-/* firma-hero: la marca como panel de identidad (lila), no un bloque plano.
-   El logo va sobre una pastilla clara para que lea sobre el morado; el SVG se
-   ajusta a su caja (nunca se solapa con las letras). */
-.firma-hero{grid-column:span 6}
-.firma-panel{position:relative;overflow:hidden;border:2px solid var(--tinta);
-  border-radius:var(--r-cont);color:var(--papel);
-  display:flex;align-items:center;gap:clamp(18px,3.4vw,44px);flex-wrap:wrap;
-  padding:clamp(26px,4.4vw,52px) clamp(24px,4vw,56px);
-  background:
-    radial-gradient(120% 140% at 88% -10%,rgba(253,251,247,.26),transparent 46%),
-    radial-gradient(90% 120% at 6% 108%,rgba(37,99,235,.42),transparent 52%),
-    linear-gradient(135deg,#8B3DF0 0%,#6A24C4 58%,#5A1EA8 100%);
-  box-shadow:0 26px 54px -30px rgba(90,30,168,.75)}
-.firma-logo{position:relative;z-index:2;display:block;flex:none;line-height:0;
-  width:clamp(104px,13vw,172px);padding:clamp(10px,1.4vw,16px);border-radius:var(--r-bloque);
-  background:var(--papel);box-shadow:0 16px 30px -16px rgba(26,23,32,.5)}
+/* firma-hero: es el TÍTULO de la página, no una sección. Letras negras, eslogan
+   abajo, el logo a color; la vida la da un halo lila detrás del logo y TO.
+   asomándose, sin caja ni borde que lo haga parecer un bloque de contenido. */
+.firma-hero{grid-column:span 6;position:relative;display:flex;align-items:center;
+  gap:clamp(16px,3vw,40px);flex-wrap:wrap;
+  padding:clamp(22px,4vw,46px) 0 clamp(10px,2vw,20px)}
+.firma-hero::before{content:"";position:absolute;left:clamp(-30px,-1vw,0);top:50%;z-index:0;
+  width:clamp(230px,34vw,440px);height:clamp(230px,34vw,440px);transform:translateY(-54%);
+  pointer-events:none;border-radius:50%;
+  background:radial-gradient(circle,color-mix(in srgb,var(--violeta) 32%,transparent) 0%,transparent 66%)}
+.firma-logo{position:relative;z-index:1;display:block;flex:none;line-height:0;
+  width:clamp(98px,13vw,156px);filter:drop-shadow(0 16px 28px rgba(139,61,240,.32))}
 .firma-logo svg,.firma-logo img{width:100%;height:auto;display:block}
-.firma-tx{position:relative;z-index:2;display:flex;flex-direction:column;gap:4px;min-width:0}
-.firma-lqs{font-family:'Syne';font-weight:800;font-size:clamp(56px,12vw,122px);letter-spacing:-.05em;
-  line-height:.78;text-transform:uppercase;color:var(--papel)}
+.firma-tx{position:relative;z-index:1;display:flex;flex-direction:column;gap:3px;min-width:0}
+.firma-lqs{font-family:'Syne';font-weight:800;font-size:clamp(60px,13vw,132px);letter-spacing:-.05em;
+  line-height:.76;text-transform:uppercase;color:var(--tinta)}
 .firma-lema{font-family:'Syne';font-weight:700;font-size:clamp(18px,3vw,32px);letter-spacing:-.02em;
-  color:rgba(253,251,247,.82)}
-.firma-pato{position:absolute;right:clamp(10px,2vw,34px);bottom:-6px;z-index:1;
-  height:clamp(86px,13vw,150px);width:auto;pointer-events:none;
-  filter:drop-shadow(0 12px 18px rgba(0,0,0,.3))}
-@media(max-width:620px){.firma-pato{opacity:.5;height:96px;right:-6px}}
+  color:var(--violeta)}
+.firma-pato{position:relative;z-index:1;margin-left:auto;align-self:flex-end;
+  height:clamp(76px,10vw,124px);width:auto;pointer-events:none;
+  filter:drop-shadow(0 10px 16px rgba(0,0,0,.18))}
+@media(max-width:560px){.firma-pato{display:none}}
 /* logo de LQS anclado en el bento de áreas, rodeado por los frentes */
 .ab-lqs{align-items:center;justify-content:center;text-align:center;gap:12px;
   border-color:var(--violeta);color:var(--tinta);
@@ -663,8 +688,8 @@ lqs-trazo:defined>img{display:none}
   line-height:.98}
 .nos-cierre .dim{margin-top:10px;font-size:15px;line-height:1.55;max-width:58ch}
 @media(prefers-reduced-motion:no-preference){
-  .nb-rej.nb-entra .nb{animation:gv-ola .6s cubic-bezier(.2,.8,.2,1) both;
-    animation-delay:calc(var(--i,0) * 70ms)}
+  .nb{opacity:0}
+  .nb.nb-visto{opacity:1;animation:gv-ola .6s cubic-bezier(.2,.8,.2,1)}
 }
 
 /* Cuadros dentro de cada área: un bento de celdas cuadradas con piezas de
@@ -948,31 +973,21 @@ lqs-trazo:defined>img{display:none}
 /* ---------- 06 casos ---------- */
 .caso{grid-column:span 6;background:var(--crema);border-radius:var(--r-cont);padding:0;
   overflow:hidden;display:grid;grid-template-columns:1.05fr 1fr}
-.caso-vis{background:linear-gradient(135deg,var(--p-lima),var(--p-azul));position:relative;
-  overflow:hidden;min-height:330px;display:grid;place-items:center;padding:26px}
+/* el visual del caso: el logo real del cliente sobre un fondo suave de marca */
+.caso-vis{position:relative;overflow:hidden;min-height:330px;padding:clamp(26px,3vw,38px);
+  display:flex;flex-direction:column;justify-content:center;gap:18px;
+  background:radial-gradient(130% 100% at 20% 0%,color-mix(in srgb,var(--violeta) 16%,var(--papel)),var(--crema))}
+.caso-logo{width:clamp(120px,15vw,180px);height:auto;filter:drop-shadow(0 14px 26px rgba(26,23,32,.18))}
+.caso-vis-tx{display:flex;flex-direction:column;gap:4px}
+.caso-vis-tx .mono{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--humo)}
+.caso-vis-tx strong{font-family:'Syne';font-weight:800;font-size:clamp(20px,2.4vw,26px);letter-spacing:-.02em;
+  line-height:1.05;color:var(--tinta)}
 .caso-txt{padding:clamp(24px,3vw,36px);display:flex;flex-direction:column;gap:14px}
-.caso-mods{display:flex;gap:6px;flex-wrap:wrap}
-.mchip{display:inline-flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;
-  font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
-  background:var(--tinta);color:var(--papel);padding:5px 11px;border-radius:999px}
-.mchip .ico{width:14px;height:14px;color:var(--papel)}
+.caso-link{align-self:flex-start;text-decoration:none}
 .caso-dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:10px;margin-top:4px}
 .caso-dl div{background:var(--papel);border-radius:var(--r-int);padding:12px 14px}
 .caso-dl b{display:block;font-family:'IBM Plex Mono',monospace;font-size:19px;font-weight:600}
 .caso-dl span{font-size:11px;color:var(--humo);line-height:1.25;display:block;margin-top:2px}
-.caso-hueco{grid-column:span 3;border:2px dashed var(--humo);border-radius:var(--r-bloque);
-  padding:24px;min-height:150px;display:flex;flex-direction:column;justify-content:center;gap:6px;
-  color:var(--humo)}
-/* con quién trabajamos: clientes reales, con su logo (nada de huecos vacíos) */
-.caso-clientes{grid-column:span 6;background:var(--papel);border:2px solid var(--tinta);
-  border-radius:var(--r-cont);padding:clamp(22px,3vw,34px);display:flex;flex-direction:column;gap:14px}
-.caso-cli{display:flex;align-items:center;gap:clamp(14px,2vw,22px);margin:0}
-.caso-cli img{width:clamp(58px,7vw,82px);height:auto;flex:none}
-.caso-cli figcaption{font-family:'Syne';font-weight:800;font-size:clamp(17px,2vw,21px);line-height:1.2}
-.caso-cli figcaption a{display:block;margin-top:4px;font-family:'IBM Plex Mono',monospace;
-  font-size:12px;font-weight:500;letter-spacing:.04em;color:var(--violeta);text-decoration:none}
-.caso-cli figcaption a:hover{text-decoration:underline}
-.caso-clientes .dim{font-size:13px}
 @media(max-width:860px){.caso{grid-template-columns:1fr}}
 
 /* ---------- 07 cómo trabajamos ---------- */
@@ -1235,37 +1250,47 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
   </script>
 
   <script>
-  /* Galería viva: filtros por categoría (no invasivos) + barrido de entrada. */
+  /* Galería viva: filtros por categoría + revelado tarjeta-por-tarjeta con scroll. */
   (function () {
     var rej = document.querySelector('.gv-rej');
     if (!rej) return;
     var cards = [].slice.call(rej.querySelectorAll('.gv-card'));
     var lento = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Filtros
+    // Filtros: las que quedan visibles se re-animan escalonadas
     var chips = [].slice.call(document.querySelectorAll('.gv-chip'));
     chips.forEach(function (chip) {
       chip.addEventListener('click', function () {
         var cat = chip.dataset.cat;
         chips.forEach(function (c) { c.setAttribute('aria-pressed', c === chip); });
-        var j = 0;
+        var k = 0;
         cards.forEach(function (card) {
           var ok = (cat === 'todas' || card.dataset.cat === cat);
           card.classList.toggle('gv-oculta', !ok);
-          if (ok) { card.style.setProperty('--i', j); j++; }   // re-escalona el barrido
+          if (ok && !lento) {
+            card.classList.remove('gv-visto'); void card.offsetWidth;
+            card.style.animationDelay = (k++ * 45) + 'ms';
+            card.classList.add('gv-visto');
+          }
         });
-        if (!lento) { rej.classList.remove('gv-entra'); void rej.offsetWidth; rej.classList.add('gv-entra'); }
       });
     });
 
-    // Barrido de entrada cuando la galería aparece en pantalla
-    if (lento || !('IntersectionObserver' in window)) { rej.classList.add('gv-entra'); return; }
+    // Revelado al hacer scroll: cada tarjeta entra sola y suave, no todas de golpe
+    if (lento || !('IntersectionObserver' in window)) {
+      cards.forEach(function (c) { c.classList.add('gv-visto'); }); return;
+    }
     var io = new IntersectionObserver(function (entries) {
+      var k = 0;
       entries.forEach(function (en) {
-        if (en.isIntersecting) { rej.classList.add('gv-entra'); io.disconnect(); }
+        if (en.isIntersecting) {
+          en.target.style.animationDelay = (k++ * 55) + 'ms';
+          en.target.classList.add('gv-visto');
+          io.unobserve(en.target);
+        }
       });
-    }, { threshold: 0.12 });
-    io.observe(rej);
+    }, { threshold: 0.18, rootMargin: '0px 0px -6% 0px' });
+    cards.forEach(function (c) { io.observe(c); });
   })();
   </script>
 </section>

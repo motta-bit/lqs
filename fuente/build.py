@@ -717,34 +717,36 @@ def areas_bento(idi):
     """Bento colorido de las áreas para Nosotros: los montones de colores de la
        marca, uno por área + Express. Sin interacción pesada: muestra el ADN
        modular y de color. Tamaños variados para que se sienta bento."""
-    grandes = {"video", "marca", "eventos"}   # unas más grandes, para ritmo
-    # El logo de LQS va en el centro del bento, rodeado por las áreas: es la marca
-    # que sostiene los ocho frentes. 2×2 para que ancle la retícula.
+    # El logo de LQS va al centro exacto (grid-area:lqs, 2×2) y las áreas lo rodean
+    # con tamaños variados hasta completar el cuadrado. La posición de cada cubo la
+    # fija `grid-template-areas` en el CSS, no el orden del DOM. Cada cubo lleva su
+    # ícono enorme, cortado y translúcido, como fondo: da profundidad y viveza.
+    grandes = {"video", "marca", "eventos"}   # ocupan 2 celdas, texto más grande
     lema = "El mejor amigo de tus ideas" if idi == "es" else "Your ideas' best friend"
-    logo_tile = ('<div class="ab-tile ab-lqs ab-big" style="--i:4">'
-                 '<lqs-trazo class="ab-lqs-logo" tam="104" cuando="visible" '
+    logo_tile = ('<div class="ab-tile ab-lqs" style="grid-area:lqs">'
+                 '<lqs-trazo class="ab-lqs-logo" tam="116" cuando="visible" '
                  'fondo="#FDFBF7" trazo="#8B3DF0" duracion="2400">'
                  '<img src="{{RAIZ}}marca/lqs-principal.svg" alt="LQS" '
-                 'width="104" height="104"></lqs-trazo>'
+                 'width="116" height="116"></lqs-trazo>'
                  '<span class="ab-tx"><span class="ab-n">LQS</span>'
                  '<span class="ab-d">%s</span></span></div>' % lema)
-    tiles = []
+    tiles = [logo_tile]
     i = 0
     for n_es, ico, color_mod, desc_es, servs in MODULOS:
         color = AREA_TONO.get(ico, color_mod)
         nom = EN_AREAS[n_es][0] if idi == "en" else n_es
         desc = EN_AREAS[n_es][1] if idi == "en" else desc_es
-        cls = " ab-big" if ico in grandes else ""
-        tiles.append('<div class="ab-tile%s" style="--c:%s;--i:%d">'
+        cls = " ab-grande" if ico in grandes else ""
+        tiles.append('<div class="ab-tile%s" style="--c:%s;--i:%d;grid-area:%s">'
+                     '<span class="ab-marca ico" data-ico="%s" aria-hidden="true"></span>'
                      '<span class="ab-ico ico" data-ico="%s"></span>'
                      '<span class="ab-tx"><span class="ab-n">%s</span>'
                      '<span class="ab-d">%s</span></span></div>'
-                     % (cls, color, i, ico, nom, desc))
+                     % (cls, color, i, ico, ico, ico, nom, desc))
         i += 1
-        if i == 4:                       # logo al centro, rodeado de áreas
-            tiles.append(logo_tile)
     exd = "Lo urgente, el mismo día" if idi == "es" else "The urgent stuff, same day"
-    tiles.append('<div class="ab-tile ab-xp" style="--c:#F4D000;--i:%d">'
+    tiles.append('<div class="ab-tile ab-xp" style="--c:#F4D000;--i:%d;grid-area:expr">'
+                 '<span class="ab-marca ico" data-ico="reloj" aria-hidden="true"></span>'
                  '<span class="ab-ico ico" data-ico="reloj"></span>'
                  '<span class="ab-tx"><span class="ab-n">Express</span>'
                  '<span class="ab-d">%s</span></span></div>' % (i, exd))

@@ -3,13 +3,13 @@
   <div class="eyebrow">Quiénes somos</div>
   <div class="nb-rej">
 
-    <article class="nb nb-color" style="--c:#8B3DF0;grid-column:span 3">
+    <article class="nb nb-color nb-cubo" style="--c:#8B3DF0;grid-area:tod">
       <span class="nb-big-word">toderos</span>
       <p>El límite es tu imaginación. Tú la sueñas, nosotros la hacemos vivir —en la pieza que necesites hoy
         y en la siguiente cuando quieras.</p>
     </article>
 
-    <article class="nb nb-color nb-lugar" style="--c:#6A24C4;grid-column:span 3">
+    <article class="nb nb-color nb-lugar" style="--c:#6A24C4;grid-area:est">
       <span class="nb-ico ico" data-ico="redes" aria-hidden="true"></span>
       <div class="nb-tx">
         <h3>Estamos donde nos necesiten</h3>
@@ -17,12 +17,12 @@
       </div>
     </article>
 
-    <article class="nb nb-luz" style="grid-column:span 2">
+    <article class="nb nb-luz" style="grid-area:idea">
       <span class="nb-big-word" style="color:var(--tinta)">tu idea</span>
       <p class="dim">Un frente o los ocho. Toma el que necesitas y suma los demás cuando tenga sentido.</p>
     </article>
 
-    <article class="nb nb-color nb-to" style="--c:#A24BE8;grid-column:span 4">
+    <article class="nb nb-color nb-to nb-cubo" style="--c:#A24BE8;grid-area:to">
       <img class="nb-pato" src="{{RAIZ}}marca/to-parado.png" alt="" aria-hidden="true">
       <div class="nb-tx"><h3>TO. te acompaña</h3><p>El pato que le pone cara a cada idea.</p></div>
     </article>
@@ -36,16 +36,26 @@
   </div>
 
   <script>
+  /* Cada cubo aparece al entrar en pantalla, con un escalón suave (no todos de golpe). */
   (function () {
     var rej = document.querySelector('#nosotros .nb-rej');
     if (!rej) return;
-    [].slice.call(rej.children).forEach(function (t, i) { t.style.setProperty('--i', i); });
+    var tiles = [].slice.call(rej.children);
     var lento = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (lento || !('IntersectionObserver' in window)) { rej.classList.add('nb-entra'); return; }
+    if (lento || !('IntersectionObserver' in window)) {
+      tiles.forEach(function (t) { t.classList.add('nb-visto'); }); return;
+    }
     var io = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { if (e.isIntersecting) { rej.classList.add('nb-entra'); io.disconnect(); } });
-    }, { threshold: 0.12 });
-    io.observe(rej);
+      var k = 0;
+      es.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.style.animationDelay = (k++ * 70) + 'ms';
+          e.target.classList.add('nb-visto');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.2, rootMargin: '0px 0px -6% 0px' });
+    tiles.forEach(function (t) { io.observe(t); });
   })();
   </script>
 </section>
