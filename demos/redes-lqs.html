@@ -32,6 +32,17 @@ header p{color:var(--gris);max-width:56ch;margin-top:14px;font-size:1rem}
 .leyenda span::before{content:"";width:9px;height:9px;border-radius:50%}
 .leyenda .vn::before{background:var(--verde)}
 .leyenda .lq::before{background:var(--lila)}
+/* cliente: logo + info + enlace al sitio */
+.cliente{display:flex;align-items:center;gap:clamp(14px,2.5vw,24px);flex-wrap:wrap;margin-top:22px;
+  background:var(--tarjeta);border:1px solid var(--linea);border-radius:20px;padding:clamp(16px,2.4vw,24px)}
+.cliente-logo{width:clamp(100px,16vw,150px);height:auto;flex:none}
+.cliente-tx{min-width:min(240px,100%);flex:1}
+.cliente-tx h2{font-family:var(--disp);font-weight:700;font-size:1.1rem;letter-spacing:-.01em}
+.cliente-tx p{color:var(--gris);font-size:.9rem;margin-top:5px;max-width:52ch}
+.cliente-link{display:inline-flex;align-items:center;gap:7px;margin-top:12px;text-decoration:none;
+  font-family:var(--mono);font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  color:#0d0d0f;background:var(--verde);border-radius:999px;padding:9px 16px;transition:filter .13s}
+.cliente-link:hover{filter:brightness(1.08)}
 /* masonry simple con columnas */
 .galeria{columns:3 240px;column-gap:12px}
 .pieza{position:relative;break-inside:avoid;margin:0 0 12px;border-radius:16px;overflow:hidden;
@@ -56,8 +67,14 @@ footer b{color:var(--tiza);font-weight:600}
     <h1>Piezas que paran<br>el scroll</h1>
     <p>Publicaciones sueltas para Instagram: una pieza, un mensaje, una acción. Esta es la campaña
       que armamos para <b style="color:var(--tiza);font-weight:500">Vita Nova</b>, de principio a fin.</p>
-    <div class="leyenda">
-      <span class="vn">Vita Nova · campaña real</span>
+    <div class="cliente">
+      <img class="cliente-logo" src="img/redes/vitanova-logo.webp" alt="Logo de Vita Nova">
+      <div class="cliente-tx">
+        <h2>Vita Nova</h2>
+        <p>Asociación colombiana de inclusión y desarrollo: territorio, comunidad y formación. LQS armó el
+          lanzamiento de su sitio y su campaña en redes.</p>
+        <a class="cliente-link" href="https://vitanovacolombia.org" target="_blank" rel="noopener">vitanovacolombia.org →</a>
+      </div>
     </div>
   </header>
 
@@ -68,6 +85,10 @@ footer b{color:var(--tiza);font-weight:600}
     <div class="pieza vn"><span class="chip">Vita Nova</span><img src="img/redes/vita-04.webp" alt="Vita Nova: evento y taller" loading="lazy"></div>
     <div class="pieza vn"><span class="chip">Vita Nova</span><img src="img/redes/vita-05.webp" alt="Vita Nova: casa raíz" loading="lazy"></div>
     <div class="pieza vn"><span class="chip">Vita Nova</span><img src="img/redes/vita-06.webp" alt="Vita Nova: formación" loading="lazy"></div>
+    <div class="pieza vn"><span class="chip">Vita Nova</span><img src="img/redes/vita-07.webp" alt="Vita Nova: frase" loading="lazy"></div>
+    <div class="pieza vn"><span class="chip">Vita Nova</span><img src="img/redes/vita-08.webp" alt="Vita Nova: cifras" loading="lazy"></div>
+    <div class="pieza vn"><span class="chip">Vita Nova</span><img src="img/redes/vita-09.webp" alt="Vita Nova: de la Amazonia al Pacífico" loading="lazy"></div>
+    <div class="pieza vn"><span class="chip">Vita Nova</span><img src="img/redes/vita-10.webp" alt="Vita Nova: Casa Raíz" loading="lazy"></div>
   </div>
 
   <footer>Campaña de publicaciones diseñada por <b>LQS</b> para <b>Vita Nova</b>: un mensaje por pieza,
