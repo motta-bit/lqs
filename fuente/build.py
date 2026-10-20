@@ -718,6 +718,16 @@ def areas_bento(idi):
        marca, uno por área + Express. Sin interacción pesada: muestra el ADN
        modular y de color. Tamaños variados para que se sienta bento."""
     grandes = {"video", "marca", "eventos"}   # unas más grandes, para ritmo
+    # El logo de LQS va en el centro del bento, rodeado por las áreas: es la marca
+    # que sostiene los ocho frentes. 2×2 para que ancle la retícula.
+    lema = "El mejor amigo de tus ideas" if idi == "es" else "Your ideas' best friend"
+    logo_tile = ('<div class="ab-tile ab-lqs ab-big" style="--i:4">'
+                 '<lqs-trazo class="ab-lqs-logo" tam="104" cuando="visible" '
+                 'fondo="#FDFBF7" trazo="#8B3DF0" duracion="2400">'
+                 '<img src="{{RAIZ}}marca/lqs-principal.svg" alt="LQS" '
+                 'width="104" height="104"></lqs-trazo>'
+                 '<span class="ab-tx"><span class="ab-n">LQS</span>'
+                 '<span class="ab-d">%s</span></span></div>' % lema)
     tiles = []
     i = 0
     for n_es, ico, color_mod, desc_es, servs in MODULOS:
@@ -731,6 +741,8 @@ def areas_bento(idi):
                      '<span class="ab-d">%s</span></span></div>'
                      % (cls, color, i, ico, nom, desc))
         i += 1
+        if i == 4:                       # logo al centro, rodeado de áreas
+            tiles.append(logo_tile)
     exd = "Lo urgente, el mismo día" if idi == "es" else "The urgent stuff, same day"
     tiles.append('<div class="ab-tile ab-xp" style="--c:#F4D000;--i:%d">'
                  '<span class="ab-ico ico" data-ico="reloj"></span>'

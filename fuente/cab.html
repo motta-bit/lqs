@@ -575,7 +575,7 @@ lqs-trazo:defined>img{display:none}
 .nb-luz::after{background:linear-gradient(115deg,transparent 42%,rgba(26,23,32,.05) 50%,transparent 58%)}
 .nb:hover::after{opacity:1;transform:translateX(72%);transition:transform .6s ease,opacity .25s ease}
 .nb-hero h2{font-family:'Syne';font-weight:800;font-size:clamp(22px,3.4vw,34px);letter-spacing:-.03em;line-height:1.03}
-.nb-hero h2 em{color:#8B5CF6;font-style:normal}
+.nb-hero h2 em{color:var(--violeta);font-style:normal}
 .nb h3{font-family:'Syne';font-weight:800;font-size:19px;letter-spacing:-.02em;line-height:1.06}
 .nb h4{font-family:'Syne';font-weight:800;font-size:17px;letter-spacing:-.02em}
 .nb p{font-size:13.5px;line-height:1.5}
@@ -600,17 +600,43 @@ lqs-trazo:defined>img{display:none}
   line-height:.82;text-transform:uppercase}
 .nb-lema{font-family:'Syne';font-weight:700;font-size:clamp(16px,2.3vw,23px);letter-spacing:-.02em;color:var(--humo)}
 .nb-toderos{font-size:14px;line-height:1.5;margin-top:7px;max-width:50ch}
-.nb-toderos b{color:#8B5CF6}
-/* firma-hero: la marca primero, con aire; el SVG se ajusta a su caja (sin solaparse) */
-.firma-hero{display:flex;align-items:center;gap:clamp(14px,3vw,38px);flex-wrap:wrap;
-  padding:clamp(18px,4vw,40px) 0 clamp(6px,2vw,16px)}
-.firma-logo{display:block;flex:none;width:clamp(96px,13vw,160px);line-height:0}
+.nb-toderos b{color:var(--violeta)}
+/* firma-hero: la marca como panel de identidad (lila), no un bloque plano.
+   El logo va sobre una pastilla clara para que lea sobre el morado; el SVG se
+   ajusta a su caja (nunca se solapa con las letras). */
+.firma-hero{grid-column:span 6}
+.firma-panel{position:relative;overflow:hidden;border:2px solid var(--tinta);
+  border-radius:var(--r-cont);color:var(--papel);
+  display:flex;align-items:center;gap:clamp(18px,3.4vw,44px);flex-wrap:wrap;
+  padding:clamp(26px,4.4vw,52px) clamp(24px,4vw,56px);
+  background:
+    radial-gradient(120% 140% at 88% -10%,rgba(253,251,247,.26),transparent 46%),
+    radial-gradient(90% 120% at 6% 108%,rgba(37,99,235,.42),transparent 52%),
+    linear-gradient(135deg,#8B3DF0 0%,#6A24C4 58%,#5A1EA8 100%);
+  box-shadow:0 26px 54px -30px rgba(90,30,168,.75)}
+.firma-logo{position:relative;z-index:2;display:block;flex:none;line-height:0;
+  width:clamp(104px,13vw,172px);padding:clamp(10px,1.4vw,16px);border-radius:var(--r-bloque);
+  background:var(--papel);box-shadow:0 16px 30px -16px rgba(26,23,32,.5)}
 .firma-logo svg,.firma-logo img{width:100%;height:auto;display:block}
-.firma-tx{display:flex;flex-direction:column;gap:2px;min-width:0}
-.firma-lqs{font-family:'Syne';font-weight:800;font-size:clamp(56px,12vw,120px);letter-spacing:-.05em;
-  line-height:.8;text-transform:uppercase}
-.firma-lema{font-family:'Syne';font-weight:700;font-size:clamp(17px,3vw,30px);letter-spacing:-.02em;
-  color:var(--humo)}
+.firma-tx{position:relative;z-index:2;display:flex;flex-direction:column;gap:4px;min-width:0}
+.firma-lqs{font-family:'Syne';font-weight:800;font-size:clamp(56px,12vw,122px);letter-spacing:-.05em;
+  line-height:.78;text-transform:uppercase;color:var(--papel)}
+.firma-lema{font-family:'Syne';font-weight:700;font-size:clamp(18px,3vw,32px);letter-spacing:-.02em;
+  color:rgba(253,251,247,.82)}
+.firma-pato{position:absolute;right:clamp(10px,2vw,34px);bottom:-6px;z-index:1;
+  height:clamp(86px,13vw,150px);width:auto;pointer-events:none;
+  filter:drop-shadow(0 12px 18px rgba(0,0,0,.3))}
+@media(max-width:620px){.firma-pato{opacity:.5;height:96px;right:-6px}}
+/* logo de LQS anclado en el bento de áreas, rodeado por los frentes */
+.ab-lqs{align-items:center;justify-content:center;text-align:center;gap:12px;
+  border-color:var(--violeta);color:var(--tinta);
+  background:radial-gradient(120% 90% at 30% 0%,#F7F0FF,#E7D7FF)}
+.ab-lqs .ab-lqs-logo{display:block;width:clamp(74px,8vw,110px);height:auto;
+  filter:drop-shadow(0 12px 22px rgba(139,61,240,.3))}
+.ab-lqs .ab-lqs-logo svg,.ab-lqs .ab-lqs-logo img{width:100%;height:auto;display:block}
+.ab-lqs .ab-n{font-size:clamp(28px,3.4vw,42px);color:var(--violeta)}
+.ab-lqs .ab-d{font-size:13px;opacity:.72;max-width:22ch}
+.ab-lqs::after{background:linear-gradient(115deg,transparent 42%,rgba(139,61,240,.1) 50%,transparent 58%)}
 /* cierre de Nosotros: el mensaje grande después del bento */
 .nos-cierre{margin-top:clamp(24px,4vw,42px)}
 .nos-cierre h2{font-family:'Syne';font-weight:800;font-size:clamp(28px,5.5vw,56px);letter-spacing:-.035em;
@@ -875,30 +901,29 @@ lqs-trazo:defined>img{display:none}
 .aviso[hidden]{display:none}
 
 /* ---------- 05 antes / después ---------- */
-.ad{grid-column:span 6;border-radius:var(--r-cont);overflow:hidden;position:relative;
-  aspect-ratio:16/8;background:var(--crema);touch-action:none;cursor:ew-resize;user-select:none}
-.ad-panel{position:absolute;inset:0;display:flex;align-items:center;padding:24px}
-.ad-antes{background:var(--crema);justify-content:flex-start;padding-left:clamp(20px,6%,64px)}
-.ad-despues{background:linear-gradient(125deg,var(--p-violeta),var(--p-azul));
-  clip-path:inset(0 0 0 50%);justify-content:flex-end;padding-right:clamp(20px,6%,64px);text-align:right}
-.ad-tag{position:absolute;top:16px;font-family:'IBM Plex Mono',monospace;font-size:10px;
-  font-weight:600;letter-spacing:.18em;text-transform:uppercase;background:var(--tinta);
-  color:var(--papel);padding:5px 12px;border-radius:999px}
-.ad-antes .ad-tag{left:16px}
-.ad-despues .ad-tag{right:16px}
-.ad-manija{position:absolute;top:0;bottom:0;width:4px;background:var(--tinta);left:50%;
-  transform:translateX(-50%);z-index:3;pointer-events:none}
-.ad-manija::after{content:"";position:absolute;top:50%;left:50%;width:44px;height:44px;
-  border-radius:999px;background:var(--papel);border:3px solid var(--tinta);
-  transform:translate(-50%,-50%)}
-.ad-manija::before{content:"";position:absolute;top:50%;left:50%;width:20px;height:10px;
-  transform:translate(-50%,-50%);z-index:1;
-  background:
-    linear-gradient(var(--tinta),var(--tinta)) left center/3px 10px no-repeat,
-    linear-gradient(var(--tinta),var(--tinta)) right center/3px 10px no-repeat}
-.ad-hueco{max-width:min(34ch,40%)}
-.ad-hueco .mono{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
-  display:block;margin-top:8px;opacity:.7}
+/* antes/después: dos paneles reales (caso Vita Nova), no un slider con huecos */
+.adv{grid-column:span 6;display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,1.6vw,18px)}
+@media(max-width:720px){.adv{grid-template-columns:1fr}}
+.adv-lado{margin:0;position:relative;overflow:hidden;border:2px solid var(--tinta);
+  border-radius:var(--r-cont);padding:clamp(16px,2.2vw,24px);display:flex;flex-direction:column;gap:14px}
+.adv-antes{background:var(--crema)}
+.adv-antes .adv-feed img:first-child{filter:saturate(.72) contrast(.96)}
+.adv-despues{background:linear-gradient(140deg,#2A1F3D,#17141c);color:var(--papel)}
+.adv-tag{align-self:flex-start;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;
+  letter-spacing:.18em;text-transform:uppercase;padding:5px 12px;border-radius:999px;
+  background:var(--tinta);color:var(--papel)}
+.adv-despues .adv-tag{background:var(--violeta)}
+.adv-feed{position:relative;border-radius:var(--r-bloque);overflow:hidden;border:1.5px solid rgba(26,23,32,.12)}
+.adv-despues .adv-feed{border-color:rgba(253,251,247,.14)}
+.adv-feed>img:first-child{display:block;width:100%;height:auto}
+.adv-badge{position:absolute;left:12px;bottom:12px;width:clamp(44px,7vw,62px);height:auto;
+  border-radius:50%;background:var(--papel);padding:6px;box-shadow:0 8px 16px -6px rgba(0,0,0,.45)}
+.adv-lado>p{font-size:13.5px;line-height:1.5;max-width:46ch}
+.adv-despues>p{color:rgba(253,251,247,.9)}
+.adv-link{align-self:flex-start;margin-top:auto;text-decoration:none;font-family:'IBM Plex Mono',monospace;
+  font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--tinta);
+  background:var(--lima);border-radius:999px;padding:9px 16px;transition:filter .13s}
+.adv-link:hover{filter:brightness(1.06)}
 
 /* ---------- 06 casos ---------- */
 .caso{grid-column:span 6;background:var(--crema);border-radius:var(--r-cont);padding:0;
@@ -918,6 +943,16 @@ lqs-trazo:defined>img{display:none}
 .caso-hueco{grid-column:span 3;border:2px dashed var(--humo);border-radius:var(--r-bloque);
   padding:24px;min-height:150px;display:flex;flex-direction:column;justify-content:center;gap:6px;
   color:var(--humo)}
+/* con quién trabajamos: clientes reales, con su logo (nada de huecos vacíos) */
+.caso-clientes{grid-column:span 6;background:var(--papel);border:2px solid var(--tinta);
+  border-radius:var(--r-cont);padding:clamp(22px,3vw,34px);display:flex;flex-direction:column;gap:14px}
+.caso-cli{display:flex;align-items:center;gap:clamp(14px,2vw,22px);margin:0}
+.caso-cli img{width:clamp(58px,7vw,82px);height:auto;flex:none}
+.caso-cli figcaption{font-family:'Syne';font-weight:800;font-size:clamp(17px,2vw,21px);line-height:1.2}
+.caso-cli figcaption a{display:block;margin-top:4px;font-family:'IBM Plex Mono',monospace;
+  font-size:12px;font-weight:500;letter-spacing:.04em;color:var(--violeta);text-decoration:none}
+.caso-cli figcaption a:hover{text-decoration:underline}
+.caso-clientes .dim{font-size:13px}
 @media(max-width:860px){.caso{grid-template-columns:1fr}}
 
 /* ---------- 07 cómo trabajamos ---------- */
