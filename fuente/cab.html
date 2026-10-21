@@ -79,17 +79,36 @@ p{margin:0}
 .nav a:hover{opacity:1;text-decoration:underline;text-underline-offset:4px}
 .nav a[aria-current="page"]{opacity:1;font-weight:900;text-decoration:underline;text-underline-offset:5px;
   text-decoration-thickness:2px}
+.top.pegada .top-menu .nav a{color:var(--papel)}
+/* menú: en escritorio va en fila; en móvil se vuelve desplegable con hamburguesa */
+.top-menu{display:flex;align-items:center;gap:14px;margin-left:auto}
+.top-burger{display:none}
 @media(max-width:760px){
-  /* una sola fila: el gato y los tres destinos. El botón sobra — «Cotizador» ya está en el menú */
-  .top{padding:8px 14px;gap:10px;background:rgba(253,251,247,.92);backdrop-filter:blur(8px)}
-  .top .wordmark{display:none}
-  .top > .btn.v{display:none}
+  .top{padding:8px 10px 8px 14px;gap:10px;background:rgba(253,251,247,.92);backdrop-filter:blur(8px)}
   .marca .cara{width:30px;height:30px}
   .marca lqs-trazo svg{width:30px;height:30px}
-  .nav{gap:14px;font-size:12.5px;margin-left:auto}
-  .nav a{opacity:.72}
+  /* la hamburguesa, animada a X al abrir */
+  .top-burger{display:flex;flex-direction:column;justify-content:center;gap:5px;
+    width:40px;height:40px;margin-left:auto;padding:9px;border:0;border-radius:12px;
+    background:transparent;color:inherit;cursor:pointer}
+  .top-burger span{display:block;height:2.5px;width:100%;background:currentColor;border-radius:2px;
+    transition:transform .25s ease,opacity .2s ease}
+  .top.abierto .top-burger span:nth-child(1){transform:translateY(7.5px) rotate(45deg)}
+  .top.abierto .top-burger span:nth-child(2){opacity:0}
+  .top.abierto .top-burger span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
+  /* panel desplegable */
+  .top-menu{position:absolute;top:calc(100% + 8px);right:0;left:0;margin:0;
+    flex-direction:column;align-items:stretch;gap:14px;padding:18px;
+    background:var(--papel);color:var(--tinta);border:2px solid var(--tinta);border-radius:22px;
+    box-shadow:0 20px 44px -20px rgba(26,23,32,.45);
+    opacity:0;visibility:hidden;transform:translateY(-10px);
+    transition:opacity .22s ease,transform .22s ease,visibility .22s}
+  .top.abierto .top-menu{opacity:1;visibility:visible;transform:none}
+  .top-menu .nav{flex-direction:column;gap:2px;font-size:17px;margin:0}
+  .top-menu .nav a{opacity:1;padding:9px 2px;color:var(--tinta)}
+  .top-menu .idioma{align-self:flex-start;color:var(--tinta);font-size:12px;padding:6px 12px;letter-spacing:.08em}
+  .top-menu .btn.v{display:inline-flex;justify-content:center;width:100%}
 }
-@media(max-width:380px){ .nav{gap:10px;font-size:11.5px} }
 
 /* ---------- 00b idioma ---------- */
 .idioma{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.1em;
@@ -103,7 +122,9 @@ p{margin:0}
 
 /* ---------- 01 hero ---------- */
 .hero{grid-column:span 6;position:relative;overflow:hidden;border-radius:var(--r-cont);
-  background:linear-gradient(140deg,var(--p-violeta),var(--p-rojo));color:#1A1720;
+  background:
+    radial-gradient(120% 120% at 88% 8%,rgba(196,168,245,.5),transparent 55%),
+    linear-gradient(142deg,#CBB2F6 0%,#DECDFB 46%,#C6D0F5 100%);color:#1A1720;
   padding:clamp(28px,5vw,56px);min-height:min(78vh,620px);
   display:flex;flex-direction:column;justify-content:space-between;gap:30px}
 /* La firma del hero: el LOGO manda y las letras lo acompañan al lado.
@@ -578,17 +599,29 @@ lqs-trazo:defined>img{display:none}
   .ab-tile.ab-visto{opacity:1;animation:gv-ola .6s cubic-bezier(.2,.8,.2,1)}
 }
 
-/* ---------- bento de Nosotros: toderos y TO. son cubos; estamos/tu idea rellenan ---------- */
+/* El bento de Nosotros arranca la página: necesita holgura para no quedar bajo el header */
+#nosotros{padding-top:clamp(92px,12vw,116px)}
+/* ---------- bento de Nosotros: toderos y TO. son cubos; estamos/tu idea rellenan ----------
+   Las filas crecen con el contenido (minmax …,auto): la caja se adapta al texto y nada se
+   corta, pero mantienen un alto mínimo para que sigan leyéndose como cubos. */
 .nb-rej{grid-column:span 6;display:grid;gap:12px;
-  grid-template-columns:repeat(4,1fr);grid-auto-rows:clamp(138px,13.5vw,188px);
+  grid-template-columns:repeat(4,1fr);grid-auto-rows:minmax(clamp(130px,13vw,180px),auto);
   grid-template-areas:
     "tod tod est est"
     "tod tod to  to"
     "idea idea to to"}
-@media(max-width:720px){
+@media(max-width:860px){
+  .nb-rej{grid-template-columns:repeat(2,1fr);grid-auto-rows:minmax(120px,auto);
+    grid-template-areas:
+      "tod tod"
+      "tod tod"
+      "est est"
+      "idea idea"
+      "to to"}}
+@media(max-width:560px){
   .nb-rej{grid-template-columns:1fr;grid-auto-rows:auto;
     grid-template-areas:"tod" "est" "idea" "to"}
-  .nb-cubo{min-height:200px}}
+  .nb-cubo{min-height:188px}}
 .nb{position:relative;overflow:hidden;border:2px solid var(--tinta);border-radius:var(--r-cont);
   padding:clamp(18px,2.2vw,26px);display:flex;flex-direction:column;gap:10px;justify-content:space-between;
   transition:transform .24s cubic-bezier(.2,.75,.25,1),box-shadow .24s cubic-bezier(.2,.75,.25,1)}
@@ -614,10 +647,10 @@ lqs-trazo:defined>img{display:none}
 .nb-tx{display:flex;flex-direction:column;gap:5px}
 .nb-big-word{font-family:'Syne';font-weight:800;font-size:clamp(34px,6vw,58px);letter-spacing:-.04em;
   line-height:.9;color:var(--papel)}
-.nb-to{position:relative;min-height:128px}
-.nb-pato{position:absolute;right:-4px;bottom:-6px;height:92px;width:auto;transform:scaleX(-1);
-  pointer-events:none;filter:drop-shadow(0 8px 14px rgba(0,0,0,.25))}
-.nb-to .nb-tx{position:relative;z-index:1;max-width:60%}
+.nb-to{position:relative;min-height:188px}
+.nb-pato{position:absolute;right:-6px;bottom:-8px;height:clamp(128px,17vw,186px);width:auto;transform:scaleX(-1);
+  pointer-events:none;filter:drop-shadow(0 10px 16px rgba(0,0,0,.28))}
+.nb-to .nb-tx{position:relative;z-index:1;max-width:58%}
 .nb-swatches{display:flex;gap:5px;height:40px}
 .nb-swatches i{flex:1;border-radius:7px}
 /* firma: el logo y el eslogan con protagonismo */

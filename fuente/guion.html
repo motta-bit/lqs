@@ -58,6 +58,20 @@ if (top) addEventListener("scroll", function(){
   top.classList.toggle("pegada", scrollY > 100);
 }, {passive:true});
 
+/* ---------------- hamburguesa (menú móvil) ---------------- */
+var burger = top && top.querySelector(".top-burger");
+if (burger) {
+  var cerrarMenu = function(){ top.classList.remove("abierto"); burger.setAttribute("aria-expanded", "false"); };
+  burger.addEventListener("click", function(e){
+    e.stopPropagation();
+    var ab = top.classList.toggle("abierto");
+    burger.setAttribute("aria-expanded", ab ? "true" : "false");
+  });
+  top.querySelectorAll(".top-menu a").forEach(function(a){ a.addEventListener("click", cerrarMenu); });
+  document.addEventListener("click", function(e){ if (top.classList.contains("abierto") && !top.contains(e.target)) cerrarMenu(); });
+  document.addEventListener("keydown", function(e){ if (e.key === "Escape") cerrarMenu(); });
+}
+
 if (!quieto) document.body.classList.add("arma");
 
 /* ---------------- la carita del 404 ---------------- */

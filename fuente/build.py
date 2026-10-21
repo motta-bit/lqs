@@ -575,7 +575,7 @@ PAGINAS = {
         "titulo": "Quiénes somos — LQS",
         "desc": ("No solo una agencia creativa: una agencia creativa modular. Por que existe LQS, "
                  "como trabajamos y que hemos hecho."),
-        "partes": ["firma", "nosotros", "areas-bento", "trabajamos", "casos"],
+        "partes": ["nosotros", "areas-bento", "trabajamos", "casos"],
     },
     "muestras.html": {
         "titulo": "Muestras — LQS",
