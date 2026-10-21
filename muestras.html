@@ -578,14 +578,17 @@ lqs-trazo:defined>img{display:none}
     "video lqs     lqs         marca"
     "web   lqs     lqs         automatizacion"
     "eventos eventos ilustracion expr"}
-@media(max-width:720px){
-  .ab-rej{grid-template-columns:repeat(2,1fr);grid-auto-rows:clamp(128px,30vw,168px);
+/* En móvil SIGUE siendo un bento (tamaños variados), no una pila: Video y Marca
+   altos, LQS y Eventos anchos, el resto en parejas. Más chico, pero con forma. */
+@media(max-width:640px){
+  .ab-rej{grid-template-columns:repeat(2,1fr);gap:8px;grid-auto-rows:clamp(112px,28vw,150px);
     grid-template-areas:
-      "video video"
-      "lqs   lqs"
-      "foto  redes"
-      "marca web"
-      "automatizacion eventos"
+      "video  marca"
+      "video  marca"
+      "lqs    lqs"
+      "foto   redes"
+      "web    automatizacion"
+      "eventos eventos"
       "ilustracion expr"}
 }
 .ab-tile{--c:var(--tinta);position:relative;overflow:hidden;border:2px solid var(--tinta);
@@ -607,10 +610,20 @@ lqs-trazo:defined>img{display:none}
   margin-bottom:auto}
 .ab-grande .ab-ico.ico{width:52px;height:52px;padding:11px}
 .ab-tx{position:relative;z-index:1;display:flex;flex-direction:column;gap:3px}
-.ab-n{font-family:'Syne';font-weight:800;font-size:19px;letter-spacing:-.02em;line-height:1}
+.ab-n{font-family:'Syne';font-weight:800;font-size:19px;letter-spacing:-.02em;line-height:1.02;
+  overflow-wrap:break-word;hyphens:auto}
 .ab-grande .ab-n{font-size:clamp(24px,3vw,33px)}
 .ab-d{font-size:12px;line-height:1.3;opacity:.9}
 .ab-grande .ab-d{font-size:14px;max-width:34ch}
+/* En móvil los cubos son más angostos: el nombre baja de tamaño y puede partir
+   para que no se salga ni lo corte el borde; el ícono de fondo se contiene. */
+@media(max-width:640px){
+  .ab-tile{padding:13px}
+  .ab-n,.ab-grande .ab-n{font-size:clamp(15px,4.4vw,19px);line-height:1.04;overflow-wrap:break-word;hyphens:auto}
+  .ab-d,.ab-grande .ab-d{font-size:clamp(11px,3vw,12px)}
+  .ab-ico.ico,.ab-grande .ab-ico.ico{width:34px;height:34px;padding:7px}
+  .ab-marca.ico,.ab-grande .ab-marca{width:54%;height:54%;right:-8%;top:auto;bottom:-8%;opacity:.13}
+}
 .ab-tile::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;opacity:0;transform:translateX(-70%);
   background:linear-gradient(115deg,transparent 38%,rgba(253,251,247,.28) 50%,transparent 62%)}
 .ab-tile:hover::after{opacity:1;transform:translateX(70%);transition:transform .6s ease,opacity .25s ease}
@@ -624,24 +637,12 @@ lqs-trazo:defined>img{display:none}
 /* ---------- bento de Nosotros: toderos y TO. son cubos; estamos/tu idea rellenan ----------
    Las filas crecen con el contenido (minmax …,auto): la caja se adapta al texto y nada se
    corta, pero mantienen un alto mínimo para que sigan leyéndose como cubos. */
-.nb-rej{grid-column:span 6;display:grid;gap:12px;
-  grid-template-columns:repeat(4,1fr);grid-auto-rows:minmax(clamp(130px,13vw,180px),auto);
+.nb-rej{grid-column:span 6;display:grid;gap:clamp(8px,1.4vw,12px);
+  grid-template-columns:repeat(4,1fr);grid-auto-rows:minmax(clamp(112px,13vw,180px),auto);
   grid-template-areas:
     "tod tod est est"
     "tod tod to  to"
     "idea idea to to"}
-@media(max-width:860px){
-  .nb-rej{grid-template-columns:repeat(2,1fr);grid-auto-rows:minmax(120px,auto);
-    grid-template-areas:
-      "tod tod"
-      "tod tod"
-      "est est"
-      "idea idea"
-      "to to"}}
-@media(max-width:560px){
-  .nb-rej{grid-template-columns:1fr;grid-auto-rows:auto;
-    grid-template-areas:"tod" "est" "idea" "to"}
-  .nb-cubo{min-height:188px}}
 .nb{position:relative;overflow:hidden;border:2px solid var(--tinta);border-radius:var(--r-cont);
   padding:clamp(18px,2.2vw,26px);display:flex;flex-direction:column;gap:10px;justify-content:space-between;
   transition:transform .24s cubic-bezier(.2,.75,.25,1),box-shadow .24s cubic-bezier(.2,.75,.25,1)}
@@ -656,10 +657,10 @@ lqs-trazo:defined>img{display:none}
   background:linear-gradient(115deg,transparent 40%,rgba(253,251,247,.22) 50%,transparent 60%)}
 .nb-luz::after{background:linear-gradient(115deg,transparent 42%,rgba(26,23,32,.05) 50%,transparent 58%)}
 .nb:hover::after{opacity:1;transform:translateX(72%);transition:transform .6s ease,opacity .25s ease}
-.nb-hero h2{font-family:'Syne';font-weight:800;font-size:clamp(22px,3.4vw,34px);letter-spacing:-.03em;line-height:1.03}
-.nb-hero h2 em{color:var(--violeta);font-style:normal}
-.nb h3{font-family:'Syne';font-weight:800;font-size:19px;letter-spacing:-.02em;line-height:1.06}
-.nb h4{font-family:'Syne';font-weight:800;font-size:17px;letter-spacing:-.02em}
+.nb h3{font-family:'Syne';font-weight:800;font-size:19px;letter-spacing:-.02em;line-height:1.06;
+  overflow-wrap:break-word;hyphens:auto}
+.nb h4{font-family:'Syne';font-weight:800;font-size:17px;letter-spacing:-.02em;overflow-wrap:break-word}
+.nb-big-word{overflow-wrap:break-word;hyphens:auto}
 .nb p{font-size:13.5px;line-height:1.5}
 .nb-color p{opacity:.9}
 .nb-ico.ico{width:42px;height:42px;flex:none;color:var(--papel);background:rgba(253,251,247,.18);
@@ -671,40 +672,18 @@ lqs-trazo:defined>img{display:none}
 .nb-pato{position:absolute;right:-6px;bottom:-8px;height:clamp(128px,17vw,186px);width:auto;transform:scaleX(-1);
   pointer-events:none;filter:drop-shadow(0 10px 16px rgba(0,0,0,.28))}
 .nb-to .nb-tx{position:relative;z-index:1;max-width:58%}
-.nb-swatches{display:flex;gap:5px;height:40px}
-.nb-swatches i{flex:1;border-radius:7px}
-/* firma: el logo y el eslogan con protagonismo */
-.nb-firma{flex-direction:row;align-items:center;gap:clamp(14px,2.6vw,32px);flex-wrap:wrap}
-.nb-firma lqs-trazo{flex:none;width:clamp(90px,11vw,140px);height:auto}
-.nb-firma lqs-trazo img{width:100%;height:auto;display:block}
-.nb-firma-tx{display:flex;flex-direction:column;gap:3px;min-width:min(240px,100%);flex:1}
-.nb-lqs{font-family:'Syne';font-weight:800;font-size:clamp(44px,8vw,82px);letter-spacing:-.05em;
-  line-height:.82;text-transform:uppercase}
-.nb-lema{font-family:'Syne';font-weight:700;font-size:clamp(16px,2.3vw,23px);letter-spacing:-.02em;color:var(--humo)}
-.nb-toderos{font-size:14px;line-height:1.5;margin-top:7px;max-width:50ch}
-.nb-toderos b{color:var(--violeta)}
-/* firma-hero: es el TÍTULO de la página, no una sección. Letras negras, eslogan
-   abajo, el logo a color; la vida la da un halo lila detrás del logo y TO.
-   asomándose, sin caja ni borde que lo haga parecer un bloque de contenido. */
-.firma-hero{grid-column:span 6;position:relative;display:flex;align-items:center;
-  gap:clamp(16px,3vw,40px);flex-wrap:wrap;
-  padding:clamp(22px,4vw,46px) 0 clamp(10px,2vw,20px)}
-.firma-hero::before{content:"";position:absolute;left:clamp(-30px,-1vw,0);top:50%;z-index:0;
-  width:clamp(230px,34vw,440px);height:clamp(230px,34vw,440px);transform:translateY(-54%);
-  pointer-events:none;border-radius:50%;
-  background:radial-gradient(circle,color-mix(in srgb,var(--violeta) 32%,transparent) 0%,transparent 66%)}
-.firma-logo{position:relative;z-index:1;display:block;flex:none;line-height:0;
-  width:clamp(98px,13vw,156px);filter:drop-shadow(0 16px 28px rgba(139,61,240,.32))}
-.firma-logo svg,.firma-logo img{width:100%;height:auto;display:block}
-.firma-tx{position:relative;z-index:1;display:flex;flex-direction:column;gap:3px;min-width:0}
-.firma-lqs{font-family:'Syne';font-weight:800;font-size:clamp(60px,13vw,132px);letter-spacing:-.05em;
-  line-height:.76;text-transform:uppercase;color:var(--tinta)}
-.firma-lema{font-family:'Syne';font-weight:700;font-size:clamp(18px,3vw,32px);letter-spacing:-.02em;
-  color:var(--violeta)}
-.firma-pato{position:relative;z-index:1;margin-left:auto;align-self:flex-end;
-  height:clamp(76px,10vw,124px);width:auto;pointer-events:none;
-  filter:drop-shadow(0 10px 16px rgba(0,0,0,.18))}
-@media(max-width:560px){.firma-pato{display:none}}
+/* En móvil NO se apila: misma retícula bento de PC, solo más chica. Las tipografías
+   bajan para que quepan en media pantalla y los nombres largos puedan partir. */
+@media(max-width:560px){
+  .nb{padding:clamp(12px,3.4vw,18px)}
+  .nb-big-word{font-size:clamp(18px,5.6vw,26px);overflow-wrap:break-word}
+  .nb h3{font-size:clamp(15px,4.2vw,18px)}
+  .nb h4{font-size:15px}
+  .nb p{font-size:clamp(11.5px,3.2vw,13px)}
+  .nb-ico.ico{width:34px;height:34px;padding:7px}
+  .nb-pato{height:clamp(92px,24vw,120px)}
+  .nb-to .nb-tx{max-width:64%}
+}
 /* logo de LQS anclado en el bento de áreas, rodeado por los frentes */
 .ab-lqs{align-items:center;justify-content:center;text-align:center;gap:12px;
   border-color:var(--violeta);color:var(--tinta);
