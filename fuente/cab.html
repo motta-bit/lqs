@@ -127,8 +127,9 @@ p{margin:0}
 /* ---------- 01 hero ---------- */
 .hero{grid-column:span 6;position:relative;overflow:hidden;border-radius:var(--r-cont);
   background:
-    radial-gradient(120% 120% at 88% 8%,rgba(196,168,245,.5),transparent 55%),
-    linear-gradient(142deg,#CBB2F6 0%,#DECDFB 46%,#C6D0F5 100%);color:#1A1720;
+    radial-gradient(85% 95% at 93% 4%,color-mix(in srgb,var(--violeta) 22%,transparent),transparent 54%),
+    radial-gradient(70% 80% at 2% 100%,color-mix(in srgb,var(--azul) 12%,transparent),transparent 56%),
+    linear-gradient(160deg,var(--papel) 0%,var(--crema) 100%);color:var(--tinta);
   padding:clamp(28px,5vw,56px);min-height:min(78vh,620px);
   display:flex;flex-direction:column;justify-content:space-between;gap:30px}
 /* La firma del hero: el LOGO manda y las letras lo acompañan al lado.
@@ -523,13 +524,14 @@ lqs-trazo:defined>img{display:none}
   letter-spacing:.14em;text-transform:uppercase;color:var(--humo);margin:2px 0 0}
 @media(max-width:620px){.gv-flecha{display:none}}
 /* portada placeholder: degradado vivo del color de la categoría + ícono que reacciona */
+/* portada neutra (carbón) para que las imágenes reales resalten; el color va en el ícono */
 .gv-cover{position:absolute;inset:0;z-index:0;overflow:hidden;
   background:
-    radial-gradient(120% 92% at 16% 6%,color-mix(in srgb,var(--c) 58%,var(--papel)) 0%,transparent 46%),
-    linear-gradient(142deg,color-mix(in srgb,var(--c) 92%,#000) 0%,var(--c) 52%,color-mix(in srgb,var(--c) 82%,#000) 100%)}
-.gv-cover-ico.ico{position:absolute;right:-14%;bottom:-12%;width:66%;height:66%;color:var(--papel);
-  opacity:.24;transition:transform .4s cubic-bezier(.2,.75,.25,1),opacity .3s ease}
-.gv-card:hover .gv-cover-ico{transform:scale(1.14) rotate(-5deg);opacity:.34}
+    radial-gradient(130% 100% at 16% 4%,color-mix(in srgb,var(--c) 22%,#241f2e) 0%,transparent 55%),
+    linear-gradient(150deg,#241f2e 0%,#17141c 100%)}
+.gv-cover-ico.ico{position:absolute;right:-14%;bottom:-12%;width:66%;height:66%;color:var(--c);
+  opacity:.4;transition:transform .4s cubic-bezier(.2,.75,.25,1),opacity .3s ease}
+.gv-card:hover .gv-cover-ico{transform:scale(1.14) rotate(-5deg);opacity:.5}
 /* brillo que barre la tarjeta al pasar el cursor */
 .gv-card::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0;
   transform:translateX(-70%);
@@ -540,7 +542,7 @@ lqs-trazo:defined>img{display:none}
 .gv-foot{position:relative;z-index:2;display:flex;align-items:flex-end;gap:9px;
   padding:12px 13px;background:linear-gradient(0deg,rgba(13,13,15,.82),rgba(13,13,15,.12) 70%,transparent)}
 .gv-cat.ico{width:26px;height:26px;flex:none;color:var(--papel);
-  background:rgba(253,251,247,.16);border-radius:8px;padding:5px}
+  background:var(--c);border-radius:8px;padding:5px}
 .gv-tx{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
 .gv-n{font-weight:700;font-size:13px;line-height:1.2;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
@@ -585,28 +587,28 @@ lqs-trazo:defined>img{display:none}
       "ilustracion expr"}
 }
 .ab-tile{--c:var(--tinta);position:relative;overflow:hidden;border:1px solid var(--linea-fuerte);
-  border-radius:var(--r-bloque);padding:16px;color:var(--papel);
+  border-radius:var(--r-bloque);padding:16px;color:var(--tinta);
   display:flex;flex-direction:column;justify-content:flex-end;gap:8px;
-  background:radial-gradient(118% 88% at 18% 0%,rgba(253,251,247,.22),transparent 52%),
-    linear-gradient(150deg,color-mix(in srgb,var(--c) 86%,#1A1720) 0%,color-mix(in srgb,var(--c) 52%,#141118) 100%);
-  transition:transform .24s cubic-bezier(.2,.75,.25,1),box-shadow .24s cubic-bezier(.2,.75,.25,1)}
-.ab-tile:hover{transform:translateY(-5px) scale(1.012);
-  box-shadow:0 16px 30px -14px color-mix(in srgb,var(--c) 72%,#000)}
-/* ícono gigante, cortado y translúcido, como marca de agua dentro del cubo */
+  background:linear-gradient(160deg,var(--papel) 0%,var(--crema) 100%);
+  transition:transform .24s cubic-bezier(.2,.75,.25,1),box-shadow .24s cubic-bezier(.2,.75,.25,1),border-color .24s ease}
+.ab-tile:hover{transform:translateY(-5px) scale(1.012);box-shadow:var(--sombra-flote);
+  border-color:color-mix(in srgb,var(--c) 55%,transparent)}
+/* el color solo como detalle: marca de agua del ícono en el tono de la categoría, muy tenue */
 .ab-marca.ico{position:absolute;right:-16%;top:-10%;z-index:0;width:74%;height:74%;
-  color:var(--papel);opacity:.14;pointer-events:none;
+  color:var(--c);opacity:.10;pointer-events:none;
   transition:transform .4s cubic-bezier(.2,.75,.25,1),opacity .3s ease}
-.ab-tile:hover .ab-marca{transform:scale(1.1) rotate(-5deg);opacity:.2}
+.ab-tile:hover .ab-marca{transform:scale(1.1) rotate(-5deg);opacity:.16}
 .ab-grande .ab-marca{width:62%;height:62%;right:-12%;top:auto;bottom:-10%}
+/* el color también vive aquí: el chip del ícono (lo que resalta) */
 .ab-ico.ico{position:relative;z-index:1;width:40px;height:40px;flex:none;color:var(--papel);
-  background:rgba(253,251,247,.2);border-radius:var(--r-int);padding:8px;align-self:flex-start;
-  margin-bottom:auto}
+  background:var(--c);border-radius:var(--r-int);padding:8px;align-self:flex-start;margin-bottom:auto;
+  box-shadow:0 6px 14px -6px color-mix(in srgb,var(--c) 70%,transparent)}
 .ab-grande .ab-ico.ico{width:52px;height:52px;padding:11px}
 .ab-tx{position:relative;z-index:1;display:flex;flex-direction:column;gap:3px}
 .ab-n{font-family:'Syne';font-weight:800;font-size:19px;letter-spacing:-.02em;line-height:1.02;
   overflow-wrap:break-word;hyphens:auto}
 .ab-grande .ab-n{font-size:clamp(24px,3vw,33px)}
-.ab-d{font-size:12px;line-height:1.3;opacity:.9}
+.ab-d{font-size:12px;line-height:1.3;color:var(--humo)}
 .ab-grande .ab-d{font-size:14px;max-width:34ch}
 /* En móvil los cubos son más angostos: el nombre baja de tamaño y puede partir
    para que no se salga ni lo corte el borde; el ícono de fondo se contiene. */
@@ -618,7 +620,7 @@ lqs-trazo:defined>img{display:none}
   .ab-marca.ico,.ab-grande .ab-marca{width:54%;height:54%;right:-8%;top:auto;bottom:-8%;opacity:.13}
 }
 .ab-tile::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;opacity:0;transform:translateX(-70%);
-  background:linear-gradient(115deg,transparent 38%,rgba(253,251,247,.28) 50%,transparent 62%)}
+  background:linear-gradient(115deg,transparent 40%,color-mix(in srgb,var(--c) 10%,transparent) 50%,transparent 60%)}
 .ab-tile:hover::after{opacity:1;transform:translateX(70%);transition:transform .6s ease,opacity .25s ease}
 @media(prefers-reduced-motion:no-preference){
   .ab-tile{opacity:0}
@@ -641,11 +643,10 @@ lqs-trazo:defined>img{display:none}
   transition:transform .24s cubic-bezier(.2,.75,.25,1),box-shadow .24s cubic-bezier(.2,.75,.25,1)}
 .nb-luz{background:var(--papel);color:var(--tinta)}
 .nb-luz:hover{transform:translateY(-4px);box-shadow:0 14px 28px -16px rgba(26,23,32,.4)}
-.nb-color{color:var(--papel);
-  background:radial-gradient(110% 82% at 20% 2%,rgba(253,251,247,.20),transparent 54%),
-    linear-gradient(150deg,color-mix(in srgb,var(--c) 84%,#1A1720) 0%,color-mix(in srgb,var(--c) 56%,#1A1720) 100%)}
-.nb-color:hover{transform:translateY(-4px) scale(1.01);
-  box-shadow:0 16px 30px -14px color-mix(in srgb,var(--c) 72%,#000)}
+/* neutro con ritmo claro/oscuro; el color va en los detalles (acentos), no en el relleno */
+.nb-color{color:var(--tinta);background:linear-gradient(160deg,var(--papel) 0%,var(--crema) 100%)}
+.nb-cubo{color:var(--papel);background:linear-gradient(155deg,#2a2335 0%,var(--tinta) 100%)}
+.nb-color:hover,.nb-cubo:hover{transform:translateY(-4px) scale(1.01);box-shadow:var(--sombra-flote)}
 .nb::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transform:translateX(-72%);
   background:linear-gradient(115deg,transparent 40%,rgba(253,251,247,.22) 50%,transparent 60%)}
 .nb-luz::after{background:linear-gradient(115deg,transparent 42%,rgba(26,23,32,.05) 50%,transparent 58%)}
@@ -655,9 +656,12 @@ lqs-trazo:defined>img{display:none}
 .nb h4{font-family:'Syne';font-weight:800;font-size:17px;letter-spacing:-.02em;overflow-wrap:break-word}
 .nb-big-word{overflow-wrap:break-word;hyphens:auto}
 .nb p{font-size:13.5px;line-height:1.5}
-.nb-color p{opacity:.9}
-.nb-ico.ico{width:42px;height:42px;flex:none;color:var(--papel);background:rgba(253,251,247,.18);
-  border-radius:var(--r-int);padding:9px}
+.nb-cubo p{opacity:.9}
+.nb-color:not(.nb-cubo) p{color:var(--humo)}
+.nb-color:not(.nb-cubo)::after{background:linear-gradient(115deg,transparent 42%,rgba(26,23,32,.05) 50%,transparent 58%)}
+/* el ícono es el acento de color (chip lila) sobre la tarjeta clara */
+.nb-ico.ico{width:42px;height:42px;flex:none;color:var(--papel);background:var(--violeta);
+  border-radius:var(--r-int);padding:9px;box-shadow:0 6px 14px -6px color-mix(in srgb,var(--violeta) 60%,transparent)}
 .nb-tx{display:flex;flex-direction:column;gap:5px}
 .nb-big-word{font-family:'Syne';font-weight:800;font-size:clamp(34px,6vw,58px);letter-spacing:-.04em;
   line-height:.9;color:var(--papel)}
