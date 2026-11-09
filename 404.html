@@ -515,16 +515,29 @@ lqs-trazo:defined>img{display:none}
 .gv-chip-dot{width:9px;height:9px;border-radius:50%;background:var(--c);flex:none}
 .gv-chip[aria-pressed="true"] .gv-chip-dot{box-shadow:0 0 0 2px var(--papel)}
 
-.gv-rej{grid-column:span 6;display:grid;grid-auto-flow:dense;gap:10px;
-  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));grid-auto-rows:150px}
-@media(max-width:440px){.gv-rej{grid-template-columns:repeat(2,1fr);grid-auto-rows:136px}}
-.gv-card{position:relative;overflow:hidden;cursor:pointer;font:inherit;color:var(--papel);
-  text-align:left;border:2px solid var(--tinta);border-radius:var(--r-bloque);padding:0;
-  display:flex;flex-direction:column;justify-content:flex-end;
-  transition:transform .24s cubic-bezier(.2,.75,.25,1),box-shadow .24s cubic-bezier(.2,.75,.25,1)}
-.gv-card:hover,.gv-card:focus-visible{transform:translateY(-5px) scale(1.012);outline:none;
-  box-shadow:0 16px 30px -14px color-mix(in srgb,var(--c) 72%,#000),0 10px 0 -4px var(--c)}
-.gv-big{grid-column:span 2;grid-row:span 2}       /* las que tienen muestra en vivo, grandes */
+/* carrusel de muestras: carril lateral con profundidad 3D (la del centro al
+   frente, las de los lados en perspectiva). El estado 3D lo pone el JS vía
+   transform; sin JS quedan planas y legibles. */
+.gv-carril-wrap{grid-column:span 6;position:relative;display:flex;align-items:center;gap:8px}
+.gv-carril{flex:1;min-width:0;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;
+  perspective:1500px;padding:36px 0 42px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.gv-carril::-webkit-scrollbar{display:none}
+.gv-card{flex:0 0 clamp(216px,64vw,300px);height:clamp(300px,80vw,398px);scroll-snap-align:center;
+  margin:0 clamp(7px,1.3vw,13px);position:relative;overflow:hidden;cursor:pointer;font:inherit;
+  color:var(--papel);text-align:left;border:2px solid var(--tinta);border-radius:var(--r-cont);
+  padding:0;display:flex;flex-direction:column;justify-content:flex-end;
+  transform-origin:center center;will-change:transform,opacity;
+  transition:transform .35s cubic-bezier(.2,.75,.25,1),box-shadow .35s ease,opacity .35s ease;
+  box-shadow:0 18px 40px -22px rgba(26,23,32,.5)}
+.gv-card.gv-foco{box-shadow:0 30px 64px -24px color-mix(in srgb,var(--c) 60%,#000)}
+.gv-card:focus-visible{outline:3px solid var(--violeta);outline-offset:3px}
+.gv-flecha{flex:none;width:46px;height:46px;border-radius:50%;border:2px solid var(--tinta);
+  background:var(--papel);color:var(--tinta);font-family:'Syne';font-size:24px;line-height:1;
+  cursor:pointer;display:grid;place-items:center;z-index:6;transition:background .15s,transform .15s}
+.gv-flecha:hover{background:var(--tinta);color:var(--papel);transform:scale(1.06)}
+.gv-pista{grid-column:span 6;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--humo);margin:2px 0 0}
+@media(max-width:620px){.gv-flecha{display:none}}
 /* portada placeholder: degradado vivo del color de la categoría + ícono que reacciona */
 .gv-cover{position:absolute;inset:0;z-index:0;overflow:hidden;
   background:
@@ -559,12 +572,8 @@ lqs-trazo:defined>img{display:none}
 .gv-urg-bars i{width:3px;border-radius:1px;background:#ff5b3a}
 .gv-urg-bars i:nth-child(1){height:5px}.gv-urg-bars i:nth-child(2){height:9px}.gv-urg-bars i:nth-child(3){height:13px}
 .gv-urg-tx{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.04em;color:var(--papel)}
-/* filtro: ocultar; y revelado tarjeta-por-tarjeta al hacer scroll (no todo de golpe) */
+/* filtro: ocultar tarjeta del carril */
 .gv-oculta{display:none}
-@media(prefers-reduced-motion:no-preference){
-  .gv-card{opacity:0}
-  .gv-card.gv-visto{opacity:1;animation:gv-ola .62s cubic-bezier(.2,.8,.2,1)}
-}
 @keyframes gv-ola{0%{opacity:0;transform:translateY(26px) scale(.9)}
   60%{opacity:1}100%{opacity:1;transform:none}}
 
@@ -755,14 +764,17 @@ lqs-trazo:defined>img{display:none}
 .mstra-dlg::backdrop{background:rgba(26,23,32,.5);backdrop-filter:blur(3px);
   animation:mstra-vela .25s ease}
 @keyframes mstra-vela{from{opacity:0}to{opacity:1}}
-.mstra-caja{position:relative;width:min(640px,100%);max-height:88vh;overflow:auto;
+.mstra-caja{position:relative;width:min(900px,100%);max-height:88vh;overflow:auto;
   background:var(--papel);border:2px solid var(--tinta);border-radius:var(--r-cont);
-  box-shadow:0 24px 60px -22px rgba(26,23,32,.55);display:flex;flex-direction:column}
+  box-shadow:0 24px 60px -22px rgba(26,23,32,.55);display:flex;flex-direction:row}
+@media(max-width:680px){.mstra-caja{flex-direction:column;width:min(620px,100%)}}
 .mstra-x{position:absolute;top:12px;right:12px;z-index:3;width:34px;height:34px;cursor:pointer;
   border:2px solid var(--tinta);border-radius:50%;background:var(--papel);color:var(--tinta);
   font-size:20px;line-height:1;display:grid;place-items:center}
-.mstra-media{position:relative;aspect-ratio:16/9;overflow:hidden;display:grid;place-items:center;
-  border-bottom:2px solid var(--tinta);background:color-mix(in srgb,var(--c) 22%,var(--papel))}
+.mstra-media{position:relative;flex:0 0 48%;overflow:hidden;display:grid;place-items:center;
+  min-height:360px;border-right:2px solid var(--tinta);background:color-mix(in srgb,var(--c) 22%,var(--papel))}
+@media(max-width:680px){.mstra-media{flex:none;aspect-ratio:16/9;min-height:0;border-right:0;
+  border-bottom:2px solid var(--tinta)}}
 .mstra-media-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .mstra-media-nota{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;
   text-transform:uppercase;color:var(--humo)}
@@ -776,7 +788,7 @@ lqs-trazo:defined>img{display:none}
    de precio agrupado (precio grande + tipo + botón)— en vez de datos regados.
    El tipo (pago único / plan mensual / por alcance / a pedido) es lo que al
    cliente le importa, así que vive junto al precio. */
-.mstra-info{padding:clamp(18px,3.2vw,26px);display:flex;flex-direction:column;gap:10px}
+.mstra-info{flex:1;min-width:0;padding:clamp(18px,3.2vw,26px);display:flex;flex-direction:column;gap:10px}
 .mstra-chip{display:inline-flex;align-items:center;gap:7px;align-self:flex-start;background:var(--c);
   border-radius:999px;padding:5px 13px 5px 7px;font-size:11px;font-weight:700;letter-spacing:.04em;
   text-transform:uppercase;color:var(--tinta)}

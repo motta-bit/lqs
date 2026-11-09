@@ -856,7 +856,7 @@ def armar(idi):
         urg_tx = "Hoy mismo" if idi == "es" else "Same day"
         urg_lab = "Urgencia" if idi == "es" else "Urgency"
         def gv_card(nom_disp, idx, ico, color, cat, i, cover_img=None, urgente=False):
-            big = " gv-big" if cover_img else ""
+            big = ""   # en el carrusel las tarjetas van uniformes; la profundidad la da el 3D
             if cover_img:
                 cover = ('<span class="gv-cover" aria-hidden="true">'
                          '<img class="gv-cover-img" src="%s" alt="" loading="lazy"></span>' % cover_img)
@@ -944,10 +944,16 @@ def armar(idi):
                 (' style="--c:%s"' % col) if col else "",
                 ('<span class="gv-chip-dot"></span>' if col else ""), nom))
             for slug, nom, col in chips)
+        pista = ("Desliza · toca una muestra para abrirla" if es
+                 else "Swipe · tap a sample to open it")
         html = ('<div class="gv-filtros" role="group" aria-label="%s">%s</div>'
-                '<div class="gv-rej">%s</div>'
+                '<div class="gv-carril-wrap">'
+                '<button class="gv-flecha gv-flecha-izq" type="button" aria-label="Anterior">‹</button>'
+                '<div class="gv-carril" tabindex="0">%s</div>'
+                '<button class="gv-flecha gv-flecha-der" type="button" aria-label="Siguiente">›</button>'
+                '</div><p class="gv-pista">%s</p>'
                 % ("Filtrar por categoría" if es else "Filter by category",
-                   chip_html, "".join(cards)))
+                   chip_html, "".join(cards), pista))
         return html, json.dumps(fichas, ensure_ascii=False)
     areas_html, fichas_json = areas_explora()
     paq_html = paquetes_html(idi)

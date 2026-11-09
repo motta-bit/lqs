@@ -38,7 +38,7 @@
     var datos = [];
     try { datos = JSON.parse(document.getElementById('fichas-data').textContent); } catch (e) {}
     var caja = dlg.querySelector('.mstra-caja');
-    var rej  = document.querySelector('.gv-rej');
+    var rej  = document.querySelector('.gv-carril');
     var wa   = dlg.getAttribute('data-wa');
     var cta  = dlg.querySelector('.mstra-cta');
     var icoN = dlg.querySelector('.mstra-chip-ico');
@@ -108,45 +108,67 @@
   </script>
 
   <script>
-  /* Live gallery: category filters + card-by-card reveal on scroll. */
+  /* Samples carousel: 3D depth (centered card up front), arrows and filters. */
   (function () {
-    var rej = document.querySelector('.gv-rej');
-    if (!rej) return;
-    var cards = [].slice.call(rej.querySelectorAll('.gv-card'));
+    var carril = document.querySelector('.gv-carril');
+    if (!carril) return;
+    var cards = [].slice.call(carril.querySelectorAll('.gv-card'));
     var lento = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function pintar() {
+      var r = carril.getBoundingClientRect();
+      var cx = r.left + r.width / 2;
+      cards.forEach(function (card) {
+        if (card.classList.contains('gv-oculta')) return;
+        var cr = card.getBoundingClientRect();
+        var d = ((cr.left + cr.width / 2) - cx) / r.width;
+        var dist = Math.min(Math.abs(d), 1);
+        var rot = Math.max(-42, Math.min(42, -d * 72));
+        var scale = Math.max(0.80, 1 - dist * 0.46);
+        var tz = -dist * 200;
+        card.style.transform = 'perspective(1500px) rotateY(' + rot + 'deg) scale(' + scale + ') translateZ(' + tz + 'px)';
+        card.style.opacity = Math.max(0.42, 1 - dist * 0.85);
+        card.style.zIndex = String(100 - Math.round(dist * 100));
+        card.classList.toggle('gv-foco', dist < 0.12);
+      });
+    }
+    if (lento) {
+      cards.forEach(function (c) { c.style.transform = 'none'; c.style.opacity = 1; });
+    } else {
+      var raf;
+      carril.addEventListener('scroll', function () {
+        if (raf) cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(pintar);
+      }, { passive: true });
+      window.addEventListener('resize', pintar);
+      requestAnimationFrame(function () {
+        var first = cards[0];
+        if (first) carril.scrollLeft = first.offsetLeft - (carril.clientWidth - first.offsetWidth) / 2;
+        pintar();
+      });
+    }
+
+    function paso() {
+      var c = cards.find(function (x) { return !x.classList.contains('gv-oculta'); });
+      return c ? c.offsetWidth + 26 : 300;
+    }
+    var izq = document.querySelector('.gv-flecha-izq'), der = document.querySelector('.gv-flecha-der');
+    if (izq) izq.addEventListener('click', function () { carril.scrollBy({ left: -paso(), behavior: 'smooth' }); });
+    if (der) der.addEventListener('click', function () { carril.scrollBy({ left: paso(), behavior: 'smooth' }); });
 
     var chips = [].slice.call(document.querySelectorAll('.gv-chip'));
     chips.forEach(function (chip) {
       chip.addEventListener('click', function () {
         var cat = chip.dataset.cat;
         chips.forEach(function (c) { c.setAttribute('aria-pressed', c === chip); });
-        var k = 0;
         cards.forEach(function (card) {
-          var ok = (cat === 'todas' || card.dataset.cat === cat);
-          card.classList.toggle('gv-oculta', !ok);
-          if (ok && !lento) {
-            card.classList.remove('gv-visto'); void card.offsetWidth;
-            card.style.animationDelay = (k++ * 45) + 'ms';
-            card.classList.add('gv-visto');
-          }
+          card.classList.toggle('gv-oculta', !(cat === 'todas' || card.dataset.cat === cat));
         });
+        var vis = cards.find(function (x) { return !x.classList.contains('gv-oculta'); });
+        if (vis) carril.scrollLeft = vis.offsetLeft - (carril.clientWidth - vis.offsetWidth) / 2;
+        if (!lento) pintar();
       });
     });
-
-    if (lento || !('IntersectionObserver' in window)) {
-      cards.forEach(function (c) { c.classList.add('gv-visto'); }); return;
-    }
-    var io = new IntersectionObserver(function (entries) {
-      var k = 0;
-      entries.forEach(function (en) {
-        if (en.isIntersecting) {
-          en.target.style.animationDelay = (k++ * 55) + 'ms';
-          en.target.classList.add('gv-visto');
-          io.unobserve(en.target);
-        }
-      });
-    }, { threshold: 0.18, rootMargin: '0px 0px -6% 0px' });
-    cards.forEach(function (c) { io.observe(c); });
   })();
   </script>
 </section>
