@@ -626,14 +626,14 @@ lqs-trazo:defined>img{display:none}
 /* ---------- bento de Nosotros: toderos y TO. son cubos; estamos/tu idea rellenan ----------
    Las filas crecen con el contenido (minmax …,auto): la caja se adapta al texto y nada se
    corta, pero mantienen un alto mínimo para que sigan leyéndose como cubos. */
-.nb-rej{grid-column:span 6;display:grid;gap:clamp(8px,1.4vw,12px);
-  grid-template-columns:repeat(4,1fr);grid-auto-rows:minmax(clamp(112px,13vw,180px),auto);
+.nb-rej{grid-column:span 6;display:grid;gap:clamp(8px,1.2vw,11px);
+  grid-template-columns:repeat(4,1fr);grid-auto-rows:minmax(clamp(96px,9.5vw,128px),auto);
   grid-template-areas:
     "tod tod est est"
     "tod tod to  to"
     "idea idea to to"}
 .nb{position:relative;overflow:hidden;border:2px solid var(--tinta);border-radius:var(--r-cont);
-  padding:clamp(18px,2.2vw,26px);display:flex;flex-direction:column;gap:10px;justify-content:space-between;
+  padding:clamp(16px,2vw,24px);display:flex;flex-direction:column;gap:10px;justify-content:space-between;
   transition:transform .24s cubic-bezier(.2,.75,.25,1),box-shadow .24s cubic-bezier(.2,.75,.25,1)}
 .nb-luz{background:var(--papel);color:var(--tinta)}
 .nb-luz:hover{transform:translateY(-4px);box-shadow:0 14px 28px -16px rgba(26,23,32,.4)}
