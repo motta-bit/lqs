@@ -607,6 +607,66 @@ lqs-trazo:defined>img{display:none}
   .zz-nom{font-size:15px}
 }
 
+/* ---------- calculadora: tres niveles por área ----------
+   Cada área lista Básico / Completo / Plus (suscripción). Se elige UN nivel por
+   área; el total sticky de abajo se arma solo y baja con el nº de áreas. */
+.niv-guia{grid-column:span 6;color:var(--humo);margin:-8px 0 24px;font-size:15px}
+.niv-areas{grid-column:span 6;display:flex;flex-direction:column;gap:clamp(24px,3.4vw,40px)}
+.niv-area{display:grid;gap:14px}
+.niv-cab{display:flex;align-items:center;gap:13px}
+.niv-ico.ico{width:30px;height:30px;flex:none;color:var(--c)}
+.niv-cab-tx h3{margin:0;font-size:clamp(19px,2.2vw,24px);line-height:1}
+.niv-cab-tx p{margin:3px 0 0;color:var(--humo);font-size:13px}
+.niv-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,1.4vw,16px)}
+@media(max-width:720px){.niv-cards{grid-template-columns:1fr}}
+.niv-card{position:relative;display:flex;flex-direction:column;gap:12px;text-align:left;cursor:pointer;
+  border:1px solid var(--borde-ctrl);border-radius:var(--r-bloque);padding:16px 16px 18px;
+  background:var(--papel);color:var(--tinta);font:inherit;transition:border-color .18s ease,transform .18s ease,box-shadow .18s ease}
+.niv-card:hover{border-color:color-mix(in srgb,var(--c) 55%,var(--borde-ctrl));transform:translateY(-3px);box-shadow:var(--sombra)}
+.niv-card:focus-visible{outline:3px solid var(--violeta);outline-offset:3px}
+.niv-card[aria-pressed="true"]{border-color:var(--c);box-shadow:0 0 0 1px var(--c),var(--sombra)}
+.niv-card[aria-pressed="true"]::before{content:"";position:absolute;inset:0;border-radius:inherit;
+  background:color-mix(in srgb,var(--c) 7%,transparent);pointer-events:none}
+.niv-top{display:flex;align-items:center;gap:8px}
+.niv-tn{font-weight:700;font-size:15px}
+.niv-susc{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--c);border:1px solid color-mix(in srgb,var(--c) 40%,transparent);
+  border-radius:999px;padding:2px 7px}
+.niv-precio{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.niv-precio b{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(20px,2.4vw,26px);line-height:1}
+.niv-mes{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--humo)}
+.niv-inc{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:5px;flex:1}
+.niv-inc li{position:relative;padding-left:16px;font-size:12.5px;line-height:1.35;color:var(--humo)}
+.niv-inc li::before{content:"";position:absolute;left:0;top:7px;width:7px;height:7px;border-radius:2px;
+  background:var(--c);opacity:.7}
+.niv-pick{align-self:flex-start;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;
+  letter-spacing:.04em;text-transform:uppercase;color:var(--c);border:1px solid var(--borde-ctrl);
+  border-radius:999px;padding:6px 13px;transition:.15s}
+.niv-card[aria-pressed="true"] .niv-pick{background:var(--c);color:var(--papel);border-color:var(--c)}
+.niv-card[aria-pressed="true"] .niv-pick::after{content:" ✓"}
+/* total sticky abajo */
+.niv-tot{grid-column:span 6;position:sticky;bottom:14px;z-index:20;margin-top:32px;
+  background:var(--tinta);color:var(--papel);border-radius:var(--r-cont);box-shadow:var(--sombra-flote);
+  padding:16px 20px;display:grid;grid-template-columns:1fr auto auto;gap:14px 22px;align-items:center}
+.niv-tot-lab{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(253,251,247,.55);display:block;margin-bottom:5px}
+.niv-resumen{margin:0;font-size:14px;line-height:1.5;display:flex;flex-wrap:wrap;gap:4px 12px}
+.niv-rline{white-space:nowrap}.niv-rline b{font-weight:700}
+.niv-tot-cifras{display:flex;gap:18px;align-items:center}
+.niv-cifra{display:flex;flex-direction:column;gap:2px}
+.niv-cifra[hidden]{display:none}
+.niv-cifra>span{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.07em;
+  text-transform:uppercase;color:rgba(253,251,247,.55)}
+.niv-cifra>b{font-family:'Syne',sans-serif;font-weight:800;font-size:19px;line-height:1}
+.niv-tot-cta{display:flex;gap:10px}
+.niv-tot .btn{white-space:nowrap;height:40px}
+.niv-razon{grid-column:1/-1;margin:0;font-size:11px;color:rgba(253,251,247,.6)}
+@media(max-width:720px){
+  .niv-tot{grid-template-columns:1fr;gap:12px}
+  .niv-tot-cifras{flex-wrap:wrap;gap:12px 22px}
+  .niv-tot-cta{display:grid;grid-template-columns:1fr 1fr}
+}
+
 /* ---------- bento de áreas (Nosotros): LQS al centro, las áreas alrededor ----------
    Retícula fija 4×4 con el logo anclado en el centro (grid-area:lqs, 2×2) y los
    ocho frentes + Express completando el cuadrado con tamaños variados. */
@@ -1215,140 +1275,112 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
 </header>
 
 <main class="wrap" id="inicio" data-pagina="cotizador">
-<section class="seccion pagina-encab"><div class="eyebrow">Quote builder</div><h1 class="tit-pagina">Let us build the number</h1><p class="dim bajada">Open an area, tick what you need and the total builds itself. Every service has its price; take a whole area and it drops. It goes straight to our WhatsApp.</p></section>
+<section class="seccion pagina-encab"><div class="eyebrow">Quote builder</div><h1 class="tit-pagina">Let us build the number</h1><p class="dim bajada">Pick a tier per area —Basic, Complete or Plus— and the total builds itself; it drops as you add areas. It goes straight to our WhatsApp, no forms nobody reads.</p></section>
 
-<section class="seccion" id="modulos">
-  <div class="eyebrow">Every service priced · a whole area drops 10% · adding areas drops up to 35%</div>
-  <h2 style="margin-bottom:20px">Tick what you need</h2>
-  <div class="chips" id="chips"></div>
-  <div class="pared" id="rejilla-modulos">
-    <article class="mod apila" data-area="Video" style="--sf:#F2975A"><div class="mod-cab"><span class="mod-top"><span class="ico" data-ico="video"></span></span><span class="mod-name">Video</span><span class="mod-desc">Reels, YouTube, commercials</span><span class="mod-price">from $150.000</span><span class="check" aria-hidden="true">✓</span></div><button class="mod-abrir" type="button" aria-expanded="false" aria-controls="serv-video"><span>See the 5 services</span><span class="mod-flecha" aria-hidden="true">+</span></button><div class="mod-lista" id="serv-video" hidden><button class="serv" type="button" data-area="Video" data-i="0" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Reels and vertical content</span><span class="serv-p mono">$150.000</span></button><button class="serv" type="button" data-area="Video" data-i="1" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Interviews</span><span class="serv-p mono">$350.000</span></button><button class="serv" type="button" data-area="Video" data-i="2" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">YouTube video, cinematic finish</span><span class="serv-p mono">$600.000</span></button><button class="serv" type="button" data-area="Video" data-i="3" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Podcast: recording and clips</span><span class="serv-p mono">$500.000</span></button><button class="serv" type="button" data-area="Video" data-i="4" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Commercials and ad pieces</span><span class="serv-p mono">$700.000</span></button><button class="serv-todo" type="button" data-area="Video">Take the whole area · −10%</button></div></article>
-<article class="mod apila" data-area="Photo" style="--sf:#58B6D8"><div class="mod-cab"><span class="mod-top"><span class="ico" data-ico="foto"></span></span><span class="mod-name">Photo</span><span class="mod-desc">Product, advertising, sessions</span><span class="mod-price">from $190.000</span><span class="check" aria-hidden="true">✓</span></div><button class="mod-abrir" type="button" aria-expanded="false" aria-controls="serv-foto"><span>See the 7 services</span><span class="mod-flecha" aria-hidden="true">+</span></button><div class="mod-lista" id="serv-foto" hidden><button class="serv" type="button" data-area="Photo" data-i="0" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Retouching and editing<em class="serv-u">per photo</em></span><span class="serv-p mono">$40.000</span></button><button class="serv" type="button" data-area="Photo" data-i="1" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">One-person session<em class="serv-u">45 min, 10 photos</em></span><span class="serv-p mono">$200.000</span></button><button class="serv" type="button" data-area="Photo" data-i="2" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Product photography</span><span class="serv-p mono">$250.000</span></button><button class="serv" type="button" data-area="Photo" data-i="3" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Portfolio photography</span><span class="serv-p mono">$300.000</span></button><button class="serv" type="button" data-area="Photo" data-i="4" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Advertising photography</span><span class="serv-p mono">$400.000</span></button><button class="serv" type="button" data-area="Photo" data-i="5" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Team session</span><span class="serv-p mono">$400.000</span></button><button class="serv" type="button" data-area="Photo" data-i="6" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Seasonal mini photo session</span><span class="serv-p mono">$190.000</span></button><button class="serv-todo" type="button" data-area="Photo">Take the whole area · −10%</button></div></article>
-<article class="mod apila" data-area="Brand" style="--sf:#E7B544"><div class="mod-cab"><span class="mod-top"><span class="ico" data-ico="marca"></span></span><span class="mod-name">Brand</span><span class="mod-desc">Identity, packaging, consulting</span><span class="mod-price">from $90.000</span><span class="check" aria-hidden="true">✓</span></div><button class="mod-abrir" type="button" aria-expanded="false" aria-controls="serv-marca"><span>See the 7 services</span><span class="mod-flecha" aria-hidden="true">+</span></button><div class="mod-lista" id="serv-marca" hidden><button class="serv" type="button" data-area="Brand" data-i="0" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Logo only<em class="serv-u">an alternative, they do not add up</em></span><span class="serv-p mono">$150.000</span></button><button class="serv" type="button" data-area="Brand" data-i="1" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Brand merchandise design</span><span class="serv-p mono">$250.000</span></button><button class="serv" type="button" data-area="Brand" data-i="2" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Brand DNA and positioning consulting</span><span class="serv-p mono">$300.000</span></button><button class="serv" type="button" data-area="Brand" data-i="3" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Packaging</span><span class="serv-p mono">$350.000</span></button><button class="serv" type="button" data-area="Brand" data-i="4" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Redesign of an existing brand<em class="serv-u">an alternative, they do not add up</em></span><span class="serv-p mono">$650.000</span></button><button class="serv" type="button" data-area="Brand" data-i="5" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Brand design from scratch<em class="serv-u">an alternative, they do not add up</em></span><span class="serv-p mono">$750.000</span></button><button class="serv" type="button" data-area="Brand" data-i="6" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Seasonal logo skin</span><span class="serv-p mono">$90.000</span></button><button class="serv-todo" type="button" data-area="Brand">Take the whole area · −10%</button></div></article>
-<article class="mod apila" data-area="Social" style="--sf:#79C257"><div class="mod-cab"><span class="mod-top"><span class="ico" data-ico="redes"></span></span><span class="mod-name">Social</span><span class="mod-desc">Content, calendar, community</span><span class="mod-price">from $60.000</span><span class="check" aria-hidden="true">✓</span></div><button class="mod-abrir" type="button" aria-expanded="false" aria-controls="serv-redes"><span>See the 8 services</span><span class="mod-flecha" aria-hidden="true">+</span></button><div class="mod-lista" id="serv-redes" hidden><button class="serv" type="button" data-area="Social" data-i="0" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Single posts<em class="serv-u">per piece</em></span><span class="serv-p mono">$40.000</span></button><button class="serv" type="button" data-area="Social" data-i="1" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Short ad for paid media</span><span class="serv-p mono">$250.000</span></button><button class="serv" type="button" data-area="Social" data-i="2" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Post bundle<em class="serv-u">6 pieces</em></span><span class="serv-p mono">$210.000</span></button><button class="serv" type="button" data-area="Social" data-i="3" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Comment and message replies</span><span class="serv-p mono">$290.000 /mo</span></button><button class="serv" type="button" data-area="Social" data-i="4" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Basic plan — living presence<em class="serv-u">Basic plan</em></span><span class="serv-p mono">$1.100.000 /mo</span></button><button class="serv" type="button" data-area="Social" data-i="5" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Standard plan — active account<em class="serv-u">Standard plan · recommended</em></span><span class="serv-p mono">$2.200.000 /mo</span></button><button class="serv" type="button" data-area="Social" data-i="6" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Pro plan — full operation<em class="serv-u">from · tailored</em></span><span class="serv-p mono">$2.600.000 /mo</span></button><button class="serv" type="button" data-area="Social" data-i="7" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Seasonal cover and highlights</span><span class="serv-p mono">$60.000</span></button><button class="serv-todo" type="button" data-area="Social">Take the whole area · −10%</button></div></article>
-<article class="mod apila" data-area="Digital" style="--sf:#EC6F6F"><div class="mod-cab"><span class="mod-top"><span class="ico" data-ico="web"></span></span><span class="mod-name">Digital</span><span class="mod-desc">Sites, catalogues, menus</span><span class="mod-price">from $180.000</span><span class="check" aria-hidden="true">✓</span></div><button class="mod-abrir" type="button" aria-expanded="false" aria-controls="serv-web"><span>See the 7 services</span><span class="mod-flecha" aria-hidden="true">+</span></button><div class="mod-lista" id="serv-web" hidden><button class="serv" type="button" data-area="Digital" data-i="0" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Digital menu with QR code</span><span class="serv-p mono">$450.000</span></button><button class="serv" type="button" data-area="Digital" data-i="1" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Campaign landing page</span><span class="serv-p mono">$600.000</span></button><button class="serv" type="button" data-area="Digital" data-i="2" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Blog</span><span class="serv-p mono">$700.000</span></button><button class="serv" type="button" data-area="Digital" data-i="3" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Portfolio site</span><span class="serv-p mono">$900.000</span></button><button class="serv" type="button" data-area="Digital" data-i="4" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Online catalogue</span><span class="serv-p mono">$1.000.000</span></button><button class="serv" type="button" data-area="Digital" data-i="5" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Website</span><span class="serv-p mono">$1.300.000</span></button><button class="serv" type="button" data-area="Digital" data-i="6" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Seasonal skin for the website</span><span class="serv-p mono">$180.000</span></button><button class="serv-todo" type="button" data-area="Digital">Take the whole area · −10%</button></div></article>
-<article class="mod apila" data-area="Events" style="--sf:#D879B4"><div class="mod-cab"><span class="mod-top"><span class="ico" data-ico="eventos"></span></span><span class="mod-name">Events</span><span class="mod-desc">Logistics, check-in, coverage</span><span class="mod-price">from $250.000</span><span class="check" aria-hidden="true">✓</span></div><button class="mod-abrir" type="button" aria-expanded="false" aria-controls="serv-eventos"><span>See the 6 services</span><span class="mod-flecha" aria-hidden="true">+</span></button><div class="mod-lista" id="serv-eventos" hidden><button class="serv" type="button" data-area="Events" data-i="0" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Event collateral design</span><span class="serv-p mono">$350.000</span></button><button class="serv" type="button" data-area="Events" data-i="1" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Backdrops and conference slides</span><span class="serv-p mono">$250.000</span></button><button class="serv" type="button" data-area="Events" data-i="2" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Guest check-in and management<em class="serv-u">with post-event follow-up</em></span><span class="serv-p mono">$600.000</span></button><button class="serv" type="button" data-area="Events" data-i="3" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Photo and video coverage</span><span class="serv-p mono">$800.000</span></button><button class="serv" type="button" data-area="Events" data-i="4" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Insta photo: guests get theirs same day</span><span class="serv-p mono">$800.000</span></button><button class="serv" type="button" data-area="Events" data-i="5" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Full event-day logistics</span><span class="serv-p mono">$1.800.000</span></button><button class="serv-todo" type="button" data-area="Events">Take the whole area · −10%</button></div></article>
-<article class="mod apila" data-area="Automation" style="--sf:#4CB0A4"><div class="mod-cab"><span class="mod-top"><span class="ico" data-ico="automatizacion"></span></span><span class="mod-name">Automation</span><span class="mod-desc">WhatsApp, Instagram, follow-up</span><span class="mod-price">from $300.000</span><span class="check" aria-hidden="true">✓</span></div><button class="mod-abrir" type="button" aria-expanded="false" aria-controls="serv-automatizacion"><span>See the 5 services</span><span class="mod-flecha" aria-hidden="true">+</span></button><div class="mod-lista" id="serv-automatizacion" hidden><button class="serv" type="button" data-area="Automation" data-i="0" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Automatic weekly numbers report</span><span class="serv-p mono">$300.000</span></button><button class="serv" type="button" data-area="Automation" data-i="1" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">WhatsApp Business: catalogue and replies</span><span class="serv-p mono">$350.000</span></button><button class="serv" type="button" data-area="Automation" data-i="2" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Requests that arrive directly, no inbox</span><span class="serv-p mono">$400.000</span></button><button class="serv" type="button" data-area="Automation" data-i="3" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Automatic replies on Instagram<em class="serv-u">messages and comments</em></span><span class="serv-p mono">$400.000</span></button><button class="serv" type="button" data-area="Automation" data-i="4" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">WhatsApp agent that answers and quotes<em class="serv-u">setup</em></span><span class="serv-p mono">$1.550.000</span></button><button class="serv-todo" type="button" data-area="Automation">Take the whole area · −10%</button></div></article>
-<article class="mod apila" data-area="Illustration & design" style="--sf:#8B6FE0"><div class="mod-cab"><span class="mod-top"><span class="ico" data-ico="ilustracion"></span></span><span class="mod-name">Illustration & design</span><span class="mod-desc">Covers, illustration, tattoos, commissions</span><span class="mod-price">from $70.000</span><span class="check" aria-hidden="true">✓</span></div><button class="mod-abrir" type="button" aria-expanded="false" aria-controls="serv-ilustracion"><span>See the 5 services</span><span class="mod-flecha" aria-hidden="true">+</span></button><div class="mod-lista" id="serv-ilustracion" hidden><button class="serv" type="button" data-area="Illustration & design" data-i="0" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Covers & illustration<em class="serv-u">varies with detail</em></span><span class="serv-p mono">$180.000</span></button><button class="serv" type="button" data-area="Illustration & design" data-i="1" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Character illustration</span><span class="serv-p mono">$250.000</span></button><button class="serv" type="button" data-area="Illustration & design" data-i="2" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Tattoo design</span><span class="serv-p mono">by scope</span></button><button class="serv" type="button" data-area="Illustration & design" data-i="3" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Open commissions</span><span class="serv-p mono">by scope</span></button><button class="serv" type="button" data-area="Illustration & design" data-i="4" aria-pressed="false"><span class="serv-tick" aria-hidden="true">✓</span><span class="serv-txt">Seasonal icon and sticker set</span><span class="serv-p mono">$70.000</span></button><button class="serv-todo" type="button" data-area="Illustration & design">Take the whole area · −10%</button></div></article>
-<div class="mod-mas apila"><span class="mod-name">Not seeing yours?</span><p class="mod-desc">These lists are what we get asked for most, not a closed catalogue. If what you need is not there, write to us and we will look at it.</p><a class="btn ghost sm" href="https://wa.me/573332791710?text=Hi%20LQS%2C%20I%20need%20something%20that%20is%20not%20on%20the%20list%3A">Ask on WhatsApp</a></div>
-  </div>
+<!-- ============ CALCULATOR · TIERS BY AREA ============ -->
+<section class="seccion" id="cotiza">
+  <div class="niv-areas"><script type="application/json" id="niv-esc">[[2, 8], [3, 14], [4, 20], [5, 25], [6, 30], [7, 35]]</script><article class="niv-area" data-area="Video" data-nom="Video" style="--c:#F2975A"><header class="niv-cab"><span class="niv-ico ico" data-ico="video"></span><div class="niv-cab-tx"><h3>Video</h3><p>Reels, YouTube, commercials</p></div></header><div class="niv-cards"><button class="niv-card" type="button" data-area="Video" data-nom="Video" data-tnom="Basic" data-u="150000" data-m="0" aria-pressed="false"><span class="niv-top"><span class="niv-tn">Basic</span></span><span class="niv-precio"><b>$150.000</b></span><ul class="niv-inc"><li>1 Reel or vertical piece</li><li>1 revision round</li></ul><span class="niv-pick">Choose</span></button><button class="niv-card" type="button" data-area="Video" data-nom="Video" data-tnom="Complete" data-u="950000" data-m="0" aria-pressed="false"><span class="niv-top"><span class="niv-tn">Complete</span></span><span class="niv-precio"><b>$950.000</b></span><ul class="niv-inc"><li>Reels + interview + YouTube piece</li><li>Script, shoot and edit</li><li>2 revision rounds</li></ul><span class="niv-pick">Choose</span></button><button class="niv-card" type="button" data-area="Video" data-nom="Video" data-tnom="Plus" data-u="950000" data-m="750000" aria-pressed="false"><span class="niv-top"><span class="niv-tn">Plus</span><span class="niv-susc">Subscription</span></span><span class="niv-precio"><b>$950.000</b><span class="niv-mes">+ $750.000/mo</span></span><ul class="niv-inc"><li>Everything in Complete</li><li>4 pieces per month</li><li>Calendar and priority</li></ul><span class="niv-pick">Choose</span></button></div></article><article class="niv-area" data-area="Foto" data-nom="Photo" style="--c:#58B6D8"><header class="niv-cab"><span class="niv-ico ico" data-ico="foto"></span><div class="niv-cab-tx"><h3>Photo</h3><p>Product, advertising, sessions</p></div></header><div class="niv-cards"><button class="niv-card" type="button" data-area="Foto" data-nom="Photo" data-tnom="Basic" data-u="180000" data-m="0" aria-pressed="false"><span class="niv-top"><span class="niv-tn">Basic</span></span><span class="niv-precio"><b>$180.000</b></span><ul class="niv-inc"><li>Mini session (10 photos)</li><li>Retouching included</li></ul><span class="niv-pick">Choose</span></button><button class="niv-card" type="button" data-area="Foto" data-nom="Photo" data-tnom="Complete" data-u="650000" data-m="0" aria-pressed="false"><span class="niv-top"><span class="niv-tn">Complete</span></span><span class="niv-precio"><b>$650.000</b></span><ul class="niv-inc"><li>Session + product photo + portfolio</li><li>Selection and edit</li><li>High-res delivery</li></ul><span class="niv-pick">Choose</span></button><button class="niv-card" type="button" data-area="Foto" data-nom="Photo" data-tnom="Plus" data-u="650000" data-m="450000" aria-pressed="false"><span class="niv-top"><span class="niv-tn">Plus</span><span class="niv-susc">Subscription</span></span><span class="niv-precio"><b>$650.000</b><span class="niv-mes">+ $450.000/mo</span></span><ul class="niv-inc"><li>Everything in Complete</li><li>Monthly photo bank</li><li>Priority scheduling</li></ul><span class="niv-pick">Choose</span></button></div></article><article class="niv-area" data-area="Marca" data-nom="Brand" style="--c:#E7B544"><header class="niv-cab"><span class="niv-ico ico" data-ico="marca"></span><div class="niv-cab-tx"><h3>Brand</h3><p>Identity, packaging, consulting</p></div></header><div class="niv-cards"><button class="niv-card" type="button" data-area="Marca" data-nom="Brand" data-tnom="Basic" data-u="150000" data-m="0" aria-pressed="false"><span class="niv-top"><span class="niv-tn">Basic</span></span><span class="niv-precio"><b>$150.000</b></span><ul class="niv-inc"><li>Logo only</li><li>Palette and type</li><li>Ready-to-use files</li></ul><span class="niv-pick">Choose</span></button><button class="niv-card" type="button" data-area="Marca" data-nom="Brand" data-tnom="Complete" data-u="1200000" data-m="0" aria-pressed="false"><span class="niv-top"><span class="niv-tn">Complete</span></span><span class="niv-precio"><b>$1.200.000</b></span><ul class="niv-inc"><li>Brand from scratch</li><li>Logo + DNA + accessories + packaging</li><li>Brand guidelines</li></ul><span class="niv-pick">Choose</span></button><button class="niv-card" type="button" data-area="Marca" data-nom="Brand" data-tnom="Plus" data-u="1200000" data-m="400000" aria-pressed="false"><span class="niv-top"><span class="niv-tn">Plus</span><span class="niv-susc">Subscription</span></span><span class="niv-precio"><b>$1.200.000</b><span class="niv-mes">+ $400.000/mo</span></span><ul class="niv-inc"><li>Everything in Complete</li><li>Monthly pieces and upkeep</li><li>Ongoing consulting</li></ul><span class="niv-pick">Choose</span></button></div></article><article class="niv-area" data-area="Redes" data-nom="Social" style="--c:#79C257"><header class="niv-cab"><span class="niv-ico ico" data-ico="redes"></span><div class="niv-cab-tx"><h3>Social</h3><p>Content, calendar, community</p></div></header><div class="niv-cards"><button class="niv-card" type="button" data-area="Redes" data-nom="Social" data-tnom="Basic" data-u="0" data-m="1100000" aria-pressed="false"><span class="niv-top"><span class="niv-tn">Basic</span><span class="niv-susc">Subscription</span></span><span class="niv-precio"><b>$1.100.000</b><span class="niv-mes">/mo</span></span><ul class="niv-inc"><li>Living presence</li><li>Posts and calendar</li><li>Comment replies</li></ul><span class="niv-pick">Choose</span></button><button class="niv-card" type="button" data-area="Redes" data-nom="Social" data-tnom="Complete" data-u="0" data-m="2200000" aria-pressed="false"><span class="niv-top"><span class="niv-tn">Complete</span><span class="niv-susc">Subscription</span></span><span class="niv-precio"><b>$2.200.000</b><span class="niv-mes">/mo</span></span><ul class="niv-inc"><li>Active account</li><li>More pieces and short ads</li><li>Monthly report</li></ul><span class="niv-pick">Choose</span></button><button class="niv-card" type="button" data-area="Redes" data-nom="Social" data-tnom="Plus" data-u="0" data-m="2600000" aria-pressed="false"><span class="niv-top"><span class="niv-tn">Plus</span><span class="niv-susc">Subscription</span></span><span class="niv-precio"><b>$2.600.000</b><span class="niv-mes">/mo</span></span><ul class="niv-inc"><li>Full operation</li><li>Community + ads + content</li><li>Tailored</li></ul><span class="niv-pick">Choose</span></button></div></article><article class="niv-area" data-area="Digital" data-nom="Digital" style="--c:#EC6F6F"><header class="niv-cab"><span class="niv-ico ico" data-ico="web"></span><div class="niv-cab-tx"><h3>Digital</h3><p>Sites, catalogues, menus</p></div></header><div class="niv-cards"><button class="niv-card" type="button" data-area="Digital" data-nom="Digital" data-tnom="Basic" data-u="600000" data-m="0" aria-pressed="false"><span class="niv-top"><span class="niv-tn">Basic</span></span><span class="niv-precio"><b>$600.000</b></span><ul class="niv-inc"><li>Campaign landing</li><li>1 section and form</li><li>Ad-ready</li></ul><span class="niv-pick">Choose</span></button><button class="niv-card" type="button" data-area="Digital" data-nom="Digital" data-tnom="Complete" data-u="1300000" data-m="0" aria-pressed="false"><span class="niv-top"><span class="niv-tn">Complete</span></span><span class="niv-precio"><b>$1.300.000</b></span><ul class="niv-inc"><li>Full website</li><li>Up to 5 sections</li><li>Domain and setup</li></ul><span class="niv-pick">Choose</span></button><button class="niv-card" type="button" data-area="Digital" data-nom="Digital" data-tnom="Plus" data-u="1300000" data-m="180000" aria-pressed="false"><span class="niv-top"><span class="niv-tn">Plus</span><span class="niv-susc">Subscription</span></span><span class="niv-precio"><b>$1.300.000</b><span class="niv-mes">+ $180.000/mo</span></span><ul class="niv-inc"><li>Everything in Complete</li><li>Hosting and maintenance</li><li>Monthly changes</li></ul><span class="niv-pick">Choose</span></button></div></article><article class="niv-area" data-area="Eventos" data-nom="Events" style="--c:#D879B4"><header class="niv-cab"><span class="niv-ico ico" data-ico="eventos"></span><div class="niv-cab-tx"><h3>Events</h3><p>Logistics, check-in, coverage</p></div></header><div class="niv-cards"><button class="niv-card" type="button" data-area="Eventos" data-nom="Events" data-tnom="Basic" data-u="800000" data-m="0" aria-pressed="false"><span class="niv-top"><span class="niv-tn">Basic</span></span><span class="niv-precio"><b>$800.000</b></span><ul class="niv-inc"><li>Photo and video coverage</li><li>One event</li><li>Edited delivery</li></ul><span class="niv-pick">Choose</span></button><button class="niv-card" type="button" data-area="Eventos" data-nom="Events" data-tnom="Complete" data-u="2200000" data-m="0" aria-pressed="false"><span class="niv-top"><span class="niv-tn">Complete</span></span><span class="niv-precio"><b>$2.200.000</b></span><ul class="niv-inc"><li>Full day logistics</li><li>Check-in + coverage + collateral</li><li>On-site team</li></ul><span class="niv-pick">Choose</span></button><button class="niv-card" type="button" data-area="Eventos" data-nom="Events" data-tnom="Plus" data-u="2200000" data-m="600000" aria-pressed="false"><span class="niv-top"><span class="niv-tn">Plus</span><span class="niv-susc">Subscription</span></span><span class="niv-precio"><b>$2.200.000</b><span class="niv-mes">+ $600.000/mo</span></span><ul class="niv-inc"><li>Everything in Complete</li><li>Several events a year</li><li>Priority and fixed price</li></ul><span class="niv-pick">Choose</span></button></div></article><article class="niv-area" data-area="Automatización" data-nom="Automation" style="--c:#4CB0A4"><header class="niv-cab"><span class="niv-ico ico" data-ico="automatizacion"></span><div class="niv-cab-tx"><h3>Automation</h3><p>WhatsApp, Instagram, follow-up</p></div></header><div class="niv-cards"><button class="niv-card" type="button" data-area="Automatización" data-nom="Automation" data-tnom="Basic" data-u="350000" data-m="0" aria-pressed="false"><span class="niv-top"><span class="niv-tn">Basic</span></span><span class="niv-precio"><b>$350.000</b></span><ul class="niv-inc"><li>WhatsApp Business</li><li>Catalog and replies</li><li>Setup and guide</li></ul><span class="niv-pick">Choose</span></button><button class="niv-card" type="button" data-area="Automatización" data-nom="Automation" data-tnom="Complete" data-u="1550000" data-m="0" aria-pressed="false"><span class="niv-top"><span class="niv-tn">Complete</span></span><span class="niv-precio"><b>$1.550.000</b></span><ul class="niv-inc"><li>Agent that answers and quotes</li><li>Full setup</li><li>Connected to your channels</li></ul><span class="niv-pick">Choose</span></button><button class="niv-card" type="button" data-area="Automatización" data-nom="Automation" data-tnom="Plus" data-u="1550000" data-m="350000" aria-pressed="false"><span class="niv-top"><span class="niv-tn">Plus</span><span class="niv-susc">Subscription</span></span><span class="niv-precio"><b>$1.550.000</b><span class="niv-mes">+ $350.000/mo</span></span><ul class="niv-inc"><li>Everything in Complete</li><li>Monthly ops and improvements</li><li>Reports</li></ul><span class="niv-pick">Choose</span></button></div></article><article class="niv-area" data-area="Ilustración y diseño" data-nom="Illustration & design" style="--c:#8B6FE0"><header class="niv-cab"><span class="niv-ico ico" data-ico="ilustracion"></span><div class="niv-cab-tx"><h3>Illustration & design</h3><p>Covers, illustration, tattoos, commissions</p></div></header><div class="niv-cards"><button class="niv-card" type="button" data-area="Ilustración y diseño" data-nom="Illustration & design" data-tnom="Basic" data-u="180000" data-m="0" aria-pressed="false"><span class="niv-top"><span class="niv-tn">Basic</span></span><span class="niv-precio"><b>$180.000</b></span><ul class="niv-inc"><li>Cover or illustration</li><li>1 piece</li><li>1 revision round</li></ul><span class="niv-pick">Choose</span></button><button class="niv-card" type="button" data-area="Ilustración y diseño" data-nom="Illustration & design" data-tnom="Complete" data-u="600000" data-m="0" aria-pressed="false"><span class="niv-top"><span class="niv-tn">Complete</span></span><span class="niv-precio"><b>$600.000</b></span><ul class="niv-inc"><li>Illustration pack</li><li>Cover + characters + icon set</li><li>Editable files</li></ul><span class="niv-pick">Choose</span></button><button class="niv-card" type="button" data-area="Ilustración y diseño" data-nom="Illustration & design" data-tnom="Plus" data-u="600000" data-m="350000" aria-pressed="false"><span class="niv-top"><span class="niv-tn">Plus</span><span class="niv-susc">Subscription</span></span><span class="niv-precio"><b>$600.000</b><span class="niv-mes">+ $350.000/mo</span></span><ul class="niv-inc"><li>Everything in Complete</li><li>Monthly illustrations</li><li>Signature style</li></ul><span class="niv-pick">Choose</span></button></div></article></div>
 
-  <div class="eyebrow" style="margin:30px 0 12px">Opening up · quoted on request</div>
-  <div class="pared">
-    <div class="apertura"><span class="mod-name">Music</span><span class="mod-desc">Recording, mixing</span><span class="mod-price">on request</span></div>
-<div class="apertura"><span class="mod-name">Physical production</span><span class="mod-desc">Prototype, laser cutting</span><span class="mod-price">on request</span></div>
-<div class="apertura"><span class="mod-name">Jewellery</span><span class="mod-desc">Design and 3D</span><span class="mod-price">on request</span></div>
-  </div>
-</section>
-
-<div class="barra-sel" id="barra-sel" hidden>
-  <div>
-    <b id="barra-n">0 services</b>
-    <span class="mono" id="barra-lista"></span>
-  </div>
-  <div class="barra-acc">
-    <button class="btn ghost sm" type="button" id="barra-limpiar">Clear</button>
-    <a class="btn v sm" id="barra-ir" href="#cot">See the estimate →</a>
-  </div>
-</div>
-
-
-<section class="seccion" id="descuentos">
-  <div class="eyebrow">How the price comes down</div>
-  <h2 style="margin-bottom:8px">Two ways, they do not add up</h2>
-  <p class="dim" style="max-width:60ch;margin-bottom:20px">Whichever suits you best applies.
-    They do not stack: one only, the larger.</p>
-
-  <div class="pared">
-    <div class="desc-caja">
-      <div class="desc-cab">
-        <h3>Adding areas</h3>
-        <span class="mono desc-tope">up to 35%</span>
-      </div>
-      <p class="dim" style="font-size:13.5px;margin-bottom:16px">Every area that joins brings the
-        total down. Connecting saves real work —one brief, one contact, assets that get reused— and
-        the price reflects it.</p>
-      <ol class="escalera" id="escalera"></ol>
+  <aside class="niv-tot" id="niv-tot" aria-live="polite">
+    <div class="niv-tot-l">
+      <span class="niv-tot-lab">Your estimate</span>
+      <p class="niv-resumen" id="niv-resumen">Nothing chosen yet.</p>
     </div>
-
-    <div class="desc-caja">
-      <div class="desc-cab">
-        <h3>Ready-made plans</h3>
-        <span class="mono desc-tope">up to 20%</span>
-      </div>
-      <p class="dim" style="font-size:13.5px;margin-bottom:16px">Combinations we already know work
-        together. Take a whole one and the discount shows up on its own.</p>
-      <div class="planes" id="planes"></div>
+    <div class="niv-tot-cifras">
+      <div class="niv-cifra" id="niv-inicial" hidden><span>Upfront</span><b id="niv-inicial-v">$0</b></div>
+      <div class="niv-cifra" id="niv-mensual" hidden><span>Monthly</span><b id="niv-mensual-v">$0</b></div>
+      <div class="niv-cifra" id="niv-descf" hidden><span id="niv-desc-n">Discount</span><b id="niv-desc-v">0%</b></div>
     </div>
-  </div>
-</section>
-
-
-<section class="seccion" id="ecosistema">
-  <div class="eyebrow">What you picked</div>
-  <h2 style="margin-bottom:8px">Your ecosystem</h2>
-  <p class="dim" style="max-width:58ch;margin-bottom:20px">When two or more areas come into the same
-    wall they stop being loose services, and the price reflects it. You can change them any time.</p>
-  <div class="pared">
-    <div class="eco">
-      <div class="eco-head">
-        <div class="chips" id="eco-chips" style="margin:0"></div>
-        <button class="btn ghost sm" id="limpiar" type="button">Clear</button>
-      </div>
-      <div class="pared-eco grano" id="pared">
-        <div class="eco-memphis"></div>
-        <div class="eco-vacio" id="vacio">No area picked yet — the blocks live apart.</div>
-      </div>
-      <div class="datos">
-        <div class="dato"><span>Areas</span><b id="n-mod">0</b></div>
-        <div class="dato" id="d-inicial" hidden><span>Initial investment</span><b id="inicial">$0</b></div>
-        <div class="dato" id="d-mensual" hidden><span>Monthly</span><b id="mensual">$0</b></div>
-        <div class="dato ok" id="d-desc" hidden><span id="desc-nombre">Savings for connecting</span><b id="desc">0%</b></div>
-        <p class="razon" id="razon">Pick two or more services so the blocks share a wall.</p>
-      </div>
+    <div class="niv-tot-cta">
+      <a class="btn claro" id="niv-wa" href="#" target="_blank" rel="noopener">WhatsApp</a>
+      <a class="btn ghost claro" id="niv-correo" href="#">Email</a>
     </div>
-    <div class="aviso" id="aviso" hidden>
-      <b>Social is billed separately.</b> It is monthly and the other areas are per project — they do
-      not add into one total. The connection discount applies to the initial work, not to the monthly fee.
-    </div>
-    <div class="aviso" id="alcance" hidden></div>
-  </div>
-</section>
+    <p class="niv-razon mono" id="niv-razon">An estimate on «from» rates. The final number comes out of a short conversation.</p>
+  </aside>
 
+  <script>
+  /* Tier calculator: one tier per area, total with a discount by number of areas
+     (the rate-card ladder, passed in as JSON). Self-contained; it doesn't touch
+     the shared script. */
+  (function () {
+    var sec = document.getElementById('cotiza'); if (!sec) return;
+    var escN = document.getElementById('niv-esc');
+    var esc = []; try { esc = JSON.parse((escN && escN.textContent) || '[]'); } catch (e) {}
+    var cards = [].slice.call(sec.querySelectorAll('.niv-card'));
+    if (!cards.length) return;
+    var sel = {};                                   // area -> chosen card
+    var wa = '573332791710', correo = 'loqueseaproductionsp1@gmail.com';
+    var fmt = function (n) { return '$' + Math.round(n).toLocaleString('en-US'); };
+    function pct(k) { var p = 0; esc.forEach(function (e) { if (k >= e[0]) p = e[1]; }); return p; }
+    function sig(k) { for (var i = 0; i < esc.length; i++) if (esc[i][0] > k) return esc[i]; return null; }
 
-<section class="seccion" id="cotizador">
-  <div class="pared">
-    <div class="cot" id="cot">
-      <div class="paso">
-        <div class="paso-n">What you picked</div>
-        <p id="cot-resumen">Nothing picked yet. Open an area above and tick what you need.</p>
-      </div>
-      <div class="paso">
-        <div class="paso-n">Who it is for</div>
-        <div class="seg" id="seg-escala">
-          <button type="button" data-v="Solo / startup" aria-pressed="true">Solo / startup</button>
-          <button type="button" data-v="Company" aria-pressed="false">Company</button>
-          <button type="button" data-v="Event" aria-pressed="false">Event</button>
-        </div>
-      </div>
-      <div class="paso">
-        <div class="paso-n">The estimate</div>
-        <div class="cot-total">
-          <span class="cara cot-cara" id="cot-cara" aria-hidden="true"></span>
-          <div class="dato" id="c-inicial"><span>Initial investment</span><b id="c-inicial-v">$0</b></div>
-          <div class="dato" id="c-mensual" hidden><span>Monthly</span><b id="c-mensual-v">$0</b></div>
-          <p class="razon" id="c-razon" style="color:rgba(253,251,247,.75)">This is an estimate on
-            «from» rates. The final number comes out of a short conversation.</p>
-        </div>
-        <div class="cot-cierre">
-          <a class="btn" id="wa" href="#" target="_blank" rel="noopener">Send on WhatsApp</a>
-          <a class="btn ghost claro" id="correo" href="#">Send by email</a>
-          <span class="mono" style="font-size:12px;opacity:.6">It arrives directly, with everything
-            you picked. We reply with a formal proposal within 24 hours.</span>
-        </div>
-      </div>
-    </div>
-  </div>
+    var E = {
+      tot: document.getElementById('niv-tot'),
+      resumen: document.getElementById('niv-resumen'),
+      inicial: document.getElementById('niv-inicial'), inicialV: document.getElementById('niv-inicial-v'),
+      mensual: document.getElementById('niv-mensual'), mensualV: document.getElementById('niv-mensual-v'),
+      descf: document.getElementById('niv-descf'), descN: document.getElementById('niv-desc-n'), descV: document.getElementById('niv-desc-v'),
+      razon: document.getElementById('niv-razon'),
+      wa: document.getElementById('niv-wa'), correo: document.getElementById('niv-correo')
+    };
+
+    function calc() {
+      var areas = Object.keys(sel), u = 0, m = 0, lineas = [];
+      areas.forEach(function (a) {
+        var c = sel[a];
+        u += +c.dataset.u; m += +c.dataset.m;
+        lineas.push({ nom: c.dataset.nom, tn: c.dataset.tnom, u: +c.dataset.u, m: +c.dataset.m });
+      });
+      var p = pct(areas.length), inicial = u * (1 - p / 100);
+      E.tot.classList.toggle('niv-tot-on', areas.length > 0);
+
+      E.resumen.innerHTML = areas.length
+        ? lineas.map(function (l) { return '<span class="niv-rline"><b>' + l.nom + '</b> · ' + l.tn + '</span>'; }).join('')
+        : 'Nothing chosen yet.';
+
+      E.inicial.hidden = !(inicial > 0);
+      E.inicialV.textContent = fmt(inicial);
+      E.mensual.hidden = !(m > 0);
+      E.mensualV.textContent = fmt(m) + '/mo';
+      E.descf.hidden = !(p > 0);
+      E.descN.textContent = p > 0 ? ('Discount · ' + areas.length + ' areas') : '';
+      E.descV.textContent = '−' + p + '%';
+
+      var s = sig(areas.length), r;
+      if (!areas.length) r = 'An estimate on «from» rates. The final number comes out of a short conversation.';
+      else if (s) r = 'Add another area and the discount rises to −' + s[1] + '% (' + s[0] + ' areas).';
+      else r = 'You already have the maximum discount. The final number comes out of a short conversation.';
+      E.razon.textContent = r;
+
+      var t = ['Hi LQS, I want a quote.', ''];
+      if (lineas.length) {
+        t.push('What I picked:');
+        lineas.forEach(function (l) {
+          var pz = l.nom + ' · ' + l.tn + ' — ';
+          pz += (l.u && l.m) ? (fmt(l.u) + ' + ' + fmt(l.m) + '/mo') : (l.u ? fmt(l.u) : fmt(l.m) + '/mo');
+          t.push('- ' + pz);
+        });
+        t.push('');
+        if (inicial > 0) t.push('Upfront: ' + fmt(inicial) + (p > 0 ? ' (−' + p + '% for ' + areas.length + ' areas)' : ''));
+        if (m > 0) t.push('Monthly: ' + fmt(m));
+      } else { t.push('Still looking at the tiers.'); }
+      var msg = t.join('\n');
+      E.wa.href = 'https://wa.me/' + wa + '?text=' + encodeURIComponent(msg);
+      E.correo.href = 'mailto:' + correo + '?subject=' + encodeURIComponent('LQS quote') + '&body=' + encodeURIComponent(msg);
+    }
+
+    cards.forEach(function (c) {
+      c.addEventListener('click', function () {
+        var a = c.dataset.area, era = sel[a];
+        [].forEach.call(c.parentNode.children, function (x) { x.setAttribute('aria-pressed', 'false'); });
+        if (era === c) { delete sel[a]; }            // tapping the same one again = remove
+        else { sel[a] = c; c.setAttribute('aria-pressed', 'true'); }
+        calc();
+      });
+    });
+    calc();
+  })();
+  </script>
 </section>
 
 

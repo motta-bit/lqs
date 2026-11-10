@@ -102,6 +102,81 @@ AREA_COMPLETA = 10   # tomar todos los servicios de una sola área
 # Express: encargos chicos que no pasan por cotizador. Se piden y se entregan.
 EXPRESS = ["Panfletos", "Carteles", "Avisos", "Presentaciones", "Edición de fotos", "Arreglos de costura"]
 
+# --- niveles por área (la calculadora) --------------------------------------
+# Tres niveles por área: Básico (arranque, pago único), Completo (el área entera
+# en un paquete, pago único ya con ventaja) y Plus (lo de Completo + un retainer
+# mensual: suscripción). Precios PLACEHOLDER a promedio de mercado, hechos más
+# competitivos; Motta los reemplaza con los reales. Cada nivel:
+#   (clave, precio_único, precio_mensual, [incluye ES], [incluye EN])
+# precio_mensual 0 = sin suscripción. En Redes todo es mensual (son planes).
+NIVELES = {
+ "Video": [
+  ("basico",   150000,      0, ["1 Reel o pieza vertical", "1 ronda de ajustes"],
+                               ["1 Reel or vertical piece", "1 revision round"]),
+  ("completo", 950000,      0, ["Reels + entrevista + pieza para YouTube", "Guion, grabación y edición", "2 rondas de ajustes"],
+                               ["Reels + interview + YouTube piece", "Script, shoot and edit", "2 revision rounds"]),
+  ("plus",     950000, 750000, ["Todo lo de Completo", "4 piezas al mes", "Calendario y prioridad"],
+                               ["Everything in Complete", "4 pieces per month", "Calendar and priority"]),
+ ],
+ "Foto": [
+  ("basico",   180000,      0, ["Mini sesión (10 fotos)", "Retoque incluido"],
+                               ["Mini session (10 photos)", "Retouching included"]),
+  ("completo", 650000,      0, ["Sesión + foto de producto + portafolio", "Selección y edición", "Entrega en alta"],
+                               ["Session + product photo + portfolio", "Selection and edit", "High-res delivery"]),
+  ("plus",     650000, 450000, ["Todo lo de Completo", "Banco de fotos al mes", "Prioridad de agenda"],
+                               ["Everything in Complete", "Monthly photo bank", "Priority scheduling"]),
+ ],
+ "Marca": [
+  ("basico",   150000,      0, ["Solo el logo", "Paleta y tipografías", "Archivos para usar"],
+                               ["Logo only", "Palette and type", "Ready-to-use files"]),
+  ("completo",1200000,      0, ["Marca desde cero", "Logo + ADN + accesorios + empaques", "Manual de marca"],
+                               ["Brand from scratch", "Logo + DNA + accessories + packaging", "Brand guidelines"]),
+  ("plus",    1200000, 400000, ["Todo lo de Completo", "Piezas y mantenimiento al mes", "Consultoría continua"],
+                               ["Everything in Complete", "Monthly pieces and upkeep", "Ongoing consulting"]),
+ ],
+ "Redes": [
+  ("basico",        0,1100000, ["Presencia viva", "Publicaciones y calendario", "Respuesta de comentarios"],
+                               ["Living presence", "Posts and calendar", "Comment replies"]),
+  ("completo",      0,2200000, ["Cuenta activa", "Más piezas y pauta corta", "Reporte mensual"],
+                               ["Active account", "More pieces and short ads", "Monthly report"]),
+  ("plus",          0,2600000, ["Operación completa", "Comunidad + pauta + contenido", "A la medida"],
+                               ["Full operation", "Community + ads + content", "Tailored"]),
+ ],
+ "Digital": [
+  ("basico",   600000,      0, ["Landing de una campaña", "1 sección y formulario", "Lista para pauta"],
+                               ["Campaign landing", "1 section and form", "Ad-ready"]),
+  ("completo",1300000,      0, ["Página web completa", "Hasta 5 secciones", "Dominio y montaje"],
+                               ["Full website", "Up to 5 sections", "Domain and setup"]),
+  ("plus",    1300000, 180000, ["Todo lo de Completo", "Hosting y mantenimiento", "Cambios al mes"],
+                               ["Everything in Complete", "Hosting and maintenance", "Monthly changes"]),
+ ],
+ "Eventos": [
+  ("basico",   800000,      0, ["Cobertura en foto y video", "Un evento", "Entrega editada"],
+                               ["Photo and video coverage", "One event", "Edited delivery"]),
+  ("completo",2200000,      0, ["Logística completa del día", "Registro + cobertura + accesorios", "Equipo en sitio"],
+                               ["Full day logistics", "Check-in + coverage + collateral", "On-site team"]),
+  ("plus",    2200000, 600000, ["Todo lo de Completo", "Varios eventos al año", "Prioridad y precio fijo"],
+                               ["Everything in Complete", "Several events a year", "Priority and fixed price"]),
+ ],
+ "Automatización": [
+  ("basico",   350000,      0, ["WhatsApp Business", "Catálogo y respuestas", "Montaje y guía"],
+                               ["WhatsApp Business", "Catalog and replies", "Setup and guide"]),
+  ("completo",1550000,      0, ["Agente que responde y cotiza", "Montaje completo", "Conectado a tus canales"],
+                               ["Agent that answers and quotes", "Full setup", "Connected to your channels"]),
+  ("plus",    1550000, 350000, ["Todo lo de Completo", "Operación y mejoras al mes", "Reportes"],
+                               ["Everything in Complete", "Monthly ops and improvements", "Reports"]),
+ ],
+ "Ilustración y diseño": [
+  ("basico",   180000,      0, ["Portada o ilustración", "1 pieza", "1 ronda de ajustes"],
+                               ["Cover or illustration", "1 piece", "1 revision round"]),
+  ("completo", 600000,      0, ["Pack de ilustración", "Portada + personajes + set de íconos", "Archivos editables"],
+                               ["Illustration pack", "Cover + characters + icon set", "Editable files"]),
+  ("plus",     600000, 350000, ["Todo lo de Completo", "Ilustraciones al mes", "Estilo propio"],
+                               ["Everything in Complete", "Monthly illustrations", "Signature style"]),
+ ],
+}
+NIV_ORDEN = ["Video", "Foto", "Marca", "Redes", "Digital", "Eventos", "Automatización", "Ilustración y diseño"]
+
 # Paquetes por sector: en Muestras, en vez de un buscador vacío, mostramos
 # combos «starter» con los servicios más necesarios de cada sector, como
 # recomendación para empezar. Cada servicio listado existe ya en MODULOS, así
@@ -551,8 +626,8 @@ EN_ENCAB = {
    "Terms, data and cookies. Written to be understood on one read, without leaving out what the "
    "law requires. The Spanish version is the one that governs."),
  "encab-cotizador": ("Quote builder", "Let us build the number",
-   "Open an area, tick what you need and the total builds itself. Every service has its price; "
-   "take a whole area and it drops. It goes straight to our WhatsApp."),
+   "Pick a tier per area —Basic, Complete or Plus— and the total builds itself; it drops as you "
+   "add areas. It goes straight to our WhatsApp, no forms nobody reads."),
 }
 # textos de interfaz que viven en el guion
 UI = {
@@ -643,8 +718,7 @@ PAGINAS = {
         "titulo": "Cotizador — LQS",
         "desc": ("Elige servicio por servicio y el total se arma solo. Cada cosa con su precio, "
                  "el area completa con descuento. Llega directo a nuestro WhatsApp o correo."),
-        "partes": ["encab-cotizador", "modulos", "descuentos", "ecosistema", "cotizador",
-                   "asesoria", "tarifas", "faqs", "contacto"],
+        "partes": ["encab-cotizador", "niveles", "asesoria", "tarifas", "faqs", "contacto"],
     },
 }
 
@@ -657,8 +731,8 @@ ENCABEZADOS = {
    "Términos, datos y cookies. Escrito para que se entienda leyéndolo una vez, sin dejar de decir "
    "lo que la ley obliga a decir."),
  "encab-cotizador": ("Cotizador", "Armemos el número",
-   "Abre el área, marca lo que necesitas y el total se arma solo. Cada servicio tiene su precio; "
-   "si tomas un área completa, baja. Llega directo a nuestro WhatsApp, sin formularios que nadie revisa."),
+   "Elige un nivel por área —Básico, Completo o Plus— y el total se arma solo; baja cuando sumas "
+   "áreas. Llega directo a nuestro WhatsApp, sin formularios que nadie revisa."),
 }
 
 TICK = "✓"
@@ -730,6 +804,58 @@ def encabezado(clave, idi):
             '<h1 class="tit-pagina">%s</h1>'
             '<p class="dim bajada">%s</p>'
             '</section>' % (eyebrow, titulo, bajada))
+
+def niveles_html(idi):
+    """La calculadora: por cada área, tres tarjetas de nivel (Básico/Completo/
+       Plus). El JS (en partes/niveles.html) lleva el total; aquí solo pintamos
+       las tarjetas con sus precios y lo que incluyen. Antes va la ESCALERA como
+       JSON para que el descuento por nº de áreas quede en sync con el tarifario."""
+    es = idi == "es"
+    mes = "/mes" if es else "/mo"
+    elegir = "Elegir" if es else "Choose"
+    susc = "Suscripción" if es else "Subscription"
+    tnom = {"basico": ("Básico", "Basic"),
+            "completo": ("Completo", "Complete"),
+            "plus": ("Plus", "Plus")}
+    tono = {ico: AREA_TONO.get(ico, col) for _, ico, col, _, _ in MODULOS}
+    icono = {n: ico for n, ico, _, _, _ in MODULOS}
+    desc_a = {n: (EN_AREAS[n][1] if idi == "en" else d) for n, _, _, d, _ in MODULOS}
+
+    def precio(u, m):
+        if u and m:
+            return '<b>%s</b><span class="niv-mes">+ %s%s</span>' % (fmt(u), fmt(m), mes)
+        if u:
+            return '<b>%s</b>' % fmt(u)
+        return '<b>%s</b><span class="niv-mes">%s</span>' % (fmt(m), mes)
+
+    bloques = []
+    for n_es in NIV_ORDEN:
+        ico = icono[n_es]
+        color = tono[ico]
+        nom = EN_AREAS[n_es][0] if idi == "en" else n_es
+        cartas = []
+        for (clave, u, m, inc_es, inc_en) in NIVELES[n_es]:
+            inc = inc_en if idi == "en" else inc_es
+            tn = tnom[clave][1 if idi == "en" else 0]
+            inc_html = "".join("<li>%s</li>" % x for x in inc)
+            tag = ('<span class="niv-susc">%s</span>' % susc) if m else ""
+            cartas.append(
+                '<button class="niv-card" type="button" data-area="%s" data-nom="%s" '
+                'data-tnom="%s" data-u="%d" data-m="%d" aria-pressed="false">'
+                '<span class="niv-top"><span class="niv-tn">%s</span>%s</span>'
+                '<span class="niv-precio">%s</span>'
+                '<ul class="niv-inc">%s</ul>'
+                '<span class="niv-pick">%s</span></button>'
+                % (n_es, nom, tn, u, m, tn, tag, precio(u, m), inc_html, elegir))
+        bloques.append(
+            '<article class="niv-area" data-area="%s" data-nom="%s" style="--c:%s">'
+            '<header class="niv-cab"><span class="niv-ico ico" data-ico="%s"></span>'
+            '<div class="niv-cab-tx"><h3>%s</h3><p>%s</p></div></header>'
+            '<div class="niv-cards">%s</div></article>'
+            % (n_es, nom, color, ico, nom, desc_a[n_es], "".join(cartas)))
+    esc = '<script type="application/json" id="niv-esc">%s</script>' % json.dumps(ESCALERA)
+    return esc + "".join(bloques)
+
 
 def paquetes_html(idi):
     """Tarjetas de paquetes por sector para Muestras. El botón lleva a WhatsApp
@@ -979,6 +1105,7 @@ def armar(idi):
     areas_html, fichas_json = areas_explora()
     paq_html = paquetes_html(idi)
     ab_html = areas_bento(idi)
+    niv_html = niveles_html(idi)
 
     datos = json.dumps([{"nombre": m[0], "ico": m[1], "color": m[2], "desc": m[3],
                          "serv": [{"n": s["n"], "p": s["p"], "m": s["m"], "u": s["u"], "g": s["g"]}
@@ -995,7 +1122,7 @@ def armar(idi):
         return (t.replace("{{MODULOS}}", mods).replace("{{APERTURA}}", apert)
                  .replace("{{EXPRESS}}", expr).replace("{{AREAS}}", areas_html)
                  .replace("{{FICHAS}}", fichas_json).replace("{{PAQUETES}}", paq_html)
-                 .replace("{{AREABENTO}}", ab_html))
+                 .replace("{{AREABENTO}}", ab_html).replace("{{NIVELES}}", niv_html))
 
     guion = ((BASE / "guion.html").read_text(encoding="utf-8")
              .replace("/*CARITA_JS*/", (BASE / "carita.js").read_text(encoding="utf-8"))

@@ -1,0 +1,105 @@
+<!-- ============ CALCULATOR · TIERS BY AREA ============ -->
+<section class="seccion" id="cotiza">
+  <div class="niv-areas">{{NIVELES}}</div>
+
+  <aside class="niv-tot" id="niv-tot" aria-live="polite">
+    <div class="niv-tot-l">
+      <span class="niv-tot-lab">Your estimate</span>
+      <p class="niv-resumen" id="niv-resumen">Nothing chosen yet.</p>
+    </div>
+    <div class="niv-tot-cifras">
+      <div class="niv-cifra" id="niv-inicial" hidden><span>Upfront</span><b id="niv-inicial-v">$0</b></div>
+      <div class="niv-cifra" id="niv-mensual" hidden><span>Monthly</span><b id="niv-mensual-v">$0</b></div>
+      <div class="niv-cifra" id="niv-descf" hidden><span id="niv-desc-n">Discount</span><b id="niv-desc-v">0%</b></div>
+    </div>
+    <div class="niv-tot-cta">
+      <a class="btn claro" id="niv-wa" href="#" target="_blank" rel="noopener">WhatsApp</a>
+      <a class="btn ghost claro" id="niv-correo" href="#">Email</a>
+    </div>
+    <p class="niv-razon mono" id="niv-razon">An estimate on «from» rates. The final number comes out of a short conversation.</p>
+  </aside>
+
+  <script>
+  /* Tier calculator: one tier per area, total with a discount by number of areas
+     (the rate-card ladder, passed in as JSON). Self-contained; it doesn't touch
+     the shared script. */
+  (function () {
+    var sec = document.getElementById('cotiza'); if (!sec) return;
+    var escN = document.getElementById('niv-esc');
+    var esc = []; try { esc = JSON.parse((escN && escN.textContent) || '[]'); } catch (e) {}
+    var cards = [].slice.call(sec.querySelectorAll('.niv-card'));
+    if (!cards.length) return;
+    var sel = {};                                   // area -> chosen card
+    var wa = '{{WHATSAPP}}', correo = '{{CORREO}}';
+    var fmt = function (n) { return '$' + Math.round(n).toLocaleString('en-US'); };
+    function pct(k) { var p = 0; esc.forEach(function (e) { if (k >= e[0]) p = e[1]; }); return p; }
+    function sig(k) { for (var i = 0; i < esc.length; i++) if (esc[i][0] > k) return esc[i]; return null; }
+
+    var E = {
+      tot: document.getElementById('niv-tot'),
+      resumen: document.getElementById('niv-resumen'),
+      inicial: document.getElementById('niv-inicial'), inicialV: document.getElementById('niv-inicial-v'),
+      mensual: document.getElementById('niv-mensual'), mensualV: document.getElementById('niv-mensual-v'),
+      descf: document.getElementById('niv-descf'), descN: document.getElementById('niv-desc-n'), descV: document.getElementById('niv-desc-v'),
+      razon: document.getElementById('niv-razon'),
+      wa: document.getElementById('niv-wa'), correo: document.getElementById('niv-correo')
+    };
+
+    function calc() {
+      var areas = Object.keys(sel), u = 0, m = 0, lineas = [];
+      areas.forEach(function (a) {
+        var c = sel[a];
+        u += +c.dataset.u; m += +c.dataset.m;
+        lineas.push({ nom: c.dataset.nom, tn: c.dataset.tnom, u: +c.dataset.u, m: +c.dataset.m });
+      });
+      var p = pct(areas.length), inicial = u * (1 - p / 100);
+      E.tot.classList.toggle('niv-tot-on', areas.length > 0);
+
+      E.resumen.innerHTML = areas.length
+        ? lineas.map(function (l) { return '<span class="niv-rline"><b>' + l.nom + '</b> · ' + l.tn + '</span>'; }).join('')
+        : 'Nothing chosen yet.';
+
+      E.inicial.hidden = !(inicial > 0);
+      E.inicialV.textContent = fmt(inicial);
+      E.mensual.hidden = !(m > 0);
+      E.mensualV.textContent = fmt(m) + '/mo';
+      E.descf.hidden = !(p > 0);
+      E.descN.textContent = p > 0 ? ('Discount · ' + areas.length + ' areas') : '';
+      E.descV.textContent = '−' + p + '%';
+
+      var s = sig(areas.length), r;
+      if (!areas.length) r = 'An estimate on «from» rates. The final number comes out of a short conversation.';
+      else if (s) r = 'Add another area and the discount rises to −' + s[1] + '% (' + s[0] + ' areas).';
+      else r = 'You already have the maximum discount. The final number comes out of a short conversation.';
+      E.razon.textContent = r;
+
+      var t = ['Hi LQS, I want a quote.', ''];
+      if (lineas.length) {
+        t.push('What I picked:');
+        lineas.forEach(function (l) {
+          var pz = l.nom + ' · ' + l.tn + ' — ';
+          pz += (l.u && l.m) ? (fmt(l.u) + ' + ' + fmt(l.m) + '/mo') : (l.u ? fmt(l.u) : fmt(l.m) + '/mo');
+          t.push('- ' + pz);
+        });
+        t.push('');
+        if (inicial > 0) t.push('Upfront: ' + fmt(inicial) + (p > 0 ? ' (−' + p + '% for ' + areas.length + ' areas)' : ''));
+        if (m > 0) t.push('Monthly: ' + fmt(m));
+      } else { t.push('Still looking at the tiers.'); }
+      var msg = t.join('\n');
+      E.wa.href = 'https://wa.me/' + wa + '?text=' + encodeURIComponent(msg);
+      E.correo.href = 'mailto:' + correo + '?subject=' + encodeURIComponent('LQS quote') + '&body=' + encodeURIComponent(msg);
+    }
+
+    cards.forEach(function (c) {
+      c.addEventListener('click', function () {
+        var a = c.dataset.area, era = sel[a];
+        [].forEach.call(c.parentNode.children, function (x) { x.setAttribute('aria-pressed', 'false'); });
+        if (era === c) { delete sel[a]; }            // tapping the same one again = remove
+        else { sel[a] = c; c.setAttribute('aria-pressed', 'true'); }
+        calc();
+      });
+    });
+    calc();
+  })();
+  </script>
+</section>

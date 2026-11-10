@@ -607,6 +607,66 @@ lqs-trazo:defined>img{display:none}
   .zz-nom{font-size:15px}
 }
 
+/* ---------- calculadora: tres niveles por área ----------
+   Cada área lista Básico / Completo / Plus (suscripción). Se elige UN nivel por
+   área; el total sticky de abajo se arma solo y baja con el nº de áreas. */
+.niv-guia{grid-column:span 6;color:var(--humo);margin:-8px 0 24px;font-size:15px}
+.niv-areas{grid-column:span 6;display:flex;flex-direction:column;gap:clamp(24px,3.4vw,40px)}
+.niv-area{display:grid;gap:14px}
+.niv-cab{display:flex;align-items:center;gap:13px}
+.niv-ico.ico{width:30px;height:30px;flex:none;color:var(--c)}
+.niv-cab-tx h3{margin:0;font-size:clamp(19px,2.2vw,24px);line-height:1}
+.niv-cab-tx p{margin:3px 0 0;color:var(--humo);font-size:13px}
+.niv-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,1.4vw,16px)}
+@media(max-width:720px){.niv-cards{grid-template-columns:1fr}}
+.niv-card{position:relative;display:flex;flex-direction:column;gap:12px;text-align:left;cursor:pointer;
+  border:1px solid var(--borde-ctrl);border-radius:var(--r-bloque);padding:16px 16px 18px;
+  background:var(--papel);color:var(--tinta);font:inherit;transition:border-color .18s ease,transform .18s ease,box-shadow .18s ease}
+.niv-card:hover{border-color:color-mix(in srgb,var(--c) 55%,var(--borde-ctrl));transform:translateY(-3px);box-shadow:var(--sombra)}
+.niv-card:focus-visible{outline:3px solid var(--violeta);outline-offset:3px}
+.niv-card[aria-pressed="true"]{border-color:var(--c);box-shadow:0 0 0 1px var(--c),var(--sombra)}
+.niv-card[aria-pressed="true"]::before{content:"";position:absolute;inset:0;border-radius:inherit;
+  background:color-mix(in srgb,var(--c) 7%,transparent);pointer-events:none}
+.niv-top{display:flex;align-items:center;gap:8px}
+.niv-tn{font-weight:700;font-size:15px}
+.niv-susc{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--c);border:1px solid color-mix(in srgb,var(--c) 40%,transparent);
+  border-radius:999px;padding:2px 7px}
+.niv-precio{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.niv-precio b{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(20px,2.4vw,26px);line-height:1}
+.niv-mes{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--humo)}
+.niv-inc{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:5px;flex:1}
+.niv-inc li{position:relative;padding-left:16px;font-size:12.5px;line-height:1.35;color:var(--humo)}
+.niv-inc li::before{content:"";position:absolute;left:0;top:7px;width:7px;height:7px;border-radius:2px;
+  background:var(--c);opacity:.7}
+.niv-pick{align-self:flex-start;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;
+  letter-spacing:.04em;text-transform:uppercase;color:var(--c);border:1px solid var(--borde-ctrl);
+  border-radius:999px;padding:6px 13px;transition:.15s}
+.niv-card[aria-pressed="true"] .niv-pick{background:var(--c);color:var(--papel);border-color:var(--c)}
+.niv-card[aria-pressed="true"] .niv-pick::after{content:" ✓"}
+/* total sticky abajo */
+.niv-tot{grid-column:span 6;position:sticky;bottom:14px;z-index:20;margin-top:32px;
+  background:var(--tinta);color:var(--papel);border-radius:var(--r-cont);box-shadow:var(--sombra-flote);
+  padding:16px 20px;display:grid;grid-template-columns:1fr auto auto;gap:14px 22px;align-items:center}
+.niv-tot-lab{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(253,251,247,.55);display:block;margin-bottom:5px}
+.niv-resumen{margin:0;font-size:14px;line-height:1.5;display:flex;flex-wrap:wrap;gap:4px 12px}
+.niv-rline{white-space:nowrap}.niv-rline b{font-weight:700}
+.niv-tot-cifras{display:flex;gap:18px;align-items:center}
+.niv-cifra{display:flex;flex-direction:column;gap:2px}
+.niv-cifra[hidden]{display:none}
+.niv-cifra>span{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.07em;
+  text-transform:uppercase;color:rgba(253,251,247,.55)}
+.niv-cifra>b{font-family:'Syne',sans-serif;font-weight:800;font-size:19px;line-height:1}
+.niv-tot-cta{display:flex;gap:10px}
+.niv-tot .btn{white-space:nowrap;height:40px}
+.niv-razon{grid-column:1/-1;margin:0;font-size:11px;color:rgba(253,251,247,.6)}
+@media(max-width:720px){
+  .niv-tot{grid-template-columns:1fr;gap:12px}
+  .niv-tot-cifras{flex-wrap:wrap;gap:12px 22px}
+  .niv-tot-cta{display:grid;grid-template-columns:1fr 1fr}
+}
+
 /* ---------- bento de áreas (Nosotros): LQS al centro, las áreas alrededor ----------
    Retícula fija 4×4 con el logo anclado en el centro (grid-area:lqs, 2×2) y los
    ocho frentes + Express completando el cuadrado con tamaños variados. */
