@@ -115,6 +115,11 @@ p{margin:0}
   .top-menu .nav a{opacity:1;padding:9px 2px;color:var(--tinta)}
   .top-menu .idioma{align-self:flex-start;color:var(--tinta);font-size:12px;padding:6px 12px;letter-spacing:.08em}
   .top-menu .btn.v{display:inline-flex;justify-content:center;width:100%}
+  /* el panel desplegable es un bloque claro aunque la barra esté «pegada»
+     (desplazada): sus enlaces van oscuros, o quedaban papel sobre papel e
+     invisibles al abrir el menú con la página desplazada. */
+  .top.pegada .top-menu .nav a{color:var(--tinta)}
+  .top.pegada .top-menu .idioma{color:var(--tinta)}
 }
 
 /* ---------- 00b idioma ---------- */
