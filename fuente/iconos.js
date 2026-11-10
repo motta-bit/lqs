@@ -10,7 +10,7 @@
 
   var CSS = [
     '.lqs-ico{display:block;width:100%;height:100%;overflow:visible}',
-    '.lqs-ico .t{fill:none;stroke:currentColor;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}',
+    '.lqs-ico .t{fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}',
     '.lqs-ico .s{fill:currentColor;stroke:none}',
     /* video · el play empuja hacia adelante */
     '@keyframes lqs-play{0%,100%{transform:translateX(0)}50%{transform:translateX(1.8px)}}',

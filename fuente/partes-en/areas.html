@@ -1,7 +1,5 @@
 <!-- ============ EXPLORE BY AREA ============ -->
 <section class="seccion" id="areas-explora">
-  <div class="eyebrow">Gallery · tap a sample to open it</div>
-  <h2 style="margin-bottom:14px">Everything we've done, in one view</h2>
   {{AREAS}}
 
   <!-- Data for each box's floating window. It is JSON, not rendered. -->
@@ -38,7 +36,7 @@
     var datos = [];
     try { datos = JSON.parse(document.getElementById('fichas-data').textContent); } catch (e) {}
     var caja = dlg.querySelector('.mstra-caja');
-    var rej  = document.querySelector('.gv-carril');
+    var zonaCeldas = document.querySelector('.zz-wrap');
     var wa   = dlg.getAttribute('data-wa');
     var cta  = dlg.querySelector('.mstra-cta');
     var icoN = dlg.querySelector('.mstra-chip-ico');
@@ -97,9 +95,9 @@
       a.onfinish = function () { dlg.close(); };
     }
 
-    if (rej) rej.addEventListener('click', function (e) {
-      var b = e.target.closest('.gv-card');
-      if (b) abrir(b);
+    if (zonaCeldas) zonaCeldas.addEventListener('click', function (e) {
+      var b = e.target.closest('.zz-cel');
+      if (b) abrir(b);                               // the sample grows from its cell
     });
     dlg.querySelector('.mstra-x').addEventListener('click', cerrar);
     dlg.addEventListener('click', function (e) { if (e.target === dlg) cerrar(); });   // click outside
@@ -108,67 +106,97 @@
   </script>
 
   <script>
-  /* Samples carousel: 3D depth (centered card up front), arrows and filters. */
+  /* Work: 3D coverflow of areas + unfold into a zigzag grid.
+     - Browse: area cards turn in perspective; the centre one faces front.
+     - Clicking the centre card unfolds its zigzag grid; clicking a side card
+       brings it to the centre. "← Areas" returns to the coverflow.
+     - No JS: a scrollable row, still readable (handled in CSS). */
   (function () {
-    var carril = document.querySelector('.gv-carril');
-    if (!carril) return;
-    var cards = [].slice.call(carril.querySelectorAll('.gv-card'));
+    var cf = document.querySelector('.cf');
+    if (!cf) return;
+    var escena  = cf.querySelector('.cf-escena');
+    var cards   = [].slice.call(cf.querySelectorAll('.cf-card'));
+    var puntos  = [].slice.call(cf.querySelectorAll('.cf-punto'));
+    var paneles = [].slice.call(document.querySelectorAll('.zz'));
+    var n = cards.length;
+    if (!n) return;
     var lento = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var activo = Math.floor(n / 2), timer = null, desplegado = false;   // start centred (symmetric fan)
+
+    cf.classList.add('cf-3d');                 // turn on 3D positioning
+    paneles.forEach(function (p) { p.hidden = true; });
 
     function pintar() {
-      var r = carril.getBoundingClientRect();
-      var cx = r.left + r.width / 2;
-      cards.forEach(function (card) {
-        if (card.classList.contains('gv-oculta')) return;
-        var cr = card.getBoundingClientRect();
-        var d = ((cr.left + cr.width / 2) - cx) / r.width;
-        var dist = Math.min(Math.abs(d), 1);
-        var rot = Math.max(-42, Math.min(42, -d * 72));
-        var scale = Math.max(0.80, 1 - dist * 0.46);
-        var tz = -dist * 200;
-        card.style.transform = 'perspective(1500px) rotateY(' + rot + 'deg) scale(' + scale + ') translateZ(' + tz + 'px)';
-        card.style.opacity = Math.max(0.42, 1 - dist * 0.85);
-        card.style.zIndex = String(100 - Math.round(dist * 100));
-        card.classList.toggle('gv-foco', dist < 0.12);
+      cards.forEach(function (c, i) {
+        var d = i - activo, ad = Math.abs(d), vis = ad <= 3;
+        c.style.display = vis ? '' : 'none';
+        c.style.opacity = ad === 0 ? 1 : (ad === 1 ? 0.92 : (ad === 2 ? 0.6 : 0.32));
+        c.style.zIndex  = 100 - ad;
+        c.style.transform =
+          'translate(-50%,-50%) translateX(' + (d * 58) + '%)' +
+          ' translateZ(' + (-ad * 86) + 'px) rotateY(' + (d * -42) + 'deg)' +
+          ' scale(' + (d === 0 ? 1 : 0.94) + ')';
+        c.classList.toggle('cf-activa', d === 0);
+        c.setAttribute('aria-hidden', vis ? 'false' : 'true');
+        c.tabIndex = d === 0 ? 0 : -1;
       });
+      puntos.forEach(function (p, i) { p.classList.toggle('cf-act', i === activo); });
     }
-    if (lento) {
-      cards.forEach(function (c) { c.style.transform = 'none'; c.style.opacity = 1; });
-    } else {
-      var raf;
-      carril.addEventListener('scroll', function () {
-        if (raf) cancelAnimationFrame(raf);
-        raf = requestAnimationFrame(pintar);
-      }, { passive: true });
-      window.addEventListener('resize', pintar);
-      requestAnimationFrame(function () {
-        var first = cards[0];
-        if (first) carril.scrollLeft = first.offsetLeft - (carril.clientWidth - first.offsetWidth) / 2;
-        pintar();
-      });
+    function ir(i) { activo = (i % n + n) % n; pintar(); }
+
+    function parar() { if (timer) { clearInterval(timer); timer = null; } }
+    function auto() {
+      if (lento) return;
+      parar();
+      timer = setInterval(function () {
+        if (!desplegado && !cf.matches(':hover')) ir(activo + 1);
+      }, 3200);
     }
 
-    function paso() {
-      var c = cards.find(function (x) { return !x.classList.contains('gv-oculta'); });
-      return c ? c.offsetWidth + 26 : 300;
+    function desplegar(idx) {
+      var panel = paneles[idx];
+      if (!panel) return;
+      parar();
+      desplegado = true;
+      cf.setAttribute('hidden', '');
+      paneles.forEach(function (p) { p.hidden = (p !== panel); });
+      requestAnimationFrame(function () { panel.classList.add('zz-on'); });
+      setTimeout(function () { panel.classList.add('zz-on'); }, 90);   // fallback if rAF is parked
+      var y = panel.getBoundingClientRect().top + window.pageYOffset - 84;
+      window.scrollTo({ top: y, behavior: lento ? 'auto' : 'smooth' });
     }
-    var izq = document.querySelector('.gv-flecha-izq'), der = document.querySelector('.gv-flecha-der');
-    if (izq) izq.addEventListener('click', function () { carril.scrollBy({ left: -paso(), behavior: 'smooth' }); });
-    if (der) der.addEventListener('click', function () { carril.scrollBy({ left: paso(), behavior: 'smooth' }); });
+    function recoger() {
+      desplegado = false;
+      paneles.forEach(function (p) { p.classList.remove('zz-on'); p.hidden = true; });
+      cf.removeAttribute('hidden');
+      pintar();
+      auto();
+      var y = cf.getBoundingClientRect().top + window.pageYOffset - 84;
+      window.scrollTo({ top: y, behavior: lento ? 'auto' : 'smooth' });
+    }
 
-    var chips = [].slice.call(document.querySelectorAll('.gv-chip'));
-    chips.forEach(function (chip) {
-      chip.addEventListener('click', function () {
-        var cat = chip.dataset.cat;
-        chips.forEach(function (c) { c.setAttribute('aria-pressed', c === chip); });
-        cards.forEach(function (card) {
-          card.classList.toggle('gv-oculta', !(cat === 'todas' || card.dataset.cat === cat));
-        });
-        var vis = cards.find(function (x) { return !x.classList.contains('gv-oculta'); });
-        if (vis) carril.scrollLeft = vis.offsetLeft - (carril.clientWidth - vis.offsetWidth) / 2;
-        if (!lento) pintar();
+    cards.forEach(function (c, i) {
+      c.addEventListener('click', function () {
+        if (i === activo) desplegar(+c.dataset.area); else ir(i);
       });
     });
+    puntos.forEach(function (p) {
+      p.addEventListener('click', function () { ir(+p.dataset.ir); });
+    });
+    var prev = cf.querySelector('.cf-prev'), next = cf.querySelector('.cf-next');
+    if (prev) prev.addEventListener('click', function () { ir(activo - 1); });
+    if (next) next.addEventListener('click', function () { ir(activo + 1); });
+    paneles.forEach(function (p) {
+      var v = p.querySelector('.zz-volver');
+      if (v) v.addEventListener('click', recoger);
+    });
+    escena.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft') ir(activo - 1);
+      else if (e.key === 'ArrowRight') ir(activo + 1);
+    });
+
+    pintar();
+    auto();
   })();
   </script>
 </section>

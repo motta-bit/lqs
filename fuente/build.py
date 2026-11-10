@@ -546,7 +546,7 @@ EN_ENCAB = {
  "encab-nosotros": ("Who we are", "We bring your ideas to life",
    "A modular creative agency: take the front you need today and add the rest when you want. The limit is your imagination."),
  "encab-muestras": ("Work", "What we have done",
-   "Explore it by area or filter by category. Tap a sample to open it."),
+   "Spin through the areas and pick one to unfold its work. Tap a sample to open it."),
  "encab-legal": ("Legal", "The legal part, in plain words",
    "Terms, data and cookies. Written to be understood on one read, without leaving out what the "
    "law requires. The Spanish version is the one that governs."),
@@ -652,7 +652,7 @@ ENCABEZADOS = {
  "encab-nosotros": ("Quiénes somos", "Hacemos vivir tus ideas",
    "Una agencia creativa modular: toma el frente que necesitas hoy y suma los demás cuando quieras. El límite es tu imaginación."),
  "encab-muestras": ("Muestras", "Lo que hemos hecho",
-   "Explóralo por área o filtra por categoría. Toca una muestra para abrirla."),
+   "Gíralo por área y elige una para desplegar sus muestras. Toca una para abrirla."),
  "encab-legal": ("Legal", "Lo legal, en español",
    "Términos, datos y cookies. Escrito para que se entienda leyéndolo una vez, sin dejar de decir "
    "lo que la ley obliga a decir."),
@@ -844,37 +844,9 @@ def armar(idi):
     FICHA_I = EN_FICHA if idi == "en" else FICHA
     def areas_explora():
         fichas = []
+        es = idi == "es"
         def precio_corto(p, m):
             return (fmt(p) + (" " + U["mes"] if m else "")) if p else U["porAlcance"]
-        # Galería viva: una tarjeta por servicio en un bento filtrable (sin
-        # acordeón; las categorías se eligen con chips). La portada la pone
-        # Motta en marca/muestras/<slug>.webp; mientras no exista va un
-        # placeholder con el color e ícono de la categoría. Al tocar abre la
-        # ficha (la misma ventana con precio y cotizar). Abajo, sobre un
-        # degradado de luz: el símbolo/color de la categoría y «Explorar».
-        ver = "Explorar" if idi == "es" else "Explore"
-        urg_tx = "Hoy mismo" if idi == "es" else "Same day"
-        urg_lab = "Urgencia" if idi == "es" else "Urgency"
-        def gv_card(nom_disp, idx, ico, color, cat, i, cover_img=None, urgente=False):
-            big = ""   # en el carrusel las tarjetas van uniformes; la profundidad la da el 3D
-            if cover_img:
-                cover = ('<span class="gv-cover" aria-hidden="true">'
-                         '<img class="gv-cover-img" src="%s" alt="" loading="lazy"></span>' % cover_img)
-            else:
-                cover = ('<span class="gv-cover" aria-hidden="true">'
-                         '<span class="gv-cover-ico ico" data-ico="%s"></span></span>' % ico)
-            urg = ''
-            if urgente:
-                urg = ('<span class="gv-urg" aria-hidden="true">'
-                       '<span class="gv-urg-lab">%s</span>'
-                       '<span class="gv-urg-bars"><i></i><i></i><i></i></span>'
-                       '<span class="gv-urg-tx">%s</span></span>' % (urg_lab, urg_tx))
-            return ('<button class="gv-card%s" type="button" data-f="%d" data-cat="%s" '
-                    'style="--c:%s;--i:%d" aria-label="%s">%s%s'
-                    '<span class="gv-foot"><span class="gv-cat ico" data-ico="%s"></span>'
-                    '<span class="gv-tx"><span class="gv-n">%s</span>'
-                    '<span class="gv-ex">%s →</span></span></span></button>'
-                    % (big, idx, cat, color, i, nom_disp, cover, urg, ico, nom_disp, ver))
 
         def ficha_demo(nombre_es):
             d = DEMOS.get(nombre_es)
@@ -886,7 +858,6 @@ def armar(idi):
         # Campos del bloque de precio de la ficha: separa lo que al cliente le
         # importa —cuánto y de qué tipo—. Cuatro tipos: pago único (proyecto),
         # plan mensual (continuo), por alcance (se cotiza) y a pedido (Express).
-        es = idi == "es"
         def modal_campos(p, m, express=False):
             if express:
                 return {"pnum": "A pedido" if es else "On request", "mes": "", "tag": "",
@@ -905,14 +876,59 @@ def armar(idi):
                     "nota": "Un brief, una entrega." if es else "One brief, one delivery.",
                     "plan": False, "cta": "Cotizar por WhatsApp →" if es else "Get a quote →"}
 
-        chips = [("todas", "Todas" if es else "All", "")]
-        cards = []
-        i = 0
+        # Dos vistas sobre los mismos datos. Paseo: cada ÁREA es una carta de un
+        # coverflow horizontal (profundidad 3D, la del centro al frente). Al elegir
+        # un área, esa carta se despliega en una reja en zigzag con SUS muestras,
+        # cada una con su nombre y un número grande de fondo. Tocar una muestra
+        # abre la misma ventana flotante con precio y cotizar. El estado 3D y el
+        # despliegue los pone el JS (partes/areas.html); sin JS el coverflow queda
+        # como fila deslizable y las rejas visibles —se lee igual—.
+        sel_lab = "Selección" if es else "Selected"
+        unidad_ct = ("muestra", "muestras") if es else ("sample", "samples")
+        cue_lab = ("Desplegar" if es else "Open") + " →"
+
+        def cf_card(idx, nom, ico, color, nserv):
+            return ('<button class="cf-card" type="button" data-area="%d" style="--c:%s" '
+                    'aria-label="%s">'
+                    '<span class="cf-cover"><span class="cf-ico ico" data-ico="%s"></span>'
+                    '<span class="cf-sel">%s</span></span>'
+                    '<span class="cf-meta"><span class="cf-nom">%s</span>'
+                    '<span class="cf-cnt">%d %s</span>'
+                    '<span class="cf-cue">%s</span></span></button>'
+                    % (idx, color, nom, ico, sel_lab, nom, nserv,
+                       unidad_ct[0] if nserv == 1 else unidad_ct[1], cue_lab))
+
+        def zz_cel(ficha_idx, nom, ico, color, demo, k):
+            if demo:
+                cover = ('<span class="zz-cover">'
+                         '<img class="zz-img" src="%s" alt="" loading="lazy"></span>'
+                         % ("{{RAIZ}}demos/" + demo[1]))
+            else:
+                cover = ('<span class="zz-cover zz-ph">'
+                         '<span class="zz-ico ico" data-ico="%s"></span></span>' % ico)
+            return ('<button class="zz-cel" type="button" data-f="%d" style="--c:%s;--i:%d" '
+                    'aria-label="%s">%s'
+                    '<span class="zz-lado"><span class="zz-num" aria-hidden="true">%02d</span>'
+                    '<span class="zz-nom">%s</span></span></button>'
+                    % (ficha_idx, color, k, nom, cover, k, nom))
+
+        volver = "← Áreas" if es else "← Areas"
+        def zz_panel(idx, nom, desc, ico, color, celdas):
+            return ('<section class="zz" data-panel="%d" style="--c:%s" hidden>'
+                    '<header class="zz-head">'
+                    '<button class="zz-volver" type="button">%s</button>'
+                    '<div class="zz-tit"><span class="zz-chip ico" data-ico="%s"></span>'
+                    '<h3>%s</h3></div><p class="zz-desc">%s</p></header>'
+                    '<div class="zz-rej">%s</div></section>'
+                    % (idx, color, volver, ico, nom, desc, "".join(celdas)))
+
+        cf_cards, zz_panels, ai = [], [], 0
         for n_es, ico, color_mod, desc_es, servs_es in MODULOS:
             color = AREA_TONO.get(ico, color_mod)
             nom_a = EN_AREAS[n_es][0] if idi == "en" else n_es
-            chips.append((ico, nom_a, color))
-            for s in servs_es:
+            desc_a = EN_AREAS[n_es][1] if idi == "en" else desc_es
+            celdas = []
+            for k, s in enumerate(servs_es, 1):
                 n_disp = EN_SERV.get(s["n"], s["n"]) if idi == "en" else s["n"]
                 que, uso = FICHA_I.get(s["n"], ("", ""))
                 demo = DEMOS.get(s["n"])
@@ -921,39 +937,44 @@ def armar(idi):
                      "demo": ficha_demo(s["n"])}
                 f.update(modal_campos(s["p"], s["m"]))
                 fichas.append(f)
-                cover = ("{{RAIZ}}demos/" + demo[1]) if demo else None
-                cards.append(gv_card(n_disp, len(fichas) - 1, ico, color, ico, i, cover_img=cover))
-                i += 1
-        # Express: una categoría más, con medidor de urgencia (entrega inmediata).
-        chips.append(("express", "Express", "#F4D000"))
+                celdas.append(zz_cel(len(fichas) - 1, n_disp, ico, color, demo, k))
+            cf_cards.append(cf_card(ai, nom_a, ico, color, len(servs_es)))
+            zz_panels.append(zz_panel(ai, nom_a, desc_a, ico, color, celdas))
+            ai += 1
+
+        # Express: una carta más, de encargos inmediatos (sin cotizador).
         ex_src = EN_EXPRESS if idi == "en" else EXPRESS
-        expr_p = "A pedido" if idi == "es" else "On request"
-        for j, e_es in enumerate(EXPRESS):
+        ex_desc = ("Encargos chicos, el mismo día. Se piden y se entregan, sin cotizador."
+                   if es else "Small jobs, same day. Asked and delivered, no quote.")
+        celdas = []
+        for k, e_es in enumerate(EXPRESS, 1):
             que, uso = FICHA_I.get(e_es, ("", ""))
-            f = {"n": ex_src[j], "area": "Express", "ico": "reloj", "color": "#F4D000",
-                 "p": expr_p, "que": que, "uso": uso, "demo": None}
+            f = {"n": ex_src[k - 1], "area": "Express", "ico": "reloj", "color": "#F4D000",
+                 "p": "A pedido" if es else "On request", "que": que, "uso": uso, "demo": None}
             f.update(modal_campos(None, False, express=True))
             fichas.append(f)
-            cards.append(gv_card(ex_src[j], len(fichas) - 1, "reloj", "#F4D000",
-                                 "express", i, urgente=True))
-            i += 1
-        chip_html = "".join(
-            ('<button class="gv-chip" type="button" data-cat="%s" aria-pressed="%s"%s>'
-             '%s<span>%s</span></button>'
-             % (slug, "true" if slug == "todas" else "false",
-                (' style="--c:%s"' % col) if col else "",
-                ('<span class="gv-chip-dot"></span>' if col else ""), nom))
-            for slug, nom, col in chips)
-        pista = ("Desliza · toca una muestra para abrirla" if es
-                 else "Swipe · tap a sample to open it")
-        html = ('<div class="gv-filtros" role="group" aria-label="%s">%s</div>'
-                '<div class="gv-carril-wrap">'
-                '<button class="gv-flecha gv-flecha-izq" type="button" aria-label="Anterior">‹</button>'
-                '<div class="gv-carril" tabindex="0">%s</div>'
-                '<button class="gv-flecha gv-flecha-der" type="button" aria-label="Siguiente">›</button>'
-                '</div><p class="gv-pista">%s</p>'
-                % ("Filtrar por categoría" if es else "Filter by category",
-                   chip_html, "".join(cards), pista))
+            celdas.append(zz_cel(len(fichas) - 1, ex_src[k - 1], "reloj", "#F4D000", None, k))
+        cf_cards.append(cf_card(ai, "Express", "reloj", "#F4D000", len(EXPRESS)))
+        zz_panels.append(zz_panel(ai, "Express", ex_desc, "reloj", "#F4D000", celdas))
+
+        puntos = "".join('<button class="cf-punto" type="button" data-ir="%d" '
+                         'aria-label="%s %d">%02d</button>' % (j, sel_lab, j + 1, j + 1)
+                         for j in range(len(cf_cards)))
+        head_r = (("Áreas (%d)" if es else "Areas (%d)") % len(cf_cards))
+        nav_prev = "Anterior" if es else "Previous"
+        nav_next = "Siguiente" if es else "Next"
+        html = ('<div class="cf" aria-label="%s">'
+                '<div class="cf-top"><span>%s</span><span>%s</span></div>'
+                '<div class="cf-escena"><div class="cf-pista">%s</div></div>'
+                '<div class="cf-barra">'
+                '<button class="cf-nav cf-prev" type="button" aria-label="%s">&lsaquo;</button>'
+                '<div class="cf-puntos">%s</div>'
+                '<button class="cf-nav cf-next" type="button" aria-label="%s">&rsaquo;</button>'
+                '</div></div>'
+                '<div class="zz-wrap">%s</div>'
+                % (("Muestras por área" if es else "Work by area"),
+                   sel_lab, head_r, "".join(cf_cards),
+                   nav_prev, puntos, nav_next, "".join(zz_panels)))
         return html, json.dumps(fichas, ensure_ascii=False)
     areas_html, fichas_json = areas_explora()
     paq_html = paquetes_html(idi)

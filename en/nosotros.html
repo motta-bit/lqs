@@ -36,8 +36,11 @@
   --violeta:#8B3DF0; --azul:#2563EB; --lima:#84CC16; --ambar:#F5A623; --rojo:#F0483C;
   --p-violeta:#C4A8F5; --p-azul:#A8CBF5; --p-lima:#BFE0A8; --p-ambar:#F7D9A6; --p-rojo:#F7B2AB;
   --gap:8px; --r-cont:28px; --r-bloque:20px; --r-int:14px;
-  /* línea fina + sombra suave: menos borde negro, más profundidad (look profesional) */
-  --linea-fuerte:color-mix(in srgb,var(--tinta) 16%,transparent);
+  /* Apple/editorial: las tarjetas NO llevan marco, se definen con sombra y aire.
+     El token queda transparente; solo los controles (botones, chips, inputs)
+     recuperan un hairline visible más abajo. */
+  --linea-fuerte:transparent;
+  --borde-ctrl:color-mix(in srgb,var(--tinta) 22%,transparent);
   --sombra:0 2px 6px -3px rgba(26,23,32,.10),0 18px 38px -22px rgba(26,23,32,.22);
   --sombra-flote:0 10px 20px -10px rgba(26,23,32,.18),0 30px 60px -26px rgba(26,23,32,.30);
   --grano-fino:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='90' height='90'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.6' numOctaves='4' stitchTiles='stitch'/></filter><rect width='90' height='90' filter='url(%23n)'/></svg>");
@@ -505,83 +508,104 @@ lqs-trazo:defined>img{display:none}
   white-space:nowrap}
 @media(max-width:560px){.areas-rej{grid-template-columns:1fr}}
 
-/* ---------- galería viva (Muestras) ----------
-   Bento de una tarjeta por servicio. La portada la pone Motta; mientras no
-   exista va un placeholder con el color e ícono de la categoría. Abajo, sobre
-   un degradado de luz: el símbolo/color de la categoría y «Explorar». Filtros
-   por categoría (chips) y barrido de entrada escalonado. */
-.gv-filtros{grid-column:span 6;display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
-.gv-chip{--c:var(--humo);display:inline-flex;align-items:center;gap:7px;cursor:pointer;
-  font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.04em;
-  background:var(--papel);color:var(--tinta);border:1.5px solid rgba(26,23,32,.18);
-  border-radius:999px;padding:7px 14px;transition:.13s}
-.gv-chip:hover{border-color:var(--c)}
-.gv-chip[aria-pressed="true"]{background:var(--tinta);color:var(--papel);border-color:var(--tinta)}
-.gv-chip-dot{width:9px;height:9px;border-radius:50%;background:var(--c);flex:none}
-.gv-chip[aria-pressed="true"] .gv-chip-dot{box-shadow:0 0 0 2px var(--papel)}
+/* ---------- muestras: coverflow de áreas + reja en zigzag ----------
+   Dos vistas. (1) Coverflow: cada área es una carta en un carril 3D horizontal;
+   la del centro va al frente y las de los lados giran en perspectiva. (2) Al
+   elegir un área, su carta se despliega en una reja en zigzag con sus muestras,
+   cada una con su nombre y un número grande de fondo. El estado 3D (.cf-3d) y el
+   despliegue (.zz-on) los pone el JS; sin JS el coverflow queda como fila
+   deslizable y, si no hay 3D, las cartas se leen planas. */
+.cf{grid-column:span 6;position:relative}
+.cf-top{display:flex;justify-content:space-between;align-items:baseline;
+  font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--humo);padding:0 2px 14px}
+.cf-escena{position:relative;height:clamp(290px,40vw,430px);perspective:1750px}
+.cf-pista{position:absolute;inset:0;transform-style:preserve-3d}
+/* sin 3D (fallback / sin JS): fila deslizable y legible */
+.cf:not(.cf-3d) .cf-pista{position:static;display:flex;gap:16px;height:100%;
+  overflow-x:auto;padding:10px 2px;scroll-snap-type:x mandatory}
+.cf:not(.cf-3d) .cf-card{position:static;flex:0 0 clamp(240px,62vw,330px);
+  transform:none;scroll-snap-align:center}
+.cf-card{position:absolute;top:50%;left:50%;width:clamp(230px,30vw,336px);aspect-ratio:3/2;
+  border:0;padding:0;cursor:pointer;font:inherit;color:var(--papel);text-align:left;
+  border-radius:var(--r-cont);overflow:hidden;box-shadow:var(--sombra);backface-visibility:hidden;
+  transform:translate(-50%,-50%);transform-origin:center center;
+  background:linear-gradient(152deg,#262030,#17141c);
+  transition:transform .6s cubic-bezier(.2,.8,.2,1),opacity .55s ease,box-shadow .45s ease}
+.cf-card.cf-activa{box-shadow:0 34px 66px -26px color-mix(in srgb,var(--c) 42%,transparent),var(--sombra-flote)}
+.cf-card:focus-visible{outline:3px solid var(--violeta);outline-offset:3px}
+.cf-cover{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(120% 90% at 78% 12%,color-mix(in srgb,var(--c) 20%,transparent),transparent 60%)}
+.cf-ico.ico{width:44%;height:44%;color:var(--c);opacity:.92;
+  transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.cf-card.cf-activa .cf-ico{transform:scale(1.06)}
+.cf-sel{position:absolute;top:13px;left:15px;font-family:'IBM Plex Mono',monospace;
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(253,251,247,.5)}
+.cf-meta{position:absolute;left:0;right:0;bottom:0;z-index:2;display:flex;flex-direction:column;gap:3px;
+  padding:16px 18px;background:linear-gradient(0deg,rgba(11,10,14,.86),rgba(11,10,14,.1) 72%,transparent)}
+.cf-nom{font-weight:700;font-size:clamp(17px,2.1vw,22px);line-height:1.08}
+.cf-cnt{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;color:rgba(253,251,247,.72)}
+.cf-cue{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--c);opacity:0;margin-top:3px;transition:opacity .4s ease}
+.cf-card.cf-activa .cf-cue{opacity:1}
+/* barra inferior: prev/next + números de posición */
+.cf-barra{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:18px}
+.cf-nav{width:40px;height:40px;border-radius:50%;border:1px solid var(--borde-ctrl);
+  background:var(--papel);color:var(--tinta);font-size:20px;line-height:1;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:.15s}
+.cf-nav:hover{border-color:var(--tinta);transform:translateY(-1px)}
+.cf-puntos{display:flex;flex-wrap:wrap;gap:4px;justify-content:center}
+.cf-punto{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:var(--humo);
+  background:none;border:0;cursor:pointer;padding:4px 6px;opacity:.5;transition:.15s;letter-spacing:.04em}
+.cf-punto:hover{opacity:.85}
+.cf-punto.cf-act{opacity:1;color:var(--tinta)}
+@media(prefers-reduced-motion:reduce){.cf-card{transition:opacity .3s ease,box-shadow .3s ease}}
 
-/* carrusel de muestras: carril lateral con profundidad 3D (la del centro al
-   frente, las de los lados en perspectiva). El estado 3D lo pone el JS vía
-   transform; sin JS quedan planas y legibles. */
-.gv-carril-wrap{grid-column:span 6;position:relative;display:flex;align-items:center;gap:8px}
-.gv-carril{flex:1;min-width:0;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;
-  perspective:1500px;padding:36px 0 42px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
-.gv-carril::-webkit-scrollbar{display:none}
-.gv-card{flex:0 0 clamp(216px,64vw,300px);height:clamp(300px,80vw,398px);scroll-snap-align:center;
-  margin:0 clamp(7px,1.3vw,13px);position:relative;overflow:hidden;cursor:pointer;font:inherit;
-  color:var(--papel);text-align:left;border:1px solid var(--linea-fuerte);border-radius:var(--r-cont);
-  padding:0;display:flex;flex-direction:column;justify-content:flex-end;
-  transform-origin:center center;will-change:transform,opacity;
-  transition:transform .35s cubic-bezier(.2,.75,.25,1),box-shadow .35s ease,opacity .35s ease;
-  box-shadow:0 18px 40px -22px rgba(26,23,32,.5)}
-.gv-card.gv-foco{box-shadow:0 30px 64px -24px color-mix(in srgb,var(--c) 60%,#000)}
-.gv-card:focus-visible{outline:3px solid var(--violeta);outline-offset:3px}
-.gv-flecha{flex:none;width:46px;height:46px;border-radius:50%;border:1px solid var(--linea-fuerte);
-  background:var(--papel);color:var(--tinta);font-family:'Syne';font-size:24px;line-height:1;
-  cursor:pointer;display:grid;place-items:center;z-index:6;transition:background .15s,transform .15s}
-.gv-flecha:hover{background:var(--tinta);color:var(--papel);transform:scale(1.06)}
-.gv-pista{grid-column:span 6;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;
-  letter-spacing:.14em;text-transform:uppercase;color:var(--humo);margin:2px 0 0}
-@media(max-width:620px){.gv-flecha{display:none}}
-/* portada placeholder: degradado vivo del color de la categoría + ícono que reacciona */
-/* portada neutra (carbón) para que las imágenes reales resalten; el color va en el ícono */
-.gv-cover{position:absolute;inset:0;z-index:0;overflow:hidden;
-  background:
-    radial-gradient(130% 100% at 16% 4%,color-mix(in srgb,var(--c) 22%,#241f2e) 0%,transparent 55%),
-    linear-gradient(150deg,#241f2e 0%,#17141c 100%)}
-.gv-cover-ico.ico{position:absolute;right:-14%;bottom:-12%;width:66%;height:66%;color:var(--c);
-  opacity:.4;transition:transform .4s cubic-bezier(.2,.75,.25,1),opacity .3s ease}
-.gv-card:hover .gv-cover-ico{transform:scale(1.14) rotate(-5deg);opacity:.5}
-/* brillo que barre la tarjeta al pasar el cursor */
-.gv-card::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0;
-  transform:translateX(-70%);
-  background:linear-gradient(115deg,transparent 38%,rgba(253,251,247,.3) 50%,transparent 62%)}
-.gv-card:hover::after{opacity:1;transform:translateX(70%);transition:transform .6s ease,opacity .25s ease}
-.gv-cover-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-/* degradado de luz + info abajo */
-.gv-foot{position:relative;z-index:2;display:flex;align-items:flex-end;gap:9px;
-  padding:12px 13px;background:linear-gradient(0deg,rgba(13,13,15,.82),rgba(13,13,15,.12) 70%,transparent)}
-.gv-cat.ico{width:26px;height:26px;flex:none;color:var(--papel);
-  background:var(--c);border-radius:8px;padding:5px}
-.gv-tx{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
-.gv-n{font-weight:700;font-size:13px;line-height:1.2;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.gv-ex{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.08em;
-  text-transform:uppercase;opacity:.9}
-.gv-big .gv-n{font-size:16px;-webkit-line-clamp:3}
-/* medidor de urgencia, solo en Express */
-.gv-urg{position:absolute;top:10px;left:10px;z-index:2;display:flex;align-items:center;gap:6px;
-  background:rgba(13,13,15,.55);backdrop-filter:blur(3px);border-radius:999px;padding:4px 9px 4px 8px}
-.gv-urg-lab{font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:600;letter-spacing:.12em;
-  text-transform:uppercase;color:rgba(253,251,247,.75)}
-.gv-urg-bars{display:flex;align-items:flex-end;gap:2px;height:12px}
-.gv-urg-bars i{width:3px;border-radius:1px;background:#ff5b3a}
-.gv-urg-bars i:nth-child(1){height:5px}.gv-urg-bars i:nth-child(2){height:9px}.gv-urg-bars i:nth-child(3){height:13px}
-.gv-urg-tx{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.04em;color:var(--papel)}
-/* filtro: ocultar tarjeta del carril */
-.gv-oculta{display:none}
-@keyframes gv-ola{0%{opacity:0;transform:translateY(26px) scale(.9)}
-  60%{opacity:1}100%{opacity:1;transform:none}}
+/* ---- reja en zigzag (muestras de un área) ---- */
+.zz-wrap{grid-column:span 6}
+.zz{animation:zz-entra .4s ease both}
+@keyframes zz-entra{from{opacity:0}to{opacity:1}}
+.zz-head{display:flex;flex-wrap:wrap;align-items:center;gap:12px 16px;margin-bottom:26px}
+.zz-volver{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.04em;
+  color:var(--tinta);background:var(--papel);border:1px solid var(--borde-ctrl);border-radius:999px;
+  padding:8px 15px;cursor:pointer;transition:.15s}
+.zz-volver:hover{border-color:var(--tinta)}
+.zz-tit{display:flex;align-items:center;gap:11px}
+.zz-chip.ico{width:28px;height:28px;flex:none;color:var(--c)}
+.zz-head h3{font-size:clamp(22px,3.1vw,32px);margin:0;line-height:1}
+.zz-desc{flex-basis:100%;color:var(--humo);max-width:62ch;margin:0;font-size:15px;line-height:1.5}
+/* Cada muestra es una fila: el cuadro (portada) y, al lado, un hueco del mismo
+   tamaño con el número grande arriba y el nombre del servicio abajo. El cuadro
+   alterna de lado fila a fila, y eso es lo que hace el zigzag. */
+.zz-rej{display:flex;flex-direction:column;gap:clamp(30px,5vw,60px)}
+.zz-cel{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,3vw,40px);
+  align-items:stretch;border:0;padding:0;background:none;color:var(--tinta);text-align:left;
+  font:inherit;cursor:pointer;opacity:0;transform:translateY(26px);
+  transition:opacity .6s ease,transform .6s cubic-bezier(.2,.8,.2,1);transition-delay:calc(var(--i)*60ms)}
+.zz.zz-on .zz-cel{opacity:1;transform:none}
+.zz-cel:nth-child(even) .zz-cover{order:2}           /* el cuadro cambia de lado → zigzag */
+.zz-cel:focus-visible{outline:3px solid var(--violeta);outline-offset:6px;border-radius:6px}
+.zz-cover{position:relative;aspect-ratio:4/3;border-radius:var(--r-bloque);overflow:hidden;
+  box-shadow:var(--sombra);background:linear-gradient(152deg,#262030,#17141c)}
+.zz-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.zz-cel:hover .zz-img{transform:scale(1.05)}
+.zz-ph{display:flex;align-items:center;justify-content:center}
+.zz-ico.ico{width:34%;height:34%;color:var(--c);opacity:.5;transition:transform .5s ease}
+.zz-cel:hover .zz-ico{transform:scale(1.1) rotate(-4deg)}
+/* el hueco del lado: número grande de fondo + nombre abajo */
+.zz-lado{position:relative;display:flex;flex-direction:column;justify-content:flex-end;padding:4px 2px 8px}
+.zz-num{position:absolute;top:-.1em;left:-.03em;z-index:0;font-family:'IBM Plex Mono',monospace;
+  font-weight:700;font-size:clamp(70px,11vw,150px);line-height:.9;color:var(--c);opacity:.15;pointer-events:none}
+.zz-nom{position:relative;z-index:1;font-weight:600;font-size:clamp(16px,1.7vw,21px);
+  line-height:1.22;max-width:24ch;transition:color .25s ease}
+.zz-cel:hover .zz-nom{color:var(--c)}
+@media(prefers-reduced-motion:reduce){.zz-cel{opacity:1;transform:none;transition:none}}
+@media(max-width:600px){
+  .zz-cel{gap:14px}
+  .zz-num{font-size:clamp(52px,16vw,88px)}
+  .zz-nom{font-size:15px}
+}
 
 /* ---------- bento de áreas (Nosotros): LQS al centro, las áreas alrededor ----------
    Retícula fija 4×4 con el logo anclado en el centro (grid-area:lqs, 2×2) y los
@@ -1148,14 +1172,17 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
 /* ---------- profundidad suave y uniforme: menos borde negro, más sombra ----------
    La misma estética en todas las tarjetas: línea fina + sombra con desenfoque
    (no un borde pesado). Da un aire más profesional y menos cargado. */
-.hero,.gv-card,.ab-tile,.nb,.caso,.paq,.ruta,.plan,.mod,.ficha,.area-cd,.eco-chip,
-.adv-lado,.caso-clientes,.caso-vis,.gv-flecha,.firma-logo{box-shadow:var(--sombra)}
+.hero,.cf-card,.ab-tile,.nb,.caso,.paq,.ruta,.plan,.mod,.ficha,.area-cd,.eco-chip,
+.adv-lado,.caso-clientes,.caso-vis,.firma-logo{box-shadow:var(--sombra)}
 .ruta:hover,.paq:hover,.plan:hover,.mod:hover,.area-cd:hover,.eco-chip:hover{box-shadow:var(--sombra-flote)}
-/* las muestras se OSCURECEN al entrar (hover/foco): el título y «Explorar» resaltan */
-.gv-cover{transition:filter .32s ease}
-.gv-card:hover .gv-cover,.gv-card:focus-visible .gv-cover{filter:brightness(.68) saturate(1.06)}
-.gv-card:hover .gv-foot,.gv-card:focus-visible .gv-foot{
-  background:linear-gradient(0deg,rgba(13,13,15,.92),rgba(13,13,15,.4) 70%,rgba(13,13,15,.14))}
+
+/* ---------- marcos minimal: solo los controles llevan hairline visible ---------- */
+.btn,.chip,.mod-abrir,.buscador,.mstra-x,.mstra-media-ver,.plan-ir{border-color:var(--borde-ctrl)}
+/* ---------- iconos en línea fina monocromo: el color queda en los acentos, no en el chip ---------- */
+.ab-ico.ico{background:transparent;color:var(--tinta);box-shadow:none;padding:0;width:30px;height:30px}
+.ab-grande .ab-ico.ico{width:38px;height:38px;padding:0}
+.nb-ico.ico{background:transparent;color:var(--tinta);box-shadow:none;padding:0;width:34px;height:34px}
+.gv-cat.ico{background:transparent;color:var(--papel);padding:0;width:22px;height:22px}
 
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -1648,7 +1675,7 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
 
   var CSS = [
     '.lqs-ico{display:block;width:100%;height:100%;overflow:visible}',
-    '.lqs-ico .t{fill:none;stroke:currentColor;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}',
+    '.lqs-ico .t{fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}',
     '.lqs-ico .s{fill:currentColor;stroke:none}',
     /* video · el play empuja hacia adelante */
     '@keyframes lqs-play{0%,100%{transform:translateX(0)}50%{transform:translateX(1.8px)}}',
