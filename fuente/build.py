@@ -16,71 +16,59 @@ def S(nombre, precio=0, mensual=False, unidad="", fuente="propuesto", grupo=""):
 
 # nombre, clave de ícono, superficie pastel, descripción corta, servicios
 MODULOS = [
- ("Video", "video", "#F2975A", "Reels, YouTube, comerciales", [
-   S("Reels y contenido vertical",                   150000, fuente="tarifario"),
-   S("Entrevistas",                                  350000),
-   S("Video para YouTube, acabado cinematográfico",  600000),
-   S("Podcast: grabación y cortes",                  500000),
-   S("Comerciales y piezas de publicidad",           700000),
+ ("Video", "video", "#F2975A", "Reels, video de marca, comerciales", [
+   S("Reels y contenido vertical",        150000, unidad="por pieza"),
+   S("Video de marca o empresa",          900000),
+   S("Comercial para pauta",              600000),
+   S("Entrevista o podcast",              450000),
  ]),
- ("Foto", "foto", "#58B6D8", "Producto, publicidad, sesiones", [
-   S("Retoque y edición",                             40000, unidad="por foto", fuente="tarifario"),
-   S("Sesión a una persona",                         200000, unidad="45 min, 10 fotos", fuente="tarifario"),
-   S("Foto de producto",                             250000),
-   S("Foto para portafolio",                         300000),
-   S("Foto para publicidad",                         400000),
-   S("Sesión al equipo",                             400000),
-   S("Mini sesión de fotos de temporada",            190000),
+ ("Foto", "foto", "#58B6D8", "Producto, retrato, equipo", [
+   S("Foto de producto",                  250000),
+   S("Retrato y marca personal",          200000, unidad="45 min, 10 fotos"),
+   S("Foto de equipo",                    400000),
+   S("Retoque y edición",                  40000, unidad="por foto"),
  ]),
- ("Marca", "marca", "#E7B544", "Identidad, empaques, consultoría", [
-   S("Solo el logo",                                 150000, grupo="identidad"),
-   S("Diseño de accesorios de marca",                250000),
-   S("Consultoría de ADN y orientación de marca",    300000),
-   S("Empaques",                                     350000),
-   S("Rediseño de una marca que ya existe",          650000, grupo="identidad"),
-   S("Diseño de marca desde cero",                   750000, grupo="identidad"),
-   S("Skin de logo de temporada",                     90000),
+ ("Marca", "marca", "#E7B544", "Identidad, cartas, empaques", [
+   S("Identidad de marca",                400000),   # solo logo → completa ~1.2M (en la ficha)
+   S("Estrategia y ADN de marca",         300000),
+   S("Papelería y piezas de marca",       250000),
+   S("Empaques y etiquetas",              350000),
+   S("Carta o menú",                      300000),
  ]),
  ("Redes", "redes", "#79C257", "Contenido, calendario, community", [
-   S("Publicaciones sueltas",                         40000, unidad="por pieza", fuente="tarifario", grupo="piezas"),
-   S("Comercial corto para pauta",                   250000),
-   S("Paquete de publicaciones",                     210000, unidad="6 piezas", grupo="piezas"),
-   S("Respuesta de comentarios y mensajes",          290000, mensual=True),
-   S("Plan Básico — presencia viva",                1100000, mensual=True, unidad="plan Básico", fuente="tarifario", grupo="plan"),
-   S("Plan Estándar — cuenta activa",               2200000, mensual=True, unidad="plan Estándar · recomendado", fuente="tarifario", grupo="plan"),
-   S("Plan Pro — operación completa",               2600000, mensual=True, unidad="desde · a la medida", fuente="tarifario", grupo="plan"),
-   S("Portada y destacados de temporada",             60000),
+   S("Piezas para redes",                 210000, unidad="paquete de 6"),
+   S("Calendario y publicación",          250000, mensual=True),
+   S("Community: respuestas y mensajes",  290000, mensual=True),
+   S("Gestión de cuenta",                1100000, mensual=True, unidad="3 planes"),
  ]),
  ("Digital", "web", "#EC6F6F", "Sitios, catálogos, menús", [
-   S("Menú digital con código QR",                   450000),
-   S("Landing para una campaña",                     600000),
-   S("Blog",                                         700000),
-   S("Portafolio web",                               900000),
-   S("Catálogo en línea",                           1000000),
-   S("Página web",                                  1300000),
-   S("Skin de temporada para la página",             180000),
+   S("Página web",                       1300000),
+   S("Landing de campaña",                700000),
+   S("Catálogo en línea",               1000000),
+   S("Menú digital con código QR",        450000),
  ]),
- ("Eventos", "eventos", "#D879B4", "Logística, registro, cobertura", [
-   S("Diseño de accesorios del evento",              350000),
-   S("Fondos y carruseles para conferencia",         250000),
-   S("Registro y control de invitados",              600000, unidad="con contacto post evento"),
-   S("Cobertura en foto y video",                    800000, fuente="tarifario"),
-   S("Insta foto: la foto llega el mismo día",       800000),
-   S("Logística completa del día",                  1800000),
+ ("Eventos", "eventos", "#D879B4", "Gráfica, registro, cobertura", [
+   S("Piezas gráficas del evento",        350000),
+   S("Registro y control de invitados",   600000),
+   S("Cobertura en foto y video",         800000),
+   S("Logística del día",                1800000),
  ]),
- ("Automatización", "automatizacion", "#4CB0A4", "WhatsApp, Instagram, seguimiento", [
-   S("Reporte automático de números cada semana",    300000),
-   S("WhatsApp Business: catálogo y respuestas",     350000),
-   S("Solicitudes que llegan directo, sin bandeja",  400000),
-   S("Respuestas automáticas en Instagram",          400000, unidad="mensajes y comentarios"),
-   S("Agente de WhatsApp que responde y cotiza",    1550000, unidad="montaje"),
+ ("Automatización", "automatizacion", "#4CB0A4", "Meta, n8n, documentos", [
+   S("Automatización con Meta (básico)",  400000, unidad="montaje"),
+   S("Automatización con n8n (avanzado)",1550000, unidad="montaje + operación"),
+   S("Reportes automáticos de resultados",300000, mensual=True),
+   S("Programa · Operaciones y Logística",900000, unidad="app descargable"),
+   S("Programa · Talento Humano",         900000, unidad="app descargable"),
+   S("Programa · Legal y Contractual",   1100000, unidad="app descargable"),
+   S("Programa · Financiera y Compras",  1100000, unidad="app descargable"),
  ]),
- ("Ilustración y diseño", "ilustracion", "#8B6FE0", "Portadas, ilustración, tatuajes, comisiones", [
-   S("Portadas e ilustración",        180000, unidad="varía con el detalle"),
-   S("Ilustración de personajes",     250000),
-   S("Diseño de tatoo",                    0),
-   S("Comisiones abiertas",                0),
-   S("Set de íconos y stickers de temporada",  70000),
+ ("Ilustración y diseño", "ilustracion", "#8B6FE0", "Ilustración, personajes, producción", [
+   S("Ilustración y portadas",            180000, unidad="varía con el detalle"),
+   S("Diseño de personaje o mascota",     250000),
+   S("Diseño de tatuaje",                      0),
+   S("Comisiones abiertas",                    0),
+   S("Íconos y stickers",                  70000),
+   S("Producción física con aliados",          0, unidad="variable · aliados"),
  ]),
 ]
 
@@ -237,16 +225,16 @@ DEMOS = {
  # con tallas/stock/envío y catálogo por presentación con precio por unidad).
  # Reemplazan a tienda-ropa.html como catálogo y estrenan «Página web».
  "Catálogo en línea":          ("tiendas.html",      "img/portadas/tiendas.webp",     "#b4512f", "Tienda modelo"),
+ # Página web: bodegas es la demo en vivo; revista-moda (blog) y mezcal (portafolio)
+ # entran como enlaces de galería (ver GALERIA), que absorbió esas dos fichas.
  "Página web":                 ("bodegas.html",      "img/portadas/bodegas.webp",     "#4a5d3a", "Bodega modelo"),
  "Menú digital con código QR": ("restaurante.html",  "img/portadas/restaurante.webp", "#E0531C", "Rescoldo"),
- "Blog":                       ("revista-moda.html", "img/portadas/revista.webp",     "#7b5cff", "Tendido"),
- "Portafolio web":             ("mezcal.html",       "img/portadas/mezcal.webp",      "#C65A16", "Casa Tepemete"),
  # LQS mostrándose a sí misma, su video y su trabajo de redes para Vita Nova
  "Reels y contenido vertical": ("video-lqs.html",    "img/portadas/video.webp",       "#8B5CF6", "LQS"),
- "Diseño de marca desde cero": ("marca-lqs.html",    "img/portadas/marca.webp",       "#8B5CF6", "LQS"),
- "Publicaciones sueltas":      ("redes-lqs.html",    "img/portadas/redes.webp",       "#6D5AE6", "Vita Nova"),
+ "Identidad de marca":         ("marca-lqs.html",    "img/portadas/marca.webp",       "#8B5CF6", "LQS"),
+ "Piezas para redes":          ("redes-lqs.html",    "img/portadas/redes.webp",       "#6D5AE6", "Vita Nova"),
  # Operación de un restaurante: parrilla + bots de WhatsApp/Instagram + reporte
- "WhatsApp Business: catálogo y respuestas": ("automatizacion.html", "img/portadas/automatizacion.webp", "#1f8a4c", "Turno"),
+ "Automatización con Meta (básico)": ("automatizacion.html", "img/portadas/automatizacion.webp", "#1f8a4c", "Turno"),
 }
 
 # Galerías de muestra: trabajo real (imagen y video) que NO es una página en vivo
@@ -263,7 +251,15 @@ GALERIA = {
       "ar": "16/9", "cap": ("Catálogo editorial de cerámica", "Editorial ceramics catalog")},
    ],
  },
- "Diseño de marca desde cero": {  # GLATOS (la demo en vivo de esta ficha es marca-lqs)
+ "Página web": {  # bodegas es la demo en vivo; blog y portafolio entran como enlaces
+   "media": [
+     {"t": "img", "src": "img/portadas/revista.webp", "href": "revista-moda.html",
+      "cap": ("Blog · Tendido (abrir)", "Blog · Tendido (open)")},
+     {"t": "img", "src": "img/portadas/mezcal.webp", "href": "mezcal.html",
+      "cap": ("Portafolio · Casa Tepemete (abrir)", "Portfolio · Casa Tepemete (open)")},
+   ],
+ },
+ "Identidad de marca": {  # GLATOS (la demo en vivo de esta ficha es marca-lqs)
    "marca": "GLATOS", "tono": "#C9102C", "cover": "muestras/img/glatos-cv.webp",
    "media": [
      {"t": "vid", "src": "muestras/clips/glatos-logo.mp4", "poster": "muestras/img/glatos-logo-poster.webp",
@@ -273,7 +269,7 @@ GALERIA = {
    ],
    "ver": {"href": "muestras/glatos.pdf", "lbl": ("Ficha de marca (PDF) →", "Brand sheet (PDF) →")},
  },
- "Diseño de accesorios de marca": {  # Alquimia Herbal
+ "Papelería y piezas de marca": {  # Alquimia Herbal
    "marca": "Alquimia Herbal", "tono": "#A33A2B", "cover": "muestras/img/alquimia-tablero-cv.webp",
    "media": [
      {"t": "img", "src": "muestras/img/alquimia-tablero.webp", "cap": ("Tablero de identidad", "Identity board")},
@@ -281,7 +277,7 @@ GALERIA = {
       "ar": "9/16", "cap": ("Carta ilustrada en movimiento", "Illustrated card in motion")},
    ],
  },
- "Foto de producto": {  # cartas de restaurante (foto de comida + diseño editorial)
+ "Carta o menú": {  # cartas de restaurante (diseño editorial + foto de comida)
    "marca": "Carta de autor", "tono": "#C0552F", "cover": "muestras/img/carta-brusquetas-cv.webp",
    "media": [
      {"t": "img", "src": "muestras/img/carta-brusquetas.webp", "cap": ("Brusquetas", "Bruschetta")},
@@ -292,14 +288,14 @@ GALERIA = {
      {"t": "img", "src": "muestras/img/carta-cafe.webp",       "cap": ("Café helado", "Iced coffee")},
    ],
  },
- "Comerciales y piezas de publicidad": {  # video corporativo Vita Nova
+ "Video de marca o empresa": {  # video corporativo Vita Nova
    "marca": "Vita Nova", "tono": "#1F5C44", "cover": "muestras/img/vitanova-cv.webp",
    "media": [
      {"t": "vid", "src": "muestras/clips/vitanova-empresa.mp4", "poster": "muestras/img/vitanova-empresa-poster.webp",
       "ar": "16/9", "cap": ("Video para empresa · Vita Nova", "Brand film · Vita Nova")},
    ],
  },
- "Ilustración de personajes": {  # hojas de personaje
+ "Diseño de personaje o mascota": {  # hojas de personaje
    "marca": "Diseño de personaje", "tono": "#8B6FE0", "cover": "muestras/img/ilu-zarigueya-cv.webp",
    "media": [
      {"t": "img", "src": "muestras/img/ilu-zarigueya.webp", "cap": ("Hoja de personaje", "Character sheet")},
@@ -452,6 +448,65 @@ FICHA = {
    "Llévalo afinado al estudio: ahorras tiempo de silla y sale justo como lo pensaste."),
  "Comisiones abiertas": ("Encargos de arte a tu idea: lo que imagines, lo ilustramos.",
    "Si no está en la lista, cuéntanoslo. El límite es tu imaginación."),
+ # --- servicios reformulados (nueva estructura) ---
+ "Video de marca o empresa": ("Pieza más larga para empresa o lanzamiento, con color, sonido y ritmo tratados como cine.",
+   "Úsala como pieza ancla de la marca; luego se despieza en cortos para redes."),
+ "Comercial para pauta": ("Pieza breve y directa pensada para anuncios pagos.",
+   "Acompáñala de presupuesto de pauta: sin inversión no despega."),
+ "Entrevista o podcast": ("Grabación de una conversación a una o dos cámaras, audio limpio y cortes listos.",
+   "Deja la versión larga en YouTube y saca 3–4 cortes verticales: una grabación, varias piezas."),
+ "Retrato y marca personal": ("45 minutos, 10 fotos finales: retrato para perfil, marca personal o prensa.",
+   "Perfecto para LinkedIn y el «sobre nosotros»; agéndalo cuando cambies de cargo o imagen."),
+ "Foto de equipo": ("Retratos coherentes de todo el equipo, mismo estilo y luz.",
+   "Dan confianza en la web y en propuestas; repítela cuando entre gente nueva."),
+ "Identidad de marca": ("La identidad completa: desde solo el logo hasta logo + color + tipografía + aplicaciones y manual. El alcance decide el precio.",
+   "Arranca aquí si empiezas o das un giro grande; es la base de todo. Completa, desde ~$1.200.000."),
+ "Estrategia y ADN de marca": ("Sesión de estrategia: qué dices, a quién y cómo suenas, antes de diseñar nada.",
+   "Hazla primero: ahorra rediseños y decisiones al azar."),
+ "Papelería y piezas de marca": ("Piezas aplicadas de la marca: tarjetas, firmas, plantillas, sellos, merch.",
+   "Pídelo cuando ya tengas la identidad; es lo que hace que la marca se vea «armada»."),
+ "Empaques y etiquetas": ("Diseño de empaque y etiqueta listo para imprimir, con medidas y troquel.",
+   "Clave en producto físico: el empaque es tu vendedor en el punto de venta."),
+ "Carta o menú": ("Diseño de tu carta o menú —impreso o digital— con tus platos, fotos y precios, en un sistema que se ve de restaurante serio.",
+   "Una buena carta vende los platos de más margen. Combínala con el menú digital con QR."),
+ "Piezas para redes": ("Piezas para tus redes, sueltas o en paquete de 6, coherentes y listas para programar.",
+   "Suelta desde $40.000; el paquete rinde para sostener un mes sin improvisar."),
+ "Calendario y publicación": ("Armamos el calendario del mes y publicamos por ti, a tiempo y en orden.",
+   "Lo mensual que mantiene la cuenta viva sin que tengas que estar encima."),
+ "Community: respuestas y mensajes": ("Gestión diaria de comentarios, DMs y dudas.",
+   "La atención rápida convierte seguidores en clientes; no la dejes sin responder."),
+ "Gestión de cuenta": ("El manejo completo de tus redes en un plan mensual, en tres niveles: Básico ($1.1M), Estándar ($2.2M) y Pro ($2.6M).",
+   "Elige el nivel por cuánto quieres publicar y crecer; incluye contenido, calendario y community."),
+ "Landing de campaña": ("Una sola página enfocada en una campaña: un mensaje, un formulario, lista para pauta.",
+   "Úsala cuando vayas a invertir en anuncios: concentra el clic en una sola acción."),
+ "Piezas gráficas del evento": ("Toda la gráfica del evento: invitaciones, señalética, fondos y carruseles.",
+   "Un evento que se ve cuidado empieza por su gráfica; pídela con tiempo."),
+ "Logística del día": ("Producción y logística del día: montaje, equipo en sitio y que todo corra.",
+   "Para eventos grandes; nos encargamos del día para que tú solo recibas."),
+ "Automatización con Meta (básico)": ("Respuestas automáticas y catálogo en WhatsApp e Instagram, sobre la API oficial de Meta: rápido de montar y sin servidor propio.",
+   "Para responder al instante y vender por WhatsApp. Costo de operar: Meta cobra por conversación iniciada por plantilla (centavos); lo demás es gratis."),
+ "Automatización con n8n (avanzado)": ("Flujos de varios pasos que conectan tus apps (CRM, Airtable, correo, IA) y hacen lo que Meta sola no puede: lógica, cruces y un agente que responde y cotiza.",
+   "Para operaciones de verdad. Costo de operar: necesita un n8n corriendo (desde ~$60.000/mes en la nube) o lo alojamos; lo dejamos andando y lo mantenemos."),
+ "Reportes automáticos de resultados": ("Un reporte de tus números que llega solo cada semana o mes, sin que lo pidas.",
+   "Ver los números seguido es lo que hace que mejoren; lo dejamos andando."),
+ "Programa · Operaciones y Logística": ("App descargable que genera actas de entrega y devolución de activos: blinda a la organización cuando asigna equipos, dotación o materiales.",
+   "Para equipos con inventario y personal en campo. Se instala en PC o móvil y queda tuya."),
+ "Programa · Talento Humano": ("App que emite certificados laborales, constancias de ingresos/retenciones y memorandos con firma digital, desde tus datos de contrato.",
+   "El colaborador los pide por un portal o bot y salen al instante. Menos papeleo, todo trazable."),
+ "Programa · Legal y Contractual": ("App que arma contratos de prestación de servicios y actas de reunión desde una base de datos: plantillas que autocompletan cláusulas, montos y plazos.",
+   "Para quien firma seguido. Un clic y el documento sale listo y uniforme."),
+ "Programa · Financiera y Compras": ("App de órdenes de compra, requisiciones y legalización de viáticos: valida presupuesto por centro de costos y encadena aprobaciones.",
+   "Ordena el gasto de punta a punta y lo deja listo para contabilidad."),
+ "Ilustración y portadas": ("Ilustración a tu idea: portadas, piezas editoriales, lo que imagines.",
+   "El precio varía con el detalle; cuéntanos la idea y te decimos."),
+ "Diseño de personaje o mascota": ("Creación de un personaje o mascota, con sus poses y expresiones.",
+   "Un personaje propio le pone cara a tu marca y viaja a stickers, merch y redes."),
+ "Diseño de tatuaje": ("Diseño de tatuaje a tu medida, listo para llevar al estudio.",
+   "Tráenos la idea o la referencia; lo dejamos limpio para tatuar."),
+ "Íconos y stickers": ("Set de íconos o stickers con un estilo propio, para tu app, web o redes.",
+   "Pequeños pero marcan; le dan identidad a cada detalle."),
+ "Producción física con aliados": ("Mandamos a hacer tus piezas físicas —pines, esculturas, pinturas, adaptación de locales— con nuestra red de aliados, para que la idea se vuelva objeto.",
+   "El precio es de cada aliado, así que varía con la pieza y el material. Te conseguimos el proveedor y coordinamos."),
 }
 EN_FICHA = {
  "Reels y contenido vertical": ("Vertical clips (9:16) for Reels, TikTok and Shorts, with snappy edits and on-screen text.",
@@ -566,6 +621,65 @@ EN_FICHA = {
    "Take it dialed-in to the studio: you save chair time and it comes out just as you pictured it."),
  "Comisiones abiertas": ("Art commissions to your idea: whatever you imagine, we illustrate.",
    "If it's not on the list, tell us. The limit is your imagination."),
+ # --- reformulated services (new structure) ---
+ "Video de marca o empresa": ("A longer piece for a company or launch, with color, sound and pacing treated like film.",
+   "Use it as the brand's anchor piece; then break it into shorts for social."),
+ "Comercial para pauta": ("A short, direct piece built for paid ads.",
+   "Pair it with an ad budget: without spend it won't take off."),
+ "Entrevista o podcast": ("A conversation shot on one or two cameras, clean audio and ready cuts.",
+   "Leave the long version on YouTube and pull 3–4 vertical cuts: one shoot, many pieces."),
+ "Retrato y marca personal": ("45 minutes, 10 final photos: portrait for profile, personal brand or press.",
+   "Perfect for LinkedIn and the «about us»; book it when you change role or image."),
+ "Foto de equipo": ("Consistent portraits of the whole team, same style and light.",
+   "They build trust on the site and in proposals; repeat when new people join."),
+ "Identidad de marca": ("The full identity: from logo only to logo + color + type + applications and guidelines. Scope sets the price.",
+   "Start here when you launch or make a big turn; it's the base for everything. Full, from ~$1,200,000."),
+ "Estrategia y ADN de marca": ("A strategy session: what you say, to whom and how you sound, before designing anything.",
+   "Do it first: it saves redesigns and random decisions."),
+ "Papelería y piezas de marca": ("Applied brand pieces: cards, signatures, templates, stamps, merch.",
+   "Ask for it once you have the identity; it's what makes a brand look «put together»."),
+ "Empaques y etiquetas": ("Print-ready packaging and label design, with sizes and die-cut.",
+   "Key for physical products: packaging is your salesperson at the point of sale."),
+ "Carta o menú": ("Your menu designed —print or digital— with your dishes, photos and prices, in a system that looks like a serious restaurant.",
+   "A good menu sells the higher-margin dishes. Pair it with the digital QR menu."),
+ "Piezas para redes": ("Pieces for your social, single or in a pack of 6, consistent and ready to schedule.",
+   "Single from $40,000; the pack keeps a month going without improvising."),
+ "Calendario y publicación": ("We build the month's calendar and post for you, on time and in order.",
+   "The monthly work that keeps the account alive without you on top of it."),
+ "Community: respuestas y mensajes": ("Daily handling of comments, DMs and questions.",
+   "Fast replies turn followers into customers; don't leave them unanswered."),
+ "Gestión de cuenta": ("Full management of your social on a monthly plan, in three tiers: Basic ($1.1M), Standard ($2.2M) and Pro ($2.6M).",
+   "Pick the tier by how much you want to post and grow; includes content, calendar and community."),
+ "Landing de campaña": ("A single page focused on one campaign: one message, one form, ready for ads.",
+   "Use it when you'll invest in ads: it concentrates the click on one action."),
+ "Piezas gráficas del evento": ("All the event's graphics: invitations, signage, backdrops and carousels.",
+   "A polished event starts with its graphics; ask early."),
+ "Logística del día": ("Production and logistics for the day: setup, on-site team, and keeping it all running.",
+   "For big events; we handle the day so you just host."),
+ "Automatización con Meta (básico)": ("Automatic replies and catalog on WhatsApp and Instagram, on Meta's official API: quick to set up and no server of your own.",
+   "To reply instantly and sell over WhatsApp. Running cost: Meta charges per template-initiated conversation (cents); the rest is free."),
+ "Automatización con n8n (avanzado)": ("Multi-step flows connecting your apps (CRM, Airtable, email, AI) that do what Meta alone can't: logic, cross-checks and an agent that answers and quotes.",
+   "For real operations. Running cost: it needs an n8n running (from ~$60,000/mo in the cloud) or we host it; we keep it running and maintained."),
+ "Reportes automáticos de resultados": ("A report of your numbers that arrives on its own every week or month, unprompted.",
+   "Seeing the numbers often is what makes them improve; we leave it running."),
+ "Programa · Operaciones y Logística": ("A downloadable app that generates asset handover and return records: it protects the organization when it assigns gear, kit or materials.",
+   "For teams with inventory and field staff. Installs on PC or mobile and it's yours."),
+ "Programa · Talento Humano": ("An app that issues employment certificates, income/withholding statements and memos, digitally signed, from your contract data.",
+   "Staff request them from a portal or bot and they come out instantly. Less paperwork, all traceable."),
+ "Programa · Legal y Contractual": ("An app that builds service contracts and meeting minutes from a database: templates that autofill clauses, amounts and terms.",
+   "For whoever signs often. One click and the document comes out ready and uniform."),
+ "Programa · Financiera y Compras": ("An app for purchase orders, requisitions and travel-expense reconciliation: it validates budget by cost center and chains approvals.",
+   "It orders spending end to end and leaves it ready for accounting."),
+ "Ilustración y portadas": ("Illustration to your idea: covers, editorial pieces, whatever you imagine.",
+   "Price varies with the detail; tell us the idea and we'll say."),
+ "Diseño de personaje o mascota": ("Creating a character or mascot, with its poses and expressions.",
+   "A character of your own gives your brand a face and travels to stickers, merch and social."),
+ "Diseño de tatuaje": ("A custom tattoo design, ready to take to the studio.",
+   "Bring us the idea or reference; we leave it clean to tattoo."),
+ "Íconos y stickers": ("A set of icons or stickers with a style of their own, for your app, site or social.",
+   "Small but they count; they give identity to every detail."),
+ "Producción física con aliados": ("We get your physical pieces made —pins, sculptures, paintings, venue adaptations— through our partner network, so the idea becomes an object.",
+   "The price is each partner's, so it varies with the piece and material. We find the supplier and coordinate."),
 }
 
 # Datos que la ley exige y que hay que llenar antes de publicar la página legal.
@@ -650,6 +764,36 @@ EN_SERV = {
   "Ilustración de personajes": "Character illustration",
   "Diseño de tatoo": "Tattoo design",
   "Comisiones abiertas": "Open commissions",
+  # --- servicios reformulados (nueva estructura) ---
+  "Video de marca o empresa": "Brand or company video",
+  "Comercial para pauta": "Ad for paid media",
+  "Entrevista o podcast": "Interview or podcast",
+  "Retrato y marca personal": "Portrait & personal brand",
+  "Foto de equipo": "Team photo",
+  "Identidad de marca": "Brand identity",
+  "Estrategia y ADN de marca": "Brand strategy & DNA",
+  "Papelería y piezas de marca": "Brand stationery & collateral",
+  "Empaques y etiquetas": "Packaging & labels",
+  "Carta o menú": "Menu design",
+  "Piezas para redes": "Social posts",
+  "Calendario y publicación": "Calendar & posting",
+  "Community: respuestas y mensajes": "Community: replies & messages",
+  "Gestión de cuenta": "Account management",
+  "Landing de campaña": "Campaign landing",
+  "Piezas gráficas del evento": "Event graphics",
+  "Logística del día": "Event-day logistics",
+  "Automatización con Meta (básico)": "Automation with Meta (basic)",
+  "Automatización con n8n (avanzado)": "Automation with n8n (advanced)",
+  "Reportes automáticos de resultados": "Automatic results reports",
+  "Programa · Operaciones y Logística": "App · Operations & Logistics",
+  "Programa · Talento Humano": "App · HR & People",
+  "Programa · Legal y Contractual": "App · Legal & Contracts",
+  "Programa · Financiera y Compras": "App · Finance & Purchasing",
+  "Ilustración y portadas": "Illustration & covers",
+  "Diseño de personaje o mascota": "Character or mascot design",
+  "Diseño de tatuaje": "Tattoo design",
+  "Íconos y stickers": "Icons & stickers",
+  "Producción física con aliados": "Physical production with partners",
 }
 EN_UNIDAD = {
   "por foto": "per photo", "45 min, 10 fotos": "45 min, 10 photos", "por pieza": "per piece",
@@ -688,9 +832,9 @@ EN_ENCAB = {
  "encab-legal": ("Legal", "The legal part, in plain words",
    "Terms, data and cookies. Written to be understood on one read, without leaving out what the "
    "law requires. The Spanish version is the one that governs."),
- "encab-cotizador": ("Quote builder", "Let us build the number",
-   "Pick a tier per area —Basic, Complete or Plus— and the total builds itself; it drops as you "
-   "add areas. It goes straight to our WhatsApp, no forms nobody reads."),
+ "encab-cotizador": ("Quote builder", "Let's build the number",
+   "The price of each service, area by area, and a free 20-minute call to sort out where to start. "
+   "It goes straight to our WhatsApp, no forms nobody reads."),
 }
 # textos de interfaz que viven en el guion
 UI = {
@@ -764,7 +908,7 @@ PAGINAS = {
         "titulo": "Muestras — LQS",
         "desc": ("Lo que hemos hecho, por area: video, foto, marca, redes, digital, eventos, "
                  "automatizacion e ilustracion. Filtra por categoria y toca una muestra para abrirla."),
-        "partes": ["encab-muestras", "areas", "paquetes", "antesdespues", "express"],
+        "partes": ["encab-muestras", "areas", "antesdespues", "express"],
     },
     "legal.html": {
         "titulo": "Términos, datos y cookies — LQS",
@@ -779,9 +923,9 @@ PAGINAS = {
     },
     "cotizador.html": {
         "titulo": "Cotizador — LQS",
-        "desc": ("Elige servicio por servicio y el total se arma solo. Cada cosa con su precio, "
-                 "el area completa con descuento. Llega directo a nuestro WhatsApp o correo."),
-        "partes": ["encab-cotizador", "niveles", "asesoria", "tarifas", "faqs", "contacto"],
+        "desc": ("Los precios de cada área, servicio por servicio, y una asesoría gratis para "
+                 "ordenar por dónde empezar. Llega directo a nuestro WhatsApp o correo."),
+        "partes": ["encab-cotizador", "asesoria", "tarifas", "faqs", "contacto"],
     },
 }
 
@@ -794,8 +938,8 @@ ENCABEZADOS = {
    "Términos, datos y cookies. Escrito para que se entienda leyéndolo una vez, sin dejar de decir "
    "lo que la ley obliga a decir."),
  "encab-cotizador": ("Cotizador", "Armemos el número",
-   "Elige un nivel por área —Básico, Completo o Plus— y el total se arma solo; baja cuando sumas "
-   "áreas. Llega directo a nuestro WhatsApp, sin formularios que nadie revisa."),
+   "El precio de cada servicio, área por área, y una asesoría gratis de 20 minutos para ordenar por "
+   "dónde empezar. Llega directo a nuestro WhatsApp, sin formularios que nadie revisa."),
 }
 
 TICK = "✓"
@@ -1055,6 +1199,8 @@ def armar(idi):
                 it = {"t": m["t"], "src": "{{RAIZ}}demos/" + m["src"]}
                 if m.get("poster"):
                     it["poster"] = "{{RAIZ}}demos/" + m["poster"]
+                if m.get("href"):   # imagen que abre una página en vivo (blog, portafolio)
+                    it["href"] = "{{RAIZ}}demos/" + m["href"]
                 if m.get("ar"):
                     it["ar"] = m["ar"]
                 cap = m.get("cap")
