@@ -1,0 +1,1684 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Digitalización para tiendas y almacenes · LQS</title>
+<meta name="description" content="Muestra de estilo y propuesta de digitalización para tiendas y almacenes: catálogo con tallas y stock, pedido por WhatsApp, pago en línea, envío nacional y presencia en Google.">
+<meta name="theme-color" content="#f3f1ec">
+<style>
+/* ══════════════════════════════════════════════════════════════════
+   LQS · DIGITALIZACIÓN PARA TIENDAS Y ALMACENES
+   Muestra de estilo + propuesta, en un solo archivo.
+
+   Hermana de la muestra de restaurantes: mismo sistema —el vidrio, el
+   grano, la escala tipográfica, el riel de disposiciones— y otro rubro.
+   Lo que allá era la carta aquí es el catálogo, y aparece lo que una
+   tienda tiene y un restaurante no: tallas, colores, existencias y
+   envío a otra ciudad.
+
+   La paleta sí cambia, y a propósito: hueso frío con un solo acento de
+   arcilla, en vez del ámbar de restaurantes. Se reconoce el mismo
+   estudio y no se confunden las dos muestras sobre la mesa.
+
+   El recorrido ES el armado: bajando, la página de la tienda se va
+   montando pieza por pieza, y cada módulo se explica justo donde
+   aparece. Al final, el resumen: siete líneas con lo que gana la
+   tienda, y un botón para volver arriba.
+
+   No lleva nada con fecha: es una muestra abierta, para enseñarla el
+   día que sea. La vigencia de la franja sale del reloj del aparato.
+
+   Un solo archivo, sin librerías, sin CDN y sin red: abre desde un
+   correo, un USB o un doble clic, y funciona sin conexión.
+   ══════════════════════════════════════════════════════════════════ */
+
+:root{
+  /* Hueso frío con un solo acento de arcilla. La tinta y los dos tonos
+     medios conservan la disciplina de la muestra de restaurantes: las
+     opacidades están puestas para pasar 4,5:1 sobre la nata, no a ojo. */
+  --hueso:#f3f1ec;
+  --niebla:#e6e4dd;
+  --nata:#fcfbf8;
+  --piedra:#a6a299;         /* solo bordes y puntos, nunca texto */
+  --piedra-h:#6a665e;       /* rótulos */
+  --arena:#e2d7c6;          /* el relleno de los huecos de foto */
+  --arcilla:#b4512f;        /* el acento */
+  --arcilla-f:#8e3e23;      /* el mismo acento cuando tiene que leerse */
+  --tinta:#23211e;
+  --tinta-70:rgba(35,33,30,.70);
+  --tinta-66:rgba(35,33,30,.66);
+  --linea:rgba(35,33,30,.12);
+  --verde:#4f7a52;          /* confirmaciones */
+  --verde-texto:#3c5e3f;    /* el mismo verde, legible sobre su propio chip */
+  --rojo:#a8402c;           /* avisos */
+  --agotado:#6f6b63;        /* lo que ya no hay: gris, no rojo */
+
+  --r-pared:30px; --r-bloque:22px; --r-interno:14px;
+  --margen:clamp(18px,5vw,64px);
+  --sans:ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+
+  --muelle:cubic-bezier(.2,.7,.3,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--hueso);color:var(--tinta);font-family:var(--sans);
+  font-size:clamp(1rem,.95rem + .25vw,1.09rem);line-height:1.6;
+  -webkit-font-smoothing:antialiased;overflow-x:clip}
+img,svg{display:block;max-width:100%}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2.5px solid var(--arcilla);outline-offset:3px;border-radius:6px}
+
+/* ── el cielo: el degradado difuso de las referencias ─────────────── */
+.cielo{position:fixed;inset:0;z-index:0;pointer-events:none;
+  transform:translateZ(0);
+  background:
+    radial-gradient(56% 42% at 14% 10%, rgba(180,81,47,.20),   transparent 62%),
+    radial-gradient(54% 40% at 86% 20%, rgba(166,162,153,.40), transparent 60%),
+    radial-gradient(62% 46% at 76% 88%, rgba(180,81,47,.13),   transparent 64%),
+    radial-gradient(52% 38% at 16% 72%, rgba(166,162,153,.34), transparent 60%),
+    var(--hueso)}
+/* el grano rompe la perfección del degradado: sin él se ve a plástico */
+.grano{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.055;
+  transform:translateZ(0);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='150' height='150' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+main{position:relative;z-index:2}
+/* «main >» a propósito: sin el hijo directo, cualquier <section> anidado
+   —el de cada categoría del carrusel, por ejemplo— hereda 90px de padding y
+   abre un hueco enorme donde no debería haber nada. */
+main > section{padding:clamp(54px,9vh,112px) var(--margen);position:relative;
+  /* la chapa es pegajosa: sin esto, «Ver el recorrido» deja el título debajo */
+  scroll-margin-top:62px}
+.centro{max-width:1180px;margin:0 auto}
+
+/* ── tipografía ───────────────────────────────────────────────────── */
+h1,h2,h3{font-weight:700;letter-spacing:-.022em;line-height:1.08;text-wrap:balance}
+h1{font-size:clamp(2.1rem,6.4vw,4.1rem);max-width:15em}
+h2{font-size:clamp(1.6rem,4vw,2.5rem);max-width:17em;letter-spacing:-.02em}
+h3{font-size:1.14rem;letter-spacing:-.012em;line-height:1.25}
+p{max-width:60ch}
+.grande{font-size:clamp(1.06rem,1rem + .4vw,1.26rem);line-height:1.55}
+.tenue{color:var(--tinta-70)}
+.sep{margin-top:clamp(13px,2.2vh,20px)}
+.rotulo{display:inline-flex;align-items:center;gap:8px;font-size:.7rem;
+  font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--piedra-h);margin-bottom:16px}
+.rotulo b{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;
+  background:var(--tinta);color:var(--hueso);font-size:.68rem;letter-spacing:0}
+
+/* ── materiales: el cristal de las referencias ────────────────────── */
+.vidrio{background:rgba(252,251,248,.62);
+  -webkit-backdrop-filter:blur(26px) saturate(165%);
+  backdrop-filter:blur(26px) saturate(165%);
+  border:1px solid rgba(255,255,255,.62);
+  border-radius:var(--r-pared);
+  box-shadow:0 26px 60px -22px rgba(58,50,42,.3),
+             0 1px 0 rgba(255,255,255,.8) inset}
+/* una superficie grande lee como más gruesa: más desenfoque y más sombra */
+.vidrio.hondo{-webkit-backdrop-filter:blur(40px) saturate(175%);
+  backdrop-filter:blur(40px) saturate(175%);
+  box-shadow:0 44px 90px -28px rgba(58,50,42,.36),
+             0 1px 0 rgba(255,255,255,.85) inset}
+.solido{background:var(--nata);border-radius:var(--r-bloque);
+  border:1px solid var(--linea);
+  box-shadow:0 16px 36px -18px rgba(58,50,42,.26)}
+
+/* ── botones ──────────────────────────────────────────────────────── */
+.bot{appearance:none;border:0;cursor:pointer;border-radius:999px;
+  padding:13px 24px;font-size:.93rem;font-weight:600;letter-spacing:-.008em;
+  display:inline-flex;align-items:center;gap:9px;text-decoration:none;
+  background:var(--tinta);color:var(--hueso);
+  box-shadow:0 10px 22px -8px rgba(35,33,30,.5);
+  transition:transform .1s var(--muelle),box-shadow .18s,background .18s}
+.bot:active{transform:scale(.97)}      /* en móvil es el único feedback */
+@media (hover:hover) and (pointer:fine){
+  .bot:hover{box-shadow:0 14px 28px -8px rgba(35,33,30,.56)}
+}
+.bot.claro{background:rgba(252,251,248,.9);color:var(--tinta);
+  border:1px solid var(--linea);box-shadow:0 8px 20px -10px rgba(58,50,42,.3)}
+/* Aquí el blanco sobre la arcilla sí pasa —5,0:1—, al revés que sobre el
+   ámbar de restaurantes, que se quedaba en 2,3:1 y obligaba a texto oscuro. */
+.bot.acento{background:var(--arcilla);color:#fff;
+  box-shadow:0 10px 22px -8px rgba(140,60,32,.45)}
+.bot svg{width:17px;height:17px;flex:none;fill:currentColor}
+
+/* ── chapa: idioma ────────────────────────────────────────────────── */
+.chapa{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:12px;
+  padding:12px var(--margen);
+  background:rgba(243,241,236,.72);
+  -webkit-backdrop-filter:blur(18px) saturate(150%);
+  backdrop-filter:blur(18px) saturate(150%);
+  border-bottom:1px solid var(--linea)}
+.chapa .firma{font-weight:700;letter-spacing:-.01em;font-size:.95rem}
+.chapa .firma i{font-style:normal;color:var(--piedra-h);font-weight:500}
+.chapa nav{margin-left:auto;display:flex;align-items:center;gap:4px}
+.leng{display:flex;gap:2px;background:rgba(35,33,30,.07);border-radius:999px;padding:3px}
+.leng a{text-decoration:none;font-size:.78rem;font-weight:700;padding:5px 11px;
+  border-radius:999px;color:var(--tinta-70);letter-spacing:.03em}
+/* El cambio de idioma es CSS puro, con anclas de tamaño cero. Funciona
+   sin JavaScript, que es donde más falta hace: en una vista previa.
+   OJO: conmuta una CLASE, nunca [lang] — [lang="es"] casaría también con
+   el <html> y display:none dejaría la página en blanco. */
+.ancla{position:fixed;top:50%;left:0;width:0;height:0;overflow:hidden}
+/* Un simple «.en{display:none}» pierde contra cualquier regla local que
+   toque display —.cifras-hero span{display:block} lo tumbaba y salían los
+   dos idiomas a la vez—. Al colgar la condición de :has(#en:target), el id
+   le presta su peso al selector y ya no hay regla local que lo gane.
+   Además, el idioma que NO toca simplemente no se declara: conserva el
+   display que le dio su propia regla, sin tener que repetirlo aquí. */
+html:not(:has(#en:target)) .en{display:none}
+html:has(#en:target) .es{display:none}
+/* Red de seguridad para un navegador sin :has: al menos no salen los dos. */
+@supports not selector(:has(*)){ .en{display:none} }
+html:not(:has(#en:target)) .leng a[href="#es"],
+html:has(#en:target) .leng a[href="#en"]{background:var(--tinta);color:var(--hueso)}
+
+/* ── portada ──────────────────────────────────────────────────────── */
+.portada{padding-top:clamp(40px,7vh,80px)}
+.portada .marco{padding:clamp(26px,5vw,56px)}
+.pastilla{display:inline-flex;align-items:center;gap:9px;font-size:.78rem;
+  font-weight:600;background:rgba(35,33,30,.06);border:1px solid var(--linea);
+  border-radius:999px;padding:7px 15px;color:var(--tinta-70);margin-bottom:20px}
+.pastilla em{font-style:normal;width:7px;height:7px;border-radius:50%;
+  background:var(--verde)}
+.hero-botones{display:flex;flex-wrap:wrap;gap:11px;margin-top:clamp(22px,3.6vh,34px)}
+.cifras-hero{display:flex;flex-wrap:wrap;gap:clamp(18px,3.5vw,44px);
+  margin-top:clamp(26px,4vh,42px);padding-top:clamp(20px,3vh,28px);
+  border-top:1px solid var(--linea)}
+.cifras-hero div{min-width:130px}
+.cifras-hero b{display:block;font-size:clamp(1.5rem,3.4vw,2.1rem);
+  letter-spacing:-.03em;line-height:1}
+.cifras-hero span{display:block;font-size:.84rem;color:var(--tinta-70);margin-top:5px}
+
+/* ── el armado: explicación + pieza viva ──────────────────────────── */
+.modulo{display:grid;gap:clamp(24px,4vw,52px);align-items:center;
+  grid-template-columns:minmax(0,.84fr) minmax(0,1fr)}
+.modulo.alreves{grid-template-columns:minmax(0,1fr) minmax(0,.84fr)}
+.modulo.alreves .dicho{order:2}
+@media (max-width:940px){
+  /* minmax(0,1fr), no 1fr: un «1fr» pelado tiene mínimo auto, y el
+     min-content del teléfono (precios sin partir) estiraba la columna
+     hasta 457px dentro de un ancho de 284. */
+  .modulo,.modulo.alreves{grid-template-columns:minmax(0,1fr)}
+  .modulo.alreves .dicho{order:0}
+}
+.dicho .lista{list-style:none;display:grid;gap:10px;margin-top:18px}
+.dicho .lista li{display:flex;gap:10px;font-size:.96rem;color:var(--tinta-70)}
+.dicho .lista li::before{content:'';flex:none;width:6px;height:6px;margin-top:9px;
+  border-radius:50%;background:var(--arcilla)}
+
+/* ── papel → datos ────────────────────────────────────────────────── */
+.papel-datos{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;
+  align-items:center}
+@media (max-width:520px){
+  .papel-datos{grid-template-columns:minmax(0,1fr)}
+  .pd-flecha{transform:rotate(90deg);justify-self:center}
+}
+.pd-lado{padding:14px;min-width:0}
+.pd-tit{font-size:.66rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--piedra-h);margin-bottom:10px}
+.pd-flecha{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;
+  background:var(--tinta);flex:none}
+.pd-flecha svg{width:18px;height:18px;fill:var(--hueso)}
+/* el inventario viejo: una hoja que se lee como manchas, que es el punto */
+.pd-papel{background:var(--nata);border:1px solid var(--linea);
+  border-radius:var(--r-interno);padding:12px;display:grid;gap:7px}
+.pd-papel p{font-size:.7rem;font-weight:600;color:var(--tinta-66);
+  margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pd-papel span{display:block;height:6px;border-radius:3px;
+  background:rgba(35,33,30,.13)}
+.pd-papel span.corto{width:62%}
+.pd-fichas{display:grid;gap:7px}
+.pd-fichas div{display:flex;align-items:center;gap:8px;background:var(--nata);
+  border:1px solid var(--linea);border-radius:10px;padding:8px 10px}
+.pd-fichas b{font-size:.78rem;font-weight:600;min-width:0;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+.pd-fichas i{margin-left:auto;font-style:normal;font-size:.78rem;font-weight:700;
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* la línea del dominio: un dato, no un alegato */
+.dominio{margin-top:20px;font-size:.92rem;color:var(--tinta-70);max-width:62ch;
+  border-left:2px solid var(--arcilla);padding-left:13px}
+
+/* ── el teléfono ──────────────────────────────────────────────────── */
+.tel{width:min(100%,330px);margin-inline:auto;border-radius:38px;padding:11px;
+  background:linear-gradient(160deg,#3b352d,#211d18);
+  box-shadow:0 40px 70px -26px rgba(48,42,36,.55),
+             0 1px 0 rgba(255,255,255,.18) inset}
+.tel-pantalla{border-radius:28px;overflow:hidden;background:var(--nata);
+  height:clamp(500px,66vh,620px);display:flex;flex-direction:column;
+  position:relative}
+.tel-barra{flex:none;display:flex;align-items:center;gap:7px;padding:9px 15px 5px;
+  font-size:.68rem;font-weight:700;color:var(--tinta-66)}
+.tel-barra .hora{margin-right:auto}
+.tel-cuerpo{flex:1 1 auto;overflow-y:auto;overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch}
+
+/* ── el catálogo ──────────────────────────────────────────────────── */
+.cat-cab{padding:14px 16px 10px;position:sticky;top:0;z-index:3;
+  background:linear-gradient(180deg,var(--nata) 72%,rgba(252,251,248,0));
+  backdrop-filter:blur(6px)}
+.cat-cab h4{font-size:1.18rem;letter-spacing:-.02em;font-weight:700}
+.cat-cab p{font-size:.78rem;color:var(--tinta-66);margin-top:2px}
+.pestanas{display:flex;gap:6px;overflow-x:auto;padding:10px 16px 12px;
+  scrollbar-width:none}
+.pestanas::-webkit-scrollbar{display:none}
+.pestanas button{flex:none;border:1px solid var(--linea);background:transparent;
+  border-radius:999px;padding:7px 14px;font-size:.8rem;font-weight:600;
+  cursor:pointer;color:var(--tinta-70);white-space:nowrap;
+  transition:background .16s,color .16s,border-color .16s,transform .1s}
+.pestanas button:active{transform:scale(.96)}
+.pestanas button[aria-selected="true"]{background:var(--tinta);color:var(--hueso);
+  border-color:var(--tinta)}
+
+/* ── el riel: cómo se acomoda el catálogo ─────────────────────────── */
+/* Va al lado del teléfono a propósito: la pregunta «¿cómo se ve mi catálogo?»
+   se responde tocando, no leyendo una lista de opciones. */
+.con-rail{display:grid;grid-template-columns:auto minmax(0,1fr);
+  gap:clamp(10px,1.6vw,18px);align-items:center}
+.rail{display:flex;flex-direction:column;gap:8px;scroll-margin-top:72px}
+.rail button{display:grid;gap:6px;justify-items:center;width:72px;padding:9px 6px;
+  border-radius:14px;border:1px solid var(--linea);background:rgba(252,251,248,.72);
+  cursor:pointer;color:var(--tinta-70);font-size:.62rem;font-weight:800;
+  letter-spacing:.04em;text-transform:uppercase;line-height:1;
+  transition:background .16s,color .16s,border-color .16s,transform .1s var(--muelle)}
+.rail button:active{transform:scale(.95)}
+.rail button[aria-selected="true"]{background:var(--tinta);color:var(--hueso);
+  border-color:var(--tinta)}
+.rail svg{width:22px;height:22px;fill:currentColor}
+@media (max-width:620px){
+  .con-rail{grid-template-columns:minmax(0,1fr)}
+  .rail{flex-direction:row;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+  .rail::-webkit-scrollbar{display:none}
+  .rail button{flex:none}
+}
+
+/* ── las cuatro disposiciones ─────────────────────────────────────── */
+/* El marcado de cada prod es siempre el mismo: lo que cambia es el CSS.
+   Así el botón «+» y el carrito siguen funcionando en las cuatro. */
+.prods{display:grid;gap:10px;padding:0 14px 18px}
+
+/* las tres que no son tarjetas apilan: foto, texto, y precio en fila */
+.prods.carrusel .prod,.prods.bento .prod,.prods.libre .prod{
+  grid-template-columns:minmax(0,1fr)}
+.prods.carrusel .col-der,.prods.bento .col-der,.prods.libre .col-der{
+  display:flex;align-items:center;gap:8px;justify-items:stretch}
+.prods.carrusel .precio,.prods.bento .precio,.prods.libre .precio{margin-right:auto}
+.prods.carrusel .mas,.prods.bento .mas,.prods.libre .mas{margin-top:0}
+
+/* Una tira por categoría, no una sola fila larga: así se ve un catálogo en
+   carrusel de verdad, y de paso no queda media pantalla vacía debajo. */
+.prods.carrusel{display:grid;gap:16px;padding:2px 0 18px}
+.prods.carrusel .grupo h6{font-size:.7rem;font-weight:800;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--piedra-h);padding:0 14px 8px}
+.prods.carrusel .tira{display:flex;gap:10px;overflow-x:auto;padding:0 14px 2px;
+  scroll-snap-type:x mandatory;scrollbar-width:none}
+.prods.carrusel .tira::-webkit-scrollbar{display:none}
+.prods.carrusel .prod{flex:none;width:150px;scroll-snap-align:start}
+.prods.carrusel .hueco{width:100%;height:92px}
+.prods.carrusel .desc{display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;
+  -webkit-box-orient:vertical;overflow:hidden}
+/* el precio se pega abajo: si no, las tarjetas de nombre largo descuadran
+   la fila entera */
+.prods.carrusel .prod,.prods.bento .prod{grid-template-rows:auto auto 1fr}
+.prods.libre .prod{grid-template-rows:auto auto auto}
+.prods.carrusel .col-der,.prods.bento .col-der{align-self:end}
+/* El agotado no lleva botón «+», así que su columna derecha mide menos y
+   el precio se salía de la línea de la fila. Se le reserva el alto. */
+.prods.carrusel .col-der,.prods.bento .col-der,.prods.libre .col-der{
+  min-height:30px}
+
+.prods.bento{grid-template-columns:1fr 1fr;gap:9px}
+.prods.bento .hueco{width:100%;height:74px}
+/* uno de cada cuatro ocupa el ancho entero: eso es lo que hace un bento
+   y no una cuadrícula. */
+.prods.bento .prod:nth-child(4n+1){grid-column:span 2}
+.prods.bento .prod:nth-child(4n+1) .hueco{height:104px}
+.prods.bento .desc{display:none}
+.prods.bento .prod:nth-child(4n+1) .desc{display:-webkit-box;-webkit-line-clamp:2;
+  line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+.prods.libre{gap:20px}
+/* sin tarjeta: la foto manda y el texto va debajo, nunca encima —sobre el
+   durazno el texto claro no llega al contraste y el oscuro se ensucia. */
+.prods.libre .prod{background:transparent;border:0;padding:0;gap:0}
+.prods.libre .hueco{width:100%;height:clamp(130px,34vw,164px);
+  border-radius:var(--r-interno)}
+.prods.libre h5{font-size:1.04rem;margin-top:11px}
+.prods.libre .desc{font-size:.78rem}
+.prods.libre .col-der{margin-top:9px}
+.prod{display:grid;padding:10px;border-radius:var(--r-interno);
+  background:rgba(243,241,236,.6);border:1px solid rgba(35,33,30,.07);
+  transition:transform .14s var(--muelle),box-shadow .18s}
+/* En tarjetas la ficha va a DOS columnas, no a tres: con el precio en su
+   propia columna, «Camisa de lino» se partía en dos líneas y la
+   descripción caía a cuatro. El precio y el «+» bajan a su propia fila,
+   debajo del texto, y el nombre recupera todo el ancho. */
+.prods.tarjetas .prod{grid-template-columns:72px minmax(0,1fr);
+  grid-template-rows:auto auto;gap:7px 12px;align-items:start}
+.prods.tarjetas .hueco{grid-row:1 / span 2}
+.prods.tarjetas .col-der{display:flex;align-items:center;gap:8px;min-height:30px}
+.prods.tarjetas .precio{margin-right:auto}
+.prods.tarjetas .mas{margin-top:0}
+.prod:active{transform:scale(.985)}
+/* ── el hueco de la foto ──────────────────────────────────────────────
+   Todavía no hay fotos de la tienda, así que el hueco se ve como lo que
+   es: el sitio donde va la suya, y lo dice. El tono lo pone la categoría
+   —no es decoración: hace que la cuadrícula lea como un catálogo y no
+   como diez rectángulos iguales en blanco—. Cuando lleguen las fotos se
+   cambia por background-image y el marcado no se toca.
+
+   display:block explícito porque es un <span>, y a un inline no le aplican
+   ni width ni height: dentro del producto no se nota, porque es un grid y
+   eso blockifica a sus hijos, pero en las tarjetas de la franja, que son
+   bloques normales, saldría de 0 × 0. */
+.hueco{display:block;position:relative;width:72px;height:72px;border-radius:12px;
+  flex:none;overflow:hidden;background-size:cover;background-position:center;
+  background-repeat:no-repeat;
+  background-color:var(--arena);
+  background-image:linear-gradient(145deg,rgba(255,255,255,.55),rgba(0,0,0,.05))}
+.hueco[data-cat="ropa"]{background-color:#d8cdbd}
+.hueco[data-cat="accesorios"]{background-color:#cdc6bb}
+.hueco[data-cat="casa"]{background-color:#c9cdc4}
+.hueco::after{content:attr(data-pie);position:absolute;bottom:4px;left:0;right:0;
+  text-align:center;font-size:.5rem;font-weight:800;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--tinta-66)}
+.hueco.grande::after{font-size:.68rem;bottom:12px}
+/* ── tallas y colores ─────────────────────────────────────────────────
+   Es la diferencia de fondo entre una carta y un catálogo: un plato se
+   pide y ya; un producto se pide en una talla, y esa talla puede estar
+   agotada. La elegida viaja hasta el mensaje de WhatsApp. */
+.tallas{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.tallas button{appearance:none;cursor:pointer;min-width:28px;padding:3px 7px;
+  border-radius:7px;border:1px solid var(--linea);background:var(--nata);
+  font-size:.7rem;font-weight:700;color:var(--tinta-70);line-height:1.3;
+  transition:background .14s,color .14s,border-color .14s,transform .1s}
+.tallas button:active{transform:scale(.92)}
+.tallas button[aria-pressed="true"]{background:var(--tinta);color:var(--nata);
+  border-color:var(--tinta)}
+.tallas button[disabled]{cursor:not-allowed;color:var(--agotado);
+  background:transparent;border-style:dashed;text-decoration:line-through}
+.sin-stock{display:inline-flex;align-items:center;gap:5px;font-size:.6rem;
+  font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--agotado);border:1px solid var(--linea);border-radius:999px;
+  padding:2px 8px;margin-top:7px}
+.prod.agotado .hueco{filter:grayscale(1);opacity:.55}
+.prod.agotado h5,.prod.agotado .precio{color:var(--agotado)}
+
+.prod h5{font-size:.92rem;font-weight:700;letter-spacing:-.01em;line-height:1.2;
+  text-wrap:balance}
+.prod .desc{font-size:.74rem;color:var(--tinta-66);line-height:1.35;margin-top:3px}
+.prod .precio{font-size:.9rem;font-weight:700;white-space:nowrap;
+  font-variant-numeric:tabular-nums}
+/* Sin scope de .prod: el mismo botón vive también en las tarjetas de
+   temporada, y allí se quedaba sin estilo, como una pastilla alta y flaca. */
+.mas{appearance:none;border:0;cursor:pointer;width:30px;height:30px;flex:none;
+  border-radius:50%;background:var(--tinta);color:var(--hueso);font-size:1.05rem;
+  display:grid;place-items:center;line-height:1;padding:0;
+  transition:transform .1s var(--muelle)}
+.prod .mas{margin-top:6px}
+.mas:active{transform:scale(.88)}
+.prod .col-der{display:grid;justify-items:end}
+.prods.tarjetas .col-der{justify-items:stretch}
+
+/* el carrito del teléfono */
+.barra-carrito{flex:none;padding:10px 14px 14px;
+  background:linear-gradient(0deg,var(--nata) 70%,rgba(252,251,248,0));
+  transform:translateY(120%);transition:transform .42s var(--muelle)}
+.barra-carrito.visible{transform:none}
+.barra-carrito .fila{display:flex;align-items:center;gap:10px;
+  background:var(--tinta);color:var(--hueso);border-radius:999px;padding:9px 10px 9px 16px}
+.barra-carrito .n{font-size:.82rem;font-weight:600;opacity:.85}
+.barra-carrito .tot{margin-left:auto;font-weight:700;font-variant-numeric:tabular-nums}
+.barra-carrito .ir{appearance:none;border:0;cursor:pointer;background:var(--arcilla);
+  color:var(--tinta);border-radius:999px;padding:7px 14px;font-size:.82rem;font-weight:700;
+  transition:transform .1s var(--muelle)}
+.barra-carrito .ir:active{transform:scale(.95)}
+
+/* ── el mensaje de WhatsApp que se escribe solo ───────────────────── */
+.wa{padding:16px;display:grid;gap:12px}
+.wa-cab{display:flex;align-items:center;gap:10px}
+.wa-cab .ava{width:38px;height:38px;border-radius:50%;flex:none;
+  background:linear-gradient(145deg,#25d366,#128c7e);display:grid;place-items:center}
+.wa-cab .ava svg{width:21px;height:21px;fill:#fff}
+.wa-cab b{font-size:.92rem;display:block}
+.wa-cab span{font-size:.74rem;color:var(--tinta-66)}
+.globo{background:#dcf8c6;border-radius:14px 14px 4px 14px;padding:11px 13px;
+  font-size:.8rem;line-height:1.5;white-space:pre-wrap;word-break:break-word;
+  min-height:92px;justify-self:end;max-width:92%;
+  box-shadow:0 2px 6px rgba(35,33,30,.1)}
+.globo .cursor{display:inline-block;width:2px;height:1em;background:var(--tinta);
+  vertical-align:-2px;animation:late 1s steps(2,end) infinite}
+@keyframes late{50%{opacity:0}}
+.wa-pie{display:flex;gap:8px;align-items:center;font-size:.74rem;color:var(--tinta-66)}
+
+/* ── el pago ──────────────────────────────────────────────────────── */
+.pago{padding:16px;display:grid;gap:12px}
+.pago[hidden]{display:none}
+.pago .resumen{border:1px solid var(--linea);border-radius:var(--r-interno);
+  padding:12px;display:grid;gap:7px;font-size:.82rem}
+.pago .resumen .l{display:flex;justify-content:space-between;gap:10px}
+.pago .resumen .l.tot{border-top:1px solid var(--linea);padding-top:7px;
+  font-weight:700;font-size:.95rem}
+.pago .resumen .l span:last-child{font-variant-numeric:tabular-nums}
+.medios{display:grid;gap:8px}
+.medio{display:flex;align-items:center;gap:10px;border:1.5px solid var(--linea);
+  border-radius:var(--r-interno);padding:11px 12px;cursor:pointer;
+  font-size:.85rem;font-weight:600;transition:border-color .16s,background .16s,transform .1s}
+.medio:active{transform:scale(.985)}
+.medio[aria-checked="true"]{border-color:var(--tinta);background:rgba(35,33,30,.04)}
+.medio .pto{width:17px;height:17px;border-radius:50%;border:2px solid var(--piedra);
+  flex:none;display:grid;place-items:center}
+.medio[aria-checked="true"] .pto{border-color:var(--tinta)}
+.medio[aria-checked="true"] .pto::after{content:'';width:8px;height:8px;
+  border-radius:50%;background:var(--tinta)}
+.medio .tag{margin-left:auto;font-size:.64rem;font-weight:800;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--piedra-h)}
+/* display:grid le gana a la hoja del navegador para [hidden]: hay que decirlo */
+.aprobado[hidden]{display:none}
+.aprobado{display:grid;place-items:center;gap:10px;text-align:center;padding:26px 16px}
+.aprobado .tick{width:62px;height:62px;border-radius:50%;background:var(--verde);
+  display:grid;place-items:center}
+.aprobado .tick svg{width:30px;height:30px;fill:#fff}
+.aprobado b{font-size:1.1rem}
+.aprobado p{font-size:.82rem;color:var(--tinta-66);max-width:30ch}
+.aprobado p small{display:block;margin-top:6px;font-size:.66rem;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--piedra-h)}
+
+/* ── temporada ────────────────────────────────────────────────────── */
+.tira-nov{display:flex;gap:12px;overflow-x:auto;padding:4px 2px 14px;
+  scroll-snap-type:x mandatory;scrollbar-width:none}
+.tira-nov::-webkit-scrollbar{display:none}
+.nov{flex:none;width:min(292px,76vw);scroll-snap-align:start;padding:14px;
+  border-radius:var(--r-bloque)}
+.nov .hueco{width:100%;height:118px;border-radius:var(--r-interno)}
+.nov h5{font-size:1rem;font-weight:700;margin-top:11px}
+.nov .desc{font-size:.8rem;color:var(--tinta-66);margin-top:4px;line-height:1.4}
+.nov .pie{display:flex;align-items:center;justify-content:space-between;
+  margin-top:11px;gap:8px}
+.nov .precio{font-weight:700;font-variant-numeric:tabular-nums}
+.vigencia{display:inline-flex;align-items:center;gap:6px;font-size:.68rem;
+  font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+  background:rgba(79,122,82,.12);color:var(--verde-texto);border-radius:999px;
+  padding:4px 10px}
+
+/* ── google y tripadvisor ─────────────────────────────────────────── */
+.antes-despues{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))}
+.ficha{padding:16px;border-radius:var(--r-bloque)}
+.ficha .cab{display:flex;align-items:center;gap:8px;font-size:.7rem;font-weight:800;
+  letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}
+.ficha.mal .cab{color:var(--rojo)}
+.ficha.bien .cab{color:var(--verde)}
+.ficha dl{display:grid;gap:9px;font-size:.86rem}
+.ficha .d{display:grid;grid-template-columns:auto 1fr;gap:9px;align-items:start}
+.ficha .d i{font-style:normal;flex:none;width:16px;text-align:center;opacity:.6}
+.ficha .d s{color:var(--rojo);text-decoration-thickness:1.5px}
+/* En el checklist la ✕ y el rojo ya dicen «esto es lo que pasa hoy»; el
+   tachado encima solo estorbaba la lectura de siete líneas seguidas. */
+.ficha .d .no{color:var(--rojo)}
+.ficha .d em{font-style:normal;color:var(--verde);font-weight:600}
+.buscador{padding:14px 16px;border-radius:var(--r-bloque);font-size:.88rem}
+.buscador .q{display:flex;align-items:center;gap:9px;border:1px solid var(--linea);
+  border-radius:999px;padding:9px 15px;font-size:.84rem;color:var(--tinta-70);
+  background:var(--nata)}
+.buscador .res{margin-top:13px;padding-top:13px;border-top:1px solid var(--linea)}
+.buscador .res .url{font-size:.74rem;color:var(--tinta-66)}
+.buscador .res .tit{color:#1a5fb4;font-weight:600;font-size:1rem;margin-top:2px}
+.buscador .res .bajada{font-size:.82rem;color:var(--tinta-70);margin-top:3px}
+.estrellas{color:var(--arcilla-f);letter-spacing:.08em}
+
+/* ── la muestra completa, al final ────────────────────────────────── */
+.completa{padding-inline:0}
+.lienzo{border-radius:var(--r-pared);overflow:hidden;margin-inline:var(--margen);
+  box-shadow:0 50px 100px -34px rgba(58,50,42,.42)}
+.nav-falsa{display:flex;align-items:center;gap:8px;padding:10px 14px;
+  background:rgba(35,33,30,.055);border-bottom:1px solid var(--linea);font-size:.76rem;
+  color:var(--tinta-66)}
+.nav-falsa i{width:10px;height:10px;border-radius:50%;background:var(--piedra);
+  flex:none;font-style:normal}
+.nav-falsa .barra-url{margin-left:8px;background:var(--nata);border-radius:999px;
+  padding:4px 13px;border:1px solid var(--linea)}
+
+/* ── entradas por scroll ──────────────────────────────────────────── */
+/* El reposo es el estado VISIBLE: esconder es lo que añade el guion, para
+   que un fallo o una vista previa sin JavaScript no deje nada en blanco. */
+html.js .sube{opacity:0;transform:translateY(20px)}
+html.js .sube.dentro{opacity:1;transform:none;
+  transition:opacity .66s var(--muelle),transform .66s var(--muelle)}
+
+/* ── el cierre ────────────────────────────────────────────────────── */
+.cierre{padding-top:clamp(40px,7vh,86px)}
+.pregunta{font-size:clamp(1.7rem,4.6vw,3.1rem);max-width:17ch;margin-inline:auto;
+  letter-spacing:-.026em;line-height:1.06}
+.firma-lqs{font-size:clamp(2.6rem,8vw,5rem);font-weight:700;letter-spacing:-.05em;
+  line-height:1;margin-top:clamp(26px,4.5vh,44px);
+  background:linear-gradient(104deg,var(--tinta) 18%,var(--arcilla-f) 92%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  max-width:none}
+.lema{font-size:clamp(1rem,2.4vw,1.3rem);color:var(--tinta-70);margin-top:6px;
+  max-width:none}
+.volver{margin-top:clamp(26px,4vh,40px)}
+
+footer{position:relative;z-index:2;padding:clamp(34px,6vh,64px) var(--margen);
+  border-top:1px solid var(--linea);font-size:.86rem;color:var(--tinta-70)}
+footer .centro{display:grid;gap:11px}
+footer b{color:var(--tinta)}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  html.js .sube{opacity:1;transform:none;transition:none}
+  .barra-carrito{transition:none}
+  .globo .cursor{animation:none}
+}
+@media (prefers-reduced-transparency:reduce){
+  .vidrio,.vidrio.hondo{background:var(--nata);
+    -webkit-backdrop-filter:none;backdrop-filter:none}
+  .chapa{background:var(--hueso);-webkit-backdrop-filter:none;backdrop-filter:none}
+}
+@media (prefers-contrast:more){
+  :root{--tinta-70:#23211e;--tinta-66:#413d37;--linea:rgba(35,33,30,.42)}
+  .grano{display:none}
+  .vidrio,.vidrio.hondo{background:var(--nata)}
+}
+</style>
+</head>
+<body>
+
+<div class="cielo" aria-hidden="true"></div>
+<div class="grano" aria-hidden="true"></div>
+
+<span class="ancla" id="es"></span>
+<span class="ancla" id="en"></span>
+
+<header class="chapa">
+  <p class="firma">LQS <i>· tiendas y almacenes</i></p>
+  <nav>
+    <div class="leng">
+      <a href="#es" hreflang="es" lang="es">ES</a>
+      <a href="#en" hreflang="en" lang="en">EN</a>
+    </div>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ══ portada ═══════════════════════════════════════════════════ -->
+  <section class="portada" id="inicio">
+    <div class="centro">
+      <div class="vidrio hondo marco">
+        <p class="pastilla"><em></em>
+          <span class="es">Muestra de estilo para tiendas y almacenes</span>
+          <span class="en">Style sample for shops and stores</span></p>
+        <h1>
+          <span class="es">Tu tienda, abierta a todo el país.</span>
+          <span class="en">Your shop, open to the whole country.</span></h1>
+        <p class="grande sep tenue" style="max-width:52ch">
+          <span class="es">El catálogo con tallas y existencias, el pedido, el
+            pago y el envío. Todo junto, y todo funcionando: lo que sigue no es
+            una imagen de una página, es la página.</span>
+          <span class="en">The catalogue with sizes and stock, the order, the
+            payment and the shipping. All together and all working: what follows
+            is not a picture of a site, it is the site.</span></p>
+        <div class="hero-botones">
+          <a class="bot" href="#armado">
+            <span class="es">Ver el recorrido</span><span class="en">See the walkthrough</span>
+          </a>
+          <a class="bot claro" href="#resumen">
+            <span class="es">Ir al resumen</span><span class="en">Go to the summary</span>
+          </a>
+        </div>
+        <div class="cifras-hero">
+          <div><b>7</b><span class="es">módulos de una misma solución</span>
+            <span class="en">modules of a single solution</span></div>
+          <div><b>$0</b><span class="es">de comisión por cada venta</span>
+            <span class="en">commission on every sale</span></div>
+          <div><b>24/7</b><span class="es">tu catálogo, siempre abierto</span>
+            <span class="en">your catalogue, always open</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 1 · el catálogo ═══════════════════════════════════════════ -->
+  <section id="armado">
+    <div class="centro modulo">
+      <div class="dicho">
+        <p class="rotulo"><b>1</b>
+          <span class="es">El catálogo</span><span class="en">The catalogue</span></p>
+        <h2><span class="es">Todo lo que vendes, con talla, precio y existencias</span>
+          <span class="en">Everything you sell, with size, price and stock</span></h2>
+        <p class="grande sep tenue">
+          <span class="es">Un enlace que se abre y se recorre con el pulgar, en vez
+            de un álbum de fotos que nadie termina de ver. Cada producto trae su
+            precio escrito, sus tallas y lo que queda de cada una.</span>
+          <span class="en">A link that opens and scrolls with a thumb, instead of a
+            photo album nobody gets to the end of. Every item carries its price in
+            writing, its sizes, and how many are left of each.</span></p>
+        <ul class="lista">
+          <li><span class="es"><b>La talla agotada se marca y deja de venderse.</b>
+            Pruébalo: la XL de la camisa está tachada.</span>
+            <span class="en"><b>A sold-out size is marked and stops selling.</b>
+            Try it: the shirt's XL is struck through.</span></li>
+          <li><span class="es">Categorías que se filtran sin recargar.</span>
+            <span class="en">Categories that filter without reloading.</span></li>
+          <li><span class="es">Precios en pesos, escritos: no hay que contestarlos
+            cien veces al día.</span>
+            <span class="en">Prices in pesos, in writing: no answering the same
+            question a hundred times a day.</span></li>
+          <li><span class="es">Subir un producto o agotarlo es un clic, no rehacer
+            el catálogo.</span>
+            <span class="en">Adding an item or marking it out of stock is one
+            click, not a redesign.</span></li>
+          <li><span class="es"><b>Cuatro formas de acomodarlo</b>, ahí al lado:
+            tarjetas, carrusel, bento o libre. Escógela y míralo cambiar.</span>
+            <span class="en"><b>Four ways to lay it out</b>, right there: cards,
+            carousel, bento or free. Pick one and watch it change.</span></li>
+        </ul>
+      </div>
+      <div class="pieza">
+        <div class="con-rail">
+        <div class="rail" role="tablist" id="rail"
+             aria-label="Forma de acomodar el catálogo"></div>
+        <div class="tel">
+          <div class="tel-pantalla">
+            <div class="tel-barra"><span class="hora">12:41</span><span>LTE</span><span>100%</span></div>
+            <div class="tel-cuerpo" id="telCuerpo">
+              <div class="cat-cab">
+                <h4>Nómada</h4>
+                <p><span class="es">Ropa, accesorios y casa · Medellín</span>
+                  <span class="en">Clothing, accessories and home · Medellín</span></p>
+              </div>
+              <div class="pestanas" role="tablist" id="pestanas"></div>
+              <div class="prods" id="prods"></div>
+            </div>
+            <div class="barra-carrito" id="barraCarrito">
+              <div class="fila">
+                <span class="n" id="carritoN">0</span>
+                <span class="tot" id="carritoTot">$0</span>
+                <button class="ir" id="irPedido" type="button">
+                  <span class="es">Pedir</span><span class="en">Order</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 2 · el pedido ═════════════════════════════════════════════ -->
+  <section>
+    <div class="centro modulo alreves">
+      <div class="pieza">
+        <div class="vidrio" style="padding:14px">
+          <div class="wa">
+            <div class="wa-cab">
+              <span class="ava"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm4.6 12.1c-.3-.1-1.5-.75-1.7-.83-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.1-.2 0-.4.1-.5l.4-.5.3-.5v-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-.9.9-.9 2.1s.9 2.5 1 2.6c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.2.7 3 .6.5 0 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2 0-.1-.2-.2-.4-.3Z"/></svg></span>
+              <span><b>Nómada</b>
+                <span class="es">Pedidos · responde en minutos</span>
+                <span class="en">Orders · replies in minutes</span></span>
+            </div>
+            <div class="globo" id="globoWa"></div>
+            <div class="wa-pie">
+              <button class="bot claro" id="btnEnvio" type="button" aria-pressed="false"
+                      style="padding:8px 14px;font-size:.8rem">
+                <span class="es">Enviar a otra ciudad</span>
+                <span class="en">Ship to another city</span>
+              </button>
+              <button class="bot claro" id="btnRehacer" type="button"
+                      style="padding:8px 14px;font-size:.8rem">
+                <span class="es">Escribir de nuevo</span><span class="en">Type again</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dicho">
+        <p class="rotulo"><b>2</b>
+          <span class="es">El pedido</span><span class="en">The order</span></p>
+        <h2><span class="es">El pedido llega a WhatsApp con la talla puesta</span>
+          <span class="en">The order reaches WhatsApp with the size already in</span></h2>
+        <p class="grande sep tenue">
+          <span class="es">El cliente escoge en el catálogo y el mensaje se escribe
+            solo: el producto, la talla, la cantidad, el total y la ciudad si hay
+            envío. Se acaban los «¿en qué talla era?» y los cambios por error.</span>
+          <span class="en">The customer picks from the catalogue and the message
+            writes itself: item, size, quantity, total, and the city if it ships.
+            No more «which size was it?» and no more wrong-size returns.</span></p>
+        <ul class="lista">
+          <li><span class="es">Sin comisión por venta: el chat y el cobro son tuyos.</span>
+            <span class="en">No commission per sale: the chat and the money are yours.</span></li>
+          <li><span class="es">Recoger en tienda o despachar a otra ciudad, con un botón.</span>
+            <span class="en">Store pickup or shipping to another city, with one button.</span></li>
+          <li><span class="es">Queda el historial en el propio WhatsApp de la tienda.</span>
+            <span class="en">The history stays in the shop's own WhatsApp.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 3 · el pago ═══════════════════════════════════════════════ -->
+  <section>
+    <div class="centro modulo">
+      <div class="dicho">
+        <p class="rotulo"><b>3</b>
+          <span class="es">El pago</span><span class="en">Payment</span></p>
+        <h2><span class="es">Wompi o PSE, cobrando antes de despachar</span>
+          <span class="en">Wompi or PSE, charged before you ship</span></h2>
+        <p class="grande sep tenue">
+          <span class="es">El contraentrega que se arrepiente te deja el paquete
+            devuelto y el flete pagado. El que ya pagó, no se arrepiente. El
+            cliente paga con tarjeta, con Nequi o con débito bancario, y el envío
+            va sumado en la misma cuenta.</span>
+          <span class="en">A cash-on-delivery buyer who changes their mind leaves
+            you a returned parcel and a paid freight. One who already paid does
+            not. The customer pays by card, Nequi or bank debit, and the shipping
+            is added into the same total.</span></p>
+        <ul class="lista">
+          <li><span class="es">Tarjeta, Nequi y PSE en la misma pantalla.</span>
+            <span class="en">Card, Nequi and PSE on the same screen.</span></li>
+          <li><span class="es">El envío entra calculado en el total, no en una
+            conversación aparte.</span>
+            <span class="en">Shipping is calculated into the total, not haggled
+            in a separate chat.</span></li>
+          <li><span class="es">La confirmación llega sola, con la talla y la
+            dirección, lista para empacar.</span>
+            <span class="en">The confirmation arrives on its own, with the size
+            and the address, ready to pack.</span></li>
+        </ul>
+      </div>
+      <div class="pieza">
+        <div class="tel">
+          <div class="tel-pantalla">
+            <div class="tel-barra"><span class="hora">12:46</span><span>LTE</span><span>100%</span></div>
+            <div class="tel-cuerpo">
+              <div class="cat-cab">
+                <h4><span class="es">Pagar el pedido</span><span class="en">Pay the order</span></h4>
+                <p><span class="es">Nómada · pedido n.º 1182</span>
+                  <span class="en">Nómada · order no. 1182</span></p>
+              </div>
+              <div class="pago" id="zonaPago">
+                <div class="resumen" id="resumenPago"></div>
+                <div class="medios" role="radiogroup" aria-label="Medio de pago">
+                  <div class="medio" role="radio" aria-checked="true" tabindex="0" data-medio="wompi">
+                    <span class="pto"></span>Wompi
+                    <span class="tag">
+                      <span class="es">Tarjeta · Nequi</span><span class="en">Card · Nequi</span></span>
+                  </div>
+                  <div class="medio" role="radio" aria-checked="false" tabindex="0" data-medio="pse">
+                    <span class="pto"></span>PSE
+                    <span class="tag">
+                      <span class="es">Débito bancario</span><span class="en">Bank debit</span></span>
+                  </div>
+                  <div class="medio" role="radio" aria-checked="false" tabindex="0" data-medio="contraentrega">
+                    <span class="pto"></span>
+                    <span class="es">Contraentrega</span><span class="en">Cash on delivery</span>
+                  </div>
+                </div>
+                <button class="bot acento" id="btnPagar" type="button" style="justify-content:center">
+                  <span class="es">Pagar</span><span class="en">Pay</span>
+                  <span id="montoPagar"></span>
+                </button>
+              </div>
+              <!-- La confirmación es un hermano que se muestra, no un innerHTML
+                   que reemplaza: así los botones del pago nunca se quedan sin
+                   escuchas y el cambio de idioma los sigue alcanzando. -->
+              <div class="aprobado" id="zonaAprobado" hidden>
+                <span class="tick"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg></span>
+                <b><span class="es">Pago aprobado</span><span class="en">Payment approved</span></b>
+                <p><span class="es">El pedido ya está en la lista de empaque.</span>
+                  <span class="en">The order is already on the packing list.</span>
+                  <small><span class="es">Demostración · no se cobra</span>
+                    <span class="en">Demo · nothing is charged</span></small></p>
+                <button class="bot claro" type="button" id="btnVolverPago" style="margin-top:4px">
+                  <span class="es">Volver</span><span class="en">Back</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 4 · novedades ═════════════════════════════════════════════ -->
+  <section>
+    <div class="centro">
+      <p class="rotulo sube"><b>4</b>
+        <span class="es">Novedades</span><span class="en">What's new</span></p>
+      <h2 class="sube"><span class="es">Lo que acaba de llegar va primero</span>
+        <span class="en">What just arrived goes first</span></h2>
+      <p class="grande sep tenue sube" style="max-width:58ch">
+        <span class="es">Una franja aparte para lo nuevo, la rebaja y las últimas
+          unidades. Tiene su propia vigencia: cuando se vence, desaparece sola y
+          nadie tiene que acordarse de bajarla. Lo que en Instagram se pierde en
+          el feed a los tres días, aquí sigue arriba mientras tenga sentido.</span>
+        <span class="en">A separate strip for new arrivals, markdowns and last
+          units. It carries its own expiry: when it lapses it disappears on its
+          own and nobody has to remember to take it down. What sinks into the
+          feed in three days stays up here for as long as it makes sense.</span></p>
+      <div class="tira-nov sube" id="tiraNov"></div>
+      <div class="hero-botones sube">
+        <button class="bot claro" id="btnTanda" type="button">
+          <span class="es">Cambiar la franja</span><span class="en">Switch the strip</span>
+        </button>
+        <p class="vigencia" id="vigencia"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 5 y 6 · que te encuentren ════════════════════════════════ -->
+  <section>
+    <div class="centro">
+      <p class="rotulo sube"><b>5</b>
+        <span class="es">Que te encuentren</span><span class="en">Getting found</span></p>
+      <h2 class="sube"><span class="es">Primero buscan, y después compran</span>
+        <span class="en">They search first, and buy second</span></h2>
+      <p class="grande sep tenue sube" style="max-width:58ch">
+        <span class="es">Alguien escribe «dónde comprar ropa de lino en Medellín»
+          y decide en los primeros resultados. Si no apareces ahí, no es que te
+          hayan descartado: es que no te vieron.</span>
+        <span class="en">Someone types «where to buy linen clothing in Medellín»
+          and decides within the first few results. If you are not there, it is
+          not that they passed on you: they never saw you.</span></p>
+
+      <div class="buscador vidrio sube" style="margin-top:24px">
+        <div class="q">
+          <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" style="fill:var(--tinta-66)"><path d="M10 2a8 8 0 1 0 4.9 14.3l5.4 5.4 1.4-1.4-5.4-5.4A8 8 0 0 0 10 2Zm0 2a6 6 0 1 1 0 12 6 6 0 0 1 0-12Z"/></svg>
+          <span class="es">dónde comprar ropa de lino en medellín</span>
+          <span class="en">where to buy linen clothing in medellín</span>
+        </div>
+        <div class="res">
+          <p class="url">nomada.com.co</p>
+          <p class="tit">Nómada · Ropa, accesorios y casa en Medellín</p>
+          <p class="bajada">
+            <span class="estrellas">★★★★☆</span> 4,7 · 184
+            <span class="es">reseñas · Abierto · Cierra a las 7:00 p. m. · Envíos a todo el país</span>
+            <span class="en">reviews · Open · Closes 7:00 p.m. · Ships nationwide</span>
+          </p>
+        </div>
+      </div>
+
+      <p class="rotulo sube" style="margin-top:clamp(34px,5vh,54px)"><b>6</b>
+        <span class="es">Tu ficha y tus redes</span>
+        <span class="en">Your listing and your socials</span></p>
+      <div class="antes-despues sube">
+        <div class="ficha solido mal">
+          <p class="cab">
+            <span class="es">Cómo está hoy</span><span class="en">As it is today</span></p>
+          <dl>
+            <div class="d"><i>◷</i><span><s>
+              <span class="es">Horario: sin confirmar desde hace dos años</span>
+              <span class="en">Hours: unconfirmed for two years</span></s></span></div>
+            <div class="d"><i>☏</i><span><s>
+              <span class="es">Un fijo que ya nadie contesta, y ningún WhatsApp</span>
+              <span class="en">A landline nobody answers, and no WhatsApp</span></s></span></div>
+            <div class="d"><i>▣</i><span><s>
+              <span class="es">Cuatro fotos, dos de una colección que ya no está</span>
+              <span class="en">Four photos, two of a collection long gone</span></s></span></div>
+            <div class="d"><i>▤</i><span><s>
+              <span class="es">El catálogo, en historias que se borran a las 24 horas</span>
+              <span class="en">The catalogue, in stories that vanish in 24 hours</span></s></span></div>
+            <div class="d"><i>☆</i><span><s>
+              <span class="es">Reseñas sin responder desde hace un año</span>
+              <span class="en">Reviews unanswered for a year</span></s></span></div>
+          </dl>
+        </div>
+        <div class="ficha solido bien">
+          <p class="cab">
+            <span class="es">Cómo queda</span><span class="en">How it ends up</span></p>
+          <dl>
+            <div class="d"><i>◷</i><span><em>
+              <span class="es">Horario real, con festivos</span>
+              <span class="en">Real hours, holidays included</span></em></span></div>
+            <div class="d"><i>☏</i><span><em>
+              <span class="es">El WhatsApp de ventas, con botón directo</span>
+              <span class="en">The sales WhatsApp, one tap away</span></em></span></div>
+            <div class="d"><i>▣</i><span><em>
+              <span class="es">Fotos propias del producto, la vitrina y la fachada</span>
+              <span class="en">Own photos of the product, the window and the door</span></em></span></div>
+            <div class="d"><i>▤</i><span><em>
+              <span class="es">El catálogo enlazado, el mismo de arriba</span>
+              <span class="en">The catalogue linked — the same one above</span></em></span></div>
+            <div class="d"><i>★</i><span><em>
+              <span class="es">Reseñas respondidas, también las malas</span>
+              <span class="en">Reviews answered, the bad ones too</span></em></span></div>
+          </dl>
+        </div>
+      </div>
+      <p class="grande sep tenue sube" style="margin-top:20px">
+        <span class="es">Y el catálogo es uno solo: el mismo que alimenta la
+          página alimenta la ficha de Google y la tienda de Instagram y Facebook.
+          Un precio se cambia en un sitio y cambia en los tres.</span>
+        <span class="en">And there is only one catalogue: the same one that feeds
+          the page feeds the Google listing and the Instagram and Facebook shop.
+          Change a price in one place and it changes in all three.</span></p>
+    </div>
+  </section>
+
+  <!-- ══ 7 · del inventario al catálogo ═══════════════════════════ -->
+  <section>
+    <div class="centro modulo">
+      <div class="dicho">
+        <p class="rotulo"><b>7</b>
+          <span class="es">El inventario</span><span class="en">The inventory</span></p>
+        <h2><span class="es">De la hoja de cálculo a un catálogo</span>
+          <span class="en">From the spreadsheet to a catalogue</span></h2>
+        <p class="grande sep tenue">
+          <span class="es">Nos pasas el inventario como lo tengas —una hoja de
+            cálculo, un cuaderno o las fotos del celular— y lo convertimos en
+            datos: cada producto con su nombre, sus tallas, su precio y lo que
+            queda. A partir de ahí sirve para todo, y agotar una talla es un
+            clic en un solo sitio.</span>
+          <span class="en">Send us the inventory however you keep it — a
+            spreadsheet, a notebook or the photos on your phone — and we turn it
+            into data: each item with its name, its sizes, its price and what is
+            left. From then on it feeds everything, and marking a size sold out
+            is one click in one place.</span></p>
+        <ul class="lista">
+          <li><span class="es">La página, la ficha de Google y la tienda de
+            Instagram, con el mismo catálogo.</span>
+            <span class="en">The page, the Google listing and the Instagram shop,
+            all one catalogue.</span></li>
+          <li><span class="es">Precios en pesos, bien escritos, sin erratas
+            heredadas de la hoja.</span>
+            <span class="en">Prices in pesos, properly written, with no typos
+            inherited from the sheet.</span></li>
+          <li><span class="es">Lo agotado deja de venderse el mismo día, no la
+            semana que viene.</span>
+            <span class="en">What runs out stops selling the same day, not next
+            week.</span></li>
+        </ul>
+      </div>
+      <div class="pieza">
+        <div class="papel-datos">
+          <div class="pd-lado vidrio">
+            <p class="pd-tit"><span class="es">Lo que tienes hoy</span>
+              <span class="en">What you have today</span></p>
+            <div class="pd-papel">
+              <p>inventario_2.xlsx</p>
+              <span></span><span></span><span></span>
+              <span class="corto"></span><span></span><span class="corto"></span>
+            </div>
+          </div>
+          <div class="pd-flecha" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M13.3 5.3 11.9 6.7 16.2 11H3v2h13.2l-4.3 4.3 1.4 1.4L20 12z"/></svg>
+          </div>
+          <div class="pd-lado vidrio">
+            <p class="pd-tit"><span class="es">Lo que queda</span>
+              <span class="en">What it becomes</span></p>
+            <div class="pd-fichas">
+              <div><b>Camisa de lino</b><i>$189.000</i></div>
+              <div><b>Pantalón ancho</b><i>$229.000</i></div>
+              <div><b>Bolso de cuero</b><i>$480.000</i></div>
+              <div><b>Manta de lana</b><i>$290.000</i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ con y sin LQS ═════════════════════════════════════════════ -->
+  <section>
+    <div class="centro">
+      <p class="rotulo sube">
+        <span class="es">La diferencia</span><span class="en">The difference</span></p>
+      <h2 class="sube"><span class="es">Un día cualquiera, con y sin LQS</span>
+        <span class="en">An ordinary day, with and without LQS</span></h2>
+
+      <div class="antes-despues sube" style="margin-top:24px">
+        <div class="ficha solido mal">
+          <p class="cab">
+            <span class="es">Sin LQS</span><span class="en">Without LQS</span></p>
+          <dl>
+            <div class="d"><i>✕</i><span class="no">
+              <span class="es">El catálogo es un álbum de WhatsApp que nadie termina de ver</span>
+              <span class="en">The catalogue is a WhatsApp album nobody scrolls to the end of</span></span></div>
+            <div class="d"><i>✕</i><span class="no">
+              <span class="es">«¿Cuánto vale?» cien veces al día por mensaje directo</span>
+              <span class="en">«How much is it?» a hundred times a day by direct message</span></span></div>
+            <div class="d"><i>✕</i><span class="no">
+              <span class="es">Vendes una talla que ya no está en bodega</span>
+              <span class="en">You sell a size that is no longer in the stockroom</span></span></div>
+            <div class="d"><i>✕</i><span class="no">
+              <span class="es">El de otra ciudad se cae en «¿y cuánto sale el envío?»</span>
+              <span class="en">The out-of-town buyer drops off at «how much is shipping?»</span></span></div>
+            <div class="d"><i>✕</i><span class="no">
+              <span class="es">En Google no apareces, o apareces con la dirección vieja</span>
+              <span class="en">On Google you are missing, or you are there with the old address</span></span></div>
+            <div class="d"><i>✕</i><span class="no">
+              <span class="es">La comisión del marketplace en cada venta</span>
+              <span class="en">The marketplace commission on every sale</span></span></div>
+            <div class="d"><i>✕</i><span class="no">
+              <span class="es">Las fotos buenas se pierden en el feed a los tres días</span>
+              <span class="en">The good photos sink into the feed in three days</span></span></div>
+          </dl>
+        </div>
+        <div class="ficha solido bien">
+          <p class="cab">
+            <span class="es">Con LQS</span><span class="en">With LQS</span></p>
+          <dl>
+            <div class="d"><i>✓</i><span><em>
+              <span class="es">Un catálogo con precio, talla y existencias, en un enlace</span>
+              <span class="en">A catalogue with price, size and stock, in one link</span></em></span></div>
+            <div class="d"><i>✓</i><span><em>
+              <span class="es">El precio está escrito: no hay que contestarlo</span>
+              <span class="en">The price is in writing: no need to answer it</span></em></span></div>
+            <div class="d"><i>✓</i><span><em>
+              <span class="es">La talla agotada se marca y deja de venderse</span>
+              <span class="en">A sold-out size is marked and stops selling</span></em></span></div>
+            <div class="d"><i>✓</i><span><em>
+              <span class="es">El envío nacional va calculado dentro del pedido</span>
+              <span class="en">Nationwide shipping is calculated inside the order</span></em></span></div>
+            <div class="d"><i>✓</i><span><em>
+              <span class="es">Apareces en Google con dirección, horario y catálogo</span>
+              <span class="en">You show on Google with address, hours and catalogue</span></em></span></div>
+            <div class="d"><i>✓</i><span><em>
+              <span class="es">$0 de comisión: la venta y el cobro son tuyos</span>
+              <span class="en">$0 commission: the sale and the money are yours</span></em></span></div>
+            <div class="d"><i>✓</i><span><em>
+              <span class="es">Tu catálogo vive en tu página, no en el feed de nadie</span>
+              <span class="en">Your catalogue lives on your page, not in anyone else’s feed</span></em></span></div>
+          </dl>
+        </div>
+      </div>
+
+      <p class="dominio sube">
+        <span class="es">Al valor del trabajo se suma el del dominio —el nombre
+          de la página—, que varía según el que se escoja.</span>
+        <span class="en">On top of the work, there is the domain — the site's
+          name — which varies depending on which one you choose.</span></p>
+    </div>
+  </section>
+  <!-- ══ el resumen ═══════════════════════════════════════════════ -->
+  <section class="completa" id="resumen">
+    <div class="centro" style="padding-inline:var(--margen);margin-bottom:22px">
+      <p class="rotulo sube">
+        <span class="es">El resumen</span><span class="en">The summary</span></p>
+      <h2 class="sube"><span class="es">Lo que gana tu tienda</span>
+        <span class="en">What your shop gains</span></h2>
+      <p class="grande sep tenue sube" style="max-width:52ch">
+        <span class="es">Esto es lo que queda armado.</span>
+        <span class="en">This is what gets built.</span></p>
+    </div>
+    <div class="lienzo vidrio hondo sube">
+      <div class="nav-falsa"><i></i><i></i><i></i>
+        <span class="barra-url">nomada.com.co</span></div>
+      <div style="padding:clamp(20px,4vw,44px);display:grid;gap:clamp(20px,3.5vw,38px)">
+        <div class="modulo" style="align-items:start">
+          <div>
+            <h3 style="font-size:clamp(1.5rem,3.6vw,2.2rem);letter-spacing:-.03em">
+              Nómada</h3>
+            <p class="tenue sep">
+              <span class="es">Ropa, accesorios y casa. Medellín, Laureles.
+                Envíos a todo el país.</span>
+              <span class="en">Clothing, accessories and home. Medellín,
+                Laureles. Nationwide shipping.</span></p>
+            <div class="hero-botones">
+              <a class="bot" href="#armado"><span class="es">Ver el catálogo</span>
+                <span class="en">See the catalogue</span></a>
+              <a class="bot claro" href="#armado"><span class="es">Pedir por WhatsApp</span>
+                <span class="en">Order on WhatsApp</span></a>
+            </div>
+          </div>
+          <!-- Marcado estático a propósito: este hueco se ve aunque el guion
+               no corra, que es donde más falta hace, en una vista previa. -->
+          <div class="hueco grande" data-pie="aquí va la foto de tu vitrina"
+               style="width:100%;height:clamp(210px,30vw,340px);
+                      border-radius:var(--r-bloque)">
+          </div>
+        </div>
+        <div id="resumenFinal" class="antes-despues"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ el cierre ═════════════════════════════════════════════════ -->
+  <section class="cierre">
+    <div class="centro">
+      <div class="vidrio hondo sube" style="padding:clamp(30px,6vw,70px);text-align:center">
+        <h2 class="pregunta">
+          <span class="es">¿Qué esperas para que tu negocio alcance todo su
+            potencial?</span>
+          <span class="en">What are you waiting for to take your business to its
+            full potential?</span></h2>
+        <p class="firma-lqs">LQS</p>
+        <p class="lema">
+          <span class="es">el mejor amigo de tus ideas</span>
+          <span class="en">your ideas' best friend</span></p>
+        <a class="bot claro volver" href="#inicio">
+          <span class="es">Volver al inicio</span><span class="en">Back to the top</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="centro">
+    <p><b>LQS</b>
+      <span class="es">· Medellín</span><span class="en">· Medellín</span></p>
+    <p><span class="es">Nómada es una tienda de ejemplo: los productos, los
+      precios y las reseñas son de muestra. Los recuadros marcados «tu foto»
+      son el sitio donde entran las fotos de tu tienda, y cambiarlas no toca
+      nada más.</span>
+      <span class="en">Nómada is an example shop: the products, prices and
+      reviews are samples. The slots marked «tu foto» are where your shop’s own
+      photographs go, and swapping them touches nothing else.</span></p>
+  </div>
+</footer>
+
+<script>
+(function(){
+'use strict';
+var raiz = document.documentElement;
+raiz.classList.add('js');
+var quieto = matchMedia('(prefers-reduced-motion:reduce)').matches;
+var $ = function(s){ return document.querySelector(s); };
+
+/* ══ pesos colombianos ═══════════════════════════════════════════════
+   Separador de miles con punto, como se escribe aquí: $32.000. No se usa
+   toLocaleString a secas porque según el idioma del navegador saldría
+   «32,000», que en Colombia se lee como treinta y dos. */
+function pesos(n){
+  return '$' + Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+
+/* ══ el catálogo ═════════════════════════════════════════════════════
+   La diferencia de fondo con una carta: un producto no se pide a secas,
+   se pide en una talla o un color, y esa variante puede estar agotada.
+   Por eso cada ficha trae `tipo` (cómo se llama la variante), `ops` (las
+   que existen) y `agot` (las que no hay). Lo agotado no se esconde: se
+   marca. Esconderlo haría creer que el catálogo es más corto, y quien ya
+   vio la foto en Instagram volvería a preguntar por mensaje. */
+var CATALOGO = [
+  {cat:'ropa', id:'camisa',
+   nom:'Camisa de lino', en:'Linen shirt',
+   d:'Lino lavado, corte amplio, botón de concha',
+   de:'Washed linen, relaxed cut, shell buttons',
+   p:189000, tipo:'Talla', tipoEn:'Size', ops:['S','M','L','XL'], agot:['XL']},
+  {cat:'ropa', id:'pantalon',
+   nom:'Pantalón ancho', en:'Wide-leg trousers',
+   d:'Algodón pesado, pretina de botón, bolsillo oculto',
+   de:'Heavy cotton, button waist, hidden pocket',
+   p:229000, tipo:'Talla', tipoEn:'Size', ops:['S','M','L','XL'], agot:[]},
+  {cat:'ropa', id:'saco',
+   nom:'Saco tejido a mano', en:'Hand-knitted jumper',
+   d:'Lana virgen, tejido en Marinilla, dos semanas de trabajo',
+   de:'Virgin wool, knitted in Marinilla, two weeks of work',
+   p:320000, tipo:'Talla', tipoEn:'Size', ops:['S','M','L'], agot:['S','L']},
+  {cat:'ropa', id:'vestido',
+   nom:'Vestido cruzado', en:'Wrap dress',
+   d:'Viscosa de bambú, cruzado al frente, cinturón del mismo paño',
+   de:'Bamboo viscose, front wrap, self-fabric belt',
+   p:265000, tipo:'Talla', tipoEn:'Size', ops:['XS','S','M','L'], agot:[]},
+  /* Agotado del todo, a propósito: es la prueba más clara de que el
+     catálogo conoce las existencias. No se esconde —se marca— y se queda
+     sin botón de añadir, que es lo que evita la venta que no se puede
+     despachar. */
+  {cat:'ropa', id:'chaqueta',
+   nom:'Chaqueta de lona', en:'Canvas jacket',
+   d:'Lona encerada, forro de franela, cuatro bolsillos',
+   de:'Waxed canvas, flannel lining, four pockets',
+   p:395000, tipo:'Talla', tipoEn:'Size', ops:['S','M','L'], agot:['S','M','L']},
+  {cat:'accesorios', id:'bolso',
+   nom:'Bolso de cuero', en:'Leather bag',
+   d:'Cuero curtido al vegetal, costura a mano, forro de lona',
+   de:'Vegetable-tanned leather, hand-stitched, canvas lining',
+   p:480000, tipo:'Color', tipoEn:'Colour', ops:['Miel','Negro'], agot:[]},
+  {cat:'accesorios', id:'cinturon',
+   nom:'Cinturón trenzado', en:'Braided belt',
+   d:'Trenzado a mano, hebilla de latón macizo',
+   de:'Hand-braided, solid brass buckle',
+   p:135000, tipo:'Talla', tipoEn:'Size', ops:['85','90','95','100'], agot:['85']},
+  {cat:'accesorios', id:'panuelo',
+   nom:'Pañuelo de seda', en:'Silk scarf',
+   d:'Seda natural, estampado propio, dobladillo a mano',
+   de:'Natural silk, own print, hand-rolled hem',
+   p:98000, tipo:'Color', tipoEn:'Colour', ops:['Arcilla','Hueso','Oliva'], agot:[]},
+  {cat:'casa', id:'manta',
+   nom:'Manta de lana', en:'Wool blanket',
+   d:'Lana de oveja, telar de pedal, 140 × 200 cm',
+   de:'Sheep wool, pedal loom, 140 × 200 cm',
+   p:290000, tipo:'Color', tipoEn:'Colour', ops:['Crudo','Gris'], agot:[]},
+  {cat:'casa', id:'vela',
+   nom:'Vela de cera de soya', en:'Soy wax candle',
+   d:'Cera de soya, mecha de algodón, 40 horas',
+   de:'Soy wax, cotton wick, 40 hours',
+   p:64000, tipo:'Aroma', tipoEn:'Scent', ops:['Higo','Cedro'], agot:[]}
+];
+var CATS = [
+  {id:'todo', es:'Todo', en:'All'},
+  {id:'ropa', es:'Ropa', en:'Clothing'},
+  {id:'accesorios', es:'Accesorios', en:'Accessories'},
+  {id:'casa', es:'Casa', en:'Home'}
+];
+
+/* Un producto sin ninguna variante disponible está agotado del todo. */
+function hayStock(p){ return p.ops.some(function(o){ return p.agot.indexOf(o) < 0; }); }
+function primeraLibre(p){
+  for (var i = 0; i < p.ops.length; i++)
+    if (p.agot.indexOf(p.ops[i]) < 0) return p.ops[i];
+  return null;
+}
+
+/* Las cuatro formas de acomodar el catálogo. El dibujito importa: dice la
+   forma antes de leer la palabra, que es justo lo que se está escogiendo. */
+var FORMAS = [
+  {id:'tarjetas', es:'Tarjetas', en:'Cards',
+   ic:'<rect x="2" y="3" width="20" height="5" rx="1.6"/>' +
+      '<rect x="2" y="9.5" width="20" height="5" rx="1.6"/>' +
+      '<rect x="2" y="16" width="20" height="5" rx="1.6"/>'},
+  {id:'carrusel', es:'Carrusel', en:'Carousel',
+   ic:'<rect x="2" y="4" width="8" height="16" rx="2"/>' +
+      '<rect x="12" y="4" width="8" height="16" rx="2"/>' +
+      '<rect x="22" y="4" width="4" height="16" rx="2" opacity=".45"/>'},
+  {id:'bento', es:'Bento', en:'Bento',
+   ic:'<rect x="2" y="3" width="12" height="18" rx="2"/>' +
+      '<rect x="16" y="3" width="6" height="8" rx="2"/>' +
+      '<rect x="16" y="13" width="6" height="8" rx="2"/>'},
+  {id:'libre', es:'Libre', en:'Free',
+   ic:'<rect x="2" y="3" width="20" height="10" rx="2"/>' +
+      '<rect x="2" y="15.4" width="13" height="2.6" rx="1.3"/>' +
+      '<rect x="2" y="19.2" width="8" height="2.6" rx="1.3"/>'}
+];
+
+/* La variante escogida de cada producto, por id. */
+var elegida = {};
+CATALOGO.forEach(function(p){ elegida[p.id] = primeraLibre(p); });
+
+var filtro = 'todo', forma = 'tarjetas', carrito = {};
+
+function enIngles(){ return location.hash === '#en'; }
+
+function pintaPestanas(){
+  var c = $('#pestanas');
+  c.innerHTML = '';
+  CATS.forEach(function(k){
+    var b = document.createElement('button');
+    b.type = 'button'; b.setAttribute('role','tab');
+    b.setAttribute('aria-selected', k.id === filtro ? 'true' : 'false');
+    b.innerHTML = '<span class="es">' + k.es + '</span><span class="en">' + k.en + '</span>';
+    b.addEventListener('click', function(){ filtro = k.id; pintaPestanas(); pintaProds(); });
+    c.appendChild(b);
+  });
+}
+
+function pintaRail(){
+  var c = $('#rail'); if (!c) return;
+  c.innerHTML = '';
+  FORMAS.forEach(function(f){
+    var b = document.createElement('button');
+    b.type = 'button'; b.setAttribute('role','tab');
+    b.setAttribute('aria-selected', f.id === forma ? 'true' : 'false');
+    b.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true">' + f.ic + '</svg>' +
+      '<span class="es">' + f.es + '</span><span class="en">' + f.en + '</span>';
+    b.addEventListener('click', function(){
+      forma = f.id; pintaRail(); pintaProds();
+      /* la carta vuelve arriba: si quedaba a media altura, el cambio de
+         forma no se ve y parece que el botón no hizo nada. */
+      var cuerpo = $('#telCuerpo');
+      if (cuerpo) cuerpo.scrollTo({top:0, behavior: quieto ? 'auto' : 'smooth'});
+    });
+    c.appendChild(b);
+  });
+}
+
+/* Un solo marcado de prod para las cuatro formas: lo que cambia es el CSS.
+   Por eso el «+» y el carrito siguen funcionando igual en todas. */
+/* Un solo marcado de producto para las cuatro formas: lo que cambia es el
+   CSS. Por eso el «+», las tallas y el carrito siguen funcionando igual en
+   todas. */
+function hazProd(p){
+  var hay = hayStock(p);
+  var el = document.createElement('article');
+  el.className = 'prod' + (hay ? '' : ' agotado');
+
+  var tallas = '';
+  if (hay){
+    tallas = '<div class="tallas" role="group" aria-label="' + p.tipo + '">' +
+      p.ops.map(function(o){
+        var fuera = p.agot.indexOf(o) >= 0;
+        return '<button type="button" data-op="' + o + '"' +
+          (fuera ? ' disabled aria-label="' + o + ', agotada"' : '') +
+          ' aria-pressed="' + (!fuera && elegida[p.id] === o) + '">' + o + '</button>';
+      }).join('') + '</div>';
+  } else {
+    tallas = '<p class="sin-stock"><span class="es">Agotado</span>' +
+             '<span class="en">Sold out</span></p>';
+  }
+
+  el.innerHTML =
+    '<span class="hueco" aria-hidden="true" data-cat="' + p.cat +
+      '" data-pie="tu foto"></span>' +
+    '<div><h5><span class="es">' + p.nom + '</span><span class="en">' + p.en + '</span></h5>' +
+    '<p class="desc"><span class="es">' + p.d + '</span><span class="en">' + p.de + '</span></p>' +
+    tallas + '</div>' +
+    '<div class="col-der"><span class="precio">' + pesos(p.p) + '</span>' +
+    (hay ? '<button class="mas" type="button" aria-label="Agregar">+</button>' : '') +
+    '</div>';
+
+  el.querySelectorAll('.tallas button:not([disabled])').forEach(function(b){
+    b.addEventListener('click', function(){
+      elegida[p.id] = b.dataset.op;
+      /* solo se repintan los botones de esta ficha: repintar el catálogo
+         entero devolvería el scroll del carrusel al principio */
+      el.querySelectorAll('.tallas button').forEach(function(o){
+        o.setAttribute('aria-pressed', String(o === b));
+      });
+    });
+  });
+  var mas = el.querySelector('.mas');
+  if (mas) mas.addEventListener('click', function(){ agrega(p, elegida[p.id]); });
+  return el;
+}
+
+function pintaProds(){
+  var c = $('#prods');
+  c.className = 'prods ' + forma;
+  c.innerHTML = '';
+
+  if (forma === 'carrusel'){
+    CATS.filter(function(k){
+      return k.id !== 'todo' && (filtro === 'todo' || k.id === filtro);
+    }).forEach(function(k){
+      var dentro = CATALOGO.filter(function(p){ return p.cat === k.id; });
+      if (!dentro.length) return;
+      var g = document.createElement('section');
+      g.className = 'grupo';
+      g.innerHTML = '<h6><span class="es">' + k.es + '</span>' +
+                    '<span class="en">' + k.en + '</span></h6>';
+      var tira = document.createElement('div');
+      tira.className = 'tira';
+      dentro.forEach(function(p){ tira.appendChild(hazProd(p)); });
+      g.appendChild(tira);
+      c.appendChild(g);
+    });
+    return;
+  }
+
+  CATALOGO.filter(function(p){ return filtro === 'todo' || p.cat === filtro; })
+       .forEach(function(p){ c.appendChild(hazProd(p)); });
+}
+
+/* El carrito se agrupa por producto Y variante: dos tallas del mismo
+   producto son dos líneas del pedido, no una de cantidad dos. Es lo que
+   le hace falta a quien va a empacar la caja. */
+function agrega(p, op){
+  var k = p.nom + (op ? ' · ' + op : '');
+  carrito[k] = carrito[k] || {p:p, op:op, n:0};
+  carrito[k].n++;
+  pintaCarrito(); escribeWa(); pintaResumenPago();
+}
+
+function totalCarrito(){
+  var t = 0, n = 0;
+  for (var k in carrito){ t += carrito[k].p.p * carrito[k].n; n += carrito[k].n; }
+  return {total:t, n:n};
+}
+
+function pintaCarrito(){
+  var r = totalCarrito();
+  $('#carritoN').textContent = r.n + (enIngles() ? (r.n === 1 ? ' item' : ' items')
+                                                : (r.n === 1 ? ' producto' : ' productos'));
+  $('#carritoTot').textContent = pesos(r.total);
+  $('#barraCarrito').classList.toggle('visible', r.n > 0);
+}
+
+/* ══ el mensaje de WhatsApp, escribiéndose ═══════════════════════════
+   Se teclea letra a letra a propósito: lo que vende el módulo no es que
+   el mensaje exista, es ver que se escribe SOLO. */
+var envio = false, tecleo = null;
+
+function textoPedido(){
+  var en = enIngles(), L = [];
+  L.push(en ? 'Hi! I would like to order:' : '¡Hola! Quiero pedir:');
+  for (var k in carrito){
+    var it = carrito[k];
+    var variante = it.op
+      ? ' (' + (en ? it.p.tipoEn : it.p.tipo) + ' ' + it.op + ')' : '';
+    L.push('• ' + it.n + ' × ' + (en ? it.p.en : it.p.nom) + variante +
+           '  ' + pesos(it.p.p * it.n));
+  }
+  var r = totalCarrito();
+  if (!r.n) L.push(en ? '(nothing picked yet)' : '(todavía no he escogido nada)');
+  L.push('');
+  L.push((en ? 'Total: ' : 'Total: ') + pesos(r.total));
+  L.push(envio ? (en ? 'Ship to: Cra 70 #44-21, Bogotá'
+                     : 'Envío a: Cra 70 #44-21, Bogotá')
+               : (en ? 'I will pick it up at the shop' : 'Paso a recogerlo a la tienda'));
+  return L.join('\n');
+}
+
+function escribeWa(){
+  var g = $('#globoWa'); if (!g) return;
+  var txt = textoPedido();
+  if (tecleo){ clearInterval(tecleo); tecleo = null; }
+  if (quieto){ g.textContent = txt; return; }
+  var i = 0;
+  g.innerHTML = '<span class="cursor"></span>';
+  tecleo = setInterval(function(){
+    i += 2;
+    if (i >= txt.length){
+      g.textContent = txt;
+      clearInterval(tecleo); tecleo = null; return;
+    }
+    g.textContent = txt.slice(0, i);
+    g.appendChild(document.createElement('span')).className = 'cursor';
+  }, 16);
+}
+
+/* ══ el pago ═════════════════════════════════════════════════════════
+   El envío va dentro de la cuenta, no en una conversación aparte: es la
+   pregunta en la que se cae la venta de otra ciudad. */
+var ENVIO = 16000;
+function pintaResumenPago(){
+  var r = totalCarrito(), en = enIngles();
+  var costo = envio ? ENVIO : 0;
+  var c = $('#resumenPago'); if (!c) return;
+  c.innerHTML =
+    '<div class="l"><span>' + (en ? 'Items' : 'Productos') + ' (' + r.n + ')</span>' +
+      '<span>' + pesos(r.total) + '</span></div>' +
+    '<div class="l"><span>' + (en ? 'Shipping' : 'Envío') + '</span>' +
+      '<span>' + (envio ? pesos(ENVIO)
+                        : (en ? 'Store pickup' : 'Recoge en tienda')) + '</span></div>' +
+    '<div class="l tot"><span>Total</span><span>' + pesos(r.total + costo) + '</span></div>';
+  var m = $('#montoPagar'); if (m) m.textContent = pesos(r.total + costo);
+}
+
+/* ══ temporada ═══════════════════════════════════════════════════════
+   La vigencia se saca del reloj del aparato, no está escrita a mano. Esta
+   muestra se enseña el día que toque, y una fecha fija envejece a la vista
+   del cliente justo en la sección que presume de vencerse sola: «hasta el
+   30 de noviembre» leído en marzo dice lo contrario de lo que se vende. */
+var MESES_ES = ['enero','febrero','marzo','abril','mayo','junio','julio',
+                'agosto','septiembre','octubre','noviembre','diciembre'];
+var MESES_EN = ['January','February','March','April','May','June','July',
+                'August','September','October','November','December'];
+function finDeMes(saltos){
+  var h = new Date();
+  // el día 0 del mes siguiente es el último del mes que interesa
+  return new Date(h.getFullYear(), h.getMonth() + saltos + 1, 0);
+}
+
+var TANDAS = [
+  {es:'Lo que acaba de llegar', en:'Just arrived', mes:0,
+   prods:[
+     {id:'vestido', nom:'Vestido cruzado', en:'Wrap dress', cat:'ropa',
+      d:'Viscosa de bambú, llegó esta semana en cuatro tallas',
+      de:'Bamboo viscose, arrived this week in four sizes', p:265000},
+     {id:'panuelo', nom:'Pañuelo de seda', en:'Silk scarf', cat:'accesorios',
+      d:'Estampado nuevo, tres colores, serie corta',
+      de:'New print, three colours, short run', p:98000},
+     /* El tercero también está en el catálogo, a propósito y al mismo
+        precio: una franja así suele destacar algo que ya existe, y el
+        carrito los junta porque se agrupan por nombre y variante. */
+     {id:'manta', nom:'Manta de lana', en:'Wool blanket', cat:'casa',
+      d:'La misma del catálogo, ahora en gris',
+      de:'The same one from the catalogue, now in grey', p:290000}
+   ]},
+  {es:'Últimas unidades', en:'Last units', mes:1,
+   prods:[
+     {id:'saco', nom:'Saco tejido a mano', en:'Hand-knitted jumper', cat:'ropa',
+      d:'Queda la talla M. No se repone hasta la próxima tanda',
+      de:'Size M only. Not restocked until the next run', p:320000},
+     {id:'cinturon', nom:'Cinturón trenzado', en:'Braided belt', cat:'accesorios',
+      d:'Sin la 85. Las demás, mientras duren',
+      de:'No 85 left. The rest while they last', p:135000},
+     {id:'vela', nom:'Vela de cera de soya', en:'Soy wax candle', cat:'casa',
+      d:'Aroma de higo, última remesa del año',
+      de:'Fig scent, last batch of the year', p:64000}
+   ]}
+];
+var tandaAct = 0;
+
+function pintaTanda(){
+  var t = TANDAS[tandaAct], c = $('#tiraNov');
+  if (!c) return;
+  c.innerHTML = '';
+  t.prods.forEach(function(p){
+    var el = document.createElement('article');
+    el.className = 'nov vidrio';
+    el.innerHTML =
+      '<span class="hueco" aria-hidden="true" data-cat="' + p.cat +
+        '" data-pie="tu foto"></span>' +
+      '<h5><span class="es">' + p.nom + '</span><span class="en">' + p.en + '</span></h5>' +
+      '<p class="desc"><span class="es">' + p.d + '</span><span class="en">' + p.de + '</span></p>' +
+      '<div class="pie"><span class="precio">' + pesos(p.p) + '</span>' +
+      '<button class="mas" type="button" aria-label="Agregar">+</button></div>';
+    el.querySelector('.mas').addEventListener('click', function(){
+      agrega(CATALOGO.filter(function(q){ return q.id === p.id; })[0], null);
+    });
+    c.appendChild(el);
+  });
+  var v = $('#vigencia'), f = finDeMes(t.mes);
+  v.innerHTML =
+    '<span class="es">' + t.es + ' · hasta el ' + f.getDate() +
+      ' de ' + MESES_ES[f.getMonth()] + '</span>' +
+    '<span class="en">' + t.en + ' · until ' + f.getDate() +
+      ' ' + MESES_EN[f.getMonth()] + '</span>';
+}
+
+/* ══ el resumen ══════════════════════════════════════════════════════
+   Siete ganancias, una línea cada una. No es la lista de lo que hacemos
+   —esa ya se recorrió arriba, módulo por módulo— sino la de lo que le
+   queda a la tienda. Por eso el título de cada ficha es el beneficio
+   y no el nombre técnico del módulo. */
+var GANANCIAS = [
+  ['Tu catálogo, siempre al día', 'Your catalogue, always current',
+   'Subir un producto o agotar una talla toma un minuto.',
+   'Adding an item or marking a size sold out takes a minute.'],
+  ['El precio ya está contestado', 'The price is already answered',
+   'Deja de responder «¿cuánto vale?» cien veces al día.',
+   'Stop answering «how much is it?» a hundred times a day.'],
+  ['Vendes sin comisión', 'You sell with no commission',
+   'El pedido llega con talla y cantidad, y el cobro es tuyo.',
+   'The order arrives with size and quantity, and the money is yours.'],
+  ['Cobras antes de despachar', 'Paid before you ship',
+   'El que ya pagó no se arrepiente al llegar el paquete.',
+   'A buyer who already paid does not back out at the door.'],
+  ['Vendes fuera de tu barrio', 'You sell beyond your block',
+   'El envío va calculado dentro del pedido, no aparte.',
+   'Shipping is calculated inside the order, not separately.'],
+  ['Te encuentran en Google', 'Found on Google',
+   'Apareces cuando buscan lo que vendes, cerca de ti.',
+   'You show up when people search for what you sell, nearby.'],
+  ['Un catálogo, tres lados', 'One catalogue, three places',
+   'La página, la ficha de Google y la tienda de Instagram.',
+   'The page, the Google listing and the Instagram shop.']
+];
+function pintaResumenFinal(){
+  var c = $('#resumenFinal'); if (!c) return;
+  c.innerHTML = GANANCIAS.map(function(g){
+    return '<div class="ficha solido">' +
+      '<h3><span class="es">' + g[0] + '</span><span class="en">' + g[1] + '</span></h3>' +
+      '<p class="desc" style="font-size:.9rem;color:var(--tinta-70);margin-top:7px">' +
+      '<span class="es">' + g[2] + '</span><span class="en">' + g[3] + '</span></p></div>';
+  }).join('');
+}
+
+/* ══ cableado ════════════════════════════════════════════════════════ */
+/* El carrito arranca con dos productos puestos, y uno con talla. No es
+   relleno: si arranca vacío, quien baja hasta el pago se encuentra un total
+   de $0 y la pantalla no demuestra nada. Con el pedido ya armado, el mensaje
+   de WhatsApp enseña desde el primer momento lo que de verdad lo diferencia
+   —«1 × Camisa de lino (Talla M)»— y el cliente sigue pudiendo cambiarlo. */
+/* Por id y no por posición: meter un producto en medio del arreglo movía
+   los índices y el carrito arrancaba con «Chaqueta de lona (Talla Miel)». */
+function porId(id){ return CATALOGO.filter(function(q){ return q.id === id; })[0]; }
+carrito['Camisa de lino · M'] = {p:porId('camisa'), op:'M', n:1};
+carrito['Bolso de cuero · Miel'] = {p:porId('bolso'), op:'Miel', n:1};
+
+pintaRail(); pintaPestanas(); pintaProds(); pintaCarrito(); pintaTanda();
+pintaResumenPago(); pintaResumenFinal(); escribeWa();
+
+$('#btnEnvio').addEventListener('click', function(){
+  envio = !envio;
+  this.setAttribute('aria-pressed', envio ? 'true' : 'false');
+  this.classList.toggle('acento', envio);
+  escribeWa(); pintaResumenPago();
+});
+$('#btnRehacer').addEventListener('click', escribeWa);
+$('#btnTanda').addEventListener('click', function(){
+  tandaAct = (tandaAct + 1) % TANDAS.length;
+  pintaTanda();
+});
+$('#irPedido').addEventListener('click', function(){
+  var g = $('#globoWa');
+  if (g) g.closest('section').scrollIntoView({behavior: quieto ? 'auto' : 'smooth',
+                                              block:'center'});
+});
+
+/* medio de pago */
+Array.prototype.forEach.call(document.querySelectorAll('.medio'), function(m){
+  function elige(){
+    document.querySelectorAll('.medio').forEach(function(o){
+      o.setAttribute('aria-checked', o === m ? 'true' : 'false');
+    });
+  }
+  m.addEventListener('click', elige);
+  m.addEventListener('keydown', function(e){
+    if (e.key === ' ' || e.key === 'Enter'){ elige(); e.preventDefault(); }
+  });
+});
+
+/* el pago: la confirmación se muestra y se esconde, no se reconstruye */
+$('#btnPagar').addEventListener('click', function(){
+  $('#zonaPago').hidden = true;
+  $('#zonaAprobado').hidden = false;
+  $('#btnVolverPago').focus();
+});
+$('#btnVolverPago').addEventListener('click', function(){
+  $('#zonaAprobado').hidden = true;
+  $('#zonaPago').hidden = false;
+  $('#btnPagar').focus();
+});
+
+/* el idioma cambia textos que el guion compone, no solo los del marcado */
+addEventListener('hashchange', function(){
+  pintaCarrito(); pintaResumenPago(); escribeWa();
+});
+
+/* entradas por scroll */
+if ('IntersectionObserver' in window){
+  var obs = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if (e.isIntersecting){ e.target.classList.add('dentro'); obs.unobserve(e.target); }
+    });
+  }, {rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.sube').forEach(function(el, i){
+    el.style.transitionDelay = (i % 4) * 60 + 'ms';
+    obs.observe(el);
+  });
+} else {
+  document.querySelectorAll('.sube').forEach(function(el){ el.classList.add('dentro'); });
+}
+})();
+</script>
+</body>
+</html>

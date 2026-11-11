@@ -10,9 +10,13 @@
     <div class="mstra-caja">
       <button class="mstra-x" type="button" aria-label="Close">&times;</button>
       <div class="mstra-media">
-        <img class="mstra-media-img" alt="" hidden>
+        <div class="mstra-car" hidden>
+          <div class="mstra-track"></div>
+          <button class="mstra-nav mstra-prev" type="button" aria-label="Previous" hidden>&lsaquo;</button>
+          <button class="mstra-nav mstra-next" type="button" aria-label="Next" hidden>&rsaquo;</button>
+          <div class="mstra-dots" aria-hidden="true" hidden></div>
+        </div>
         <span class="mstra-media-nota">Sample coming soon</span>
-        <a class="mstra-media-ver" target="_blank" rel="noopener" hidden>See it live →</a>
       </div>
       <div class="mstra-info">
         <span class="mstra-chip"><span class="mstra-chip-ico ico" aria-hidden="true"></span><span data-campo="area"></span></span>
@@ -25,6 +29,10 @@
           <a class="btn mstra-cta" href="#"></a>
         </div>
         <p class="mstra-tip"><span class="mstra-tip-ico" aria-hidden="true">💡</span><span data-campo="uso"></span></p>
+        <div class="mstra-media-links">
+          <a class="mstra-media-ver" target="_blank" rel="noopener" hidden>See it live →</a>
+          <a class="mstra-media-doc" target="_blank" rel="noopener" hidden></a>
+        </div>
       </div>
     </div>
   </dialog>
@@ -40,9 +48,14 @@
     var wa   = dlg.getAttribute('data-wa');
     var cta  = dlg.querySelector('.mstra-cta');
     var icoN = dlg.querySelector('.mstra-chip-ico');
-    var mImg = dlg.querySelector('.mstra-media-img');
+    var car   = dlg.querySelector('.mstra-car');
+    var track = dlg.querySelector('.mstra-track');
+    var btnPrev = dlg.querySelector('.mstra-prev');
+    var btnNext = dlg.querySelector('.mstra-next');
+    var dotsN = dlg.querySelector('.mstra-dots');
     var mNota = dlg.querySelector('.mstra-media-nota');
     var mVer = dlg.querySelector('.mstra-media-ver');
+    var mDoc = dlg.querySelector('.mstra-media-doc');
     var abridor = null;
     var lento = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -51,6 +64,59 @@
       if (el) el.textContent = val || '';
     }
     function rect(el) { return el.getBoundingClientRect(); }
+
+    // ---- sample gallery: demo cover + real images/videos ---------------------
+    function pausarVideos() {
+      [].forEach.call(track.querySelectorAll('video'), function (v) { try { v.pause(); } catch (e) {} });
+    }
+    function unaSlide(s) {
+      var sl = document.createElement('div'); sl.className = 'mstra-slide';
+      if (s.t === 'vid') {
+        var v = document.createElement('video');
+        v.src = s.src; v.controls = true; v.muted = true; v.playsInline = true;
+        v.setAttribute('playsinline', ''); v.preload = 'metadata';
+        if (s.poster) v.poster = s.poster;
+        sl.appendChild(v);
+      } else {
+        var a = document.createElement('a');
+        a.href = s.href || s.src; a.target = '_blank'; a.rel = 'noopener'; a.className = 'mstra-ampliar';
+        var im = document.createElement('img');
+        im.src = s.src; im.alt = s.cap || ''; im.loading = 'lazy';
+        a.appendChild(im); sl.appendChild(a);
+      }
+      if (s.cap) { var c = document.createElement('span'); c.className = 'mstra-cap'; c.textContent = s.cap; sl.appendChild(c); }
+      return sl;
+    }
+    function indiceActual() { return Math.round(track.scrollLeft / Math.max(track.clientWidth, 1)); }
+    function irSlide(i) { track.scrollTo({ left: i * track.clientWidth, behavior: lento ? 'auto' : 'smooth' }); }
+    function marcarDots() {
+      var i = indiceActual();
+      [].forEach.call(dotsN.children, function (d, j) { d.classList.toggle('on', j === i); });
+    }
+    function pintarMedia(f) {
+      pausarVideos(); track.innerHTML = ''; dotsN.innerHTML = '';
+      var slides = [];
+      if (f.demo) slides.push({ t: 'img', src: f.demo.img, href: f.demo.arch, cap: f.demo.marca });
+      if (f.media && f.media.length) slides = slides.concat(f.media);
+      var hay = slides.length > 0;
+      car.hidden = !hay; mNota.hidden = hay;
+      if (hay) {
+        slides.forEach(function (s) { track.appendChild(unaSlide(s)); });
+        var multi = slides.length > 1;
+        btnPrev.hidden = btnNext.hidden = dotsN.hidden = !multi;
+        if (multi) slides.forEach(function (_, j) {
+          var b = document.createElement('button'); b.type = 'button'; b.className = 'mstra-dot';
+          b.setAttribute('aria-label', 'Sample ' + (j + 1));
+          b.addEventListener('click', function () { irSlide(j); });
+          dotsN.appendChild(b);
+        });
+        track.scrollLeft = 0; marcarDots();
+      }
+      if (f.demo) { mVer.href = f.demo.arch; mVer.hidden = false; dlg.style.setProperty('--t', f.demo.tono); }
+      else mVer.hidden = true;
+      if (f.ver) { mDoc.href = f.ver.href; mDoc.textContent = f.ver.lbl; mDoc.hidden = false; }
+      else mDoc.hidden = true;
+    }
 
     function animar(desde, hacia, ida) {
       var dx = desde.left - hacia.left, dy = desde.top - hacia.top;
@@ -73,16 +139,7 @@
       if (bloque) bloque.classList.toggle('es-plan', !!f.plan);
       if (cta) cta.textContent = f.cta || 'Ask on WhatsApp →';
       if (icoN && window.Iconos) icoN.innerHTML = Iconos.html(f.ico);
-      // live sample: if the ficha has a demo, its cover fills the slot
-      if (f.demo) {
-        mImg.src = f.demo.img; mImg.alt = f.demo.marca || ''; mImg.hidden = false;
-        mNota.hidden = true;
-        mVer.href = f.demo.arch; mVer.hidden = false;
-        dlg.style.setProperty('--t', f.demo.tono);
-      } else {
-        mImg.hidden = true; mImg.removeAttribute('src');
-        mNota.hidden = false; mVer.hidden = true;
-      }
+      pintarMedia(f);
       if (cta) cta.href = 'https://wa.me/' + wa + '?text=' + encodeURIComponent('Hi LQS, I am interested in: ' + f.n + '.');
       var desde = rect(btn);
       dlg.showModal();
@@ -90,10 +147,15 @@
     }
 
     function cerrar() {
+      pausarVideos();
       if (lento || !abridor) { dlg.close(); return; }
       var a = animar(rect(abridor), rect(caja), false);
       a.onfinish = function () { dlg.close(); };
     }
+
+    btnPrev.addEventListener('click', function () { irSlide(indiceActual() - 1); });
+    btnNext.addEventListener('click', function () { irSlide(indiceActual() + 1); });
+    track.addEventListener('scroll', marcarDots, { passive: true });
 
     if (zonaCeldas) zonaCeldas.addEventListener('click', function (e) {
       var b = e.target.closest('.zz-cel');

@@ -233,7 +233,11 @@ EN_PAQUETES = {
 # en demos/img/portadas/, no una foto suelta: así el cuadro muestra lo que se
 # va a abrir. (archivo, portada, color propio de la demo, marca)
 DEMOS = {
- "Catálogo en línea":          ("tienda-ropa.html",  "img/portadas/tienda.webp",      "#1b35ff", "Atelier Norte"),
+ # tiendas.html/bodegas.html: muestras nuevas de digitalización (catálogo real
+ # con tallas/stock/envío y catálogo por presentación con precio por unidad).
+ # Reemplazan a tienda-ropa.html como catálogo y estrenan «Página web».
+ "Catálogo en línea":          ("tiendas.html",      "img/portadas/tiendas.webp",     "#b4512f", "Tienda modelo"),
+ "Página web":                 ("bodegas.html",      "img/portadas/bodegas.webp",     "#4a5d3a", "Bodega modelo"),
  "Menú digital con código QR": ("restaurante.html",  "img/portadas/restaurante.webp", "#E0531C", "Rescoldo"),
  "Blog":                       ("revista-moda.html", "img/portadas/revista.webp",     "#7b5cff", "Tendido"),
  "Portafolio web":             ("mezcal.html",       "img/portadas/mezcal.webp",      "#C65A16", "Casa Tepemete"),
@@ -243,6 +247,65 @@ DEMOS = {
  "Publicaciones sueltas":      ("redes-lqs.html",    "img/portadas/redes.webp",       "#6D5AE6", "Vita Nova"),
  # Operación de un restaurante: parrilla + bots de WhatsApp/Instagram + reporte
  "WhatsApp Business: catálogo y respuestas": ("automatizacion.html", "img/portadas/automatizacion.webp", "#1f8a4c", "Turno"),
+}
+
+# Galerías de muestra: trabajo real (imagen y video) que NO es una página en vivo
+# —marcas, cartas, ilustración, video— metido en la ficha del servicio que le toca.
+# Conviven con DEMOS: una ficha puede tener demo en vivo Y galería (p.ej. «Diseño
+# de marca desde cero» trae la demo marca-lqs + el caso GLATOS). Clave = nombre del
+# servicio en español. Rutas relativas a demos/ (se les antepone {{RAIZ}}demos/).
+# Cada media: {"t":"img"|"vid","src":…, poster?, ar?, "cap":(es,en)}. Los textos
+# bilingües van como (es, en); la marca es un nombre propio, igual en los dos.
+GALERIA = {
+ "Catálogo en línea": {  # junto a la demo en vivo tiendas.html
+   "media": [
+     {"t": "vid", "src": "muestras/clips/ceramica-catalogo.mp4", "poster": "muestras/img/ceramica-catalogo-poster.webp",
+      "ar": "16/9", "cap": ("Catálogo editorial de cerámica", "Editorial ceramics catalog")},
+   ],
+ },
+ "Diseño de marca desde cero": {  # GLATOS (la demo en vivo de esta ficha es marca-lqs)
+   "marca": "GLATOS", "tono": "#C9102C", "cover": "muestras/img/glatos-cv.webp",
+   "media": [
+     {"t": "vid", "src": "muestras/clips/glatos-logo.mp4", "poster": "muestras/img/glatos-logo-poster.webp",
+      "ar": "16/9", "cap": ("Identidad en movimiento", "Identity in motion")},
+     {"t": "vid", "src": "muestras/clips/glatos-carta.mp4", "poster": "muestras/img/glatos-carta-poster.webp",
+      "ar": "16/9", "cap": ("Carta animada", "Animated menu")},
+   ],
+   "ver": {"href": "muestras/glatos.pdf", "lbl": ("Ficha de marca (PDF) →", "Brand sheet (PDF) →")},
+ },
+ "Diseño de accesorios de marca": {  # Alquimia Herbal
+   "marca": "Alquimia Herbal", "tono": "#A33A2B", "cover": "muestras/img/alquimia-tablero-cv.webp",
+   "media": [
+     {"t": "img", "src": "muestras/img/alquimia-tablero.webp", "cap": ("Tablero de identidad", "Identity board")},
+     {"t": "vid", "src": "muestras/clips/alquimia-carta.mp4", "poster": "muestras/img/alquimia-carta-poster.webp",
+      "ar": "9/16", "cap": ("Carta ilustrada en movimiento", "Illustrated card in motion")},
+   ],
+ },
+ "Foto de producto": {  # cartas de restaurante (foto de comida + diseño editorial)
+   "marca": "Carta de autor", "tono": "#C0552F", "cover": "muestras/img/carta-brusquetas-cv.webp",
+   "media": [
+     {"t": "img", "src": "muestras/img/carta-brusquetas.webp", "cap": ("Brusquetas", "Bruschetta")},
+     {"t": "img", "src": "muestras/img/carta-sushi.webp",      "cap": ("Sushi y gunkan", "Sushi & gunkan")},
+     {"t": "img", "src": "muestras/img/carta-tartares.webp",   "cap": ("Tartares y tatakis", "Tartares & tatakis")},
+     {"t": "img", "src": "muestras/img/carta-pasta.webp",      "cap": ("Pasta italiana", "Italian pasta")},
+     {"t": "img", "src": "muestras/img/carta-sopas.webp",      "cap": ("Sopas", "Soups")},
+     {"t": "img", "src": "muestras/img/carta-cafe.webp",       "cap": ("Café helado", "Iced coffee")},
+   ],
+ },
+ "Comerciales y piezas de publicidad": {  # video corporativo Vita Nova
+   "marca": "Vita Nova", "tono": "#1F5C44", "cover": "muestras/img/vitanova-cv.webp",
+   "media": [
+     {"t": "vid", "src": "muestras/clips/vitanova-empresa.mp4", "poster": "muestras/img/vitanova-empresa-poster.webp",
+      "ar": "16/9", "cap": ("Video para empresa · Vita Nova", "Brand film · Vita Nova")},
+   ],
+ },
+ "Ilustración de personajes": {  # hojas de personaje
+   "marca": "Diseño de personaje", "tono": "#8B6FE0", "cover": "muestras/img/ilu-zarigueya-cv.webp",
+   "media": [
+     {"t": "img", "src": "muestras/img/ilu-zarigueya.webp", "cap": ("Hoja de personaje", "Character sheet")},
+     {"t": "img", "src": "muestras/img/ilu-to.webp",        "cap": ("«TO.» · variaciones y paleta", "«TO.» · variants & palette")},
+   ],
+ },
 }
 
 # Tono propio de cada área SOLO para las tarjetas de «explora por área» en Muestras.
@@ -981,6 +1044,31 @@ def armar(idi):
             return {"arch": "{{RAIZ}}demos/" + d[0], "img": "{{RAIZ}}demos/" + d[1],
                     "tono": d[2], "marca": d[3]}
 
+        # Galería de la ficha: lista de media (imagen/video) ya con ruta e idioma
+        # resueltos, más el enlace «ver» (p.ej. el PDF) y la portada de la tarjeta.
+        def ficha_media(nombre_es):
+            g = GALERIA.get(nombre_es)
+            if not g:
+                return [], None, None
+            items = []
+            for m in g["media"]:
+                it = {"t": m["t"], "src": "{{RAIZ}}demos/" + m["src"]}
+                if m.get("poster"):
+                    it["poster"] = "{{RAIZ}}demos/" + m["poster"]
+                if m.get("ar"):
+                    it["ar"] = m["ar"]
+                cap = m.get("cap")
+                if cap:
+                    it["cap"] = cap[1] if idi == "en" else cap[0]
+                items.append(it)
+            ver = None
+            if g.get("ver"):
+                v = g["ver"]
+                ver = {"href": "{{RAIZ}}demos/" + v["href"],
+                       "lbl": v["lbl"][1] if idi == "en" else v["lbl"][0]}
+            cover = ("{{RAIZ}}demos/" + g["cover"]) if g.get("cover") else None
+            return items, ver, cover
+
         # Campos del bloque de precio de la ficha: separa lo que al cliente le
         # importa —cuánto y de qué tipo—. Cuatro tipos: pago único (proyecto),
         # plan mensual (continuo), por alcance (se cotiza) y a pedido (Express).
@@ -1024,11 +1112,11 @@ def armar(idi):
                     % (idx, color, nom, ico, sel_lab, nom, nserv,
                        unidad_ct[0] if nserv == 1 else unidad_ct[1], cue_lab))
 
-        def zz_cel(ficha_idx, nom, ico, color, demo, k):
-            if demo:
+        def zz_cel(ficha_idx, nom, ico, color, cover_src, k):
+            if cover_src:
                 cover = ('<span class="zz-cover">'
                          '<img class="zz-img" src="%s" alt="" loading="lazy"></span>'
-                         % ("{{RAIZ}}demos/" + demo[1]))
+                         % cover_src)
             else:
                 cover = ('<span class="zz-cover zz-ph">'
                          '<span class="zz-ico ico" data-ico="%s"></span></span>' % ico)
@@ -1058,12 +1146,17 @@ def armar(idi):
                 n_disp = EN_SERV.get(s["n"], s["n"]) if idi == "en" else s["n"]
                 que, uso = FICHA_I.get(s["n"], ("", ""))
                 demo = DEMOS.get(s["n"])
+                media, ver, gcover = ficha_media(s["n"])
                 f = {"n": n_disp, "area": nom_a, "ico": ico, "color": color,
                      "p": precio_corto(s["p"], s["m"]), "que": que, "uso": uso,
-                     "demo": ficha_demo(s["n"])}
+                     "demo": ficha_demo(s["n"]), "media": media}
+                if ver:
+                    f["ver"] = ver
                 f.update(modal_campos(s["p"], s["m"]))
                 fichas.append(f)
-                celdas.append(zz_cel(len(fichas) - 1, n_disp, ico, color, demo, k))
+                # portada de la tarjeta: la demo manda; si no hay demo, la de la galería
+                cover_src = ("{{RAIZ}}demos/" + demo[1]) if demo else gcover
+                celdas.append(zz_cel(len(fichas) - 1, n_disp, ico, color, cover_src, k))
             cf_cards.append(cf_card(ai, nom_a, ico, color, len(servs_es)))
             zz_panels.append(zz_panel(ai, nom_a, desc_a, ico, color, celdas))
             ai += 1
@@ -1076,7 +1169,7 @@ def armar(idi):
         for k, e_es in enumerate(EXPRESS, 1):
             que, uso = FICHA_I.get(e_es, ("", ""))
             f = {"n": ex_src[k - 1], "area": "Express", "ico": "reloj", "color": "#F4D000",
-                 "p": "A pedido" if es else "On request", "que": que, "uso": uso, "demo": None}
+                 "p": "A pedido" if es else "On request", "que": que, "uso": uso, "demo": None, "media": []}
             f.update(modal_campos(None, False, express=True))
             fichas.append(f)
             celdas.append(zz_cel(len(fichas) - 1, ex_src[k - 1], "reloj", "#F4D000", None, k))

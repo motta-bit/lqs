@@ -850,17 +850,45 @@ lqs-trazo:defined>img{display:none}
   font-size:20px;line-height:1;display:grid;place-items:center}
 .mstra-media{position:relative;flex:0 0 48%;overflow:hidden;display:grid;place-items:center;
   min-height:360px;border-right:1px solid var(--linea-fuerte);background:color-mix(in srgb,var(--c) 22%,var(--papel))}
-@media(max-width:680px){.mstra-media{flex:none;aspect-ratio:16/9;min-height:0;border-right:0;
+@media(max-width:680px){.mstra-media{flex:none;aspect-ratio:4/3;min-height:0;border-right:0;
   border-bottom:1px solid var(--linea-fuerte)}}
 .mstra-media-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .mstra-media-nota{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;
   text-transform:uppercase;color:var(--humo)}
-/* enlace a la muestra en vivo, sobre la portada */
-.mstra-media-ver{position:absolute;right:14px;bottom:14px;z-index:2;text-decoration:none;
-  font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.03em;
-  background:var(--papel);color:var(--tinta);border:1px solid var(--linea-fuerte);border-radius:999px;
-  padding:7px 14px;box-shadow:0 6px 16px -6px rgba(13,13,15,.5)}
-.mstra-media-ver:hover{background:var(--tinta);color:var(--papel)}
+/* Galería de la ficha: portada de demo + imágenes y videos en un riel deslizable
+   con flechas y puntos. El media va «contain» sobre el fondo del área, para que
+   una carta vertical y un video horizontal quepan sin recortarse. */
+.mstra-car{position:absolute;inset:0;z-index:1}
+.mstra-track{position:absolute;inset:0;display:flex;overflow-x:auto;overflow-y:hidden;
+  scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.mstra-track::-webkit-scrollbar{display:none}
+.mstra-slide{position:relative;flex:0 0 100%;scroll-snap-align:center;display:grid;place-items:stretch;padding:14px}
+.mstra-ampliar{display:block;width:100%;height:100%;min-height:0}
+.mstra-slide img,.mstra-slide video{width:100%;height:100%;object-fit:contain;
+  border-radius:12px;box-shadow:0 10px 26px -14px rgba(13,13,15,.6)}
+.mstra-slide video{background:#0b0b0d}
+.mstra-cap{position:absolute;left:12px;top:12px;z-index:2;font-family:'IBM Plex Mono',monospace;
+  font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--papel);
+  background:rgba(13,13,15,.62);border-radius:999px;padding:4px 10px;max-width:72%;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mstra-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:34px;height:34px;
+  display:grid;place-items:center;cursor:pointer;border:1px solid var(--linea-fuerte);border-radius:50%;
+  background:color-mix(in srgb,var(--papel) 88%,transparent);color:var(--tinta);font-size:20px;line-height:1;
+  box-shadow:0 6px 16px -8px rgba(13,13,15,.5)}
+.mstra-prev{left:10px}.mstra-next{right:10px}
+.mstra-nav:hover{background:var(--tinta);color:var(--papel)}
+.mstra-dots{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:3;display:flex;gap:6px}
+.mstra-dot{width:7px;height:7px;border-radius:50%;cursor:pointer;border:0;padding:0;
+  background:color-mix(in srgb,var(--tinta) 30%,var(--papel));transition:transform .2s,background .2s}
+.mstra-dot.on{background:var(--tinta);transform:scale(1.25)}
+/* enlaces (muestra en vivo / ficha PDF): fila al pie de la info, no sobre el
+   video —así no tapan los controles de reproducción—. */
+.mstra-media-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
+.mstra-media-links:empty{display:none}
+.mstra-media-ver,.mstra-media-doc{text-decoration:none;font-family:'IBM Plex Mono',monospace;
+  font-size:11px;font-weight:600;letter-spacing:.03em;background:var(--papel);color:var(--tinta);
+  border:1px solid var(--linea-fuerte);border-radius:999px;padding:7px 14px;box-shadow:0 6px 16px -6px rgba(13,13,15,.5)}
+.mstra-media-ver:hover,.mstra-media-doc:hover{background:var(--tinta);color:var(--papel)}
 /* Info de la ficha: jerarquía clara —nombre, una línea de qué es, y un bloque
    de precio agrupado (precio grande + tipo + botón)— en vez de datos regados.
    El tipo (pago único / plan mensual / por alcance / a pedido) es lo que al
