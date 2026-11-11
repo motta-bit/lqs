@@ -960,6 +960,18 @@ lqs-trazo:defined>img{display:none}
 .paq-serv li{font-size:13.5px;line-height:1.3;position:relative;padding-left:21px}
 .paq-serv li::before{content:"✓";position:absolute;left:0;top:-1px;color:var(--c);font-weight:800}
 .paq-cta{align-self:flex-start;margin-top:auto}
+/* precio del pack/membresía, título de grupo, y resalte del nivel recomendado */
+.paq-precio{font-size:22px;font-weight:800;color:var(--tinta);margin:2px 0 2px}
+.paq-desde{font-size:12px;font-weight:600;color:var(--humo);letter-spacing:.02em}
+.paq-grupo{font-family:'Syne';font-weight:800;font-size:clamp(15px,2vw,18px);letter-spacing:.02em;
+  text-transform:uppercase;color:var(--humo);margin:30px 0 12px}
+.paq-grupo:first-of-type{margin-top:6px}
+.plus-rej{margin-bottom:4px}
+.paq.plus{border-color:color-mix(in srgb,var(--c) 30%,var(--linea))}
+.paq.plus-rec{border-color:var(--c);box-shadow:0 0 0 2px color-mix(in srgb,var(--c) 26%,transparent),var(--sombra)}
+.plus-rec-tag{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--papel);background:var(--c);border-radius:999px;padding:3px 9px}
+.ases-horario{margin-top:12px;font-size:11.5px;letter-spacing:.06em;color:var(--papel);opacity:.6}
 /* carrusel de LQS dentro de Paquetes: los líos que los paquetes resuelven */
 .paq-suena{margin-top:26px}
 .paq-suena h3{font-family:'Syne';font-weight:800;font-size:clamp(18px,2.4vw,24px);letter-spacing:-.02em}
@@ -1310,30 +1322,24 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
 <main class="wrap" id="inicio" data-pagina="cotizador">
 <section class="seccion pagina-encab"><div class="eyebrow">Cotizador</div><h1 class="tit-pagina">Armemos el número</h1><p class="dim bajada">El precio de cada servicio, área por área, y una asesoría gratis de 20 minutos para ordenar por dónde empezar. Llega directo a nuestro WhatsApp, sin formularios que nadie revisa.</p></section>
 
-<!-- ============ ASESORÍA ============ -->
-<section class="seccion" id="asesoria">
-  <div class="pared">
-    <div class="ases apila">
-      <div class="ases-txt">
-        <div class="eyebrow" style="color:var(--papel);opacity:.65">Sin costo · veinte minutos</div>
-        <h2 class="ases-tit">¿Todavía no sabes por dónde empezar?</h2>
-        <p class="ases-p">Casi nadie llega sabiéndolo, y está bien. Nos cuentas qué tienes en mente
-          —o qué te tiene atascado— y te decimos qué haríamos nosotros, en qué orden y con qué
-          empezaríamos si fuera nuestro.</p>
-        <p class="ases-p"><b>Si al final no somos lo que necesitas, te lo decimos igual</b> y te
-          apuntamos a dónde sí. Preferimos eso a arrancar un proyecto que no era.</p>
-        <div class="ases-acc">
-          <a class="btn claro" href="https://wa.me/573332791710?text=Hola%20LQS%2C%20quiero%20agendar%20la%20asesor%C3%ADa.%20Les%20cuento%3A">
-            Agendar por WhatsApp
-          </a>
-          <a class="btn ghost claro" href="mailto:loqueseaproductionsp1@gmail.com?subject=Quiero%20agendar%20la%20asesor%C3%ADa">
-            Escribir al correo
-          </a>
-        </div>
-      </div>
-      <span class="cara ases-cara" id="ases-cara" aria-hidden="true"></span>
-    </div>
-  </div>
+<!-- ============ PLUS+ · MEMBRESÍA ============ -->
+<section class="seccion" id="membresia">
+  <div class="eyebrow">Plus+ · tu asistente creativo</div>
+  <h2 style="margin-bottom:10px">Una membresía, toda el área creativa</h2>
+  <p class="dim" style="max-width:62ch;margin-bottom:22px">Un cupo mensual de «módulos» que gastas en lo que quieras, express ilimitado y lo
+    pesado capado por ciclo. Se arma a tu necesidad y se cobra <b>mensual, quincenal o por temporada</b>.</p>
+  <div class="paq-rej plus-rej"><article class="paq plus" style="--c:#8B3DF0"><div class="paq-cab"><span class="paq-tag">Plus+ Base</span></div><p class="paq-precio mono">$900.000<span class="paq-desde">/mes</span></p><p class="paq-para">Tu asistente creativo, para empezar.</p><span class="paq-lab">Incluye</span><ul class="paq-serv"><li>Cupo de 6 módulos al mes</li><li>Express ilimitado (uno a la vez)</li><li>1 pieza grande al mes (1 reel o 1 set de foto)</li><li>Un canal de pedidos directo</li></ul><a class="btn sm paq-cta" href="https://wa.me/573332791710?text=Hola%20LQS%2C%20me%20interesa%20Plus%2B%20Base.">Empezar Plus+ →</a></article><article class="paq plus plus-rec" style="--c:#8B3DF0"><div class="paq-cab"><span class="paq-tag">Plus+ Pro</span><span class="plus-rec-tag">Recomendado</span></div><p class="paq-precio mono">$1.900.000<span class="paq-desde">/mes</span></p><p class="paq-para">El equipo creativo que no tienes.</p><span class="paq-lab">Incluye</span><ul class="paq-serv"><li>Cupo de 14 módulos al mes</li><li>Express ilimitado</li><li>Hasta 3 piezas grandes al mes</li><li>1 área con prioridad</li><li>Reporte mensual</li></ul><a class="btn sm paq-cta" href="https://wa.me/573332791710?text=Hola%20LQS%2C%20me%20interesa%20Plus%2B%20Pro.">Empezar Plus+ →</a></article><article class="paq plus" style="--c:#8B3DF0"><div class="paq-cab"><span class="paq-tag">Plus+ Studio</span></div><p class="paq-precio mono">$3.500.000<span class="paq-desde">/mes</span></p><p class="paq-para">Como tener un estudio adentro.</p><span class="paq-lab">Incluye</span><ul class="paq-serv"><li>Cupo alto de módulos</li><li>Varias piezas grandes al mes</li><li>Redes gestionadas</li><li>Llamadas de estrategia</li><li>Prioridad máxima</li></ul><a class="btn sm paq-cta" href="https://wa.me/573332791710?text=Hola%20LQS%2C%20me%20interesa%20Plus%2B%20Studio.">Empezar Plus+ →</a></article></div>
+  <p class="dim mono" style="font-size:12px;margin-top:16px">Un «módulo» = un trabajo chico o mediano (una pieza de redes, un retoque, un ícono,
+    una landing simple). Lo grande —video de marca, eventos, web completa, los programas— entra con cupo o se suma aparte.</p>
+</section>
+
+
+<!-- ============ PAQUETES ============ -->
+<section class="seccion" id="paquetes">
+  <div class="eyebrow">Paquetes</div>
+  <h2 style="margin-bottom:10px">Combos que salen mejor que sumar suelto</h2>
+  <p class="dim" style="max-width:62ch;margin-bottom:22px">Armados por rubro o por área. Son un punto de partida: se ajustan a lo que necesitas.</p>
+  <h3 class="paq-grupo">Por rubro</h3><div class="paq-rej"><article class="paq" style="--c:#58B6D8"><div class="paq-cab"><span class="paq-ico ico" data-ico="foto"></span><span class="paq-tag">Pack</span></div><h3 class="paq-nom">Artista o músico</h3><p class="paq-para">Para mostrarte profesional desde el primer vistazo.</p><p class="paq-precio mono"><span class="paq-desde">desde</span> $900.000</p><span class="paq-lab">Incluye</span><ul class="paq-serv"><li>Retrato y marca personal</li><li>Reels y contenido vertical</li><li>Identidad de marca</li><li>Piezas para redes</li></ul><a class="btn sm paq-cta" href="https://wa.me/573332791710?text=Hola%20LQS%2C%20me%20interesa%20el%20paquete%20%C2%ABArtista%20o%20m%C3%BAsico%C2%BB%3A%20Retrato%20y%20marca%20personal%2C%20Reels%20y%20contenido%20vertical%2C%20Identidad%20de%20marca%2C%20Piezas%20para%20redes.">Armar este paquete →</a></article><article class="paq" style="--c:#F2975A"><div class="paq-cab"><span class="paq-ico ico" data-ico="video"></span><span class="paq-tag">Pack</span></div><h3 class="paq-nom">Creador de contenido</h3><p class="paq-para">Sube seguido, véte pro y ten casa propia.</p><p class="paq-precio mono"><span class="paq-desde">desde</span> $2.000.000</p><span class="paq-lab">Incluye</span><ul class="paq-serv"><li>Reels y contenido vertical</li><li>Video de marca o empresa</li><li>Retrato y marca personal</li><li>Página web</li></ul><a class="btn sm paq-cta" href="https://wa.me/573332791710?text=Hola%20LQS%2C%20me%20interesa%20el%20paquete%20%C2%ABCreador%20de%20contenido%C2%BB%3A%20Reels%20y%20contenido%20vertical%2C%20Video%20de%20marca%20o%20empresa%2C%20Retrato%20y%20marca%20personal%2C%20P%C3%A1gina%20web.">Armar este paquete →</a></article><article class="paq" style="--c:#E7B544"><div class="paq-cab"><span class="paq-ico ico" data-ico="marca"></span><span class="paq-tag">Pack</span></div><h3 class="paq-nom">Negocio o marca nueva</h3><p class="paq-para">Nace con identidad, con qué vender y quién sostenga tus redes.</p><p class="paq-precio mono"><span class="paq-desde">desde</span> $1.800.000</p><span class="paq-lab">Incluye</span><ul class="paq-serv"><li>Identidad de marca</li><li>Foto de producto</li><li>Piezas para redes</li><li>Catálogo en línea</li></ul><a class="btn sm paq-cta" href="https://wa.me/573332791710?text=Hola%20LQS%2C%20me%20interesa%20el%20paquete%20%C2%ABNegocio%20o%20marca%20nueva%C2%BB%3A%20Identidad%20de%20marca%2C%20Foto%20de%20producto%2C%20Piezas%20para%20redes%2C%20Cat%C3%A1logo%20en%20l%C3%ADnea.">Armar este paquete →</a></article><article class="paq" style="--c:#EC6F6F"><div class="paq-cab"><span class="paq-ico ico" data-ico="web"></span><span class="paq-tag">Pack</span></div><h3 class="paq-nom">Restaurante</h3><p class="paq-para">La carta, la foto y el pedido, resueltos.</p><p class="paq-precio mono"><span class="paq-desde">desde</span> $1.400.000</p><span class="paq-lab">Incluye</span><ul class="paq-serv"><li>Carta o menú</li><li>Menú digital con código QR</li><li>Foto de producto</li><li>Automatización con Meta (básico)</li></ul><a class="btn sm paq-cta" href="https://wa.me/573332791710?text=Hola%20LQS%2C%20me%20interesa%20el%20paquete%20%C2%ABRestaurante%C2%BB%3A%20Carta%20o%20men%C3%BA%2C%20Men%C3%BA%20digital%20con%20c%C3%B3digo%20QR%2C%20Foto%20de%20producto%2C%20Automatizaci%C3%B3n%20con%20Meta%20%28b%C3%A1sico%29.">Armar este paquete →</a></article><article class="paq" style="--c:#4CB0A4"><div class="paq-cab"><span class="paq-ico ico" data-ico="automatizacion"></span><span class="paq-tag">Pack</span></div><h3 class="paq-nom">Empresa en transición digital</h3><p class="paq-para">Tu operación a digital: presencia, orden y procesos que corren solos.</p><p class="paq-precio mono"><span class="paq-desde">desde</span> $2.600.000</p><span class="paq-lab">Incluye</span><ul class="paq-serv"><li>Página web</li><li>Automatización con Meta (básico)</li><li>Programa · Operaciones y Logística</li><li>Reportes automáticos de resultados</li></ul><a class="btn sm paq-cta" href="https://wa.me/573332791710?text=Hola%20LQS%2C%20me%20interesa%20el%20paquete%20%C2%ABEmpresa%20en%20transici%C3%B3n%20digital%C2%BB%3A%20P%C3%A1gina%20web%2C%20Automatizaci%C3%B3n%20con%20Meta%20%28b%C3%A1sico%29%2C%20Programa%20%C2%B7%20Operaciones%20y%20Log%C3%ADstica%2C%20Reportes%20autom%C3%A1ticos%20de%20resultados.">Armar este paquete →</a></article></div><h3 class="paq-grupo">Por área</h3><div class="paq-rej"><article class="paq" style="--c:#E7B544"><div class="paq-cab"><span class="paq-ico ico" data-ico="marca"></span><span class="paq-tag">Área</span></div><h3 class="paq-nom">Marca completa</h3><p class="paq-para">La identidad entera, de punta a punta.</p><p class="paq-precio mono"><span class="paq-desde">desde</span> $1.100.000</p><span class="paq-lab">Incluye</span><ul class="paq-serv"><li>Identidad de marca</li><li>Papelería y piezas de marca</li><li>Empaques y etiquetas</li><li>Carta o menú</li></ul><a class="btn sm paq-cta" href="https://wa.me/573332791710?text=Hola%20LQS%2C%20me%20interesa%20el%20paquete%20%C2%ABMarca%20completa%C2%BB%3A%20Identidad%20de%20marca%2C%20Papeler%C3%ADa%20y%20piezas%20de%20marca%2C%20Empaques%20y%20etiquetas%2C%20Carta%20o%20men%C3%BA.">Armar este paquete →</a></article><article class="paq" style="--c:#EC6F6F"><div class="paq-cab"><span class="paq-ico ico" data-ico="web"></span><span class="paq-tag">Área</span></div><h3 class="paq-nom">Digital negocio</h3><p class="paq-para">Tu casa digital completa.</p><p class="paq-precio mono"><span class="paq-desde">desde</span> $2.400.000</p><span class="paq-lab">Incluye</span><ul class="paq-serv"><li>Página web</li><li>Catálogo en línea</li><li>Menú digital con código QR</li></ul><a class="btn sm paq-cta" href="https://wa.me/573332791710?text=Hola%20LQS%2C%20me%20interesa%20el%20paquete%20%C2%ABDigital%20negocio%C2%BB%3A%20P%C3%A1gina%20web%2C%20Cat%C3%A1logo%20en%20l%C3%ADnea%2C%20Men%C3%BA%20digital%20con%20c%C3%B3digo%20QR.">Armar este paquete →</a></article><article class="paq" style="--c:#D879B4"><div class="paq-cab"><span class="paq-ico ico" data-ico="eventos"></span><span class="paq-tag">Área</span></div><h3 class="paq-nom">Evento completo</h3><p class="paq-para">El día entero, montado y cubierto.</p><p class="paq-precio mono"><span class="paq-desde">desde</span> $3.200.000</p><span class="paq-lab">Incluye</span><ul class="paq-serv"><li>Piezas gráficas del evento</li><li>Registro y control de invitados</li><li>Cobertura en foto y video</li><li>Logística del día</li></ul><a class="btn sm paq-cta" href="https://wa.me/573332791710?text=Hola%20LQS%2C%20me%20interesa%20el%20paquete%20%C2%ABEvento%20completo%C2%BB%3A%20Piezas%20gr%C3%A1ficas%20del%20evento%2C%20Registro%20y%20control%20de%20invitados%2C%20Cobertura%20en%20foto%20y%20video%2C%20Log%C3%ADstica%20del%20d%C3%ADa.">Armar este paquete →</a></article><article class="paq" style="--c:#4CB0A4"><div class="paq-cab"><span class="paq-ico ico" data-ico="automatizacion"></span><span class="paq-tag">Área</span></div><h3 class="paq-nom">Automatización empresa</h3><p class="paq-para">Respuestas, flujos y documentos.</p><p class="paq-precio mono"><span class="paq-desde">desde</span> $2.800.000</p><span class="paq-lab">Incluye</span><ul class="paq-serv"><li>Automatización con Meta (básico)</li><li>Automatización con n8n (avanzado)</li><li>Programa · Legal y Contractual</li></ul><a class="btn sm paq-cta" href="https://wa.me/573332791710?text=Hola%20LQS%2C%20me%20interesa%20el%20paquete%20%C2%ABAutomatizaci%C3%B3n%20empresa%C2%BB%3A%20Automatizaci%C3%B3n%20con%20Meta%20%28b%C3%A1sico%29%2C%20Automatizaci%C3%B3n%20con%20n8n%20%28avanzado%29%2C%20Programa%20%C2%B7%20Legal%20y%20Contractual.">Armar este paquete →</a></article></div>
 </section>
 
 
@@ -1368,6 +1374,32 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
       <b>Arranque: $290.000, una sola vez</b>, al iniciar cualquier plan de Redes — cubre la auditoría de cuentas,
       la línea gráfica y el primer calendario. No se cobra si ya trabajaste el área Marca con nosotros.
       <b>Sin permanencia mínima</b> y aviso de cancelación de 15 días. Los ecosistemas se cotizan: no tienen precio de lista.
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ ASESORÍA ============ -->
+<section class="seccion" id="asesoria">
+  <div class="pared">
+    <div class="ases apila">
+      <div class="ases-txt">
+        <div class="eyebrow" style="color:var(--papel);opacity:.65">Sin costo · veinte minutos</div>
+        <h2 class="ases-tit">¿Todavía no sabes por dónde empezar?</h2>
+        <p class="ases-p">Casi nadie llega sabiéndolo, y está bien. Nos cuentas qué tienes en mente
+          —o qué te tiene atascado— y te decimos qué haríamos nosotros, en qué orden y con qué
+          empezaríamos si fuera nuestro.</p>
+        <p class="ases-p"><b>Si al final no somos lo que necesitas, te lo decimos igual</b> y te
+          apuntamos a dónde sí. Preferimos eso a arrancar un proyecto que no era.</p>
+        <div class="ases-acc">
+          <a class="btn claro" href="https://wa.me/573332791710?text=Hola%20LQS%2C%20quiero%20agendar%20la%20asesor%C3%ADa.%20Les%20cuento%3A">Agendar por WhatsApp</a>
+          <a class="btn ghost claro" href="mailto:loqueseaproductionsp1@gmail.com?subject=Quiero%20agendar%20la%20asesor%C3%ADa">
+            Escribir al correo
+          </a>
+        </div>
+        <p class="ases-horario mono">Atendemos de lunes a viernes · 8–12 y 2–6</p>
+      </div>
+      <span class="cara ases-cara" id="ases-cara" aria-hidden="true"></span>
     </div>
   </div>
 </section>

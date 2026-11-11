@@ -960,6 +960,18 @@ lqs-trazo:defined>img{display:none}
 .paq-serv li{font-size:13.5px;line-height:1.3;position:relative;padding-left:21px}
 .paq-serv li::before{content:"✓";position:absolute;left:0;top:-1px;color:var(--c);font-weight:800}
 .paq-cta{align-self:flex-start;margin-top:auto}
+/* precio del pack/membresía, título de grupo, y resalte del nivel recomendado */
+.paq-precio{font-size:22px;font-weight:800;color:var(--tinta);margin:2px 0 2px}
+.paq-desde{font-size:12px;font-weight:600;color:var(--humo);letter-spacing:.02em}
+.paq-grupo{font-family:'Syne';font-weight:800;font-size:clamp(15px,2vw,18px);letter-spacing:.02em;
+  text-transform:uppercase;color:var(--humo);margin:30px 0 12px}
+.paq-grupo:first-of-type{margin-top:6px}
+.plus-rej{margin-bottom:4px}
+.paq.plus{border-color:color-mix(in srgb,var(--c) 30%,var(--linea))}
+.paq.plus-rec{border-color:var(--c);box-shadow:0 0 0 2px color-mix(in srgb,var(--c) 26%,transparent),var(--sombra)}
+.plus-rec-tag{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--papel);background:var(--c);border-radius:999px;padding:3px 9px}
+.ases-horario{margin-top:12px;font-size:11.5px;letter-spacing:.06em;color:var(--papel);opacity:.6}
 /* carrusel de LQS dentro de Paquetes: los líos que los paquetes resuelven */
 .paq-suena{margin-top:26px}
 .paq-suena h3{font-family:'Syne';font-weight:800;font-size:clamp(18px,2.4vw,24px);letter-spacing:-.02em}
@@ -1310,29 +1322,24 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
 <main class="wrap" id="inicio" data-pagina="cotizador">
 <section class="seccion pagina-encab"><div class="eyebrow">Quote builder</div><h1 class="tit-pagina">Let's build the number</h1><p class="dim bajada">The price of each service, area by area, and a free 20-minute call to sort out where to start. It goes straight to our WhatsApp, no forms nobody reads.</p></section>
 
-<section class="seccion" id="asesoria">
-  <div class="pared">
-    <div class="ases apila">
-      <div class="ases-txt">
-        <div class="eyebrow" style="color:var(--papel);opacity:.65">No cost · twenty minutes</div>
-        <h2 class="ases-tit">Still not sure where to start?</h2>
-        <p class="ases-p">Almost nobody arrives knowing, and that is fine. Tell us what you have in
-          mind —or what has you stuck— and we will tell you what we would do, in what order, and
-          where we would start if it were ours.</p>
-        <p class="ases-p"><b>If it turns out we are not what you need, we will say so anyway</b> and
-          point you to who is. We would rather do that than start a project that was not the one.</p>
-        <div class="ases-acc">
-          <a class="btn claro" href="https://wa.me/573332791710?text=Hi%20LQS%2C%20I%27d%20like%20to%20book%20the%20free%20session.%20Here%20is%20what%20I%20have%3A">
-            Book on WhatsApp
-          </a>
-          <a class="btn ghost claro" href="mailto:loqueseaproductionsp1@gmail.com?subject=I%20would%20like%20to%20book%20the%20free%20session">
-            Send an email
-          </a>
-        </div>
-      </div>
-      <span class="cara ases-cara" id="ases-cara" aria-hidden="true"></span>
-    </div>
-  </div>
+<!-- ============ PLUS+ · MEMBERSHIP ============ -->
+<section class="seccion" id="membresia">
+  <div class="eyebrow">Plus+ · your creative assistant</div>
+  <h2 style="margin-bottom:10px">One membership, the whole creative area</h2>
+  <p class="dim" style="max-width:62ch;margin-bottom:22px">A monthly pool of «modules» you spend on whatever you want, unlimited express, and the
+    heavy stuff capped per cycle. Built to your need and billed <b>monthly, biweekly or by season</b>.</p>
+  <div class="paq-rej plus-rej"><article class="paq plus" style="--c:#8B3DF0"><div class="paq-cab"><span class="paq-tag">Plus+ Base</span></div><p class="paq-precio mono">$900.000<span class="paq-desde">/mo</span></p><p class="paq-para">Your creative assistant, to start.</p><span class="paq-lab">Includes</span><ul class="paq-serv"><li>6 modules a month</li><li>Unlimited express (one at a time)</li><li>1 big piece a month (1 reel or 1 photo set)</li><li>A direct request channel</li></ul><a class="btn sm paq-cta" href="https://wa.me/573332791710?text=Hi%20LQS%2C%20I%27m%20interested%20in%20Plus%2B%20Base.">Start Plus+ →</a></article><article class="paq plus plus-rec" style="--c:#8B3DF0"><div class="paq-cab"><span class="paq-tag">Plus+ Pro</span><span class="plus-rec-tag">Recommended</span></div><p class="paq-precio mono">$1.900.000<span class="paq-desde">/mo</span></p><p class="paq-para">The creative team you don't have.</p><span class="paq-lab">Includes</span><ul class="paq-serv"><li>14 modules a month</li><li>Unlimited express</li><li>Up to 3 big pieces a month</li><li>1 area with priority</li><li>Monthly report</li></ul><a class="btn sm paq-cta" href="https://wa.me/573332791710?text=Hi%20LQS%2C%20I%27m%20interested%20in%20Plus%2B%20Pro.">Start Plus+ →</a></article><article class="paq plus" style="--c:#8B3DF0"><div class="paq-cab"><span class="paq-tag">Plus+ Studio</span></div><p class="paq-precio mono">$3.500.000<span class="paq-desde">/mo</span></p><p class="paq-para">Like having a studio inside.</p><span class="paq-lab">Includes</span><ul class="paq-serv"><li>High module cap</li><li>Several big pieces a month</li><li>Managed social</li><li>Strategy calls</li><li>Top priority</li></ul><a class="btn sm paq-cta" href="https://wa.me/573332791710?text=Hi%20LQS%2C%20I%27m%20interested%20in%20Plus%2B%20Studio.">Start Plus+ →</a></article></div>
+  <p class="dim mono" style="font-size:12px;margin-top:16px">A «module» = a small or medium job (a social piece, a retouch, an icon, a simple
+    landing). The big stuff —brand video, events, full website, the programs— comes with a cap or is added separately.</p>
+</section>
+
+
+<!-- ============ PACKAGES ============ -->
+<section class="seccion" id="paquetes">
+  <div class="eyebrow">Packages</div>
+  <h2 style="margin-bottom:10px">Bundles that beat buying à la carte</h2>
+  <p class="dim" style="max-width:62ch;margin-bottom:22px">Put together by sector or by area. A starting point: we tailor them to what you need.</p>
+  <h3 class="paq-grupo">By sector</h3><div class="paq-rej"><article class="paq" style="--c:#58B6D8"><div class="paq-cab"><span class="paq-ico ico" data-ico="foto"></span><span class="paq-tag">Pack</span></div><h3 class="paq-nom">Artist or musician</h3><p class="paq-para">To look professional at first glance.</p><p class="paq-precio mono"><span class="paq-desde">from</span> $900.000</p><span class="paq-lab">Includes</span><ul class="paq-serv"><li>Portrait & personal brand</li><li>Reels and vertical content</li><li>Brand identity</li><li>Social posts</li></ul><a class="btn sm paq-cta" href="https://wa.me/573332791710?text=Hi%20LQS%2C%20I%27m%20interested%20in%20the%20%C2%ABArtist%20or%20musician%C2%BB%20pack%3A%20Portrait%20%26%20personal%20brand%2C%20Reels%20and%20vertical%20content%2C%20Brand%20identity%2C%20Social%20posts.">Build this pack →</a></article><article class="paq" style="--c:#F2975A"><div class="paq-cab"><span class="paq-ico ico" data-ico="video"></span><span class="paq-tag">Pack</span></div><h3 class="paq-nom">Content creator</h3><p class="paq-para">Post often, look pro, and have a home of your own.</p><p class="paq-precio mono"><span class="paq-desde">from</span> $2.000.000</p><span class="paq-lab">Includes</span><ul class="paq-serv"><li>Reels and vertical content</li><li>Brand or company video</li><li>Portrait & personal brand</li><li>Website</li></ul><a class="btn sm paq-cta" href="https://wa.me/573332791710?text=Hi%20LQS%2C%20I%27m%20interested%20in%20the%20%C2%ABContent%20creator%C2%BB%20pack%3A%20Reels%20and%20vertical%20content%2C%20Brand%20or%20company%20video%2C%20Portrait%20%26%20personal%20brand%2C%20Website.">Build this pack →</a></article><article class="paq" style="--c:#E7B544"><div class="paq-cab"><span class="paq-ico ico" data-ico="marca"></span><span class="paq-tag">Pack</span></div><h3 class="paq-nom">New business or brand</h3><p class="paq-para">Born with identity, something to sell and someone to keep your social up.</p><p class="paq-precio mono"><span class="paq-desde">from</span> $1.800.000</p><span class="paq-lab">Includes</span><ul class="paq-serv"><li>Brand identity</li><li>Product photography</li><li>Social posts</li><li>Online catalogue</li></ul><a class="btn sm paq-cta" href="https://wa.me/573332791710?text=Hi%20LQS%2C%20I%27m%20interested%20in%20the%20%C2%ABNew%20business%20or%20brand%C2%BB%20pack%3A%20Brand%20identity%2C%20Product%20photography%2C%20Social%20posts%2C%20Online%20catalogue.">Build this pack →</a></article><article class="paq" style="--c:#EC6F6F"><div class="paq-cab"><span class="paq-ico ico" data-ico="web"></span><span class="paq-tag">Pack</span></div><h3 class="paq-nom">Restaurant</h3><p class="paq-para">Menu, photos and ordering, all sorted.</p><p class="paq-precio mono"><span class="paq-desde">from</span> $1.400.000</p><span class="paq-lab">Includes</span><ul class="paq-serv"><li>Menu design</li><li>Digital menu with QR code</li><li>Product photography</li><li>Automation with Meta (basic)</li></ul><a class="btn sm paq-cta" href="https://wa.me/573332791710?text=Hi%20LQS%2C%20I%27m%20interested%20in%20the%20%C2%ABRestaurant%C2%BB%20pack%3A%20Menu%20design%2C%20Digital%20menu%20with%20QR%20code%2C%20Product%20photography%2C%20Automation%20with%20Meta%20%28basic%29.">Build this pack →</a></article><article class="paq" style="--c:#4CB0A4"><div class="paq-cab"><span class="paq-ico ico" data-ico="automatizacion"></span><span class="paq-tag">Pack</span></div><h3 class="paq-nom">Company going digital</h3><p class="paq-para">Your operation to digital: presence, order and processes that run on their own.</p><p class="paq-precio mono"><span class="paq-desde">from</span> $2.600.000</p><span class="paq-lab">Includes</span><ul class="paq-serv"><li>Website</li><li>Automation with Meta (basic)</li><li>App · Operations & Logistics</li><li>Automatic results reports</li></ul><a class="btn sm paq-cta" href="https://wa.me/573332791710?text=Hi%20LQS%2C%20I%27m%20interested%20in%20the%20%C2%ABCompany%20going%20digital%C2%BB%20pack%3A%20Website%2C%20Automation%20with%20Meta%20%28basic%29%2C%20App%20%C2%B7%20Operations%20%26%20Logistics%2C%20Automatic%20results%20reports.">Build this pack →</a></article></div><h3 class="paq-grupo">By area</h3><div class="paq-rej"><article class="paq" style="--c:#E7B544"><div class="paq-cab"><span class="paq-ico ico" data-ico="marca"></span><span class="paq-tag">Area</span></div><h3 class="paq-nom">Full brand</h3><p class="paq-para">The whole identity, end to end.</p><p class="paq-precio mono"><span class="paq-desde">from</span> $1.100.000</p><span class="paq-lab">Includes</span><ul class="paq-serv"><li>Brand identity</li><li>Brand stationery & collateral</li><li>Packaging & labels</li><li>Menu design</li></ul><a class="btn sm paq-cta" href="https://wa.me/573332791710?text=Hi%20LQS%2C%20I%27m%20interested%20in%20the%20%C2%ABFull%20brand%C2%BB%20pack%3A%20Brand%20identity%2C%20Brand%20stationery%20%26%20collateral%2C%20Packaging%20%26%20labels%2C%20Menu%20design.">Build this pack →</a></article><article class="paq" style="--c:#EC6F6F"><div class="paq-cab"><span class="paq-ico ico" data-ico="web"></span><span class="paq-tag">Area</span></div><h3 class="paq-nom">Business digital</h3><p class="paq-para">Your full digital home.</p><p class="paq-precio mono"><span class="paq-desde">from</span> $2.400.000</p><span class="paq-lab">Includes</span><ul class="paq-serv"><li>Website</li><li>Online catalogue</li><li>Digital menu with QR code</li></ul><a class="btn sm paq-cta" href="https://wa.me/573332791710?text=Hi%20LQS%2C%20I%27m%20interested%20in%20the%20%C2%ABBusiness%20digital%C2%BB%20pack%3A%20Website%2C%20Online%20catalogue%2C%20Digital%20menu%20with%20QR%20code.">Build this pack →</a></article><article class="paq" style="--c:#D879B4"><div class="paq-cab"><span class="paq-ico ico" data-ico="eventos"></span><span class="paq-tag">Area</span></div><h3 class="paq-nom">Full event</h3><p class="paq-para">The whole day, set up and covered.</p><p class="paq-precio mono"><span class="paq-desde">from</span> $3.200.000</p><span class="paq-lab">Includes</span><ul class="paq-serv"><li>Event graphics</li><li>Guest check-in and management</li><li>Photo and video coverage</li><li>Event-day logistics</li></ul><a class="btn sm paq-cta" href="https://wa.me/573332791710?text=Hi%20LQS%2C%20I%27m%20interested%20in%20the%20%C2%ABFull%20event%C2%BB%20pack%3A%20Event%20graphics%2C%20Guest%20check-in%20and%20management%2C%20Photo%20and%20video%20coverage%2C%20Event-day%20logistics.">Build this pack →</a></article><article class="paq" style="--c:#4CB0A4"><div class="paq-cab"><span class="paq-ico ico" data-ico="automatizacion"></span><span class="paq-tag">Area</span></div><h3 class="paq-nom">Company automation</h3><p class="paq-para">Replies, flows and documents.</p><p class="paq-precio mono"><span class="paq-desde">from</span> $2.800.000</p><span class="paq-lab">Includes</span><ul class="paq-serv"><li>Automation with Meta (basic)</li><li>Automation with n8n (advanced)</li><li>App · Legal & Contracts</li></ul><a class="btn sm paq-cta" href="https://wa.me/573332791710?text=Hi%20LQS%2C%20I%27m%20interested%20in%20the%20%C2%ABCompany%20automation%C2%BB%20pack%3A%20Automation%20with%20Meta%20%28basic%29%2C%20Automation%20with%20n8n%20%28advanced%29%2C%20App%20%C2%B7%20Legal%20%26%20Contracts.">Build this pack →</a></article></div>
 </section>
 
 
@@ -1367,6 +1374,31 @@ footer{background:var(--tinta);color:var(--papel);margin-top:64px;padding:52px 0
       the graphic line and the first calendar. It is waived if you have already done the Brand area
       with us. <b>No minimum term</b> and 15 days' notice to cancel. Ecosystems are quoted: they
       have no list price.
+    </div>
+  </div>
+</section>
+
+
+<section class="seccion" id="asesoria">
+  <div class="pared">
+    <div class="ases apila">
+      <div class="ases-txt">
+        <div class="eyebrow" style="color:var(--papel);opacity:.65">No cost · twenty minutes</div>
+        <h2 class="ases-tit">Still not sure where to start?</h2>
+        <p class="ases-p">Almost nobody arrives knowing, and that is fine. Tell us what you have in
+          mind —or what has you stuck— and we will tell you what we would do, in what order, and
+          where we would start if it were ours.</p>
+        <p class="ases-p"><b>If it turns out we are not what you need, we will say so anyway</b> and
+          point you to who is. We would rather do that than start a project that was not the one.</p>
+        <div class="ases-acc">
+          <a class="btn claro" href="https://wa.me/573332791710?text=Hi%20LQS%2C%20I%27d%20like%20to%20book%20the%20consultation.%20Here%27s%20what%20I%20have%3A">Book on WhatsApp</a>
+          <a class="btn ghost claro" href="mailto:loqueseaproductionsp1@gmail.com?subject=I%20would%20like%20to%20book%20the%20free%20session">
+            Send an email
+          </a>
+        </div>
+        <p class="ases-horario mono">Monday to Friday · 8–12 and 2–6</p>
+      </div>
+      <span class="cara ases-cara" id="ases-cara" aria-hidden="true"></span>
     </div>
   </div>
 </section>

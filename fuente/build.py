@@ -79,6 +79,74 @@ APERTURA = [("Música","Grabación, mezcla"),
 # Express: encargos chicos que no pasan por cotizador. Se piden y se entregan.
 EXPRESS = ["Panfletos", "Carteles", "Avisos", "Presentaciones", "Edición de fotos", "Arreglos de costura"]
 
+# --- Agenda --------------------------------------------------------------------
+# Enlace del «horario de citas» de Google Calendar (franja L–V 8–12 y 2–6, la pone
+# Motta en su calendario). Vacío = el botón de asesoría cae a WhatsApp. Cuando
+# Motta pase el enlace, se pega aquí y la cita sincroniza sola a su calendario.
+AGENDA = ""
+
+# --- Plus+ : la membresía (asistente creativo) --------------------------------
+# Cupo mensual de «módulos» que se gasta en cualquier área + express ilimitado,
+# con lo pesado capado por ciclo. Se factura mensual, quincenal o por temporada.
+# Precios PROPUESTOS; Motta los ajusta. (nombre, precio_mes, gancho, [incluye es], [incluye en])
+PLUS = [
+ ("Base",   900000, "Tu asistente creativo, para empezar.",
+   ["Cupo de 6 módulos al mes", "Express ilimitado (uno a la vez)",
+    "1 pieza grande al mes (1 reel o 1 set de foto)", "Un canal de pedidos directo"],
+   ["6 modules a month", "Unlimited express (one at a time)",
+    "1 big piece a month (1 reel or 1 photo set)", "A direct request channel"]),
+ ("Pro",   1900000, "El equipo creativo que no tienes.",
+   ["Cupo de 14 módulos al mes", "Express ilimitado", "Hasta 3 piezas grandes al mes",
+    "1 área con prioridad", "Reporte mensual"],
+   ["14 modules a month", "Unlimited express", "Up to 3 big pieces a month",
+    "1 area with priority", "Monthly report"]),
+ ("Studio",3500000, "Como tener un estudio adentro.",
+   ["Cupo alto de módulos", "Varias piezas grandes al mes", "Redes gestionadas",
+    "Llamadas de estrategia", "Prioridad máxima"],
+   ["High module cap", "Several big pieces a month", "Managed social",
+    "Strategy calls", "Top priority"]),
+]
+PLUS_REC = "Pro"
+
+# --- Paquetes: por rubro (curados) y por área (el área en bloque) -------------
+# Cada servicio existe en MODULOS, así el nombre coincide y el WhatsApp lo nombra
+# tal cual. precio = «desde» del combo (mejor que sumar suelto = el descuento
+# funcional). Precios PROPUESTOS; Motta los ajusta.
+# (nombre, slug ícono, color, para quién, [servicios], precio)
+PACKS_RUBRO = [
+ ("Artista o músico", "foto", "#58B6D8", "Para mostrarte profesional desde el primer vistazo.",
+   ["Retrato y marca personal", "Reels y contenido vertical", "Identidad de marca", "Piezas para redes"], 900000),
+ ("Creador de contenido", "video", "#F2975A", "Sube seguido, véte pro y ten casa propia.",
+   ["Reels y contenido vertical", "Video de marca o empresa", "Retrato y marca personal", "Página web"], 2000000),
+ ("Negocio o marca nueva", "marca", "#E7B544", "Nace con identidad, con qué vender y quién sostenga tus redes.",
+   ["Identidad de marca", "Foto de producto", "Piezas para redes", "Catálogo en línea"], 1800000),
+ ("Restaurante", "web", "#EC6F6F", "La carta, la foto y el pedido, resueltos.",
+   ["Carta o menú", "Menú digital con código QR", "Foto de producto", "Automatización con Meta (básico)"], 1400000),
+ ("Empresa en transición digital", "automatizacion", "#4CB0A4", "Tu operación a digital: presencia, orden y procesos que corren solos.",
+   ["Página web", "Automatización con Meta (básico)", "Programa · Operaciones y Logística", "Reportes automáticos de resultados"], 2600000),
+]
+PACKS_AREA = [
+ ("Marca completa", "marca", "#E7B544", "La identidad entera, de punta a punta.",
+   ["Identidad de marca", "Papelería y piezas de marca", "Empaques y etiquetas", "Carta o menú"], 1100000),
+ ("Digital negocio", "web", "#EC6F6F", "Tu casa digital completa.",
+   ["Página web", "Catálogo en línea", "Menú digital con código QR"], 2400000),
+ ("Evento completo", "eventos", "#D879B4", "El día entero, montado y cubierto.",
+   ["Piezas gráficas del evento", "Registro y control de invitados", "Cobertura en foto y video", "Logística del día"], 3200000),
+ ("Automatización empresa", "automatizacion", "#4CB0A4", "Respuestas, flujos y documentos.",
+   ["Automatización con Meta (básico)", "Automatización con n8n (avanzado)", "Programa · Legal y Contractual"], 2800000),
+]
+EN_PACKS = {
+ "Artista o músico": ("Artist or musician", "To look professional at first glance."),
+ "Creador de contenido": ("Content creator", "Post often, look pro, and have a home of your own."),
+ "Negocio o marca nueva": ("New business or brand", "Born with identity, something to sell and someone to keep your social up."),
+ "Restaurante": ("Restaurant", "Menu, photos and ordering, all sorted."),
+ "Empresa en transición digital": ("Company going digital", "Your operation to digital: presence, order and processes that run on their own."),
+ "Marca completa": ("Full brand", "The whole identity, end to end."),
+ "Digital negocio": ("Business digital", "Your full digital home."),
+ "Evento completo": ("Full event", "The whole day, set up and covered."),
+ "Automatización empresa": ("Company automation", "Replies, flows and documents."),
+}
+
 # Muestras en vivo: cuatro páginas demo de una sola pantalla que viven en
 # demos/ (carpeta autocontenida, rutas relativas, sin librerías). Cada una va
 # ATADA al servicio que le corresponde: al abrir ese cuadro en su área, la
@@ -791,7 +859,7 @@ PAGINAS = {
         "titulo": "Cotizador — LQS",
         "desc": ("Los precios de cada área, servicio por servicio, y una asesoría gratis para "
                  "ordenar por dónde empezar. Llega directo a nuestro WhatsApp o correo."),
-        "partes": ["encab-cotizador", "asesoria", "tarifas", "faqs", "contacto"],
+        "partes": ["encab-cotizador", "membresia", "paquetes", "tarifas", "asesoria", "faqs", "contacto"],
     },
 }
 
@@ -914,6 +982,72 @@ def areas_bento(idi):
                  '<span class="ab-tx"><span class="ab-n">Express</span>'
                  '<span class="ab-d">%s</span></span></div>' % (i, exd))
     return '<div class="ab-rej">%s</div>' % "".join(tiles)
+
+def _pack_card(nom, ico, color, para, servs, precio, tag, idi, es):
+    servs_disp = [EN_SERV.get(s, s) if idi == "en" else s for s in servs]
+    lis = "".join("<li>%s</li>" % s for s in servs_disp)
+    incluye = "Incluye" if es else "Includes"
+    cta = "Armar este paquete →" if es else "Build this pack →"
+    desde = "desde" if es else "from"
+    txt = (("Hola LQS, me interesa el paquete «%s»: %s." % (nom, ", ".join(servs_disp)))
+           if es else ("Hi LQS, I'm interested in the «%s» pack: %s." % (nom, ", ".join(servs_disp))))
+    href = "https://wa.me/{{WHATSAPP}}?text=" + quote(txt)
+    return ('<article class="paq" style="--c:%s">'
+            '<div class="paq-cab"><span class="paq-ico ico" data-ico="%s"></span>'
+            '<span class="paq-tag">%s</span></div>'
+            '<h3 class="paq-nom">%s</h3>'
+            '<p class="paq-para">%s</p>'
+            '<p class="paq-precio mono"><span class="paq-desde">%s</span> %s</p>'
+            '<span class="paq-lab">%s</span>'
+            '<ul class="paq-serv">%s</ul>'
+            '<a class="btn sm paq-cta" href="%s">%s</a></article>'
+            % (color, ico, tag, nom, para, desde, fmt(precio), incluye, lis, href, cta))
+
+def packs_html(idi):
+    """Paquetes para el cotizador: por rubro (curados) y por área (el área en bloque).
+       Reusa las tarjetas .paq-*. El WhatsApp nombra el combo y sus servicios."""
+    es = idi == "es"
+    tag_r = "Pack" if es else "Pack"
+    tag_a = "Área" if es else "Area"
+    def grupo(tit_es, tit_en, packs, tag):
+        cards = "".join(_pack_card(
+            (EN_PACKS[n][0] if idi == "en" else n), ico, color,
+            (EN_PACKS[n][1] if idi == "en" else para), servs, precio, tag, idi, es)
+            for (n, ico, color, para, servs, precio) in packs)
+        return ('<h3 class="paq-grupo">%s</h3><div class="paq-rej">%s</div>'
+                % ((tit_es if es else tit_en), cards))
+    return (grupo("Por rubro", "By sector", PACKS_RUBRO, tag_r)
+            + grupo("Por área", "By area", PACKS_AREA, tag_a))
+
+def plus_html(idi):
+    """Plus+ : la membresía (asistente creativo). Tres niveles en tarjetas .paq-*,
+       con el nivel recomendado marcado. Precios propuestos."""
+    es = idi == "es"
+    lab = "Incluye" if es else "Includes"
+    cta = "Empezar Plus+ →" if es else "Start Plus+ →"
+    rec_lab = "Recomendado" if es else "Recommended"
+    mes = "/mes" if es else "/mo"
+    gan_en = {"Base": "Your creative assistant, to start.",
+              "Pro": "The creative team you don't have.",
+              "Studio": "Like having a studio inside."}
+    cards = []
+    for (nom, precio, gancho, inc_es, inc_en) in PLUS:
+        inc = inc_en if idi == "en" else inc_es
+        g = gan_en.get(nom, gancho) if idi == "en" else gancho
+        rec = nom == PLUS_REC
+        lis = "".join("<li>%s</li>" % x for x in inc)
+        txt = ("Hola LQS, me interesa Plus+ %s." % nom) if es else ("Hi LQS, I'm interested in Plus+ %s." % nom)
+        href = "https://wa.me/{{WHATSAPP}}?text=" + quote(txt)
+        cards.append('<article class="paq plus%s" style="--c:#8B3DF0">'
+            '<div class="paq-cab"><span class="paq-tag">Plus+ %s</span>%s</div>'
+            '<p class="paq-precio mono">%s<span class="paq-desde">%s</span></p>'
+            '<p class="paq-para">%s</p>'
+            '<span class="paq-lab">%s</span><ul class="paq-serv">%s</ul>'
+            '<a class="btn sm paq-cta" href="%s">%s</a></article>'
+            % (" plus-rec" if rec else "", nom,
+               ('<span class="plus-rec-tag">%s</span>' % rec_lab) if rec else "",
+               fmt(precio), mes, g, lab, lis, href, cta))
+    return '<div class="paq-rej plus-rej">%s</div>' % "".join(cards)
 
 logo = (P.parent / "carita-inline.svg")
 if not logo.exists():
@@ -1128,6 +1262,20 @@ def armar(idi):
         return html, json.dumps(fichas, ensure_ascii=False)
     areas_html, fichas_json = areas_explora()
     ab_html = areas_bento(idi)
+    plus_h = plus_html(idi)
+    packs_h = packs_html(idi)
+
+    # Agenda: si hay enlace de Google Calendar, el botón agenda directo (sincroniza);
+    # si no, cae a WhatsApp. El horario (L–V 8–12 y 2–6) vive en el calendario de Motta.
+    if AGENDA:
+        agenda_href, agenda_tgt = AGENDA, ' target="_blank" rel="noopener"'
+        agenda_label = "Agendar en el calendario →" if idi == "es" else "Book on the calendar →"
+    else:
+        _wa_txt = ("Hola LQS, quiero agendar la asesoría. Les cuento:" if idi == "es"
+                   else "Hi LQS, I'd like to book the consultation. Here's what I have:")
+        agenda_href = "https://wa.me/{{WHATSAPP}}?text=" + quote(_wa_txt)
+        agenda_tgt = ""
+        agenda_label = "Agendar por WhatsApp" if idi == "es" else "Book on WhatsApp"
 
     datos = json.dumps([{"nombre": m[0], "ico": m[1], "color": m[2], "desc": m[3],
                          "serv": [{"n": s["n"], "p": s["p"], "m": s["m"], "u": s["u"], "g": s["g"]}
@@ -1139,7 +1287,10 @@ def armar(idi):
         return (t.replace("{{MODULOS}}", mods).replace("{{APERTURA}}", apert)
                  .replace("{{EXPRESS}}", expr).replace("{{AREAS}}", areas_html)
                  .replace("{{FICHAS}}", fichas_json)
-                 .replace("{{AREABENTO}}", ab_html))
+                 .replace("{{AREABENTO}}", ab_html)
+                 .replace("{{MEMBRESIA}}", plus_h).replace("{{PAQUETES}}", packs_h)
+                 .replace("{{AGENDA_HREF}}", agenda_href).replace("{{AGENDA_LABEL}}", agenda_label)
+                 .replace("{{AGENDA_TGT}}", agenda_tgt))
 
     guion = ((BASE / "guion.html").read_text(encoding="utf-8")
              .replace("/*CARITA_JS*/", (BASE / "carita.js").read_text(encoding="utf-8"))
