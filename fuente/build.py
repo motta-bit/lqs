@@ -80,11 +80,6 @@ APERTURA = [("Música","Grabación, mezcla"),
 EXPRESS = ["Panfletos", "Carteles", "Avisos", "Presentaciones", "Edición de fotos", "Arreglos de costura"]
 
 # --- Agenda --------------------------------------------------------------------
-# Enlace del «horario de citas» de Google Calendar (franja L–V 8–12 y 2–6, la pone
-# Motta en su calendario). Vacío = el botón de asesoría cae a WhatsApp. Cuando
-# Motta pase el enlace, se pega aquí y la cita sincroniza sola a su calendario.
-AGENDA = ""
-
 # --- Plus+ : la membresía (asistente creativo) --------------------------------
 # Cupo mensual de «módulos» que se gasta en cualquier área + express ilimitado,
 # con lo pesado capado por ciclo. Se factura mensual, quincenal o por temporada.
@@ -1265,17 +1260,13 @@ def armar(idi):
     plus_h = plus_html(idi)
     packs_h = packs_html(idi)
 
-    # Agenda: si hay enlace de Google Calendar, el botón agenda directo (sincroniza);
-    # si no, cae a WhatsApp. El horario (L–V 8–12 y 2–6) vive en el calendario de Motta.
-    if AGENDA:
-        agenda_href, agenda_tgt = AGENDA, ' target="_blank" rel="noopener"'
-        agenda_label = "Agendar en el calendario →" if idi == "es" else "Book on the calendar →"
-    else:
-        _wa_txt = ("Hola LQS, quiero agendar la asesoría. Les cuento:" if idi == "es"
-                   else "Hi LQS, I'd like to book the consultation. Here's what I have:")
-        agenda_href = "https://wa.me/{{WHATSAPP}}?text=" + quote(_wa_txt)
-        agenda_tgt = ""
-        agenda_label = "Agendar por WhatsApp" if idi == "es" else "Book on WhatsApp"
+    # Lo que queremos es que escriban: el botón va directo a WhatsApp, sin calendario.
+    # El horario (L–V 8–12 y 2–6) solo dice cuándo respondemos.
+    _wa_txt = ("Hola LQS, armé mi cotización y quiero que me escriban. Les cuento:" if idi == "es"
+               else "Hi LQS, I put together my quote and I'd like you to reach out. Here's what I have:")
+    agenda_href = "https://wa.me/{{WHATSAPP}}?text=" + quote(_wa_txt)
+    agenda_tgt = ""
+    agenda_label = "Escríbenos por WhatsApp →" if idi == "es" else "Message us on WhatsApp →"
 
     datos = json.dumps([{"nombre": m[0], "ico": m[1], "color": m[2], "desc": m[3],
                          "serv": [{"n": s["n"], "p": s["p"], "m": s["m"], "u": s["u"], "g": s["g"]}
